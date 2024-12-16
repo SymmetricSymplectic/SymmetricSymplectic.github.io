@@ -11,6 +11,8 @@ header, section, footer {
   margin-bottom: 20px;
   padding: 20px;
   background: #fff;
+  justify-content: center;
+  align-items: center;
 }
 
 img {
