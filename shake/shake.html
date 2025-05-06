@@ -32,10 +32,12 @@
             overflow-y: auto;
             background-color: #f3f4f6;
             padding: 1rem;
+            display: none; /* Oculta el sidebar por defecto en móviles */
         }
         .map-container {
             flex: 1;
             position: relative;
+            display: block; /* Muestra el mapa por defecto */
         }
         #map {
             height: 100%;
@@ -74,10 +76,32 @@
             width: 100%;
             padding: 1.5rem;
         }
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tab {
+            padding: 0.75rem 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .tab.active {
+            border-bottom: 2px solid #3182ce;
+            color: #3182ce;
+        }
+        /* En pantallas más grandes, mostrar la vista clásica */
         @media (min-width: 768px) {
+            .tabs {
+                display: none; /* Ocultar pestañas en pantallas grandes */
+            }
             .sidebar {
+                display: block; /* Mostrar sidebar siempre en desktop */
                 width: 25%;
                 max-width: 350px;
+            }
+            .map-container {
+                display: block; /* Mostrar mapa siempre en desktop */
             }
         }
         .category-icon {
@@ -101,10 +125,16 @@
             <h1 class="text-2xl font-bold">Shake!</h1>
         </header>
         
+        <!-- Sistema de pestañas para móviles -->
+        <div class="tabs md:hidden">
+            <div id="map-tab" class="tab active" onclick="switchTab('map')">Mapa</div>
+            <div id="events-tab" class="tab" onclick="switchTab('events')">Eventos</div>
+        </div>
+        
         <!-- Contenedor principal (sidebar + mapa) -->
         <div class="content-container">
             <!-- Panel lateral (filtros y lista de eventos) -->
-            <div class="sidebar">
+            <div id="sidebar" class="sidebar">
                 <div class="mb-6">
                     <h2 class="text-lg font-semibold mb-2">Filtros</h2>
                     
@@ -138,7 +168,7 @@
             </div>
             
             <!-- Contenedor del mapa -->
-            <div class="map-container">
+            <div id="map-container" class="map-container">
                 <div id="map"></div>
             </div>
         </div>
@@ -226,12 +256,46 @@
                 initFilters();
                 renderEventsList(eventos);
                 initModal();
+                
+                // Forzar recálculo del tamaño del mapa después de que la página esté completamente cargada
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 100);
             }).catch(error => {
                 console.error('Error al cargar los datos:', error);
                 document.getElementById('events-list').innerHTML = 
                     '<p class="text-red-500">Error al cargar los datos de eventos. Por favor, recarga la página.</p>';
             });
         });
+        
+        // Función para cambiar entre pestañas
+        function switchTab(tabName) {
+            const mapTab = document.getElementById('map-tab');
+            const eventsTab = document.getElementById('events-tab');
+            const mapContainer = document.getElementById('map-container');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (tabName === 'map') {
+                // Activar pestaña de mapa
+                mapTab.classList.add('active');
+                eventsTab.classList.remove('active');
+                
+                // Mostrar mapa, ocultar eventos
+                mapContainer.style.display = 'block';
+                sidebar.style.display = 'none';
+                
+                // Actualizar tamaño del mapa después de hacerlo visible
+                map.invalidateSize();
+            } else {
+                // Activar pestaña de eventos
+                eventsTab.classList.add('active');
+                mapTab.classList.remove('active');
+                
+                // Mostrar eventos, ocultar mapa
+                sidebar.style.display = 'block';
+                mapContainer.style.display = 'none';
+            }
+        }
         
         // Función para cargar datos desde el CSV
         async function cargarDatosDesdeCSV() {
@@ -294,7 +358,7 @@
 
         // Inicialización del mapa
         function initMap() {
-            // Crear mapa centrado en Madrid
+            // Crear mapa centrado en CDMX
             map = L.map('map').setView([19.33, -99.14], 13);
             
             // Añadir capa de mapa base (OpenStreetMap)
@@ -304,6 +368,11 @@
             
             // Agregar marcadores para cada evento
             renderMapMarkers(eventos);
+            
+            // Manejar evento de redimensionamiento para actualizar el mapa
+            window.addEventListener('resize', function() {
+                map.invalidateSize();
+            });
         }
         
         // Renderizar marcadores en el mapa
@@ -421,6 +490,11 @@
                 
                 // Añadir evento de clic
                 eventoElement.addEventListener('click', () => {
+                    // En móvil, cambiar a la pestaña de mapa al hacer clic en un evento
+                    if (window.innerWidth < 768) {
+                        switchTab('map');
+                    }
+                    
                     showEventModal(evento);
                 });
                 
