@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Eventos</title>
+    
+    <!-- Estilos de Leaflet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .content-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 100%;
+            overflow-y: auto;
+            background-color: #f3f4f6;
+            padding: 1rem;
+        }
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        .event-item {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background-color: white;
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .event-item:hover {
+            background-color: #ebf5ff;
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+        }
+        .modal-content {
+            background-color: white;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 100%;
+            padding: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .sidebar {
+                width: 25%;
+                max-width: 350px;
+            }
+        }
+        .category-icon {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .category-musica { background-color: #e53e3e; }
+        .category-arte { background-color: #3182ce; }
+        .category-tecnologia { background-color: #805ad5; }
+        .category-gastronomia { background-color: #38a169; }
+        .category-default { background-color: #718096; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Encabezado de la aplicación -->
+        <header class="bg-blue-600 text-white p-4">
+            <h1 class="text-2xl font-bold">Visualizador de Eventos</h1>
+        </header>
+        
+        <!-- Contenedor principal (sidebar + mapa) -->
+        <div class="content-container">
+            <!-- Panel lateral (filtros y lista de eventos) -->
+            <div class="sidebar">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold mb-2">Filtros</h2>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Fecha:</label>
+                        <input 
+                            type="date" 
+                            id="date-filter" 
+                            class="w-full p-2 border rounded"
+                        >
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1">Categoría:</label>
+                        <select 
+                            id="category-filter" 
+                            class="w-full p-2 border rounded"
+                        >
+                            <option value="">Todas las categorías</option>
+                            <!-- Se llenará dinámicamente con JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                
+                <div>
+                    <h2 class="text-lg font-semibold mb-2">Lista de Eventos</h2>
+                    <div id="events-list" class="space-y-2">
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contenedor del mapa -->
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de detalle de evento -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-start">
+                <h2 id="modal-title" class="text-xl font-bold">Título del evento</h2>
+                <button 
+                    id="close-modal"
+                    class="text-gray-500 hover:text-gray-700"
+                >
+                    ✕
+                </button>
+            </div>
+            
+            <div class="my-4">
+                <p class="font-medium">Fecha:</p>
+                <p id="modal-date" class="mb-2">01 Enero 2025 - 05 Enero 2025</p>
+                
+                <p class="font-medium">Ubicación:</p>
+                <p id="modal-location" class="mb-2">Dirección del evento</p>
+                
+                <p class="font-medium">Descripción:</p>
+                <p id="modal-description" class="mb-2">Descripción del evento</p>
+                
+                <p class="font-medium">Más información:</p>
+                <a 
+                    id="modal-link"
+                    href="#" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-blue-600 hover:underline"
+                >
+                    Visitar sitio web
+                </a>
+            </div>
+            
+            <div class="mt-6 text-right">
+                <button
+                    id="modal-close-btn"
+                    class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts de Leaflet -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    
+    <!-- PapaParse para procesar CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <!-- Script de la aplicación -->
+    <script>
+        // Variables para almacenar los eventos
+        let eventos = [];
+        // Nombre del archivo CSV (asegúrate de que esté en la misma carpeta)
+        const CSV_FILE = 'eventos.csv';
+
+        // Variables globales
+        let map;
+        let markers = [];
+        let eventosActuales = [...eventos];
+        
+        // Configuración de los íconos para cada categoría
+        const iconColors = {
+            musica: '#e53e3e',        // Rojo
+            arte: '#3182ce',          // Azul
+            tecnologia: '#805ad5',    // Morado
+            gastronomia: '#38a169',   // Verde
+            deporte: '#f6ad55',       // Naranja
+            default: '#718096'        // Gris
+        };
+
+        // Inicialización de la aplicación
+        document.addEventListener('DOMContentLoaded', () => {
+            // Primero cargamos los datos desde el CSV
+            cargarDatosDesdeCSV().then(() => {
+                initMap();
+                initFilters();
+                renderEventsList(eventos);
+                initModal();
+            }).catch(error => {
+                console.error('Error al cargar los datos:', error);
+                document.getElementById('events-list').innerHTML = 
+                    '<p class="text-red-500">Error al cargar los datos de eventos. Por favor, recarga la página.</p>';
+            });
+        });
+        
+        // Función para cargar datos desde el CSV
+        async function cargarDatosDesdeCSV() {
+            return new Promise((resolve, reject) => {
+                Papa.parse(CSV_FILE, {
+                    download: true,
+                    header: true,           // Primera fila contiene encabezados
+                    dynamicTyping: true,    // Convierte números automáticamente
+                    skipEmptyLines: true,   // Ignora líneas vacías
+                    transformHeader: (header) => {
+                        // Normalizar encabezados: eliminar espacios y convertir a camelCase
+                        return header.trim().toLowerCase();
+                    },
+                    complete: function(results) {
+                        if (results.errors.length > 0) {
+                            console.error('Errores al procesar el CSV:', results.errors);
+                        }
+                        
+                        // Transformar los datos del CSV al formato que necesitamos
+                        eventos = results.data.map((row, index) => {
+                            // Extraer coordenadas (pueden estar en columnas separadas o en una sola)
+                            let coords;
+                            if (row.latitud && row.longitud) {
+                                coords = [parseFloat(row.latitud), parseFloat(row.longitud)];
+                            } else if (row.coords || row.coordenadas) {
+                                // Si las coordenadas están en formato "lat,lng"
+                                const coordStr = row.coords || row.coordenadas;
+                                if (typeof coordStr === 'string') {
+                                    coords = coordStr.split(',').map(coord => parseFloat(coord.trim()));
+                                }
+                            } else {
+                                // Coordenadas por defecto (centro de Madrid) si no hay datos
+                                coords = [40.416775, -3.703790];
+                            }
+                            
+                            // Crear objeto de evento normalizado
+                            return {
+                                id: row.id || index + 1,
+                                titulo: row.titulo || row.nombre || row.title || 'Evento sin título',
+                                fechaInicio: row.fechainicio || row.fecha_inicio || row.fecha || row.startdate || row.start_date,
+                                fechaFin: row.fechafin || row.fecha_fin || row.fechainicio || row.fecha_inicio || row.fecha || row.enddate || row.end_date,
+                                coords: coords,
+                                direccion: row.direccion || row.address || row.ubicacion || 'Sin dirección',
+                                descripcion: row.descripcion || row.description || row.desc || 'Sin descripción',
+                                enlace: row.enlace || row.link || row.url || '#',
+                                categoria: row.categoria || row.category || 'default'
+                            };
+                        });
+                        
+                        console.log('Datos cargados:', eventos);
+                        resolve();
+                    },
+                    error: function(error) {
+                        console.error('Error al cargar el CSV:', error);
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        // Inicialización del mapa
+        function initMap() {
+            // Crear mapa centrado en Madrid
+            map = L.map('map').setView([40.416775, -3.703790], 13);
+            
+            // Añadir capa de mapa base (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Agregar marcadores para cada evento
+            renderMapMarkers(eventos);
+        }
+        
+        // Renderizar marcadores en el mapa
+        function renderMapMarkers(eventosParaMostrar) {
+            // Limpiar marcadores existentes
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            
+            // Añadir nuevos marcadores
+            eventosParaMostrar.forEach(evento => {
+                const colorCategoria = iconColors[evento.categoria] || iconColors.default;
+                
+                // Crear icono personalizado
+                const iconoEvento = L.divIcon({
+                    className: 'evento-marcador',
+                    html: `<div style="background-color: ${colorCategoria}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>`,
+                    iconSize: [16, 16],
+                    iconAnchor: [8, 8]
+                });
+                
+                // Crear marcador
+                const marker = L.marker(evento.coords, { icon: iconoEvento }).addTo(map);
+                
+                // Añadir popup
+                marker.bindPopup(`
+                    <div class="text-center">
+                        <strong>${evento.titulo}</strong><br>
+                        <small>${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}</small>
+                    </div>
+                `);
+                
+                // Añadir evento de clic
+                marker.on('click', () => {
+                    showEventModal(evento);
+                });
+                
+                // Guardar referencia al marcador
+                markers.push(marker);
+            });
+            
+            // Si hay eventos, ajustar el mapa para mostrarlos todos
+            if (eventosParaMostrar.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+        
+        // Inicializar filtros
+        function initFilters() {
+            const dateFilter = document.getElementById('date-filter');
+            const categoryFilter = document.getElementById('category-filter');
+            
+            // Llenar el selector de categorías
+            const categorias = [...new Set(eventos.map(e => e.categoria))];
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria;
+                option.textContent = categoria.charAt(0).toUpperCase() + categoria.slice(1);
+                categoryFilter.appendChild(option);
+            });
+            
+            // Eventos de cambio en los filtros
+            dateFilter.addEventListener('change', applyFilters);
+            categoryFilter.addEventListener('change', applyFilters);
+        }
+        
+        // Aplicar filtros a los eventos
+        function applyFilters() {
+            const dateFilter = document.getElementById('date-filter').value;
+            const categoryFilter = document.getElementById('category-filter').value;
+            
+            // Filtrar eventos según criterios
+            const eventosFiltrados = eventos.filter(evento => {
+                const cumpleFiltroFecha = dateFilter ? 
+                    (new Date(evento.fechaInicio) <= new Date(dateFilter) && 
+                     new Date(evento.fechaFin) >= new Date(dateFilter)) : 
+                    true;
+                
+                const cumpleFiltroCategoria = categoryFilter ? 
+                    evento.categoria === categoryFilter : 
+                    true;
+                
+                return cumpleFiltroFecha && cumpleFiltroCategoria;
+            });
+            
+            // Actualizar la lista y mapa con los eventos filtrados
+            eventosActuales = eventosFiltrados;
+            renderEventsList(eventosFiltrados);
+            renderMapMarkers(eventosFiltrados);
+        }
+        
+        // Renderizar lista de eventos
+        function renderEventsList(eventosParaMostrar) {
+            const eventsList = document.getElementById('events-list');
+            eventsList.innerHTML = '';
+            
+            if (eventosParaMostrar.length === 0) {
+                eventsList.innerHTML = '<p class="text-gray-500 italic">No hay eventos que coincidan con los filtros.</p>';
+                return;
+            }
+            
+            eventosParaMostrar.forEach(evento => {
+                const eventoElement = document.createElement('div');
+                eventoElement.className = 'event-item';
+                eventoElement.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="category-icon category-${evento.categoria || 'default'}"></span>
+                        <h3 class="font-medium">${evento.titulo}</h3>
+                    </div>
+                    <p class="text-sm text-gray-600">
+                        ${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}
+                    </p>
+                    <p class="text-sm text-gray-600">${evento.direccion}</p>
+                `;
+                
+                // Añadir evento de clic
+                eventoElement.addEventListener('click', () => {
+                    showEventModal(evento);
+                });
+                
+                eventsList.appendChild(eventoElement);
+            });
+        }
+        
+        // Inicializar modal
+        function initModal() {
+            const modal = document.getElementById('event-modal');
+            const closeButton = document.getElementById('close-modal');
+            const closeBtn = document.getElementById('modal-close-btn');
+            
+            // Eventos para cerrar el modal
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            // Cerrar modal haciendo clic fuera del contenido
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+        
+        // Mostrar modal con detalles del evento
+        function showEventModal(evento) {
+            const modal = document.getElementById('event-modal');
+            
+            // Rellenar datos
+            document.getElementById('modal-title').textContent = evento.titulo;
+            document.getElementById('modal-date').textContent = `${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}`;
+            document.getElementById('modal-location').textContent = evento.direccion;
+            document.getElementById('modal-description').textContent = evento.descripcion;
+            
+            const enlaceElement = document.getElementById('modal-link');
+            enlaceElement.href = evento.enlace;
+            
+            // Mostrar modal
+            modal.style.display = 'flex';
+            
+            // Centrar el mapa en el evento
+            map.setView(evento.coords, 15);
+            
+            // Abrir popup en el mapa
+            markers.forEach(marker => {
+                if (marker.getLatLng().lat === evento.coords[0] && 
+                    marker.getLatLng().lng === evento.coords[1]) {
+                    marker.openPopup();
+                }
+            });
+        }
+        
+        // Formatear fecha
+        function formatearFecha(fecha) {
+            return new Date(fecha).toLocaleDateString('es-ES', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+    </script>
+</body>
+</html>
