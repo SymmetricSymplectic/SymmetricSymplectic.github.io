@@ -191,8 +191,22 @@
                 <p class="font-medium">Fecha:</p>
                 <p id="modal-date" class="mb-2">01 Enero 2025 - 05 Enero 2025</p>
                 
+                <p class="font-medium">Horarios:</p>
+                <p id="modal-schedule" class="mb-2">Sin horarios especificados</p>
+                
                 <p class="font-medium">Ubicación:</p>
                 <p id="modal-location" class="mb-2">Dirección del evento</p>
+                
+                <p class="font-medium">Ver en Google Maps:</p>
+                <a 
+                    id="modal-google-maps"
+                    href="#" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="text-green-600 hover:underline mb-2 inline-block"
+                >
+                    📍 Abrir en Google Maps
+                </a>
                 
                 <p class="font-medium">Descripción:</p>
                 <p id="modal-description" class="mb-2">Descripción del evento</p>
@@ -327,8 +341,8 @@
                                     coords = coordStr.split(',').map(coord => parseFloat(coord.trim()));
                                 }
                             } else {
-                                // Coordenadas por defecto (centro de Madrid) si no hay datos
-                                coords = [40.416775, -3.703790];
+                                // Coordenadas por defecto si no hay datos (CDMX)
+                                coords = [19.334842809698745, -99.14410548446263];
                             }
                             
                             // Crear objeto de evento normalizado
@@ -337,6 +351,7 @@
                                 titulo: row.titulo || row.nombre || row.title || 'Evento sin título',
                                 fechaInicio: row.fechainicio || row.fecha_inicio || row.fecha || row.startdate || row.start_date,
                                 fechaFin: row.fechafin || row.fecha_fin || row.fechainicio || row.fecha_inicio || row.fecha || row.enddate || row.end_date,
+                                horarios: row.horarios || row.schedule || row.horario || row.time || 'Sin horarios especificados',
                                 coords: coords,
                                 direccion: row.direccion || row.address || row.ubicacion || 'Sin dirección',
                                 descripcion: row.descripcion || row.description || row.desc || 'Sin descripción',
@@ -532,9 +547,16 @@
             // Rellenar datos
             document.getElementById('modal-title').textContent = evento.titulo;
             document.getElementById('modal-date').textContent = `${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}`;
+            document.getElementById('modal-schedule').textContent = evento.horarios;
             document.getElementById('modal-location').textContent = evento.direccion;
             document.getElementById('modal-description').textContent = evento.descripcion;
             
+            // Configurar enlace a Google Maps
+            const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(evento.direccion)}&query_place_id=${evento.coords[0]},${evento.coords[1]}`;
+            const googleMapsElement = document.getElementById('modal-google-maps');
+            googleMapsElement.href = googleMapsUrl;
+            
+            // Configurar enlace del evento
             const enlaceElement = document.getElementById('modal-link');
             enlaceElement.href = evento.enlace;
             
