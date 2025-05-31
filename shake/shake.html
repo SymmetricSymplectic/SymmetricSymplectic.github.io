@@ -116,6 +116,15 @@
         .category-tecnologia { background-color: #805ad5; }
         .category-gastronomia { background-color: #38a169; }
         .category-default { background-color: #718096; }
+    
+        /* Estilos para popups con múltiples eventos */
+        .eventos-popup .leaflet-popup-content {
+            margin: 8px 12px;
+            font-size: 13px;
+        }
+        .eventos-popup .leaflet-popup-content-wrapper {
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -261,7 +270,20 @@
             deporte: '#f6ad55',       // Naranja
             default: '#718096'        // Gris
         };
-
+        // Función para agrupar eventos por ubicación (mismas coordenadas)
+        function agruparEventosPorUbicacion(eventos) {
+            const grupos = new Map();
+            
+            eventos.forEach(evento => {
+                const key = `${evento.coords[0].toFixed(6)},${evento.coords[1].toFixed(6)}`;
+                if (!grupos.has(key)) {
+                    grupos.set(key, []);
+                }
+                grupos.get(key).push(evento);
+            });
+            
+            return grupos;
+        }
         // Inicialización de la aplicación
         document.addEventListener('DOMContentLoaded', () => {
             // Primero cargamos los datos desde el CSV
@@ -390,41 +412,87 @@
             });
         }
         
-        // Renderizar marcadores en el mapa
+// Renderizar marcadores en el mapa
         function renderMapMarkers(eventosParaMostrar) {
             // Limpiar marcadores existentes
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
             
-            // Añadir nuevos marcadores
-            eventosParaMostrar.forEach(evento => {
-                const colorCategoria = iconColors[evento.categoria] || iconColors.default;
+            // Agrupar eventos por ubicación
+            const gruposDeEventos = agruparEventosPorUbicacion(eventosParaMostrar);
+            
+            // Crear marcadores para cada grupo de ubicación
+            gruposDeEventos.forEach((eventosEnUbicacion, coordenadas) => {
+                const coords = coordenadas.split(',').map(Number);
+                const primerEvento = eventosEnUbicacion[0];
                 
-                // Crear icono personalizado
+                // Determinar color del marcador (usar el primer evento como referencia)
+                const colorCategoria = iconColors[primerEvento.categoria] || iconColors.default;
+                
+                // Crear icono - si hay múltiples eventos, mostrar número
+                let iconHtml;
+                if (eventosEnUbicacion.length > 1) {
+                    iconHtml = `<div style="background-color: ${colorCategoria}; color: white; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold;">${eventosEnUbicacion.length}</div>`;
+                } else {
+                    iconHtml = `<div style="background-color: ${colorCategoria}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>`;
+                }
+                
                 const iconoEvento = L.divIcon({
                     className: 'evento-marcador',
-                    html: `<div style="background-color: ${colorCategoria}; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>`,
-                    iconSize: [16, 16],
-                    iconAnchor: [8, 8]
+                    html: iconHtml,
+                    iconSize: eventosEnUbicacion.length > 1 ? [24, 24] : [16, 16],
+                    iconAnchor: eventosEnUbicacion.length > 1 ? [12, 12] : [8, 8]
                 });
                 
                 // Crear marcador
-                const marker = L.marker(evento.coords, { icon: iconoEvento }).addTo(map);
+                const marker = L.marker(coords, { icon: iconoEvento }).addTo(map);
+                
+                // Crear contenido del popup
+                let popupContent;
+                if (eventosEnUbicacion.length === 1) {
+                    // Un solo evento
+                    const evento = eventosEnUbicacion[0];
+                    popupContent = `
+                        <div class="text-center">
+                            <strong>${evento.titulo}</strong><br>
+                            <small>${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}</small>
+                        </div>
+                    `;
+                } else {
+                    // Múltiples eventos
+                    popupContent = `
+                        <div>
+                            <strong>${eventosEnUbicacion.length} eventos en esta ubicación:</strong><br>
+                            <div style="max-height: 200px; overflow-y: auto; margin-top: 8px;">
+                                ${eventosEnUbicacion.map(evento => `
+                                    <div style="margin-bottom: 8px; padding: 4px; border-left: 3px solid ${iconColors[evento.categoria] || iconColors.default}; background: #f9f9f9; cursor: pointer;" 
+                                         onclick="showEventModal(${JSON.stringify(evento).replace(/"/g, '&quot;')})">
+                                        <strong style="font-size: 12px;">${evento.titulo}</strong><br>
+                                        <small style="font-size: 10px;">${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}</small>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
                 
                 // Añadir popup
-                marker.bindPopup(`
-                    <div class="text-center">
-                        <strong>${evento.titulo}</strong><br>
-                        <small>${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}</small>
-                    </div>
-                `);
+                marker.bindPopup(popupContent, {
+                    maxWidth: 300,
+                    className: 'eventos-popup'
+                });
                 
                 // Añadir evento de clic
                 marker.on('click', () => {
-                    showEventModal(evento);
+                    if (eventosEnUbicacion.length === 1) {
+                        // Un solo evento - mostrar modal directamente
+                        showEventModal(eventosEnUbicacion[0]);
+                    }
+                    // Si hay múltiples eventos, el popup se abre automáticamente
                 });
                 
-                // Guardar referencia al marcador
+                // Guardar referencia al marcador con los eventos asociados
+                marker.eventosAsociados = eventosEnUbicacion;
                 markers.push(marker);
             });
             
@@ -539,7 +607,9 @@
                 }
             });
         }
-        
+        // Hacer showEventModal accesible globalmente para los popups
+        window.showEventModal = showEventModal;
+                
         // Mostrar modal con detalles del evento
         function showEventModal(evento) {
             const modal = document.getElementById('event-modal');
