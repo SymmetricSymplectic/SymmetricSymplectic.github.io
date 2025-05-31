@@ -116,6 +116,8 @@
         .category-tecnologia { background-color: #805ad5; }
         .category-gastronomia { background-color: #38a169; }
         .category-default { background-color: #718096; }
+        .category-boardgames { background-color: #939671; }
+        
     
         /* Estilos para popups con múltiples eventos */
         .eventos-popup .leaflet-popup-content {
@@ -412,7 +414,7 @@
             });
         }
         
-// Renderizar marcadores en el mapa
+        // Renderizar marcadores en el mapa
         function renderMapMarkers(eventosParaMostrar) {
             // Limpiar marcadores existentes
             markers.forEach(marker => map.removeLayer(marker));
