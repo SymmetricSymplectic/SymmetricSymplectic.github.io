@@ -262,7 +262,8 @@
         const CSV_FILE = 'eventos.csv';
 
         // Variables globales
-        let map;
+        const map = L.map('map').setView([19.4326, -99.1332], 13); //
+        //let map;
         let markers = [];
         let eventosActuales = [...eventos];
         
