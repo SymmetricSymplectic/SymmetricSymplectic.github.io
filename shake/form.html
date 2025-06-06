@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Captura de Datos CSV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        table, th, td { 
+            border: 1px solid #333; 
+            border-collapse: collapse; 
+            padding: 8px; 
+        }
+        th { 
+            background: #eee; 
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        form { 
+            margin-bottom: 20px; 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+        input, textarea { 
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            grid-column: span 2;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .file-input {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .actions {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .download-btn {
+            background: #28a745;
+        }
+        .download-btn:hover {
+            background: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <h1>Lectura y Edición de Tabla CSV de Eventos</h1>
+    
+    <div class="file-input">
+        <label for="csvFile">Cargar archivo CSV (opcional):</label>
+        <input type="file" id="csvFile" accept=".csv">
+    </div>
+
+    <div id="status"></div>
+
+    <h3>Agregar Nuevo Evento</h3>
+    <form id="addForm">
+        <input type="text" name="id" placeholder="ID" required>
+        <input type="text" name="titulo" placeholder="Título" required>
+        <input type="date" name="fechaInicio" placeholder="Fecha Inicio" required>
+        <input type="date" name="fechaFin" placeholder="Fecha Fin" required>
+        <input type="text" name="horarios" placeholder="Horarios" required>
+        <input type="number" step="any" name="latitud" placeholder="Latitud" required>
+        <input type="number" step="any" name="longitud" placeholder="Longitud" required>
+        <input type="text" name="direccion" placeholder="Dirección" required>
+        <textarea name="descripcion" placeholder="Descripción" required rows="2"></textarea>
+        <input type="url" name="enlace" placeholder="Enlace (URL)" required>
+        <input type="text" name="categoria" placeholder="Categoría" required>
+        <button type="submit">Agregar Evento</button>
+    </form>
+
+    <div class="table-container">
+        <table id="csvTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Horarios</th>
+                    <th>Latitud</th>
+                    <th>Longitud</th>
+                    <th>Dirección</th>
+                    <th>Descripción</th>
+                    <th>Enlace</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions">
+        <button id="downloadBtn" class="download-btn">Descargar CSV Actualizado</button>
+    </div>
+
+    <script>
+        let tableData = [];
+        const headers = ["id","titulo","fechaInicio","fechaFin","horarios","latitud","longitud","direccion","descripcion","enlace","categoria"];
+
+        function showStatus(message, type = 'success') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            const result = [];
+            
+            // Verificar si hay encabezados
+            if (lines.length === 0) return result;
+            
+            // Empezar desde la línea 1 (asumiendo que línea 0 son headers)
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                // Parsear CSV considerando comillas
+                const values = parseCSVLine(line);
+                if (values.length === headers.length) {
+                    result.push(Object.fromEntries(headers.map((h, idx) => [h, values[idx] || ''])));
+                }
+            }
+            return result;
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        current += '"';
+                        i++; // Skip next quote
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            return result;
+        }
+
+        function renderTable() {
+            const tbody = document.querySelector('#csvTable tbody');
+            tbody.innerHTML = '';
+            
+            if (tableData.length === 0) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = '<td colspan="12" style="text-align: center; color: #666;">No hay eventos para mostrar</td>';
+                tbody.appendChild(tr);
+                return;
+            }
+            
+            tableData.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                headers.forEach(h => {
+                    const td = document.createElement('td');
+                    td.textContent = row[h] || '';
+                    tr.appendChild(td);
+                });
+                
+                // Agregar columna de acciones
+                const actionTd = document.createElement('td');
+                actionTd.innerHTML = `<button onclick="deleteRow(${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Eliminar</button>`;
+                tr.appendChild(actionTd);
+                
+                tbody.appendChild(tr);
+            });
+        }
+
+        function deleteRow(index) {
+            if (confirm('¿Estás seguro de que quieres eliminar este evento?')) {
+                tableData.splice(index, 1);
+                renderTable();
+                showStatus('Evento eliminado correctamente');
+            }
+        }
+
+        // Cargar automáticamente el CSV al cargar la página
+        window.addEventListener('DOMContentLoaded', function() {
+            fetch('eventos.csv')
+                .then(response => {
+                    if (!response.ok) throw new Error('No se pudo cargar el archivo CSV');
+                    return response.text();
+                })
+                .then(text => {
+                    tableData = parseCSV(text);
+                    renderTable();
+                    showStatus(`Archivo eventos.csv cargado correctamente (${tableData.length} eventos)`);
+                })
+                .catch(err => {
+                    console.log('No se encontró eventos.csv:', err);
+                    showStatus('No se encontró el archivo eventos.csv. Puedes cargar uno manualmente o empezar agregando eventos.', 'error');
+                    renderTable(); // Mostrar tabla vacía
+                });
+        });
+
+        // Manejo de carga manual de archivos
+        document.getElementById('csvFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const text = evt.target.result;
+                tableData = parseCSV(text);
+                renderTable();
+                showStatus(`Archivo ${file.name} cargado correctamente (${tableData.length} eventos)`);
+            };
+            reader.readAsText(file);
+        });
+
+        // Manejo del formulario
+        document.getElementById('addForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const newRow = {};
+            
+            headers.forEach(h => {
+                newRow[h] = formData.get(h) || '';
+            });
+            
+            // Validar ID único
+            const existingIds = tableData.map(row => row.id);
+            if (existingIds.includes(newRow.id)) {
+                showStatus('Error: Ya existe un evento con ese ID', 'error');
+                return;
+            }
+            
+            tableData.push(newRow);
+            renderTable();
+            e.target.reset();
+            showStatus('Evento agregado correctamente');
+        });
+
+        // Manejo de descarga
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            if (tableData.length === 0) {
+                showStatus('No hay datos para descargar', 'error');
+                return;
+            }
+            
+            let csv = headers.join(',') + '\n';
+            tableData.forEach(row => {
+                csv += headers.map(h => {
+                    const value = (row[h] || '').toString();
+                    // Escapar comillas y agregar comillas si contiene comas o saltos de línea
+                    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+                        return `"${value.replace(/"/g, '""')}"`;
+                    }
+                    return value;
+                }).join(',') + '\n';
+            });
+            
+            const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'eventos_actualizado.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus('Archivo CSV descargado correctamente');
+        });
+    </script>
+</body>
+</html>
