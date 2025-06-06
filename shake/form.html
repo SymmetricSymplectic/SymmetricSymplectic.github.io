@@ -269,59 +269,49 @@
         });
 
         // Manejo del formulario
-        document.getElementById('addForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const newRow = {};
-            
-            headers.forEach(h => {
-                newRow[h] = formData.get(h) || '';
-            });
-            
-            // Validar ID único
-            const existingIds = tableData.map(row => row.id);
-            if (existingIds.includes(newRow.id)) {
-                showStatus('Error: Ya existe un evento con ese ID', 'error');
-                return;
-            }
-            
-            tableData.push(newRow);
-            renderTable();
-            e.target.reset();
-            showStatus('Evento agregado correctamente');
-        });
-
-        // Manejo de descarga
         document.getElementById('downloadBtn').addEventListener('click', function() {
-            if (tableData.length === 0) {
-                showStatus('No hay datos para descargar', 'error');
-                return;
-            }
-            
-            let csv = headers.join(',') + '\n';
-            tableData.forEach(row => {
-                csv += headers.map(h => {
-                    const value = (row[h] || '').toString();
+        if (tableData.length === 0) {
+            showStatus('No hay datos para descargar', 'error');
+            return;
+        }
+
+        let csv = headers.join(',') + '\n';
+        tableData.forEach(row => {
+            csv += headers.map(h => {
+                let value = (row[h] || '').toString().trim();
+
+                // Limitar decimales para latitud y longitud
+                if (h === 'latitud' || h === 'longitud') {
+                    if (value !== '') {
+                        value = parseFloat(value).toFixed(6);
+                    }
+                }
+
+                // Colocar entre comillas dobles para los campos requeridos
+                if (['titulo', 'horarios', 'direccion', 'descripcion'].includes(h)) {
+                    value = '"' + value.replace(/"/g, '""') + '"';
+                } else {
                     // Escapar comillas y agregar comillas si contiene comas o saltos de línea
                     if (value.includes(',') || value.includes('"') || value.includes('\n')) {
-                        return `"${value.replace(/"/g, '""')}"`;
+                        value = '"' + value.replace(/"/g, '""') + '"';
                     }
-                    return value;
-                }).join(',') + '\n';
-            });
-            
-            const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'eventos_actualizado.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showStatus('Archivo CSV descargado correctamente');
+                }
+                return value;
+            }).join(',') + '\n';
         });
+
+        const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'eventos_actualizado.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showStatus('Archivo CSV descargado correctamente');
+    });
     </script>
 </body>
 </html>
