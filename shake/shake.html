@@ -262,8 +262,7 @@
         const CSV_FILE = 'eventos.csv';
 
         // Variables globales
-        const map = L.map('map').setView([19.4326, -99.1332], 13); //
-        //let map;
+        let map;
         let markers = [];
         let eventosActuales = [...eventos];
         
@@ -402,7 +401,7 @@
         // Inicialización del mapa
         function initMap() {
             // Crear mapa centrado en CDMX
-            map = L.map('map').setView([19.33, -99.14], 13);
+            map = L.map('map').setView([19.33, -99.14], 15);
             
             // Añadir capa de mapa base (OpenStreetMap)
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
