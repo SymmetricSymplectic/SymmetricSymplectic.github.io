@@ -33,6 +33,7 @@
             background-color: #f3f4f6;
             padding: 1rem;
             display: none; /* Oculta el sidebar por defecto en móviles */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07); /* NUEVO */
         }
         .map-container {
             flex: 1;
@@ -51,9 +52,12 @@
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: background-color 0.2s;
+            border: 1px solid #e2e8f0;
         }
         .event-item:hover {
             background-color: #ebf5ff;
+            box-shadow: 0 4px 12px rgba(49,130,206,0.08); 
+            border-color: #3182ce; 
         }
         .modal {
             position: fixed;
@@ -75,6 +79,7 @@
             max-width: 500px;
             width: 100%;
             padding: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13); /* NUEVO */
         }
         .tabs {
             display: flex;
