@@ -108,6 +108,9 @@
             .map-container {
                 display: block; /* Mostrar mapa siempre en desktop */
             }
+            #mobile-form-container {
+                display: none !important; /* Ocultar contenedor móvil en desktop */
+            }
         }
         .category-icon {
             display: inline-block;
@@ -148,6 +151,8 @@
         <div class="tabs md:hidden">
             <div id="map-tab" class="tab active" onclick="switchTab('map')">Mapa</div>
             <div id="events-tab" class="tab" onclick="switchTab('events')">Eventos</div>
+            <div id="form-tab" class="tab" onclick="switchTab('form')">Agregar Evento</div>
+
         </div>
         
         <!-- Contenedor principal (sidebar + mapa) -->
@@ -177,6 +182,15 @@
                         </select>
                     </div>
                 </div>
+                <div class="mb-4">
+                    <button 
+                        id="toggle-form-btn" 
+                        onclick="toggleForm()" 
+                        class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors"
+                    >
+                        📝 Agregar tu Evento
+                    </button>
+                </div>
                 
                 <div>
                     <h2 class="text-lg font-semibold mb-2">Lista de Eventos</h2>
@@ -184,12 +198,39 @@
                         <!-- Se llenará dinámicamente con JavaScript -->
                     </div>
                 </div>
+                <div id="form-container" style="display: none;">
+                    <h2 class="text-lg font-semibold mb-4">Agregar tu Evento</h2>
+                    <iframe 
+                        id="google-form" 
+                        src="<iframe src="https://docs.google.com/forms/d/e/1FAIpQLScNtg2ZblkKjvjmhKhbFYQzsSdHOgxkGkxfyJOCuxUJtqjnbA/viewform?embedded=true" width="640" height="1559" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>" 
+                        width="100%" 
+                        height="600" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0">
+                        Cargando...
+                    </iframe>
+                </div>
             </div>
             
             <!-- Contenedor del mapa -->
             <div id="map-container" class="map-container">
                 <div id="map"></div>
             </div>
+        </div>
+        <!-- Contenedor del formulario para móvil -->
+        <div id="mobile-form-container" class="sidebar" style="display: none;">
+            <h2 class="text-lg font-semibold mb-4">Agregar tu Evento</h2>
+            <iframe 
+                id="mobile-google-form" 
+                src="TU_URL_DEL_FORMULARIO_AQUI" 
+                width="100%" 
+                height="500" 
+                frameborder="0" 
+                marginheight="0" 
+                marginwidth="0">
+                Cargando...
+            </iframe>
         </div>
     </div>
     
@@ -318,28 +359,34 @@
         function switchTab(tabName) {
             const mapTab = document.getElementById('map-tab');
             const eventsTab = document.getElementById('events-tab');
+            const formTab = document.getElementById('form-tab');
             const mapContainer = document.getElementById('map-container');
             const sidebar = document.getElementById('sidebar');
+            const mobileFormContainer = document.getElementById('mobile-form-container');
+            
+            // Remover clase active de todas las pestañas
+            mapTab.classList.remove('active');
+            eventsTab.classList.remove('active');
+            formTab.classList.remove('active');
+            
+            // Ocultar todos los contenedores
+            mapContainer.style.display = 'none';
+            sidebar.style.display = 'none';
+            mobileFormContainer.style.display = 'none';
             
             if (tabName === 'map') {
-                // Activar pestaña de mapa
                 mapTab.classList.add('active');
-                eventsTab.classList.remove('active');
-                
-                // Mostrar mapa, ocultar eventos
                 mapContainer.style.display = 'block';
-                sidebar.style.display = 'none';
-                
-                // Actualizar tamaño del mapa después de hacerlo visible
                 map.invalidateSize();
-            } else {
-                // Activar pestaña de eventos
+            } else if (tabName === 'events') {
                 eventsTab.classList.add('active');
-                mapTab.classList.remove('active');
-                
-                // Mostrar eventos, ocultar mapa
                 sidebar.style.display = 'block';
-                mapContainer.style.display = 'none';
+                // Mostrar lista de eventos, ocultar formulario
+                document.getElementById('events-list').parentElement.style.display = 'block';
+                document.getElementById('form-container').style.display = 'none';
+            } else if (tabName === 'form') {
+                formTab.classList.add('active');
+                mobileFormContainer.style.display = 'block';
             }
         }
         
@@ -662,6 +709,28 @@
                 month: 'long',
                 year: 'numeric'
             });
+        }
+        // Función para alternar entre lista de eventos y formulario en desktop
+        function toggleForm() {
+            const eventsList = document.getElementById('events-list').parentElement;
+            const formContainer = document.getElementById('form-container');
+            const toggleBtn = document.getElementById('toggle-form-btn');
+            
+            if (formContainer.style.display === 'none' || formContainer.style.display === '') {
+                // Mostrar formulario
+                eventsList.style.display = 'none';
+                formContainer.style.display = 'block';
+                toggleBtn.textContent = '📋 Ver Lista de Eventos';
+                toggleBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                toggleBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            } else {
+                // Mostrar lista de eventos
+                formContainer.style.display = 'none';
+                eventsList.style.display = 'block';
+                toggleBtn.textContent = '📝 Agregar tu Evento';
+                toggleBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                toggleBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            }
         }
     </script>
 </body>
