@@ -312,6 +312,22 @@
 
         showStatus('Archivo CSV descargado correctamente');
     });
+        document.getElementById('addForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Evita recarga de página
+
+        const formData = new FormData(e.target);
+        const newEvent = {};
+        headers.forEach(h => {
+            newEvent[h] = formData.get(h)?.trim() || '';
+        });
+
+        tableData.push(newEvent);
+        renderTable();
+        showStatus('Evento agregado correctamente');
+
+        e.target.reset(); // Limpia el formulario
+    });
+
     </script>
 </body>
 </html>
