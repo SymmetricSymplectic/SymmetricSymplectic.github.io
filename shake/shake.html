@@ -72,6 +72,8 @@
             padding: 1rem;
             z-index: 1000;
             display: none;
+            /* Permitir scroll en el modal cuando sea necesario */
+            overflow-y: auto;
         }
         .modal-content {
             background-color: white;
@@ -79,7 +81,12 @@
             max-width: 500px;
             width: 100%;
             padding: 1.5rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.13); /* NUEVO */
+            box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+            /* Permitir que el contenido tenga scroll interno si es muy largo */
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+            /* Centrar el modal verticalmente incluso con contenido largo */
+            margin: auto 0;
         }
         .tabs {
             display: flex;
@@ -137,6 +144,22 @@
         }
         .eventos-popup .leaflet-popup-content-wrapper {
             border-radius: 8px;
+        }
+        /* Estilos específicos para móvil */
+        @media (max-width: 767px) {
+            .modal {
+                padding: 0.5rem;
+                /* En móvil, alinear al inicio para evitar problemas con contenido largo */
+                align-items: flex-start;
+                padding-top: 2rem;
+                padding-bottom: 2rem;
+            }
+            
+            .modal-content {
+                max-height: calc(100vh - 4rem);
+                /* En móvil, asegurar que el modal no sea más ancho que la pantalla */
+                max-width: calc(100vw - 1rem);
+            }
         }
     </style>
 </head>
