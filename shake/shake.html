@@ -138,17 +138,6 @@
         .eventos-popup .leaflet-popup-content-wrapper {
             border-radius: 8px;
         }
-        /* Ocultar botón de agregar evento en móvil */
-        #toggle-form-btn {
-            display: none !important;
-        }
-
-        /* Mostrar botón solo en desktop */
-        @media (min-width: 768px) {
-            #toggle-form-btn {
-                display: block;
-            }
-        }
     </style>
 </head>
 <body>
@@ -174,7 +163,7 @@
                     <h2 class="text-lg font-semibold mb-2">Filtros</h2>
                     
                     <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Filtrar por Fecha:</label>
+                        <label class="block text-sm font-medium mb-1">Fecha:</label>
                         <input 
                             type="date" 
                             id="date-filter" 
@@ -193,7 +182,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="mb-4>
+                <div class="mb-4 hidden md:block">
                     <button 
                         id="toggle-form-btn" 
                         onclick="toggleForm()" 
@@ -723,11 +712,6 @@
         }
         // Función para alternar entre lista de eventos y formulario en desktop
         function toggleForm() {
-            // Solo funcionar en desktop (pantallas >= 768px)
-            if (window.innerWidth < 768) {
-                return; // No hacer nada en móvil
-            }
-            
             const eventsList = document.getElementById('events-list').parentElement;
             const formContainer = document.getElementById('form-container');
             const toggleBtn = document.getElementById('toggle-form-btn');
@@ -748,35 +732,6 @@
                 toggleBtn.classList.add('bg-green-600', 'hover:bg-green-700');
             }
         }
-       // Función para manejar el redimensionamiento de ventana
-        function handleResize() {
-            const toggleBtn = document.getElementById('toggle-form-btn');
-            if (window.innerWidth < 768) {
-                // En móvil: ocultar botón y resetear vista
-                if (toggleBtn) {
-                    toggleBtn.style.display = 'none';
-                }
-                // Asegurar que se muestre la lista de eventos
-                document.getElementById('events-list').parentElement.style.display = 'block';
-                document.getElementById('form-container').style.display = 'none';
-            } else {
-                // En desktop: mostrar botón
-                if (toggleBtn) {
-                    toggleBtn.style.display = 'block';
-                }
-            }
-        }
-
-        // Agregar listener para redimensionamiento
-        window.addEventListener('resize', handleResize);
-
-        // Ejecutar al cargar la página
-        document.addEventListener('DOMContentLoaded', () => {
-            // ... tu código existente ...
-            
-            // Agregar esta línea al final del DOMContentLoaded
-            handleResize();
-        });
     </script>
 </body>
 </html>
