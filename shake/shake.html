@@ -723,6 +723,11 @@
         }
         // Función para alternar entre lista de eventos y formulario en desktop
         function toggleForm() {
+            // Solo funcionar en desktop (pantallas >= 768px)
+            if (window.innerWidth < 768) {
+                return; // No hacer nada en móvil
+            }
+            
             const eventsList = document.getElementById('events-list').parentElement;
             const formContainer = document.getElementById('form-container');
             const toggleBtn = document.getElementById('toggle-form-btn');
