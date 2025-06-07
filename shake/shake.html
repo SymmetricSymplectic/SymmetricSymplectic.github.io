@@ -138,6 +138,17 @@
         .eventos-popup .leaflet-popup-content-wrapper {
             border-radius: 8px;
         }
+        /* Ocultar botón de agregar evento en móvil */
+        #toggle-form-btn {
+            display: none;
+        }
+
+        /* Mostrar botón solo en desktop */
+        @media (min-width: 768px) {
+            #toggle-form-btn {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
@@ -182,7 +193,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="mb-4 hidden md:block">
+                <div class="mb-4>
                     <button 
                         id="toggle-form-btn" 
                         onclick="toggleForm()" 
