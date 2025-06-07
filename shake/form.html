@@ -201,31 +201,36 @@
         function renderTable() {
             const tbody = document.querySelector('#csvTable tbody');
             tbody.innerHTML = '';
-            
+
             if (tableData.length === 0) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = '<td colspan="12" style="text-align: center; color: #666;">No hay eventos para mostrar</td>';
                 tbody.appendChild(tr);
                 return;
             }
-            
+
             tableData.forEach((row, index) => {
                 const tr = document.createElement('tr');
+                
                 headers.forEach(h => {
                     const td = document.createElement('td');
+                    td.contentEditable = true;
                     td.textContent = row[h] || '';
+
+                    td.addEventListener('blur', () => {
+                        tableData[index][h] = td.textContent.trim();
+                    });
+
                     tr.appendChild(td);
                 });
-                
-                // Agregar columna de acciones
+
                 const actionTd = document.createElement('td');
                 actionTd.innerHTML = `<button onclick="deleteRow(${index})" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Eliminar</button>`;
                 tr.appendChild(actionTd);
-                
+
                 tbody.appendChild(tr);
             });
         }
-
         function deleteRow(index) {
             if (confirm('¿Estás seguro de que quieres eliminar este evento?')) {
                 tableData.splice(index, 1);
