@@ -15,6 +15,10 @@ header, section, footer {
   align-items: center;
 }
 
+header {
+  text-align: center;
+}
+
 img {
   width: 100%; /* Asegura que las imágenes no sean más anchas que su contenedor */
   max-width: 400px; /* Establece un ancho máximo para las imágenes */
