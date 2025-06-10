@@ -538,7 +538,7 @@
                     popupContent = `
                         <div class="text-center">
                             <strong>${evento.titulo}</strong><br>
-                            <small>${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}</small>
+                            <small>${formatearRangoFechas(evento.fechaInicio, evento.fechaFin)}</small>
                         </div>
                     `;
                 } else {
@@ -649,7 +649,7 @@
                         <h3 class="font-medium">${evento.titulo}</h3>
                     </div>
                     <p class="text-sm text-gray-600">
-                        ${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}
+                        ${formatearRangoFechas(evento.fechaInicio, evento.fechaFin)}
                     </p>
                     <p class="text-sm text-gray-600">${evento.direccion}</p>
                 `;
@@ -699,7 +699,7 @@
             
             // Rellenar datos
             document.getElementById('modal-title').textContent = evento.titulo;
-            document.getElementById('modal-date').textContent = `${formatearFecha(evento.fechaInicio)} - ${formatearFecha(evento.fechaFin)}`;
+            document.getElementById('modal-date').textContent = formatearRangoFechas(evento.fechaInicio, evento.fechaFin);
             document.getElementById('modal-schedule').textContent = evento.horarios;
             document.getElementById('modal-location').textContent = evento.direccion;
             document.getElementById('modal-description').textContent = evento.descripcion;
@@ -727,15 +727,44 @@
                 }
             });
         }
-        
-        // Formatear fecha
+        // Función para formatear fechas   
         function formatearFecha(fecha) {
-            return new Date(fecha).toLocaleDateString('es-ES', {
+            if (!fecha) return 'Fecha no especificada';
+            
+            // Crear fecha local para evitar problemas de zona horaria
+            let fechaLocal;
+            if (typeof fecha === 'string') {
+                // Si es una cadena en formato YYYY-MM-DD, crear fecha local
+                const partes = fecha.split('-');
+                if (partes.length === 3) {
+                    // Crear fecha local: new Date(año, mes-1, día)
+                    fechaLocal = new Date(parseInt(partes[0]), parseInt(partes[1]) - 1, parseInt(partes[2]));
+                } else {
+                    fechaLocal = new Date(fecha);
+                }
+            } else {
+                fechaLocal = new Date(fecha);
+            }
+            
+            return fechaLocal.toLocaleDateString('es-ES', {
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric'
             });
         }
+        // Nueva función para mostrar fechas en el modal con manejo especial de eventos de un día
+        function formatearRangoFechas(fechaInicio, fechaFin) {
+            if (!fechaInicio && !fechaFin) return 'Fechas no especificadas';
+            
+            // Si no hay fecha de fin o es igual a la de inicio, es un evento de un día
+            if (!fechaFin || fechaInicio === fechaFin) {
+                return formatearFecha(fechaInicio);
+            }
+            
+            // Si hay fechas diferentes, mostrar el rango
+            return `${formatearFecha(fechaInicio)} - ${formatearFecha(fechaFin)}`;
+        }
+
         // Función para alternar entre lista de eventos y formulario en desktop
         function toggleForm() {
             const eventsList = document.getElementById('events-list').parentElement;
