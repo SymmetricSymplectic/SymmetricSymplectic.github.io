@@ -331,7 +331,7 @@
         // Cargar datos desde la BDD
         async function cargarDatosDesdeBD() {
             try {
-                const response = await fetch('https://symmetricsymplectic.github.io/shake/get_eventos.php');
+                const response = await fetch('../shake/get_eventos.php');
                 if (!response.ok) throw new Error('Error en la respuesta del servidor');
 
                 const data = await response.json();
