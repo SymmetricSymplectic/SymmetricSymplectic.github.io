@@ -327,104 +327,13 @@
     <script>
         // Variables para almacenar los eventos
         let eventos = [];
-        eventosActuales = [...eventos]; 
-        async function cargarDatosDesdeBD() {
-            try {
-                console.log('Iniciando carga de datos desde BD...');
-                
-                const response = await fetch('../shake/get_eventos.php', {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-
-                if (!response.ok) {
-                    throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
-                }
-
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    const textResponse = await response.text();
-                    console.error('Respuesta no es JSON:', textResponse);
-                    throw new Error('La respuesta del servidor no es JSON válido');
-                }
-
-                const data = await response.json();
-                console.log('Datos recibidos:', data);
-
-                // Verificar si hay error en la respuesta
-                if (data.error) {
-                    throw new Error(data.message || 'Error desconocido del servidor');
-                }
-
-                // Verificar que data es un array
-                if (!Array.isArray(data)) {
-                    throw new Error('Los datos recibidos no son un array válido');
-                }
-
-                eventos = data;
-                eventosActuales = [...eventos];
-                
-                console.log(`Cargados ${eventos.length} eventos desde MySQL`);
-                return eventos;
-                
-            } catch (error) {
-                console.error('Error detallado al cargar eventos:', error);
-                
-                // Mostrar mensaje de error más específico
-                let mensajeError = 'Error al cargar eventos: ';
-                if (error.name === 'TypeError' && error.message.includes('fetch')) {
-                    mensajeError += 'No se pudo conectar con el servidor. Verifica que el archivo PHP esté disponible.';
-                } else if (error.message.includes('JSON')) {
-                    mensajeError += 'Error en el formato de datos del servidor.';
-                } else {
-                    mensajeError += error.message;
-                }
-                
-                // Cargar datos de respaldo si existe
-                try {
-                    await cargarDatosRespaldo();
-                } catch (backupError) {
-                    console.error('También falló la carga de respaldo:', backupError);
-                    throw new Error(mensajeError);
-                }
-            }
-        }
-
-        // Función de respaldo con datos estáticos (opcional)
-        async function cargarDatosRespaldo() {
-            console.log('Cargando datos de respaldo...');
-            
-            // Datos de ejemplo para desarrollo/pruebas
-            const datosRespaldo = [
-                {
-                    id: 1,
-                    titulo: "Evento de Prueba",
-                    descripcion: "Este es un evento de prueba mientras se resuelve la conexión a la base de datos",
-                    fechaInicio: "2025-07-01",
-                    fechaFin: "2025-07-01",
-                    horarios: "18:00 - 22:00",
-                    direccion: "Centro de la Ciudad de México",
-                    coords: [19.4326, -99.1332],
-                    categoria: "arte",
-                    enlace: "https://ejemplo.com"
-                }
-            ];
-            
-            eventos = datosRespaldo;
-            eventosActuales = [...eventos];
-            
-            console.log('Datos de respaldo cargados exitosamente');
-        }
+        // Nombre del archivo CSV (asegúrate de que esté en la misma carpeta)
+        const CSV_FILE = 'eventos.csv';
 
         // Variables globales
         let map;
         let markers = [];
+        let eventosActuales = [...eventos];
         
         // Configuración de los íconos para cada categoría
         const iconColors = {
@@ -455,7 +364,7 @@
         // Inicialización de la aplicación
         document.addEventListener('DOMContentLoaded', () => {
             // Primero cargamos los datos desde el CSV
-            cargarDatosDesdeBD().then(() => {
+            cargarDatosDesdeCSV().then(() => {
                 initMap();
                 initFilters();
                 renderEventsList(eventos);
@@ -506,6 +415,67 @@
                 mobileFormContainer.style.display = 'block';
             }
         }
+        
+        // Función para cargar datos desde el CSV
+        async function cargarDatosDesdeCSV() {
+            return new Promise((resolve, reject) => {
+                Papa.parse(CSV_FILE, {
+                    download: true,
+                    header: true,           // Primera fila contiene encabezados
+                    dynamicTyping: true,    // Convierte números automáticamente
+                    skipEmptyLines: true,   // Ignora líneas vacías
+                    transformHeader: (header) => {
+                        // Normalizar encabezados: eliminar espacios y convertir a camelCase
+                        return header.trim().toLowerCase();
+                    },
+                    complete: function(results) {
+                        if (results.errors.length > 0) {
+                            console.error('Errores al procesar el CSV:', results.errors);
+                        }
+                        
+                        // Transformar los datos del CSV al formato que necesitamos
+                        eventos = results.data.map((row, index) => {
+                            // Extraer coordenadas (pueden estar en columnas separadas o en una sola)
+                            let coords;
+                            if (row.latitud && row.longitud) {
+                                coords = [parseFloat(row.latitud), parseFloat(row.longitud)];
+                            } else if (row.coords || row.coordenadas) {
+                                // Si las coordenadas están en formato "lat,lng"
+                                const coordStr = row.coords || row.coordenadas;
+                                if (typeof coordStr === 'string') {
+                                    coords = coordStr.split(',').map(coord => parseFloat(coord.trim()));
+                                }
+                            } else {
+                                // Coordenadas por defecto si no hay datos (CDMX)
+                                coords = [19.334842809698745, -99.14410548446263];
+                            }
+                            
+                            // Crear objeto de evento normalizado
+                            return {
+                                id: row.id || index + 1,
+                                titulo: row.titulo || row.nombre || row.title || 'Evento sin título',
+                                fechaInicio: row.fechainicio || row.fecha_inicio || row.fecha || row.startdate || row.start_date,
+                                fechaFin: row.fechafin || row.fecha_fin || row.fechainicio || row.fecha_inicio || row.fecha || row.enddate || row.end_date,
+                                horarios: row.horarios || row.schedule || row.horario || row.time || 'Sin horarios especificados',
+                                coords: coords,
+                                direccion: row.direccion || row.address || row.ubicacion || 'Sin dirección',
+                                descripcion: row.descripcion || row.description || row.desc || 'Sin descripción',
+                                enlace: row.enlace || row.link || row.url || '#',
+                                categoria: row.categoria || row.category || 'default'
+                            };
+                        });
+                        
+                        console.log('Datos cargados:', eventos);
+                        resolve();
+                    },
+                    error: function(error) {
+                        console.error('Error al cargar el CSV:', error);
+                        reject(error);
+                    }
+                });
+            });
+        }
+
         // Inicialización del mapa
         function initMap() {
             // Crear mapa centrado en CDMX
