@@ -327,13 +327,26 @@
     <script>
         // Variables para almacenar los eventos
         let eventos = [];
-        // Nombre del archivo CSV (asegúrate de que esté en la misma carpeta)
-        const CSV_FILE = 'eventos.csv';
+        eventosActuales = [...eventos]; 
+        // Cargar datos desde la BDD
+        async function cargarDatosDesdeBD() {
+            try {
+                const response = await fetch('https://symmetricsymplectic.github.io/shake/get_eventos.php');
+                if (!response.ok) throw new Error('Error en la respuesta del servidor');
+
+                const data = await response.json();
+                eventos = data;
+                eventosActuales = [...eventos]; // <- mover aquí
+                console.log('Eventos desde MySQL:', eventos);
+            } catch (error) {
+                console.error('Error al cargar eventos desde MySQL:', error);
+                throw error;
+            }
+        }
 
         // Variables globales
         let map;
         let markers = [];
-        let eventosActuales = [...eventos];
         
         // Configuración de los íconos para cada categoría
         const iconColors = {
@@ -415,21 +428,6 @@
                 mobileFormContainer.style.display = 'block';
             }
         }
-        // Cargar datos desde la BDD
-        async function cargarDatosDesdeBD() {
-            try {
-                const response = await fetch('get_eventos.php'); // o la URL completa si está en otro dominio
-                if (!response.ok) throw new Error('Error en la respuesta del servidor');
-
-                const data = await response.json();
-                eventos = data;
-                console.log('Eventos desde MySQL:', eventos);
-            } catch (error) {
-                console.error('Error al cargar eventos desde MySQL:', error);
-            }
-        }
-
-
         // Inicialización del mapa
         function initMap() {
             // Crear mapa centrado en CDMX
