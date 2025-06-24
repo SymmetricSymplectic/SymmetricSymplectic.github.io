@@ -328,20 +328,98 @@
         // Variables para almacenar los eventos
         let eventos = [];
         eventosActuales = [...eventos]; 
-        // Cargar datos desde la BDD
         async function cargarDatosDesdeBD() {
             try {
-                const response = await fetch('../shake/get_eventos.php');
-                if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                console.log('Iniciando carga de datos desde BD...');
+                
+                const response = await fetch('../shake/get_eventos.php', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
+                }
+
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const textResponse = await response.text();
+                    console.error('Respuesta no es JSON:', textResponse);
+                    throw new Error('La respuesta del servidor no es JSON válido');
+                }
 
                 const data = await response.json();
+                console.log('Datos recibidos:', data);
+
+                // Verificar si hay error en la respuesta
+                if (data.error) {
+                    throw new Error(data.message || 'Error desconocido del servidor');
+                }
+
+                // Verificar que data es un array
+                if (!Array.isArray(data)) {
+                    throw new Error('Los datos recibidos no son un array válido');
+                }
+
                 eventos = data;
-                eventosActuales = [...eventos]; // <- mover aquí
-                console.log('Eventos desde MySQL:', eventos);
+                eventosActuales = [...eventos];
+                
+                console.log(`Cargados ${eventos.length} eventos desde MySQL`);
+                return eventos;
+                
             } catch (error) {
-                console.error('Error al cargar eventos desde MySQL:', error);
-                throw error;
+                console.error('Error detallado al cargar eventos:', error);
+                
+                // Mostrar mensaje de error más específico
+                let mensajeError = 'Error al cargar eventos: ';
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    mensajeError += 'No se pudo conectar con el servidor. Verifica que el archivo PHP esté disponible.';
+                } else if (error.message.includes('JSON')) {
+                    mensajeError += 'Error en el formato de datos del servidor.';
+                } else {
+                    mensajeError += error.message;
+                }
+                
+                // Cargar datos de respaldo si existe
+                try {
+                    await cargarDatosRespaldo();
+                } catch (backupError) {
+                    console.error('También falló la carga de respaldo:', backupError);
+                    throw new Error(mensajeError);
+                }
             }
+        }
+
+        // Función de respaldo con datos estáticos (opcional)
+        async function cargarDatosRespaldo() {
+            console.log('Cargando datos de respaldo...');
+            
+            // Datos de ejemplo para desarrollo/pruebas
+            const datosRespaldo = [
+                {
+                    id: 1,
+                    titulo: "Evento de Prueba",
+                    descripcion: "Este es un evento de prueba mientras se resuelve la conexión a la base de datos",
+                    fechaInicio: "2025-07-01",
+                    fechaFin: "2025-07-01",
+                    horarios: "18:00 - 22:00",
+                    direccion: "Centro de la Ciudad de México",
+                    coords: [19.4326, -99.1332],
+                    categoria: "arte",
+                    enlace: "https://ejemplo.com"
+                }
+            ];
+            
+            eventos = datosRespaldo;
+            eventosActuales = [...eventos];
+            
+            console.log('Datos de respaldo cargados exitosamente');
         }
 
         // Variables globales
