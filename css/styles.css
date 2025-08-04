@@ -30,3 +30,24 @@ img {
 footer {
   text-align: center;
 }
+
+
+#symbol-info,
+#advanced-chart,
+#company-profile,
+#fundamental-data,
+#technical-analysis,
+#top-stories,
+#ticker-tape {
+    text-align: center;
+    padding: 16px;
+    font-size: 24px;
+    background: rgba(0, 0, 0, 0.075);
+    border-radius: 4px;
+}
+
+#ticker-tape {
+    width: 100%;
+    margin-bottom: var(--gap-size);
+    height: 75px; /* ← remove this line*/
+}
