@@ -29,6 +29,7 @@ shake/            Landing, APK y política de privacidad de Shake (sin enlazar p
   Campos: `title`, `author`, `type`, `source`, `description`, `url`, `image`, `tags`.
 - **Demos**: añade objetos al arreglo `demos` de `data/demos.json` y copia el HTML
   autocontenido a `demos/`. Campos: `title`, `description`, `url`, `lang`, `tags`.
+  Sigue los lineamientos de [`demos/ESTILO.md`](demos/ESTILO.md).
 
 Los JSON se cargan por `fetch`, por lo que el sitio debe servirse por HTTP
 (GitHub Pages o un servidor local, p. ej. `python -m http.server`).
