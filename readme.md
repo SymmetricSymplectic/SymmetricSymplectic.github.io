@@ -13,7 +13,7 @@ sobre-mi.html     Bio y experiencia
 hannya.html       Página del yokai 般若
 demos/            Exploradores numéricos interactivos (HTML autocontenido)
 css/styles.css    Sistema de diseño (tokens, nav, tarjetas, dark mode)
-css/demo-chrome.css  Barra de navegación común inyectada en los demos
+css/demos.css     Estilo unificado de los demos (tokens, componentes, chrome)
 data/*.json       Contenido editable del journal, el archivo y los demos
 js/*.js           Renderizadores (filtros, búsqueda) de cada JSON
 resources/        Imágenes y PDFs

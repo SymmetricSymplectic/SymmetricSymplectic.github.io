@@ -1,0 +1,313 @@
+/* ==========================================================================
+   Estilo unificado para los demos interactivos de FelixNet.
+   Se carga DESPUÉS del <style> interno de cada demo: unifica paleta,
+   tipografía y componentes, respetando el layout propio de cada demo.
+   Soporta tema claro/oscuro vía prefers-color-scheme.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+  --bg: #f6f6f4;
+  --surface: #ffffff;
+  --surface-2: #f0f0ec;
+  --text: #1b1b1b;
+  --muted: #6d6d6d;
+  --line: #e4e4e0;
+  --accent: #8b1a1a;
+  --accent-soft: rgba(139, 26, 26, 0.09);
+  --c1: #0f766e;
+  --c2: #b45309;
+  --c3: #6d28d9;
+  --c4: #2563eb;
+  --ok: #15803d;
+  --bad: #b91c1c;
+  --ok-soft: rgba(21, 128, 61, 0.12);
+  --bad-soft: rgba(185, 28, 28, 0.12);
+  --warn-soft: rgba(180, 83, 9, 0.14);
+  --radius: 12px;
+  --maxw: 1100px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #121212;
+    --surface: #1c1c1c;
+    --surface-2: #232323;
+    --text: #ececec;
+    --muted: #9b9b9b;
+    --line: #2e2e2e;
+    --accent: #e08383;
+    --accent-soft: rgba(224, 131, 131, 0.14);
+    --c1: #5eead4;
+    --c2: #fbbf24;
+    --c3: #c4b5fd;
+    --c4: #93c5fd;
+    --ok: #4ade80;
+    --bad: #f87171;
+    --ok-soft: rgba(74, 222, 128, 0.16);
+    --bad-soft: rgba(248, 113, 113, 0.16);
+    --warn-soft: rgba(251, 191, 36, 0.18);
+  }
+}
+
+/* --- Base ---------------------------------------------------------------- */
+
+body {
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text) !important;
+  font-family: inherit !important;
+}
+
+p,
+small,
+figcaption,
+label,
+output,
+.eyebrow,
+.legend,
+.intro,
+.profile,
+.muted,
+.doc-source,
+.entry-note {
+  color: var(--muted) !important;
+}
+
+a {
+  color: var(--accent) !important;
+}
+
+a:hover {
+  color: var(--accent) !important;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+/* --- Paneles y tarjetas -------------------------------------------------- */
+
+section,
+.panel,
+article,
+details,
+.controls,
+.note,
+.card,
+.doc,
+.toolbar {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+  color: var(--text) !important;
+}
+
+.controls,
+.panel,
+article,
+.card,
+.doc {
+  border-radius: var(--radius);
+}
+
+.note {
+  border-left: 3px solid var(--accent) !important;
+}
+
+/* --- Controles de formulario -------------------------------------------- */
+
+button,
+select,
+input,
+textarea {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+  font-family: inherit !important;
+}
+
+input[type="range"],
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--accent) !important;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primary,
+button[aria-pressed="true"],
+.filter[aria-pressed="true"] {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #ffffff !important;
+}
+
+/* --- Tablas -------------------------------------------------------------- */
+
+table {
+  border-color: var(--line) !important;
+  color: var(--text) !important;
+}
+
+th,
+td {
+  border-color: var(--line) !important;
+}
+
+thead th,
+th {
+  color: var(--muted) !important;
+}
+
+/* --- Código y fórmulas --------------------------------------------------- */
+
+code,
+kbd,
+samp,
+pre,
+.math {
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border-color: var(--line) !important;
+}
+
+/* --- Estadísticas -------------------------------------------------------- */
+
+.stats strong {
+  color: var(--text) !important;
+}
+
+.stats span {
+  color: var(--muted) !important;
+}
+
+/* --- Leyendas y colores de series ---------------------------------------- */
+
+.teal,
+.sabr,
+.c1 {
+  color: var(--c1) !important;
+}
+
+.paper,
+.amber,
+.c2 {
+  color: var(--c2) !important;
+}
+
+.violet,
+.mc,
+.c3 {
+  color: var(--c3) !important;
+}
+
+.blue,
+.c4 {
+  color: var(--c4) !important;
+}
+
+.gray,
+.flat,
+.c-muted {
+  color: var(--muted) !important;
+}
+
+.red,
+.c-bad {
+  color: var(--bad) !important;
+}
+
+/* --- Etiquetas y estados ------------------------------------------------- */
+
+.tag,
+.badge {
+  background: var(--accent-soft) !important;
+  color: var(--accent) !important;
+  border-color: var(--line) !important;
+}
+
+.badge.rejected,
+.status-abandonado {
+  background: var(--bad-soft) !important;
+  color: var(--bad) !important;
+}
+
+.badge.pending {
+  background: var(--warn-soft) !important;
+  color: var(--c2) !important;
+}
+
+.badge.eligible,
+.status-completado {
+  background: var(--ok-soft) !important;
+  color: var(--ok) !important;
+}
+
+.fill {
+  background: var(--accent) !important;
+}
+
+/* --- Chrome de navegación ------------------------------------------------ */
+
+.demo-chrome {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  background: var(--surface) !important;
+  border-bottom: 1px solid var(--line) !important;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.demo-chrome a {
+  color: var(--muted) !important;
+  text-decoration: none;
+}
+
+.demo-chrome a:hover {
+  color: var(--text) !important;
+}
+
+.demo-chrome .demo-chrome-brand {
+  color: var(--text) !important;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.demo-chrome .demo-chrome-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.demo-chrome a[aria-current="page"] {
+  color: var(--text) !important;
+  font-weight: 600;
+}
+
+/* --- Canvas -------------------------------------------------------------- */
+
+canvas {
+  max-width: 100%;
+}

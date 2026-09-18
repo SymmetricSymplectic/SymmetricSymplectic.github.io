@@ -47,7 +47,7 @@
     .c-h1 { color: #58a6ff; }
     .c-h3 { color: #a371f7; }
   </style>
-<link rel="stylesheet" href="../css/demo-chrome.css">
+<link rel="stylesheet" href="../css/demos.css">
 </head>
 <body>
 <nav class="demo-chrome"><a class="demo-chrome-brand" href="../index.html">FELIXNET</a><span class="demo-chrome-links"><a href="../index.html">Inicio</a><a href="../journal.html">Journal</a><a href="../archivo.html">Archivo</a><a href="../proyectos.html" aria-current="page">Proyectos</a><a href="../sobre-mi.html">Sobre mí</a></span></nav>
@@ -85,6 +85,11 @@
   const N = 500;
   const T = 1.0;
   const dt = T / N;
+
+  const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  // Últimos datos calculados, para redibujar al cambiar de tema
+  let lastT, lastH1, lastH3, lastF, lastDrF;
 
   // Generador Gaussiano Estándar (Box-Muller)
   function randn() {
@@ -140,8 +145,13 @@
     document.getElementById("valTotal").textContent = F_cum[N].toFixed(3);
 
     // Renderizar Canvas
-    drawChaos(t, H1_cum, H3_cum, F_cum);
-    drawMalliavin(t, DrF);
+    lastT = t; lastH1 = H1_cum; lastH3 = H3_cum; lastF = F_cum; lastDrF = DrF;
+    redraw();
+  }
+
+  function redraw() {
+    drawChaos(lastT, lastH1, lastH3, lastF);
+    drawMalliavin(lastT, lastDrF);
   }
 
   function drawChaos(t, H1, H3, F) {
@@ -156,7 +166,7 @@
     const scaleX = (i) => (i / N) * (w - 60) + 40;
 
     // Eje cero
-    ctx.strokeStyle = "#30363d";
+    ctx.strokeStyle = tok('--line');
     ctx.beginPath();
     ctx.moveTo(40, scaleY(0));
     ctx.lineTo(w, scaleY(0));
@@ -175,15 +185,16 @@
       ctx.setLineDash([]);
     }
 
-    plotLine(H1, "#58a6ff", 1.5);             // Capa 1: Azul
-    plotLine(H3, "#a371f7", 1.5);             // Capa 3: Violeta
-    plotLine(F,  "#f0883e", 2.2, [4, 3]);      // Total F = H1 + H3: Naranja punteado
+    const c1 = tok('--c4'), c3 = tok('--c3'), c2 = tok('--c2');
+    plotLine(H1, c1, 1.5);             // Capa 1: Azul
+    plotLine(H3, c3, 1.5);             // Capa 3: Violeta
+    plotLine(F,  c2, 2.2, [4, 3]);      // Total F = H1 + H3: Naranja punteado
 
     // Leyenda
     ctx.font = "12px monospace";
-    ctx.fillStyle = "#58a6ff"; ctx.fillText("Caos H1: Int(t dW)", 50, 25);
-    ctx.fillStyle = "#a371f7"; ctx.fillText("Caos H3: Int((W^2-t) dW)", 250, 25);
-    ctx.fillStyle = "#f0883e"; ctx.fillText("Total F = H1 + H3", 490, 25);
+    ctx.fillStyle = c1; ctx.fillText("Caos H1: Int(t dW)", 50, 25);
+    ctx.fillStyle = c3; ctx.fillText("Caos H3: Int((W^2-t) dW)", 250, 25);
+    ctx.fillStyle = c2; ctx.fillText("Total F = H1 + H3", 490, 25);
   }
 
   function drawMalliavin(t, DrF) {
@@ -198,13 +209,14 @@
     const scaleX = (i) => (i / N) * (w - 60) + 40;
 
     // Eje cero
-    ctx.strokeStyle = "#30363d";
+    ctx.strokeStyle = tok('--line');
     ctx.beginPath();
     ctx.moveTo(40, scaleY(0)); ctx.lineTo(w, scaleY(0));
     ctx.stroke();
 
     // Curva D_r F
-    ctx.strokeStyle = "#7ee787";
+    const colorOk = tok('--ok');
+    ctx.strokeStyle = colorOk;
     ctx.lineWidth = 2;
     ctx.beginPath();
     for (let i = 0; i <= N; i++) {
@@ -214,12 +226,14 @@
     ctx.stroke();
 
     ctx.font = "12px monospace";
-    ctx.fillStyle = "#7ee787";
+    ctx.fillStyle = colorOk;
     ctx.fillText("Trayectoria de sensibilidad D_r F vs instante r", 50, 20);
   }
 
   document.getElementById("btnSimulate").addEventListener("click", simulate);
   simulate();
+
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { redraw(); });
 </script>
 
 </body>

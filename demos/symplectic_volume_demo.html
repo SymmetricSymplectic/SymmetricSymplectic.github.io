@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Symplectic volume preservation — Liouville demo</title>
+<title>Conservación del volumen simpléctico · Liouville</title>
 <style>
 :root{
   --ink:#1a1a1a; --sub:#666; --faint:#999; --border:#e2e2e2; --panel:#fff;
@@ -36,44 +36,43 @@ canvas{width:100%;height:320px;display:block;border-radius:8px}
 .stats b{font-size:14px;font-weight:500;font-variant-numeric:tabular-nums}
 .note{font-size:12px;color:var(--faint);margin-top:4px}
 </style>
-<link rel="stylesheet" href="../css/demo-chrome.css">
+<link rel="stylesheet" href="../css/demos.css">
 </head>
 <body>
 <nav class="demo-chrome"><a class="demo-chrome-brand" href="../index.html">FELIXNET</a><span class="demo-chrome-links"><a href="../index.html">Inicio</a><a href="../journal.html">Journal</a><a href="../archivo.html">Archivo</a><a href="../proyectos.html" aria-current="page">Proyectos</a><a href="../sobre-mi.html">Sobre mí</a></span></nav>
-<h1>Liouville's theorem: phase-space volume is conserved</h1>
-<p class="sub">A blob of 420 initial conditions for the pendulum
-<i>H</i>(<i>q</i>,<i>p</i>) = <i>p</i>&sup2;/2 + (1 &minus; cos <i>q</i>), evolved with two
-integrators. The leapfrog panel (symplectic) shears the blob along energy contours but never
-changes its area. Explicit Euler (not symplectic) lets the area drift &mdash; increase dt to
-see it blow up faster. The dashed circle is the initial blob; faint curves are level sets of
-<i>H</i>, the darker one the separatrix.</p>
+<h1>Teorema de Liouville: el volumen del espacio de fases se conserva</h1>
+<p class="sub">Una nube de 420 condiciones iniciales para el péndulo
+<i>H</i>(<i>q</i>,<i>p</i>) = <i>p</i>&sup2;/2 + (1 &minus; cos <i>q</i>), evolucionada con dos
+integradores. El panel de leapfrog (simpléctico) deforma la nube a lo largo de las curvas de
+nivel de energía pero nunca cambia su área. Euler explícito (no simpléctico) deja que el área
+se desplace &mdash; aumenta dt para verla crecer más rápido. El círculo discontinuo es la nube
+inicial; las curvas tenues son conjuntos de nivel de <i>H</i>, la más oscura es la separatriz.</p>
 <div id="svp">
   <div class="ctrl">
-    <button id="play" type="button">Pause</button>
-    <button id="reset" type="button">Reset</button>
+    <button id="play" type="button">Pausar</button>
+    <button id="reset" type="button">Reiniciar</button>
     <label class="sl">dt <input id="dt" type="range" min="0.01" max="0.10" step="0.005" value="0.04"><span class="val" id="dtv">0.040</span></label>
-    <label class="sl">steps / frame <input id="spd" type="range" min="1" max="8" step="1" value="3"><span class="val" id="spdv">3</span></label>
+    <label class="sl">pasos / fotograma <input id="spd" type="range" min="1" max="8" step="1" value="3"><span class="val" id="spdv">3</span></label>
   </div>
   <div class="grid">
     <div class="panel">
-      <div class="pt">Symplectic &middot; leapfrog</div>
+      <div class="pt">Simpléctico &middot; leapfrog</div>
       <canvas id="cvA"></canvas>
-      <div class="stats"><span>&Delta; area <b id="arA" style="color:var(--pos)">+0.0%</b></span><span>&Delta; energy <b id="enA">+0.00%</b></span><span>t = <b id="tA">0.0</b></span></div>
+      <div class="stats"><span>&Delta; área <b id="arA" style="color:var(--ok)">+0.0%</b></span><span>&Delta; energía <b id="enA">+0.00%</b></span><span>t = <b id="tA">0.0</b></span></div>
     </div>
     <div class="panel">
-      <div class="pt">Explicit Euler &middot; not symplectic</div>
+      <div class="pt">Euler explícito &middot; no simpléctico</div>
       <canvas id="cvB"></canvas>
-      <div class="stats"><span>&Delta; area <b id="arB" style="color:var(--dan)">+0.0%</b></span><span>&Delta; energy <b id="enB">+0.00%</b></span><span>t = <b id="tB">0.0</b></span></div>
+      <div class="stats"><span>&Delta; área <b id="arB" style="color:var(--bad)">+0.0%</b></span><span>&Delta; energía <b id="enB">+0.00%</b></span><span>t = <b id="tB">0.0</b></span></div>
     </div>
   </div>
-  <div class="note">&Delta; area is measured from the convex hull of the 420 particles in (q,p) units;
-  &Delta; energy is the drift of the marked particle's value of H.</div>
+  <div class="note">&Delta; área se mide a partir del cierre convexo de las 420 partículas en unidades (q,p);
+  &Delta; energía es la deriva del valor de H de la partícula marcada.</div>
 </div>
 <script>
 (function(){
 var $=function(id){return document.getElementById(id)};
 var tok=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()};
-var C={ch1:tok('--part'),quad:tok('--contour'),sec:tok('--contour-strong')};
 var N=420,QC=1.05,RC=0.35,QL=-Math.PI,QR=Math.PI,PB=2.7,MARG=24,MK=[0,140,280],TL=1100;
 var dt=0.04,spd=3,running=true,nf=0;
 function acc(q){return -Math.sin(q)}
@@ -91,25 +90,26 @@ function view(cv){var w=cv.width,h=cv.height,s=Math.min((w-2*MARG)/(QR-QL),(h-2*
 function fit(cv){var d=Math.min(2,window.devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;if(cv.width!==Math.round(w*d)||cv.height!==Math.round(h*d)){cv.width=Math.round(w*d);cv.height=Math.round(h*d)}}
 var LEVELS=[0.5,1,1.5,1.9,2,2.8,3.6];
 function draw(P){var cv=P.cv,ctx=cv.getContext('2d'),V=view(cv),s=P.st,w=cv.width,h=cv.height;
+var C={part:tok('--c4'),line:tok('--line'),muted:tok('--muted'),acc:tok('--accent')};
 ctx.clearRect(0,0,w,h);ctx.lineWidth=1;
-ctx.strokeStyle=C.quad;ctx.globalAlpha=.9;
+ctx.strokeStyle=C.line;ctx.globalAlpha=.9;
 ctx.beginPath();ctx.moveTo(V.q2x(0),0);ctx.lineTo(V.q2x(0),h);ctx.moveTo(0,V.p2y(0));ctx.lineTo(w,V.p2y(0));ctx.stroke();
 for(var li=0;li<LEVELS.length;li++){var E=LEVELS[li],qm=E>=2?Math.PI:Math.acos(1-E);
-ctx.globalAlpha=E===2?.9:.55;ctx.strokeStyle=E===2?C.sec:C.quad;
+ctx.globalAlpha=E===2?.9:.55;ctx.strokeStyle=E===2?C.muted:C.line;
 for(var br=0;br<2;br++){ctx.beginPath();for(var i=0;i<=120;i++){var q=-qm+2*qm*i/120,p=(br?-1:1)*Math.sqrt(Math.max(0,2*(E-1+Math.cos(q))));var x=V.q2x(q),y=V.p2y(p);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y)}ctx.stroke()}}
-ctx.globalAlpha=.8;ctx.strokeStyle=C.sec;ctx.setLineDash([5,4]);ctx.lineWidth=1.2;
+ctx.globalAlpha=.8;ctx.strokeStyle=C.muted;ctx.setLineDash([5,4]);ctx.lineWidth=1.2;
 ctx.beginPath();ctx.arc(V.q2x(QC),V.p2y(0),RC*V.s,0,6.2832);ctx.stroke();ctx.setLineDash([]);
 ctx.lineWidth=1.2;
 for(var m=0;m<s.trails.length;m++){var tr=s.trails[m];if(tr.length<2)continue;
 var chunks=8,per=Math.ceil(tr.length/chunks);
 for(var c=0;c<chunks;c++){var a0=c*per,b0=Math.min(tr.length,a0+per+1);if(b0-a0<2)continue;
-ctx.strokeStyle=C.ch1;ctx.globalAlpha=.12+.75*c/chunks;ctx.beginPath();
+ctx.strokeStyle=C.part;ctx.globalAlpha=.12+.75*c/chunks;ctx.beginPath();
 for(var j=a0;j<b0;j++){var x=V.q2x(tr[j][0]),y=V.p2y(tr[j][1]);if(j===a0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}}
-ctx.fillStyle=C.ch1;ctx.globalAlpha=.85;
+ctx.fillStyle=C.part;ctx.globalAlpha=.85;
 for(var k=0;k<s.pts.length;k++){var o=s.pts[k];if(o.q<QL-.3||o.q>QR+.3||o.p<-PB-.3||o.p>PB+.3)continue;ctx.fillRect(V.q2x(o.q)-1.4,V.p2y(o.p)-1.4,2.8,2.8)}
 ctx.globalAlpha=1;
 for(var m2=0;m2<MK.length;m2++){var mo=s.pts[MK[m2]];if(mo.q<QL||mo.q>QR||mo.p<-PB||mo.p>PB)continue;
-ctx.strokeStyle=C.ch1;ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(V.q2x(mo.q),V.p2y(mo.p),4.5,0,6.2832);ctx.stroke()}
+ctx.strokeStyle=C.acc;ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(V.q2x(mo.q),V.p2y(mo.p),4.5,0,6.2832);ctx.stroke()}
 ctx.globalAlpha=1}
 function stats(P){var s=P.st;var dA=(hullArea(s.pts)/s.A0-1)*100,dE=(ener(s.pts[0])/s.E0-1)*100;
 P.elA.textContent=(dA>=0?'+':'')+dA.toFixed(1)+'%';
@@ -125,13 +125,14 @@ function frame(){if(running){for(var i=0;i<panels.length;i++){var P=panels[i],s=
 for(var j=0;j<panels.length;j++)draw(panels[j]);
 if(running&&nf%10===0){for(var j2=0;j2<panels.length;j2++)stats(panels[j2])}
 requestAnimationFrame(frame)}
-$('play').onclick=function(){running=!running;this.textContent=running?'Pause':'Play'};
+$('play').onclick=function(){running=!running;this.textContent=running?'Pausar':'Reanudar'};
 $('reset').onclick=function(){resetAll()};
 $('dt').oninput=function(){dt=parseFloat(this.value);$('dtv').textContent=dt.toFixed(3)};
 $('spd').oninput=function(){spd=parseInt(this.value);$('spdv').textContent=spd};
 function fitAll(){for(var i=0;i<panels.length;i++)fit(panels[i].cv)}
 new ResizeObserver(fitAll).observe(document.getElementById('svp'));
 fitAll();resetAll();requestAnimationFrame(frame);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { frame(); });
 })();
 </script>
 </body>

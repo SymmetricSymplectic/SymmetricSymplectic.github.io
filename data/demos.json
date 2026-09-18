@@ -1,14 +1,14 @@
 {
   "demos": [
     {
-      "title": "DVFP · From observations to probability flow",
+      "title": "DVFP · De las observaciones al flujo de probabilidad",
       "description": "Reconstruye un sistema estocástico a partir de observaciones ordenadas y evoluciona la probabilidad sobre una malla de Voronoi aprendida (Fokker–Planck).",
       "url": "demos/dvfp_explorer.html",
       "lang": "en",
       "tags": ["Fokker–Planck", "Voronoi", "SDE"]
     },
     {
-      "title": "Geometry of the volatility smile",
+      "title": "Geometría de la sonrisa de volatilidad",
       "description": "Compara la expansión local del paper, la sonrisa SABR a tiempo corto y el precio por Monte Carlo, con diagnóstico de curvatura.",
       "url": "demos/geometric_smile_explorer.html",
       "lang": "en",
@@ -22,14 +22,14 @@
       "tags": ["Malliavin", "caos de Wiener", "cálculo estocástico"]
     },
     {
-      "title": "Market dynamics · SDHO laboratory",
+      "title": "Dinámica de mercado · laboratorio SDHO",
       "description": "Explora el oscilador armónico amortiguado estocástico, su distribución estacionaria y la identidad de varianza detrás de la frontera de Pareto.",
       "url": "demos/market_dynamics_explorer.html",
       "lang": "en",
       "tags": ["procesos estocásticos", "riesgo", "Pareto"]
     },
     {
-      "title": "Symplectic volume preservation · Liouville",
+      "title": "Conservación del volumen simpléctico · Liouville",
       "description": "Compara leapfrog (simpléctico) contra Euler explícito en el péndulo: uno conserva el área del espacio de fase, el otro la hace derivar.",
       "url": "demos/symplectic_volume_demo.html",
       "lang": "en",
