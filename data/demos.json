@@ -41,6 +41,17 @@
       "url": "demos/grappa-js/demo.html",
       "lang": "es",
       "tags": ["matchmaking", "Veit", "algoritmos"]
+    },
+    {
+      "title": "Fokker–Planck · El atractor general",
+      "description": "Explora cómo la contracción local, el tamaño de las cuencas y la profundidad del potencial gobiernan tres etapas de la relajación hacia Gibbs. Basado en Arnold y Khesin, §3.C.",
+      "url": "demos/fokker_planck_attractor.html",
+      "lang": "es",
+      "tags": [
+        "Fokker–Planck",
+        "Arnold–Khesin",
+        "metaestabilidad"
+      ]
     }
   ]
 }
