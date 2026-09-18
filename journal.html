@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal — FelixNet</title>
+    <meta name="description" content="Journal de películas, series, anime y videojuegos: cronología, estado y notas.">
+    <link rel="icon" href="resources/hannya.ico">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/journal.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="wrap">
+            <a class="brand" href="index.html">FELIXNET</a>
+            <nav class="site-nav">
+                <a href="index.html">Inicio</a>
+                <a href="journal.html" aria-current="page">Journal</a>
+                <a href="archivo.html">Archivo</a>
+                <a href="proyectos.html">Proyectos</a>
+                <a href="sobre-mi.html">Sobre mí</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="wrap prose">
+            <h1>Journal</h1>
+            <p>Registro (continuamente actualizado) de todo lo que he jugado y visto. La fecha indica el año, o el rango de años, en que lo consumí; mantengo la meta de conservar la cronología.</p>
+
+            <div class="controls">
+                <button class="filter" type="button" data-medium="todos" aria-pressed="true">Todo</button>
+                <button class="filter" type="button" data-medium="juego" aria-pressed="false">Juegos</button>
+                <button class="filter" type="button" data-medium="película" aria-pressed="false">Películas</button>
+                <button class="filter" type="button" data-medium="serie" aria-pressed="false">Series</button>
+                <button class="filter" type="button" data-medium="anime" aria-pressed="false">Anime</button>
+                <input class="search" id="journal-search" type="search" placeholder="Buscar título…" aria-label="Buscar en el journal">
+                <span class="counter" id="journal-count"></span>
+            </div>
+
+            <ul class="entry-list" id="journal-list">
+                <li class="entry muted">Cargando…</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <p>Profesional y negocios: <a href="mailto:felixcm@asapa.com">felixcm@asapa.com</a></p>
+            <p>Académico: <a href="mailto:felixcm@ciencias.unam.mx">felixcm@ciencias.unam.mx</a></p>
+            <p>Personal: <a href="mailto:abakanovia@gmail.com">abakanovia@gmail.com</a></p>
+        </div>
+    </footer>
+</body>
+</html>

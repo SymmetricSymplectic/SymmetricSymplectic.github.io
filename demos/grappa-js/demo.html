@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GRAPPA · Compatibilidad recíproca</title>
+<style>
+:root{font-family:system-ui,sans-serif;color:#20343c;background:#f0f3f1}*{box-sizing:border-box}body{margin:0}main{max-width:1050px;margin:auto;padding:40px 24px}h1{font-size:clamp(28px,5vw,45px);letter-spacing:-1.5px;margin:12px 0}p{line-height:1.6}.eyebrow{color:#28786f;letter-spacing:2px;font-size:12px;font-weight:700}.intro{max-width:720px;color:#52656b}.controls{display:flex;gap:24px;flex-wrap:wrap;background:#fff;padding:22px;border-radius:14px;margin:28px 0}label{display:grid;gap:8px;flex:1;min-width:180px;font-size:13px;font-weight:600}select,input{width:100%;accent-color:#28786f}select{padding:10px;border:1px solid #cbd7d3;border-radius:7px;background:white;color:inherit}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}article{background:white;padding:22px;border-radius:14px;border:1px solid #d8e1de}h2{margin:0;font-size:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.badge{font-size:11px;background:#e6f3ed;padding:6px 9px;border-radius:30px}.rejected{background:#f8e7df}.pending{background:#fff2ce}.score{font-size:36px;margin:18px 0 2px;letter-spacing:-1px;font-variant-numeric:tabular-nums}.muted,small{color:#60747a;font-size:12px}.row{display:flex;justify-content:space-between;margin-top:15px;font-size:13px}.bar{height:6px;background:#e8eeeb;margin-top:6px;border-radius:8px;overflow:hidden}.fill{height:100%;background:#398b80}details{margin-top:18px;font-size:13px}summary{cursor:pointer;color:#286e64}table{width:100%;border-collapse:collapse;font-size:11px;margin-top:12px}td,th{text-align:left;padding:6px;border-bottom:1px solid #e6edeb}.note{padding:18px 0;font-size:13px;color:#5f7277}.profile{font-size:12px;line-height:1.7;color:#52656b}footer{margin-top:30px;font-size:12px;color:#64767b}
+</style><link rel="stylesheet" href="../../css/demo-chrome.css"><nav class="demo-chrome"><a class="demo-chrome-brand" href="../../index.html">FELIXNET</a><span class="demo-chrome-links"><a href="../../index.html">Inicio</a><a href="../../journal.html">Journal</a><a href="../../archivo.html">Archivo</a><a href="../../proyectos.html" aria-current="page">Proyectos</a><a href="../../sobre-mi.html">Sobre mí</a></span></nav><main>
+<div class="eyebrow">LABORATORIO / GRAPPA EN JAVASCRIPT</div>
+<h1>El ajuste debe ir en ambas direcciones.</h1>
+<p class="intro">Reconstrucción del núcleo de Daniel Veit con una extensión de preferencias recíprocas. Explora cómo cambian los resultados al modificar la importancia de la personalidad y la regla de reciprocidad.</p>
+<div class="controls"><label>Persona que busca<select id="person"></select></label><label>Peso de personalidad <span id="weightLabel">3</span><input id="weight" type="range" min="1" max="10" value="3"></label><label>Regla recíproca<select id="mode"><option value="min">Mínimo de ambas direcciones</option><option value="geometric">Media geométrica</option></select></label></div>
+<p id="profile" class="profile"></p><p class="note">Puntuaciones de ajuste sobre 100; no son probabilidades. Los rangos representan datos faltantes. «Excluido» indica una restricción incumplida y no es una recomendación.</p>
+<section id="cards" class="cards" aria-live="polite"></section>
+<footer>Personas y rasgos ficticios · Sin transmisión de datos · Consulta README.md para las fórmulas, referencias, pruebas y alcance.</footer>
+</main><script src="grappa.js"></script><script src="example.js"></script><script>
+const $=id=>document.getElementById(id),fmt=x=>(100*x).toFixed(1),range=x=>Math.abs(x[0]-x[1])<1e-10?fmt(x[0]):fmt(x[0])+'–'+fmt(x[1]);
+const status={eligible:'Elegible',pending:'Pendiente',rejected:'Excluido'};
+Example.people.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.name;$('person').append(o)});
+function leaves(tree){return tree.children?tree.children.flatMap(leaves):[tree]}
+function render(){
+ $('weightLabel').textContent=$('weight').value;
+ const A=Example.people.find(p=>p.id===$('person').value);
+ $('profile').textContent=A.name+' · Contexto: '+A.profile.context+' · Rasgos propios: '+Object.values(A.profile.traits).map(v=>v??'?').join(' / ')+' · Rasgos buscados: '+Object.values(A.preferences.traits).join(' / ')+' (apertura / organización / sociabilidad). El peso cambia sólo para '+A.name+'.';
+ $('cards').replaceChildren();
+ for(const x of Example.rank(A.id,Number($('weight').value),$('mode').value)){
+  const card=document.createElement('article');
+  card.innerHTML='<div class="top"><h2></h2><span class="badge"></span></div><div class="score"></div><small>Ajuste recíproco / 100</small><div class="directions"></div><p class="muted coverage"></p><details><summary>Examinar los criterios</summary><div class="trace"></div></details>';
+  card.querySelector('h2').textContent=x.name;
+  const badge=card.querySelector('.badge');badge.textContent=status[x.status];badge.classList.add(x.status);
+  card.querySelector('.score').textContent=range(x.scoreBounds);
+  card.querySelector('.coverage').textContent='Cobertura mínima entre direcciones: '+fmt(x.coverage)+'%';
+  for(const [label,res] of [[A.name+' → '+x.name,x.ab],[x.name+' → '+A.name,x.ba]]){
+   const wrap=document.createElement('div'),row=document.createElement('div');row.className='row';
+   const title=document.createElement('span'),value=document.createElement('span');title.textContent=label;value.textContent=range(res.scoreBounds);row.append(title,value);
+   const bar=document.createElement('div'),fill=document.createElement('div');bar.className='bar';fill.className='fill';fill.style.width=fmt(res.scoreBounds[0])+'%';bar.append(fill);wrap.append(row,bar);card.querySelector('.directions').append(wrap);
+   const title2=document.createElement('p');title2.textContent=label;card.querySelector('.trace').append(title2);
+   const table=document.createElement('table');table.innerHTML='<tr><th>Criterio</th><th>Distancia</th><th>Estado</th></tr>';
+   for(const n of leaves(res.tree)){const tr=document.createElement('tr');for(const v of [n.id,n.coverage?(100*n.lower).toFixed(1):'0.0–100.0',n.reason==='missing'?'Sin dato':status[n.status]]){const td=document.createElement('td');td.textContent=v;tr.append(td)}table.append(tr)}
+   card.querySelector('.trace').append(table);
+  }
+  $('cards').append(card);
+ }
+}
+['person','weight','mode'].forEach(id=>$(id).addEventListener('input',render));render();
+</script></html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Symplectic volume preservation — Liouville demo</title>
+<style>
+:root{
+  --ink:#1a1a1a; --sub:#666; --faint:#999; --border:#e2e2e2; --panel:#fff;
+  --part:#2563eb; --contour:#c9c9c9; --contour-strong:#9a9a9a;
+  --pos:#16a34a; --dan:#dc2626;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --ink:#e8e8e8; --sub:#a8a8a8; --faint:#777; --border:#3a3a3a; --panel:#16181d;
+    --part:#6ea3ff; --contour:#3d434e; --contour-strong:#5b636f;
+    --pos:#4ade80; --dan:#f87171;
+  }
+}
+*{box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--panel);color:var(--ink);max-width:1000px;margin:0 auto;padding:24px 16px}
+h1{font-size:20px;font-weight:600;margin:0 0 8px}
+p.sub{font-size:14px;color:var(--sub);margin:0 0 20px;line-height:1.5}
+#svp{display:flex;flex-direction:column;gap:12px}
+button{font:inherit;font-size:14px;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--ink);border-radius:8px;padding:6px 14px}
+button:hover{border-color:var(--ink)}
+.ctrl{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.sl{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub)}
+input[type=range]{accent-color:var(--ink);width:104px}
+.val{font-size:13px;color:var(--ink);font-variant-numeric:tabular-nums;min-width:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.panel{border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.pt{font-size:14px;font-weight:500}
+canvas{width:100%;height:320px;display:block;border-radius:8px}
+.stats{display:flex;gap:16px;font-size:12px;color:var(--faint)}
+.stats b{font-size:14px;font-weight:500;font-variant-numeric:tabular-nums}
+.note{font-size:12px;color:var(--faint);margin-top:4px}
+</style>
+<link rel="stylesheet" href="../css/demo-chrome.css">
+</head>
+<body>
+<nav class="demo-chrome"><a class="demo-chrome-brand" href="../index.html">FELIXNET</a><span class="demo-chrome-links"><a href="../index.html">Inicio</a><a href="../journal.html">Journal</a><a href="../archivo.html">Archivo</a><a href="../proyectos.html" aria-current="page">Proyectos</a><a href="../sobre-mi.html">Sobre mí</a></span></nav>
+<h1>Liouville's theorem: phase-space volume is conserved</h1>
+<p class="sub">A blob of 420 initial conditions for the pendulum
+<i>H</i>(<i>q</i>,<i>p</i>) = <i>p</i>&sup2;/2 + (1 &minus; cos <i>q</i>), evolved with two
+integrators. The leapfrog panel (symplectic) shears the blob along energy contours but never
+changes its area. Explicit Euler (not symplectic) lets the area drift &mdash; increase dt to
+see it blow up faster. The dashed circle is the initial blob; faint curves are level sets of
+<i>H</i>, the darker one the separatrix.</p>
+<div id="svp">
+  <div class="ctrl">
+    <button id="play" type="button">Pause</button>
+    <button id="reset" type="button">Reset</button>
+    <label class="sl">dt <input id="dt" type="range" min="0.01" max="0.10" step="0.005" value="0.04"><span class="val" id="dtv">0.040</span></label>
+    <label class="sl">steps / frame <input id="spd" type="range" min="1" max="8" step="1" value="3"><span class="val" id="spdv">3</span></label>
+  </div>
+  <div class="grid">
+    <div class="panel">
+      <div class="pt">Symplectic &middot; leapfrog</div>
+      <canvas id="cvA"></canvas>
+      <div class="stats"><span>&Delta; area <b id="arA" style="color:var(--pos)">+0.0%</b></span><span>&Delta; energy <b id="enA">+0.00%</b></span><span>t = <b id="tA">0.0</b></span></div>
+    </div>
+    <div class="panel">
+      <div class="pt">Explicit Euler &middot; not symplectic</div>
+      <canvas id="cvB"></canvas>
+      <div class="stats"><span>&Delta; area <b id="arB" style="color:var(--dan)">+0.0%</b></span><span>&Delta; energy <b id="enB">+0.00%</b></span><span>t = <b id="tB">0.0</b></span></div>
+    </div>
+  </div>
+  <div class="note">&Delta; area is measured from the convex hull of the 420 particles in (q,p) units;
+  &Delta; energy is the drift of the marked particle's value of H.</div>
+</div>
+<script>
+(function(){
+var $=function(id){return document.getElementById(id)};
+var tok=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()};
+var C={ch1:tok('--part'),quad:tok('--contour'),sec:tok('--contour-strong')};
+var N=420,QC=1.05,RC=0.35,QL=-Math.PI,QR=Math.PI,PB=2.7,MARG=24,MK=[0,140,280],TL=1100;
+var dt=0.04,spd=3,running=true,nf=0;
+function acc(q){return -Math.sin(q)}
+function ener(o){return o.p*o.p/2+1-Math.cos(o.q)}
+function initPts(){var a=[];for(var i=0;i<N;i++){var r=RC*Math.sqrt(Math.random()),th=2*Math.PI*Math.random();a.push({q:QC+r*Math.cos(th),p:r*Math.sin(th)})}return a}
+function stepLF(s){for(var i=0;i<s.pts.length;i++){var o=s.pts[i],ph=o.p+0.5*dt*acc(o.q),qn=o.q+dt*ph;o.p=ph+0.5*dt*acc(qn);o.q=qn}}
+function stepEE(s){for(var i=0;i<s.pts.length;i++){var o=s.pts[i],qn=o.q+dt*o.p;o.p=o.p+dt*acc(o.q);o.q=qn}}
+function hullArea(pts){var p=pts.map(function(o){return [o.q,o.p]});p.sort(function(a,b){return a[0]-b[0]||a[1]-b[1]});
+var cr=function(o,a,b){return (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])};
+var lo=[],up=[],i,pt;for(i=0;i<p.length;i++){pt=p[i];while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],pt)<=0)lo.pop();lo.push(pt)}
+for(i=p.length-1;i>=0;i--){pt=p[i];while(up.length>=2&&cr(up[up.length-2],up[up.length-1],pt)<=0)up.pop();up.push(pt)}
+var h=lo.slice(0,-1).concat(up.slice(0,-1));if(h.length<3)return 0;var s=0;
+for(i=0;i<h.length;i++){var a=h[i],b=h[(i+1)%h.length];s+=a[0]*b[1]-b[0]*a[1]}return Math.abs(s)/2}
+function view(cv){var w=cv.width,h=cv.height,s=Math.min((w-2*MARG)/(QR-QL),(h-2*MARG)/(2*PB));return {s:s,q2x:function(q){return w/2+q*s},p2y:function(p){return h/2-p*s}}}
+function fit(cv){var d=Math.min(2,window.devicePixelRatio||1),w=cv.clientWidth,h=cv.clientHeight;if(cv.width!==Math.round(w*d)||cv.height!==Math.round(h*d)){cv.width=Math.round(w*d);cv.height=Math.round(h*d)}}
+var LEVELS=[0.5,1,1.5,1.9,2,2.8,3.6];
+function draw(P){var cv=P.cv,ctx=cv.getContext('2d'),V=view(cv),s=P.st,w=cv.width,h=cv.height;
+ctx.clearRect(0,0,w,h);ctx.lineWidth=1;
+ctx.strokeStyle=C.quad;ctx.globalAlpha=.9;
+ctx.beginPath();ctx.moveTo(V.q2x(0),0);ctx.lineTo(V.q2x(0),h);ctx.moveTo(0,V.p2y(0));ctx.lineTo(w,V.p2y(0));ctx.stroke();
+for(var li=0;li<LEVELS.length;li++){var E=LEVELS[li],qm=E>=2?Math.PI:Math.acos(1-E);
+ctx.globalAlpha=E===2?.9:.55;ctx.strokeStyle=E===2?C.sec:C.quad;
+for(var br=0;br<2;br++){ctx.beginPath();for(var i=0;i<=120;i++){var q=-qm+2*qm*i/120,p=(br?-1:1)*Math.sqrt(Math.max(0,2*(E-1+Math.cos(q))));var x=V.q2x(q),y=V.p2y(p);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y)}ctx.stroke()}}
+ctx.globalAlpha=.8;ctx.strokeStyle=C.sec;ctx.setLineDash([5,4]);ctx.lineWidth=1.2;
+ctx.beginPath();ctx.arc(V.q2x(QC),V.p2y(0),RC*V.s,0,6.2832);ctx.stroke();ctx.setLineDash([]);
+ctx.lineWidth=1.2;
+for(var m=0;m<s.trails.length;m++){var tr=s.trails[m];if(tr.length<2)continue;
+var chunks=8,per=Math.ceil(tr.length/chunks);
+for(var c=0;c<chunks;c++){var a0=c*per,b0=Math.min(tr.length,a0+per+1);if(b0-a0<2)continue;
+ctx.strokeStyle=C.ch1;ctx.globalAlpha=.12+.75*c/chunks;ctx.beginPath();
+for(var j=a0;j<b0;j++){var x=V.q2x(tr[j][0]),y=V.p2y(tr[j][1]);if(j===a0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}}
+ctx.fillStyle=C.ch1;ctx.globalAlpha=.85;
+for(var k=0;k<s.pts.length;k++){var o=s.pts[k];if(o.q<QL-.3||o.q>QR+.3||o.p<-PB-.3||o.p>PB+.3)continue;ctx.fillRect(V.q2x(o.q)-1.4,V.p2y(o.p)-1.4,2.8,2.8)}
+ctx.globalAlpha=1;
+for(var m2=0;m2<MK.length;m2++){var mo=s.pts[MK[m2]];if(mo.q<QL||mo.q>QR||mo.p<-PB||mo.p>PB)continue;
+ctx.strokeStyle=C.ch1;ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(V.q2x(mo.q),V.p2y(mo.p),4.5,0,6.2832);ctx.stroke()}
+ctx.globalAlpha=1}
+function stats(P){var s=P.st;var dA=(hullArea(s.pts)/s.A0-1)*100,dE=(ener(s.pts[0])/s.E0-1)*100;
+P.elA.textContent=(dA>=0?'+':'')+dA.toFixed(1)+'%';
+P.elE.textContent=(dE>=0?'+':'')+dE.toFixed(2)+'%';
+P.elT.textContent=s.t.toFixed(1)}
+var panels=[
+{cv:$('cvA'),elA:$('arA'),elE:$('enA'),elT:$('tA'),step:stepLF,st:{pts:[],trails:[[],[],[]],t:0,A0:1,E0:1}},
+{cv:$('cvB'),elA:$('arB'),elE:$('enB'),elT:$('tB'),step:stepEE,st:{pts:[],trails:[[],[],[]],t:0,A0:1,E0:1}}
+];
+function resetAll(){for(var i=0;i<panels.length;i++){var s=panels[i].st;s.pts=initPts();s.trails=[[],[],[]];s.t=0;s.A0=hullArea(s.pts);s.E0=ener(s.pts[0]);stats(panels[i])}nf=0}
+function pushTrails(s){for(var m=0;m<MK.length;m++){var o=s.pts[MK[m]];s.trails[m].push([o.q,o.p]);if(s.trails[m].length>TL)s.trails[m].splice(0,s.trails[m].length-TL)}}
+function frame(){if(running){for(var i=0;i<panels.length;i++){var P=panels[i],s=P.st;for(var k=0;k<spd;k++){P.step(s);s.t+=dt}pushTrails(s)}nf++}
+for(var j=0;j<panels.length;j++)draw(panels[j]);
+if(running&&nf%10===0){for(var j2=0;j2<panels.length;j2++)stats(panels[j2])}
+requestAnimationFrame(frame)}
+$('play').onclick=function(){running=!running;this.textContent=running?'Pause':'Play'};
+$('reset').onclick=function(){resetAll()};
+$('dt').oninput=function(){dt=parseFloat(this.value);$('dtv').textContent=dt.toFixed(3)};
+$('spd').oninput=function(){spd=parseInt(this.value);$('spdv').textContent=spd};
+function fitAll(){for(var i=0;i<panels.length;i++)fit(panels[i].cv)}
+new ResizeObserver(fitAll).observe(document.getElementById('svp'));
+fitAll();resetAll();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

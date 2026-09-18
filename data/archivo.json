@@ -1,0 +1,44 @@
+{
+  "items": [
+    {
+      "title": "Geometry",
+      "author": "Vladimir Arnold y Ricardo Uribe",
+      "source": "Cortesía de Ricardo Uribe",
+      "type": "Libro inédito",
+      "description": "Desconozco las razones por las cuales no ha sido publicado.",
+      "url": "resources/geometryArnoldUribe.pdf",
+      "image": "",
+      "tags": ["matemáticas", "lost media"]
+    },
+    {
+      "title": "Doob H-transform. Theory and Examples",
+      "author": "Alex Bloemendal",
+      "source": "Cortesía de Alejandro Rosales",
+      "type": "Artículo",
+      "description": "Notas y ejemplos sobre la transformada H de Doob.",
+      "url": "resources/doob-h-transform-bloemendal.pdf",
+      "image": "",
+      "tags": ["probabilidad", "matemáticas"]
+    },
+    {
+      "title": "Seeing Red: Redshifts, Cosmology and Academic Science",
+      "author": "Halton Arp",
+      "source": "Compartido por Brendan Eich en X",
+      "type": "Libro",
+      "description": "Relevante dada la reciente discusión sobre ciertas observaciones que ponen en duda las teorías cosmológicas mainstream.",
+      "url": "resources/Arp Seeing Red_ Redshifts Cosmology and Academic Science.pdf",
+      "image": "",
+      "tags": ["cosmología", "ciencia"]
+    },
+    {
+      "title": "Unconventional Flying Objects",
+      "author": "",
+      "source": "Archivo personal",
+      "type": "Documento",
+      "description": "«And whatever they may think, the night is far from over.» Material sobre objetos voladores no identificados y su análisis.",
+      "url": "resources/unconventionalflyingobjects.pdf",
+      "image": "resources/oea.png",
+      "tags": ["OVNI", "ciencia"]
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Visualizador de Expansiones de Caos y Cálculo de Malliavin</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+      background: #0d1117;
+      color: #c9d1d9;
+      margin: 20px;
+    }
+    h2 { margin-bottom: 5px; color: #58a6ff; }
+    p { color: #8b949e; font-size: 0.95rem; }
+    .container { display: flex; flex-direction: column; gap: 20px; max-width: 900px; }
+    canvas {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+    }
+    .controls { display: flex; gap: 15px; align-items: center; }
+    button {
+      background: #238636;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover { background: #2ea043; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .card {
+      background: #161b22;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+      font-size: 0.85rem;
+    }
+    .card span { display: block; font-size: 1.1rem; font-weight: bold; margin-top: 4px; }
+    .c-total { color: #f0883e; }
+    .c-h1 { color: #58a6ff; }
+    .c-h3 { color: #a371f7; }
+  </style>
+<link rel="stylesheet" href="../css/demo-chrome.css">
+</head>
+<body>
+<nav class="demo-chrome"><a class="demo-chrome-brand" href="../index.html">FELIXNET</a><span class="demo-chrome-links"><a href="../index.html">Inicio</a><a href="../journal.html">Journal</a><a href="../archivo.html">Archivo</a><a href="../proyectos.html" aria-current="page">Proyectos</a><a href="../sobre-mi.html">Sobre mí</a></span></nav>
+
+<div class="container">
+  <div>
+    <h2>Expansión de Caos de $F = \int_0^T W_t^2 dW_t$</h2>
+    <p>Descomposición exacta en subespacios ortogonales: $F = I_1(t) + I_3(f_3)$.</p>
+  </div>
+
+  <div class="controls">
+    <button id="btnSimulate">Generar Nuevo Camino Browniano</button>
+    <span>T = 1.0, N = 500 pasos</span>
+  </div>
+
+  <div class="metrics">
+    <div class="card">Trayectoria $W_T$:<span id="valWT">0.00</span></div>
+    <div class="card">Caos $\mathcal{H}_1$ ($I_1$):<span id="valH1" class="c-h1">0.00</span></div>
+    <div class="card">Caos $\mathcal{H}_3$ ($I_3$):<span id="valH3" class="c-h3">0.00</span></div>
+    <div class="card">Valor Total $F$:<span id="valTotal" class="c-total">0.00</span></div>
+  </div>
+
+  <!-- Gráfica 1: Reconstrucción en tiempo de las capas de caos -->
+  <canvas id="canvasChaos" width="900" height="260"></canvas>
+
+  <!-- Gráfica 2: Perfil temporal de la Derivada de Malliavin D_r F -->
+  <div>
+    <h3 style="color: #7ee787; margin-bottom: 5px;">Derivada de Malliavin: $D_r F = W_r^2 + 2\int_r^T W_t dW_t$</h3>
+    <p style="margin-top:0;">Sensibilidad estocástica del funcional respecto a impulsos de ruido en cada instante $r \in [0, T]$.</p>
+  </div>
+  <canvas id="canvasMalliavin" width="900" height="200"></canvas>
+</div>
+
+<script>
+  const N = 500;
+  const T = 1.0;
+  const dt = T / N;
+
+  // Generador Gaussiano Estándar (Box-Muller)
+  function randn() {
+    let u = 1 - Math.random();
+    let v = Math.random();
+    return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+  }
+
+  function simulate() {
+    const dW = new Float64Array(N);
+    const W = new Float64Array(N + 1);
+    const t = new Float64Array(N + 1);
+
+    for (let i = 0; i < N; i++) {
+      dW[i] = Math.sqrt(dt) * randn();
+      W[i + 1] = W[i] + dW[i];
+      t[i + 1] = (i + 1) * dt;
+    }
+
+    // Acumuladores de Caos acumulados paso a paso
+    const H1_cum = new Float64Array(N + 1);
+    const H3_cum = new Float64Array(N + 1);
+    const F_cum  = new Float64Array(N + 1);
+
+    for (let i = 0; i < N; i++) {
+      const dH1 = t[i] * dW[i];
+      const dH3 = (W[i] * W[i] - t[i]) * dW[i];
+      const dF  = (W[i] * W[i]) * dW[i];
+
+      H1_cum[i + 1] = H1_cum[i] + dH1;
+      H3_cum[i + 1] = H3_cum[i] + dH3;
+      F_cum[i + 1]  = F_cum[i] + dF;
+    }
+
+    // Cálculo de D_r F para cada r en la grilla discreta
+    // D_r F = W_r^2 + 2 * \int_r^T W_s dW_s
+    const intWdW_forward = new Float64Array(N + 1);
+    let backwardAccum = 0.0;
+    for (let i = N - 1; i >= 0; i--) {
+      backwardAccum += W[i] * dW[i];
+      intWdW_forward[i] = backwardAccum;
+    }
+
+    const DrF = new Float64Array(N + 1);
+    for (let i = 0; i <= N; i++) {
+      DrF[i] = (W[i] * W[i]) + 2.0 * intWdW_forward[i];
+    }
+
+    // Actualizar texto UI
+    document.getElementById("valWT").textContent = W[N].toFixed(3);
+    document.getElementById("valH1").textContent = H1_cum[N].toFixed(3);
+    document.getElementById("valH3").textContent = H3_cum[N].toFixed(3);
+    document.getElementById("valTotal").textContent = F_cum[N].toFixed(3);
+
+    // Renderizar Canvas
+    drawChaos(t, H1_cum, H3_cum, F_cum);
+    drawMalliavin(t, DrF);
+  }
+
+  function drawChaos(t, H1, H3, F) {
+    const canvas = document.getElementById("canvasChaos");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const minVal = Math.min(...F, ...H1, ...H3);
+    const maxVal = Math.max(...F, ...H1, ...H3);
+    const scaleY = (v) => h - ((v - minVal) / (maxVal - minVal || 1)) * (h - 40) - 20;
+    const scaleX = (i) => (i / N) * (w - 60) + 40;
+
+    // Eje cero
+    ctx.strokeStyle = "#30363d";
+    ctx.beginPath();
+    ctx.moveTo(40, scaleY(0));
+    ctx.lineTo(w, scaleY(0));
+    ctx.stroke();
+
+    function plotLine(arr, color, lineWidth = 1.5, dash = []) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.setLineDash(dash);
+      ctx.beginPath();
+      for (let i = 0; i <= N; i++) {
+        const x = scaleX(i), y = scaleY(arr[i]);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    plotLine(H1, "#58a6ff", 1.5);             // Capa 1: Azul
+    plotLine(H3, "#a371f7", 1.5);             // Capa 3: Violeta
+    plotLine(F,  "#f0883e", 2.2, [4, 3]);      // Total F = H1 + H3: Naranja punteado
+
+    // Leyenda
+    ctx.font = "12px monospace";
+    ctx.fillStyle = "#58a6ff"; ctx.fillText("Caos H1: Int(t dW)", 50, 25);
+    ctx.fillStyle = "#a371f7"; ctx.fillText("Caos H3: Int((W^2-t) dW)", 250, 25);
+    ctx.fillStyle = "#f0883e"; ctx.fillText("Total F = H1 + H3", 490, 25);
+  }
+
+  function drawMalliavin(t, DrF) {
+    const canvas = document.getElementById("canvasMalliavin");
+    const ctx = canvas.getContext("2d");
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0, 0, w, h);
+
+    const minVal = Math.min(0, ...DrF);
+    const maxVal = Math.max(0.1, ...DrF);
+    const scaleY = (v) => h - ((v - minVal) / (maxVal - minVal || 1)) * (h - 30) - 15;
+    const scaleX = (i) => (i / N) * (w - 60) + 40;
+
+    // Eje cero
+    ctx.strokeStyle = "#30363d";
+    ctx.beginPath();
+    ctx.moveTo(40, scaleY(0)); ctx.lineTo(w, scaleY(0));
+    ctx.stroke();
+
+    // Curva D_r F
+    ctx.strokeStyle = "#7ee787";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const x = scaleX(i), y = scaleY(DrF[i]);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    ctx.font = "12px monospace";
+    ctx.fillStyle = "#7ee787";
+    ctx.fillText("Trayectoria de sensibilidad D_r F vs instante r", 50, 20);
+  }
+
+  document.getElementById("btnSimulate").addEventListener("click", simulate);
+  simulate();
+</script>
+
+</body>
+</html>
