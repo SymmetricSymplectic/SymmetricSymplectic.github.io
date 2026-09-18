@@ -52,6 +52,17 @@
         "Arnold–Khesin",
         "metaestabilidad"
       ]
+    },
+    {
+      "title": "KAN · Aprender funciones en las conexiones",
+      "description": "Entrena una red de Kolmogorov–Arnold y una MLP con los mismos datos y parámetros. Explora sus funciones aprendidas, el ruido y el error de aproximación.",
+      "url": "demos/kan_explorer.html",
+      "lang": "es",
+      "tags": [
+        "KAN",
+        "redes neuronales",
+        "aproximación"
+      ]
     }
   ]
 }
