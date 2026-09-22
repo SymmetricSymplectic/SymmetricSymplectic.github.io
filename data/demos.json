@@ -63,6 +63,17 @@
         "redes neuronales",
         "aproximación"
       ]
+    },
+    {
+      "title": "Elecciones como martingalas · Taleb",
+      "description": "Simula votos y probabilidades de victoria y reconstruye paso a paso el argumento de Taleb: Itô, valoración binaria, incertidumbre y coherencia temporal.",
+      "url": "demos/election_martingales.html",
+      "lang": "es",
+      "tags": [
+        "martingalas",
+        "Taleb",
+        "probabilidad"
+      ]
     }
   ]
 }
