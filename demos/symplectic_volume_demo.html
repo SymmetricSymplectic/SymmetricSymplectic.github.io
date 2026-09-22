@@ -32,9 +32,18 @@ input[type=range]{accent-color:var(--ink);width:104px}
 .panel{border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
 .pt{font-size:14px;font-weight:500}
 canvas{width:100%;height:320px;display:block;border-radius:8px}
-.stats{display:flex;gap:16px;font-size:12px;color:var(--faint)}
+.stats{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--sub)}
 .stats b{font-size:14px;font-weight:500;font-variant-numeric:tabular-nums}
 .note{font-size:12px;color:var(--faint);margin-top:4px}
+.note{padding:12px;line-height:1.7}
+.explanation{margin-top:28px;padding:20px;border:1px solid var(--border);border-radius:12px;line-height:1.75}
+.explanation h2{font-size:19px;margin:0 0 12px}
+.explanation h3{font-size:16px;margin:24px 0 8px}
+.explanation p{margin:10px 0}
+.equation{overflow-x:auto;padding:12px 16px;margin:12px 0;background:var(--surface-2);border-radius:8px;font-family:Cambria,"Times New Roman",serif;font-size:18px;line-height:1.8}
+.equation .line{display:block;min-width:max-content}
+.reading{font-size:14px}
+@media(max-width:400px){.grid{grid-template-columns:minmax(0,1fr)}.explanation{padding:14px}}
 </style>
 <link rel="stylesheet" href="../css/demos.css">
 </head>
@@ -43,9 +52,10 @@ canvas{width:100%;height:320px;display:block;border-radius:8px}
 <h1>Teorema de Liouville: el volumen del espacio de fases se conserva</h1>
 <p class="sub">Una nube de 420 condiciones iniciales para el péndulo
 <i>H</i>(<i>q</i>,<i>p</i>) = <i>p</i>&sup2;/2 + (1 &minus; cos <i>q</i>), evolucionada con dos
-integradores. El panel de leapfrog (simpléctico) deforma la nube a lo largo de las curvas de
-nivel de energía pero nunca cambia su área. Euler explícito (no simpléctico) deja que el área
-se desplace &mdash; aumenta dt para verla crecer más rápido. El círculo discontinuo es la nube
+integradores, desde las mismas condiciones iniciales. Leapfrog (simpléctico) conserva el área
+de la región transportada, aunque su forma cambia y la energía numérica no es exactamente constante.
+Euler explícito (no simpléctico) altera el área &mdash; aumenta dt para acentuar el efecto.
+El círculo discontinuo delimita la región
 inicial; las curvas tenues son conjuntos de nivel de <i>H</i>, la más oscura es la separatriz.</p>
 <div id="svp">
   <div class="ctrl">
@@ -57,18 +67,137 @@ inicial; las curvas tenues son conjuntos de nivel de <i>H</i>, la más oscura es
   <div class="grid">
     <div class="panel">
       <div class="pt">Simpléctico &middot; leapfrog</div>
-      <canvas id="cvA"></canvas>
-      <div class="stats"><span>&Delta; área <b id="arA" style="color:var(--ok)">+0.0%</b></span><span>&Delta; energía <b id="enA">+0.00%</b></span><span>t = <b id="tA">0.0</b></span></div>
+      <canvas id="cvA" aria-label="Nube de condiciones iniciales evolucionada con leapfrog"></canvas>
+      <div class="stats"><span>&Delta; área (jacobianos) <b id="jacA" style="color:var(--ok)">+0.0%</b></span><span>&Delta; envolvente <b id="arA">+0.0%</b></span><span>&Delta; energía <b id="enA">+0.00%</b></span><span>t = <b id="tA">0.0</b></span></div>
     </div>
     <div class="panel">
       <div class="pt">Euler explícito &middot; no simpléctico</div>
-      <canvas id="cvB"></canvas>
-      <div class="stats"><span>&Delta; área <b id="arB" style="color:var(--bad)">+0.0%</b></span><span>&Delta; energía <b id="enB">+0.00%</b></span><span>t = <b id="tB">0.0</b></span></div>
+      <canvas id="cvB" aria-label="Nube de condiciones iniciales evolucionada con Euler explícito"></canvas>
+      <div class="stats"><span>&Delta; área (jacobianos) <b id="jacB" style="color:var(--bad)">+0.0%</b></span><span>&Delta; envolvente <b id="arB">+0.0%</b></span><span>&Delta; energía <b id="enB">+0.00%</b></span><span>t = <b id="tB">0.0</b></span></div>
     </div>
   </div>
-  <div class="note">&Delta; área se mide a partir del cierre convexo de las 420 partículas en unidades (q,p);
-  &Delta; energía es la deriva del valor de H de la partícula marcada.</div>
+  <div class="note"><strong>Qué se está midiendo.</strong> &Delta; área (jacobianos) estima el cambio del área
+  transportada promediando los factores de expansión acumulados en las 420 partículas.
+  Para leapfrog estos factores son exactamente uno en aritmética exacta.
+  &Delta; envolvente mide el área del cierre convexo de la muestra: puede crecer al curvarse la nube,
+  incluso si el área transportada se conserva. &Delta; energía sigue la primera de las tres partículas
+  marcadas. Los puntos que salen del encuadre siguen incluidos en las mediciones.
+  <a href="#medicion">Ver las fórmulas de los indicadores.</a></div>
 </div>
+<section class="explanation" aria-labelledby="proof-title">
+  <h2 id="proof-title">De las ecuaciones de Hamilton a la conservación del volumen</h2>
+  <p>La afirmación se refiere a una <strong>región de condiciones iniciales</strong> que se mueve con el flujo,
+  no al espacio que parece ocupar una colección finita de puntos. En este demo hay un grado de libertad:
+  el espacio de fases tiene coordenadas (q, p) y su volumen simpléctico es un área.</p>
+
+  <h3>1. El péndulo: velocidad y divergencia</h3>
+  <p>Con masa, longitud y gravedad normalizadas, el hamiltoniano y su campo de velocidades son</p>
+  <div class="equation" aria-label="Hamiltoniano y ecuaciones del péndulo">
+    <span class="line">H(q, p) = p²/2 + 1 − cos q,</span>
+    <span class="line">q̇ = ∂H/∂p = p, &emsp; ṗ = −∂H/∂q = −sin q.</span>
+    <span class="line">div X<sub>H</sub> = ∂p/∂q + ∂(−sin q)/∂p = 0 + 0 = 0.</span>
+  </div>
+  <p>Para un hamiltoniano general H de clase C², con n grados de libertad, la misma cancelación ocurre
+  por la igualdad de las derivadas mixtas:</p>
+  <div class="equation"><span class="line">div X<sub>H</sub> = ∑<sub>i=1</sub><sup>n</sup> [∂²H/(∂q<sub>i</sub>∂p<sub>i</sub>) − ∂²H/(∂p<sub>i</sub>∂q<sub>i</sub>)] = 0.</span></div>
+  <p>Esto expresa que no hay expansión neta infinitesimal. Falta justificar que el resultado se mantiene
+  durante un tiempo finito; no basta con descartar términos de segundo orden en un solo paso.</p>
+
+  <h3>2. Del determinante local al área de una región</h3>
+  <p>Sea φ<sub>t</sub>(z) la solución que parte de z, y M(t) = Dφ<sub>t</sub>(z) su matriz de derivadas
+  respecto de la condición inicial. Al derivar la ecuación del flujo se obtiene la ecuación variacional.
+  La fórmula de Jacobi para el determinante da, donde el flujo está definido,</p>
+  <div class="equation">
+    <span class="line">Ṁ = DX<sub>H</sub>(φ<sub>t</sub>(z)) M, &emsp; M(0) = I,</span>
+    <span class="line">J(t) = det M(t), &emsp; J̇ = J tr(M<sup>−1</sup>Ṁ)</span>
+    <span class="line">&emsp; = J tr(DX<sub>H</sub>) = J div X<sub>H</sub> = 0.</span>
+    <span class="line">J(0) = 1 &ensp; ⇒ &ensp; J(t) = 1.</span>
+  </div>
+  <p>En el paso intermedio usamos que la traza no cambia al conjugar una matriz. Ahora el cambio de
+  variables en la integral sobre cualquier región inicial D<sub>0</sub> implica</p>
+  <div class="equation">
+    <span class="line">Área(φ<sub>t</sub>(D<sub>0</sub>)) = ∫<sub>D₀</sub> |det Dφ<sub>t</sub>(q, p)| dq dp</span>
+    <span class="line">&emsp; = ∫<sub>D₀</sub> dq dp = Área(D<sub>0</sub>).</span>
+  </div>
+  <p>La región puede estirarse, doblarse y hacerse muy delgada; el flujo compensa una expansión en una
+  dirección con una contracción en otra. Esta es la conservación de volumen de Liouville.</p>
+
+  <h3>3. Por qué el volumen es «simpléctico»</h3>
+  <p>Usamos la convención ω = ∑ dq<sub>i</sub> ∧ dp<sub>i</sub>, para la que ι<sub>X<sub>H</sub></sub>ω = dH.
+  Aquí ∧ es el producto exterior e ι denota la contracción con el campo. Como dω = 0 y d²H = 0,
+  la fórmula de Cartan para la derivada de Lie conduce a</p>
+  <div class="equation">
+    <span class="line">ℒ<sub>X<sub>H</sub></sub>ω = d(ι<sub>X<sub>H</sub></sub>ω) + ι<sub>X<sub>H</sub></sub>dω = d(dH) = 0,</span>
+    <span class="line">d(φ<sub>t</sub><sup>*</sup>ω)/dt = φ<sub>t</sub><sup>*</sup>(ℒ<sub>X<sub>H</sub></sub>ω) = 0 &ensp; ⇒ &ensp; φ<sub>t</sub><sup>*</sup>ω = ω.</span>
+    <span class="line">Ω = ω<sup>n</sup>/n! = dq₁ ∧ dp₁ ∧ ··· ∧ dq<sub>n</sub> ∧ dp<sub>n</sub>, &emsp; φ<sub>t</sub><sup>*</sup>Ω = Ω.</span>
+  </div>
+  <p>El asterisco indica que evaluamos la forma después de transportar los vectores con el flujo.
+  El factor n! elimina las repeticiones al expandir ω<sup>n</sup>. Para n = 1, Ω = dq ∧ dp;
+  para n &gt; 1, conservar ω exige más que conservar solamente el volumen Ω.</p>
+
+  <h3>4. Las cuentas de los dos integradores</h3>
+  <p>Escribamos h = dt. Euler explícito usa las dos velocidades al comienzo del paso:</p>
+  <div class="equation">
+    <span class="line">Q = q + hp, &emsp; P = p − h sin q,</span>
+    <span class="line">D E<sub>h</sub> = [ 1, h; −h cos q, 1 ],</span>
+    <span class="line">det D E<sub>h</sub> = 1 + h² cos q.</span>
+  </div>
+  <p>Las filas de la matriz están separadas por punto y coma. Cerca de q = 0 el área aumenta;
+  donde cos q &lt; 0 disminuye. Por ejemplo, en q = 0 y h = 0.1 el factor local es 1.01:
+  un aumento del 1 % en un solo paso. Para varios pasos los factores se multiplican y dependen
+  de las posiciones sucesivas; no hay una tasa de crecimiento constante.</p>
+  <p>Leapfrog compone un impulso de medio paso, un avance de posición y otro impulso de medio paso:</p>
+  <div class="equation">
+    <span class="line">p<sub>½</sub> = p − (h/2) sin q,</span>
+    <span class="line">Q = q + h p<sub>½</sub>, &emsp; P = p<sub>½</sub> − (h/2) sin Q.</span>
+    <span class="line">K<sub>a</sub>(q, p) = (q, p − a sin q), &emsp; D K<sub>a</sub> = [ 1, 0; −a cos q, 1 ],</span>
+    <span class="line">T<sub>h</sub>(q, p) = (q + hp, p), &emsp; D T<sub>h</sub> = [ 1, h; 0, 1 ].</span>
+    <span class="line">L<sub>h</sub> = K<sub>h/2</sub> ∘ T<sub>h</sub> ∘ K<sub>h/2</sub>,</span>
+    <span class="line">det D L<sub>h</sub> = det D K<sub>h/2</sub> · det D T<sub>h</sub> · det D K<sub>h/2</sub> = 1.</span>
+  </div>
+  <p>Cada jacobiano se evalúa en el punto correspondiente de la composición. Son cizallamientos de
+  determinante uno. En este plano eso equivale a preservar dq ∧ dp. Por ello, leapfrog conserva
+  el área en cada paso en aritmética exacta, aunque aproxima las trayectorias del flujo continuo.</p>
+  <p>Conservar área y conservar energía son afirmaciones diferentes. Para el flujo exacto,</p>
+  <div class="equation"><span class="line">dH/dt = H<sub>q</sub>q̇ + H<sub>p</sub>ṗ = (sin q)p + p(−sin q) = 0.</span></div>
+  <p>Leapfrog no conserva exactamente este H: a paso fijo y pequeño suele mostrar un error de energía
+  oscilante, mientras Euler suele presentar deriva. Cambiar h conserva el determinante uno de cada
+  paso de leapfrog, pero modifica el comportamiento de su error energético.</p>
+
+  <h3 id="medicion">5. Cómo relacionar las cuentas con los indicadores</h3>
+  <p>El disco inicial tiene radio r = 0.35 y área A<sub>0</sub> = πr² ≈ 0.38485.
+  Para cada partícula j guardamos el determinante acumulado w<sub>j</sub>, inicialmente uno.
+  La regla de la cadena y el cambio de variables dan</p>
+  <div class="equation">
+    <span class="line">w<sub>j</sub><sup>(k+1)</sup> = w<sub>j</sub><sup>(k)</sup> det D F<sub>h</sub>(z<sub>j</sub><sup>(k)</sup>),</span>
+    <span class="line">A<sub>k</sub>/A<sub>0</sub> = (1/A<sub>0</sub>) ∫<sub>D₀</sub> det D(F<sub>h</sub><sup>k</sup>)(z) dq dp ≈ (1/N) ∑<sub>j=1</sub><sup>N</sup> w<sub>j</sub><sup>(k)</sup>,</span>
+    <span class="line">Δ área (%) = 100 [(1/N) ∑<sub>j=1</sub><sup>N</sup> w<sub>j</sub> − 1], &emsp; N = 420.</span>
+  </div>
+  <p>La aproximación es un promedio de Monte Carlo de puntos uniformes en el disco. Para los pasos
+  permitidos, el mapa de Euler es invertible y su determinante es positivo; por eso esta integral
+  mide área sin contar pliegues superpuestos. En efecto, al eliminar p se obtiene
+  q + h² sin q = Q − hP, cuyo lado izquierdo tiene derivada 1 + h² cos q &gt; 0.</p>
+  <p>En leapfrog w<sub>j</sub> = 1 por construcción: el indicador expresa la propiedad analítica del
+  método, no una comprobación independiente del error de redondeo. En Euler la estimación tiene
+  error de muestreo. La envolvente convexa, en cambio, incluye huecos entre partes de la nube y
+  tampoco reconstruye su frontera real. Su variación no contradice el teorema.</p>
+  <p>Los otros dos indicadores se normalizan por su valor inicial: Δ envolvente =
+  100 [C<sub>k</sub>/C<sub>0</sub> − 1], donde C es el área del cierre convexo de la muestra,
+  y Δ energía = 100 [H(z₁<sup>(k)</sup>)/H(z₁<sup>(0)</sup>) − 1].
+  La coordenada q se evoluciona sin reducirla módulo 2π; el encuadre muestra solamente −π ≤ q ≤ π.</p>
+  <p><strong>Para explorar:</strong> reinicia con h = 0.04 y observa cómo puede variar la envolvente
+  de leapfrog mientras su factor de área permanece en uno. Luego reinicia con h = 0.10 y compara
+  la variación de área de Euler con su deriva energética. Reiniciar genera una nueva muestra,
+  compartida por ambos paneles.</p>
+
+  <h3>Referencia y convenciones</h3>
+  <p class="reading">V. I. Arnold, <cite>Mathematical Methods of Classical Mechanics</cite>,
+  §16, «Liouville’s theorem», pp. 68–70, y §38, «Hamiltonian phase flows and their integral invariants»,
+  pp. 204–206 (paginación impresa del ejemplar de la biblioteca). La prueba por divergencia sigue
+  §16; la conservación de la forma simpléctica se desarrolla en §38. Aquí usamos dq ∧ dp;
+  Arnold usa dp ∧ dq, con la correspondiente convención de signo para el campo hamiltoniano.
+  Las cuentas de Euler, leapfrog y los indicadores se especializan al código de este demo.</p>
+</section>
 <script>
 (function(){
 var $=function(id){return document.getElementById(id)};
@@ -77,9 +206,9 @@ var N=420,QC=1.05,RC=0.35,QL=-Math.PI,QR=Math.PI,PB=2.7,MARG=24,MK=[0,140,280],T
 var dt=0.04,spd=3,running=true,nf=0;
 function acc(q){return -Math.sin(q)}
 function ener(o){return o.p*o.p/2+1-Math.cos(o.q)}
-function initPts(){var a=[];for(var i=0;i<N;i++){var r=RC*Math.sqrt(Math.random()),th=2*Math.PI*Math.random();a.push({q:QC+r*Math.cos(th),p:r*Math.sin(th)})}return a}
+function initPts(){var a=[];for(var i=0;i<N;i++){var r=RC*Math.sqrt(Math.random()),th=2*Math.PI*Math.random();a.push({q:QC+r*Math.cos(th),p:r*Math.sin(th),weight:1})}return a}
 function stepLF(s){for(var i=0;i<s.pts.length;i++){var o=s.pts[i],ph=o.p+0.5*dt*acc(o.q),qn=o.q+dt*ph;o.p=ph+0.5*dt*acc(qn);o.q=qn}}
-function stepEE(s){for(var i=0;i<s.pts.length;i++){var o=s.pts[i],qn=o.q+dt*o.p;o.p=o.p+dt*acc(o.q);o.q=qn}}
+function stepEE(s){for(var i=0;i<s.pts.length;i++){var o=s.pts[i],qn=o.q+dt*o.p;o.weight*=1+dt*dt*Math.cos(o.q);o.p=o.p+dt*acc(o.q);o.q=qn}}
 function hullArea(pts){var p=pts.map(function(o){return [o.q,o.p]});p.sort(function(a,b){return a[0]-b[0]||a[1]-b[1]});
 var cr=function(o,a,b){return (a[0]-o[0])*(b[1]-o[1])-(a[1]-o[1])*(b[0]-o[0])};
 var lo=[],up=[],i,pt;for(i=0;i<p.length;i++){pt=p[i];while(lo.length>=2&&cr(lo[lo.length-2],lo[lo.length-1],pt)<=0)lo.pop();lo.push(pt)}
@@ -112,14 +241,16 @@ for(var m2=0;m2<MK.length;m2++){var mo=s.pts[MK[m2]];if(mo.q<QL||mo.q>QR||mo.p<-
 ctx.strokeStyle=C.acc;ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(V.q2x(mo.q),V.p2y(mo.p),4.5,0,6.2832);ctx.stroke()}
 ctx.globalAlpha=1}
 function stats(P){var s=P.st;var dA=(hullArea(s.pts)/s.A0-1)*100,dE=(ener(s.pts[0])/s.E0-1)*100;
+var dJ=(s.pts.reduce(function(sum,o){return sum+o.weight},0)/s.pts.length-1)*100;
+P.elJ.textContent=(dJ>=0?'+':'')+dJ.toFixed(1)+'%';
 P.elA.textContent=(dA>=0?'+':'')+dA.toFixed(1)+'%';
 P.elE.textContent=(dE>=0?'+':'')+dE.toFixed(2)+'%';
 P.elT.textContent=s.t.toFixed(1)}
 var panels=[
-{cv:$('cvA'),elA:$('arA'),elE:$('enA'),elT:$('tA'),step:stepLF,st:{pts:[],trails:[[],[],[]],t:0,A0:1,E0:1}},
-{cv:$('cvB'),elA:$('arB'),elE:$('enB'),elT:$('tB'),step:stepEE,st:{pts:[],trails:[[],[],[]],t:0,A0:1,E0:1}}
+{cv:$('cvA'),elJ:$('jacA'),elA:$('arA'),elE:$('enA'),elT:$('tA'),step:stepLF,st:{pts:[],trails:[[],[],[]],t:0,A0:1,E0:1}},
+{cv:$('cvB'),elJ:$('jacB'),elA:$('arB'),elE:$('enB'),elT:$('tB'),step:stepEE,st:{pts:[],trails:[[],[],[]],t:0,A0:1,E0:1}}
 ];
-function resetAll(){for(var i=0;i<panels.length;i++){var s=panels[i].st;s.pts=initPts();s.trails=[[],[],[]];s.t=0;s.A0=hullArea(s.pts);s.E0=ener(s.pts[0]);stats(panels[i])}nf=0}
+function resetAll(){var initial=initPts();for(var i=0;i<panels.length;i++){var s=panels[i].st;s.pts=initial.map(function(o){return {q:o.q,p:o.p,weight:1}});s.trails=[[],[],[]];s.t=0;s.A0=hullArea(s.pts);s.E0=ener(s.pts[0]);stats(panels[i])}nf=0}
 function pushTrails(s){for(var m=0;m<MK.length;m++){var o=s.pts[MK[m]];s.trails[m].push([o.q,o.p]);if(s.trails[m].length>TL)s.trails[m].splice(0,s.trails[m].length-TL)}}
 function frame(){if(running){for(var i=0;i<panels.length;i++){var P=panels[i],s=P.st;for(var k=0;k<spd;k++){P.step(s);s.t+=dt}pushTrails(s)}nf++}
 for(var j=0;j<panels.length;j++)draw(panels[j]);
@@ -132,7 +263,7 @@ $('spd').oninput=function(){spd=parseInt(this.value);$('spdv').textContent=spd};
 function fitAll(){for(var i=0;i<panels.length;i++)fit(panels[i].cv)}
 new ResizeObserver(fitAll).observe(document.getElementById('svp'));
 fitAll();resetAll();requestAnimationFrame(frame);
-matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { frame(); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(){panels.forEach(draw)});
 })();
 </script>
 </body>
