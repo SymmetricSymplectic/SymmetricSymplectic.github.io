@@ -1,6 +1,17 @@
 {
   "items": [
     {
+      "title": "Homogenización y el atractor general",
+      "author": "Félix Alfonso Camacho Moya",
+      "source": "Nota de estudio",
+      "type": "Notas matemáticas",
+      "description": "Demostración del principio de homogenización de Koralov–Sinai y comparación cualitativa con la concentración del atractor general de Arnold–Khesin: difusión efectiva, medidas de Gibbs, metastabilidad y orden de los límites.",
+      "url": "resources/homogenizacion-atractor-general.pdf",
+      "texUrl": "resources/homogenizacion-atractor-general.tex",
+      "image": "",
+      "tags": ["probabilidad", "homogenización", "sistemas dinámicos", "matemáticas"]
+    },
+    {
       "title": "Unicidad de martingalas en un hemisferio",
       "author": "Félix Alfonso Camacho Moya",
       "source": "Nota de estudio",
