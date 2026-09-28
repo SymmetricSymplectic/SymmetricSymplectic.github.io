@@ -1,0 +1,197 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=28mm]{geometry}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
+\newtheorem{theorem}{Teorema}
+\newtheorem{lemma}{Lema}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\PP}{\mathbb P}
+\DeclareMathOperator{\Hess}{Hess}
+\title{Unicidad de martingalas en un hemisferio\\\large Una demostración del caso hemisférico de (4.63) de Émery}
+\author{Félix Alfonso Camacho Moya}
+\date{28 de septiembre de 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Demostramos que dos martingalas continuas, para la misma filtración y con valores en un subconjunto relativamente compacto de un hemisferio abierto, son indistinguibles si tienen el mismo valor terminal. Construimos una función suave, convexa para la conexión producto y nula exactamente en la diagonal. El cálculo de su Hessiano y el argumento de localización se presentan explícitamente. Se distingue este resultado de la generalización propuesta en el mismo párrafo de Émery.
+\end{abstract}
+
+\section{Qué afirman (4.61) y (4.63)}
+El corolario (4.61) de \cite{emery}, en la página impresa 53 (página 61 del PDF consultado), establece una propiedad \emph{local}: cada punto de una variedad con conexión tiene un entorno $U$ en el cual una martingala queda determinada por su valor en $t=1$ y por la filtración. La demostración aparece en la página impresa 54 (página 62 del PDF).
+
+El párrafo (4.63), en esa misma página 54, está formulado como una \emph{conjetura}. Contiene dos alcances distintos: el de los subconjuntos relativamente compactos de un hemisferio abierto de una esfera, y otro más general para variedades en las que cada par de puntos está unido por una única geodésica. Aquí damos una prueba completa del primero, con la conexión de Levi-Civita de la esfera. No suponemos que $U$ sea geodésicamente convexo.
+
+La construcción de funciones convexas separadoras en casquetes es el tema de Kendall \cite{kendall}. Presentamos abajo una verificación directa con una elección explícita de parámetros; el cálculo es autosuficiente. La sección final explica por qué no constituye una demostración de la segunda parte de (4.63).
+
+\section{El criterio probabilístico de separación}
+Una martingala en una variedad con conexión es aquí una semimartingala continua $X$ tal que, para toda función suave $f$, el proceso
+\[
+ f(X_t)-f(X_0)-\frac12\int_0^t\Hess f(dX_s,dX_s)
+\]
+es una martingala local. En particular, el término martingala en esta definición no exige que todas las coordenadas sean martingalas verdaderas.
+
+\begin{lemma}\label{lem:separation}
+Sean $X,Y$ martingalas en la misma variedad, definidas sobre el mismo espacio filtrado, durante $[0,1]$. Supongamos que sus pares de valores permanecen en un abierto $W$ del producto y que existe $F\in C^2(W)$ tal que $F\geq0$, $\Hess F\geq0$ para la conexión producto y $F(x,y)=0$ si y sólo si $x=y$. Si $F(X_t,Y_t)$ está acotado por una constante determinista y $X_1=Y_1$ casi seguramente, entonces $X,Y$ son indistinguibles.
+\end{lemma}
+\begin{proof}
+Por (4.58) de Émery, $Z=(X,Y)$ es una martingala para la conexión producto. Esto no requiere independencia: la covariación entre $X$ e $Y$ forma parte de la covariación de $Z$. La fórmula de Itô da
+\[
+ S_t:=F(Z_t)=S_0+N_t+A_t,\qquad
+ A_t=\frac12\int_0^t\Hess F(dZ_s,dZ_s),
+\]
+con $N$ martingala local y $A$ creciente. En coordenadas, este último hecho se debe a que la contracción de dos matrices semidefinidas positivas, el Hessiano y la matriz de medidas de covariación, es no negativa.
+
+Localicemos para que $S^{\tau_n}$ sea submartingala. Si $0\leq s\leq t\leq1$, entonces
+\[
+ S_{s\wedge\tau_n}\leq
+ \E[S_{t\wedge\tau_n}\mid\mathcal F_s].
+\]
+La acotación determinista de $S$ permite pasar al límite por convergencia dominada condicional. Así, $S$ es una submartingala verdadera. Como $S_1=0$,
+\[
+ 0\leq S_t\leq\E[S_1\mid\mathcal F_t]=0.
+\]
+Para cada $t$, resulta $X_t=Y_t$ casi seguramente. Intersectando los sucesos de probabilidad uno correspondientes a los tiempos racionales y usando continuidad, obtenemos
+\[
+ \PP\{X_t=Y_t\text{ para todo }t\in[0,1]\}=1.
+\]
+\end{proof}
+
+Este lema también explicita la prueba local de (4.61). La diagonal es totalmente geodésica por (4.58); (4.59) proporciona una función convexa que la separa de los demás puntos cerca de $(a,a)$. Se elige $U$ suficientemente pequeño para que $U\times U$ esté en ese entorno y la función sea acotada allí. El problema hemisférico exige construir una sola función que sirva para todo el conjunto considerado.
+
+\section{Una función convexa explícita}
+Trabajamos en la esfera unitaria $S^n\subset\R^{n+1}$, con producto escalar y norma euclidianos. Fijemos $e\in S^n$ y escribamos
+\[
+ H=\{x\in S^n:\langle e,x\rangle>0\},\qquad
+ h(x)=\langle e,x\rangle.
+\]
+Sea $U\Subset H$, es decir, $\overline U$ es compacto y está contenido en $H$. Si $U$ es vacío no hay nada que probar. En otro caso,
+\[
+ m=\min_{x\in\overline U}h(x)>0.
+\]
+Elegimos
+\begin{equation}\label{eq:parameters}
+ 0<c<m^2,\qquad p\in\mathbb N,\qquad
+ p\geq\frac{1+c}{2c}.
+\end{equation}
+Por ejemplo, sirven $c=m^2/2$ y $p=\lceil(1+c)/(2c)\rceil$. Consideramos el abierto
+\[
+ W_c=\{(x,y)\in H\times H:h(x)h(y)>c\}
+\]
+y la función
+\begin{equation}\label{eq:F}
+ F(x,y)=\left(\frac{1-\langle x,y\rangle}{h(x)h(y)-c}\right)^p.
+\end{equation}
+El numerador es $\frac12|x-y|^2$. Por tanto, $F$ es no negativa, se anula exactamente en la diagonal y es suave incluso en ella, pues $p$ es entero y el denominador es positivo. Además, $U\times U\subset W_c$ y
+\begin{equation}\label{eq:bound}
+ 0\leq F(x,y)\leq\left(\frac{2}{m^2-c}\right)^p
+ \qquad (x,y\in U).
+\end{equation}
+
+\begin{lemma}\label{lem:convex}
+Con los parámetros de \eqref{eq:parameters}, la función \eqref{eq:F} tiene Hessiano semidefinido positivo para la conexión producto en $W_c$.
+\end{lemma}
+\begin{proof}
+Se puede comprobar el Hessiano derivando dos veces a lo largo de geodésicas afínmente parametrizadas. Sean $x(t),y(t)$ geodésicas de la esfera y, en el instante considerado, pongamos
+\[
+ v=x',\quad w=y',\quad E=|v|^2+|w|^2,\quad
+ a=h(x),\quad b=h(y),\quad q=1-\langle x,y\rangle,\quad d=ab-c.
+\]
+Primero suponemos $x\ne y$, de modo que $q>0$. Las ecuaciones extrínsecas de las geodésicas son
+\[
+ x''=-|v|^2x,\qquad y''=-|w|^2y.
+\]
+De ellas y de $\langle x,v\rangle=\langle y,w\rangle=0$ se deduce
+\begin{align}
+ q'&=\langle x-y,v-w\rangle, &
+ q''&=|v-w|^2-qE,\label{eq:q}\\
+ a''&=-|v|^2a, & b''&=-|w|^2b,\notag\\
+ d'&=ba'+ab', & d''&=-abE+2a'b'.\label{eq:d}
+\end{align}
+Introduzcamos las derivadas logarítmicas
+\[
+ z=\frac{q'}q,\qquad s=\frac{d'}d.
+\]
+Como $F=(q/d)^p$, tenemos
+\[
+ (\log F)'=p(z-s),\qquad
+ \frac{F''}{pF}=\frac{q''}q-\frac{d''}d-z^2+s^2+p(z-s)^2.
+\]
+Sustituyendo \eqref{eq:q}--\eqref{eq:d}, y usando $ab=d+c$, obtenemos la identidad
+\begin{equation}\label{eq:identity}
+ \frac{F''}{pF}=
+ \frac{|v-w|^2}{q}+\frac{cE}{d}-\frac{2a'b'}d
+ +(p-1)z^2-2pzs+(p+1)s^2.
+\end{equation}
+Ahora acotamos los dos términos que lo requieren. Por Cauchy--Schwarz y $|x-y|^2=2q$,
+\[
+ (q')^2\leq2q|v-w|^2,
+ \qquad \frac{|v-w|^2}{q}\geq\frac12z^2.
+\]
+Por otra parte, la identidad
+\[
+ (ba'+ab')^2-4ab\,a'b'=(ba'-ab')^2\geq0
+\]
+implica, sin ninguna restricción sobre los signos de $a',b'$,
+\[
+ \frac{2a'b'}d\leq\frac{(d')^2}{2ab\,d}
+ =\frac{d}{2ab}s^2
+ =\frac12\left(1-\frac{c}{ab}\right)s^2
+ \leq\frac{1-c}{2}s^2.
+\]
+La última desigualdad usa $0<ab\leq1$. Aplicando ambas cotas a \eqref{eq:identity}, queda
+\begin{equation}\label{eq:quadratic}
+ \frac{F''}{pF}\geq\frac{cE}{d}
+ +\left(p-\frac12\right)z^2-2pzs
+ +\left(p+\frac12+\frac c2\right)s^2.
+\end{equation}
+La forma cuadrática en $z,s$ tiene matriz
+\[
+ Q=\begin{pmatrix}
+ p-\frac12&-p\\
+ -p&p+\frac12+\frac c2
+ \end{pmatrix}.
+\]
+Su primera entrada diagonal es positiva y su determinante vale
+\[
+ \det Q=\left(p-\frac12\right)
+ \left(p+\frac12+\frac c2\right)-p^2
+ =\frac{pc}{2}-\frac{1+c}{4}\geq0
+\]
+por \eqref{eq:parameters}. Así, $Q$ es semidefinida positiva, y \eqref{eq:quadratic} da $F''\geq0$ fuera de la diagonal. Toda dirección tangente del producto es la velocidad inicial de una pareja de geodésicas, luego esto prueba $\Hess F\geq0$ allí. Finalmente, $F$ es suave en todo $W_c$; por continuidad de su Hessiano y densidad del complemento de la diagonal, la misma desigualdad vale sobre la diagonal.
+\end{proof}
+
+\section{Demostración del caso hemisférico}
+\begin{theorem}
+Sea $H$ un hemisferio abierto de una esfera redonda, dotada de su conexión de Levi-Civita, y sea $U\Subset H$. Sean $X,Y$ martingalas continuas con valores en $U$, sobre un mismo espacio de probabilidad con una misma filtración $(\mathcal F_t)_{0\leq t\leq1}$. Si $X_1=Y_1$ casi seguramente, entonces $X,Y$ son indistinguibles en $[0,1]$.
+\end{theorem}
+\begin{proof}
+Para la esfera unitaria, tomamos $m,c,p$ como en \eqref{eq:parameters} y la función $F$ de \eqref{eq:F}. El lema \ref{lem:convex} prueba la convexidad necesaria; \eqref{eq:bound} proporciona una cota determinista. Todas las hipótesis del lema \ref{lem:separation} se cumplen. Su conclusión es precisamente la afirmación.
+
+Para una esfera de radio $R>0$ y centro $o$, la aplicación $x\mapsto(x-o)/R$ identifica su conexión con la de la esfera unitaria: multiplicar una métrica por una constante positiva no cambia su conexión de Levi-Civita. Se aplica entonces el resultado anterior a las imágenes de las martingalas.
+\end{proof}
+
+La compacidad relativa se usa de manera precisa: garantiza un mínimo $m>0$ de la altura y permite elegir un único $c>0$ y un exponente finito $p$, además de asegurar la cota uniforme. No hace falta suponer independencia, una filtración browniana ni integrabilidad adicional de la variación cuadrática. El resultado es de unicidad; no afirma que todo valor terminal admita una martingala con valores en $U$.
+
+\section{Alcance de la demostración y \textit{caveats} de su interpretación}
+La función construida vive en un entorno de $U\times U$ y aprovecha las ecuaciones concretas de las geodésicas esféricas. La sola unicidad de geodésicas en una variedad con conexión no proporciona estas identidades ni una función separadora. Por ello, pasar del caso hemisférico a la segunda parte de (4.63) necesita un argumento adicional que esta nota no afirma tener.
+
+Existe además una obstrucción documentada a esa vía general de prueba: Kendall \cite{propeller} construye un dominio riemanniano bidimensional con una única geodésica entre cada par de puntos, pero sin una función convexa acotada en el producto que se anule exactamente en la diagonal. Esto refuta el correspondiente criterio de existencia de funciones convexas separadoras. No lo convertimos aquí, sin argumentos adicionales, en un contraejemplo probabilístico a la formulación exacta sobre todos los subconjuntos relativamente compactos de (4.63). La nota demuestra el caso hemisférico y deja expresamente fuera de su conclusión la generalización.
+
+Tampoco se puede reemplazar automáticamente $U\Subset H$ por el hemisferio completo en esta prueba: ya no existe un mínimo positivo de $h$. Kendall \cite{kendall} demuestra que el hemisferio abierto completo no admite una función convexa no negativa en su producto que se anule precisamente en la diagonal, incluso sin exigir acotación. Esta ausencia tampoco debe confundirse, por sí sola, con una demostración de no unicidad de martingalas.
+
+\begin{thebibliography}{9}
+\bibitem{emery}
+M. Émery, \emph{Stochastic Calculus in Manifolds}, con un apéndice de P.-A. Meyer, Springer, 1989. Capítulo IV, (4.58)--(4.63), pp. 51--54; especialmente pp. 53--54, correspondientes a las páginas 61--62 del PDF consultado.
+\bibitem{kendall}
+W. S. Kendall, \emph{Convexity and the Hemisphere}, Journal of the London Mathematical Society (2) \textbf{43} (1991), 567--576.
+\href{https://doi.org/10.1112/jlms/s2-43.3.567}{doi:10.1112/jlms/s2-43.3.567}.
+\bibitem{propeller}
+W. S. Kendall, \emph{The Propeller: A Counterexample to a Conjectured Criterion for the Existence of Certain Convex Functions}, Journal of the London Mathematical Society (2) \textbf{46} (1992), 364--374.
+\href{https://doi.org/10.1112/jlms/s2-46.2.364}{doi:10.1112/jlms/s2-46.2.364}.
+\end{thebibliography}
+\end{document}

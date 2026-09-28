@@ -60,6 +60,16 @@
       article.appendChild(link);
     }
 
+    if (item.texUrl) {
+      article.appendChild(document.createTextNode(" · "));
+      var texLink = document.createElement("a");
+      texLink.className = "doc-link";
+      texLink.href = item.texUrl;
+      texLink.download = "";
+      texLink.textContent = "Descargar fuente LaTeX";
+      article.appendChild(texLink);
+    }
+
     return article;
   }
 
@@ -74,7 +84,7 @@
       items.forEach(function (item) {
         fragment.appendChild(itemNode(item));
       });
-      listEl.appendChild(fragment);
+      listEl.replaceChildren(fragment);
     })
     .catch(function () {
       listEl.innerHTML =

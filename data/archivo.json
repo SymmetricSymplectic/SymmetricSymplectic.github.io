@@ -1,6 +1,17 @@
 {
   "items": [
     {
+      "title": "Unicidad de martingalas en un hemisferio",
+      "author": "Félix Alfonso Camacho Moya",
+      "source": "Nota de estudio",
+      "type": "Notas matemáticas",
+      "description": "Demostración detallada del caso hemisférico de (4.63) de Émery, con una función convexa separadora y el argumento de unicidad de martingalas con el mismo valor terminal.",
+      "url": "resources/emery-4-63-hemisferio.pdf",
+      "texUrl": "resources/emery-4-63-hemisferio.tex",
+      "image": "",
+      "tags": ["probabilidad", "geometría", "matemáticas"]
+    },
+    {
       "title": "Geometry",
       "author": "Vladimir Arnold y Ricardo Uribe",
       "source": "Cortesía de Ricardo Uribe",
