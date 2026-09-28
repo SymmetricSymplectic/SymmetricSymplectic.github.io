@@ -332,9 +332,102 @@ La homogenización con ruido fijo tampoco da automáticamente un límite conjunt
 \subsection{Alcance de la interpretación}
 La relación conceptual se encuentra en la separación de escalas. La homogenización describe fluctuaciones acumuladas cuando el promedio microscópico es efectivo; la metastabilidad puede retrasar ese promedio mediante largas permanencias en regiones del espacio. La concentración describe, por su parte, cómo se distribuye la masa al disminuir el ruido. Esta relación no convierte al atractor general en un movimiento browniano ni convierte a la homogenización en un principio de selección de mínimos.
 
-La discusión de Gibbs se refiere al caso globalmente gradiente de Arnold--Khesin. Su observación 3.16 incluye potenciales pseudoperiódicos $U(x+1)=U(x)+c$. Si $c\ne0$, la fórmula de Gibbs anterior no es una densidad periódica y puede haber corriente estacionaria. La selección y el transporte requieren entonces otro análisis; la conclusión ``selección del mínimo global'' no se debe extender sin esas precisiones.
+Por ``familia de medidas de Gibbs'' entendemos aquí las probabilidades invariantes $\{\mu_\eta:\eta>0\}$ del problema gradiente en un espacio compacto, con densidades normalizadas $Z_\eta^{-1}e^{-U/\eta}$. La discusión comprende tres afirmaciones distintas: su existencia a ruido fijo, la convergencia de la ley hacia ellas cuando $t\to\infty$ y su concentración cuando $\eta\downarrow0$. La ley transitoria no es, en general, una medida de Gibbs; durante la metastabilidad puede aproximarse por una mezcla de equilibrios locales con pesos que todavía evolucionan.
+
+Esta discusión corresponde al caso globalmente gradiente expuesto antes de la observación 3.16 de Arnold--Khesin. La observación 3.16 delimita una extensión diferente: potenciales pseudoperiódicos $U(x+1)=U(x)+c$, con deriva periódica pero potencial no definido globalmente en el círculo si $c\ne0$. En ese caso, $e^{-U/\eta}$ no es periódico ni es normalizable como probabilidad en toda la recta. Sigue existiendo una única probabilidad invariante para la difusión elíptica en el círculo, pero su densidad no tiene esa forma de Gibbs y su corriente estacionaria es no nula. El libro discute entonces la selección mediante umbrales de escape. No estamos atribuyendo a 3.16 el resultado anterior sobre familias de Gibbs ni extendiendo a su caso la selección de un mínimo global.
 
 El demo \cite{demo} es un artefacto didáctico para visualizar los mecanismos de contracción, captura y redistribución lenta. No aporta evidencia independiente para los teoremas ni fija el alcance de la comparación. Las afirmaciones rigurosas de esta nota se sostienen en las hipótesis indicadas, las ecuaciones de Poisson, la convergencia de martingalas y la concentración de las medidas de Gibbs.
+
+\section{Un problema de valores iniciales que reúne ambos fenómenos}
+\subsection{Coeficientes y dato inicial explícitos}
+Fijemos el potencial suave de período uno
+\begin{equation}\label{eq:explicitU}
+ U(x)=-\cos(4\pi x)-\frac12\cos(2\pi x),
+ \qquad U'(x)=4\pi\sin(4\pi x)+\pi\sin(2\pi x).
+\end{equation}
+Para cada $\eta>0$, consideremos en la recta el problema de Cauchy
+\begin{equation}\label{eq:IVP}
+ \begin{cases}
+ \partial_t p_\eta=\partial_x(U'p_\eta)+\eta\partial_{xx}p_\eta,
+       & x\in\R,\ t>0,\\
+ p_\eta(0,x)=\mathbf 1_{[0,1)}(x).
+ \end{cases}
+\end{equation}
+El dato inicial es una densidad de probabilidad. Se entiende en sentido $L^1$ al tiempo cero; la solución es suave para $t>0$. Es la densidad del proceso
+\[
+ dZ_t^\eta=-U'(Z_t^\eta)\,dt+\sqrt{2\eta}\,dW_t,
+ \qquad Z_0^\eta\sim\mathrm{Unif}[0,1),
+\]
+con condición inicial independiente del browniano. La deriva es suave, acotada y Lipschitz y la difusión es uniformemente elíptica a $\eta$ fijo, por lo que el proceso está bien definido globalmente.
+
+La densidad no se impone periódica en la recta: una función periódica positiva no puede integrar uno sobre $\R$. Se periodizan los coeficientes y se proyecta la solución al círculo mediante
+\begin{equation}\label{eq:periodization}
+ r_\eta(t,x)=\sum_{n\in\mathbb Z}p_\eta(t,x+n),\qquad x\in[0,1).
+\end{equation}
+Esta suma es la densidad de $Z_t^\eta\bmod1$. Satisface la misma ecuación con condiciones periódicas y dato $r_\eta(0,x)=1$. Así obtenemos dos observables de un único proceso: $r_\eta$ registra la posición dentro del período, mientras que $p_\eta$ conserva el desplazamiento total.
+
+\subsection{Pozos, concentración transitoria y equilibrio}
+En un período hay dos mínimos, $x_0=0$ y $x_1=1/2$, con
+\[
+ U(x_0)=-\tfrac32,\quad U(x_1)=-\tfrac12,
+ \qquad U''(x_0)=18\pi^2,\quad U''(x_1)=14\pi^2.
+\]
+Los dos máximos se encuentran en $s$ y $1-s$, donde
+\[
+ s=\frac{\arccos(-1/8)}{2\pi},\qquad U(s)=U(1-s)=\frac{33}{32}.
+\]
+Las cuencas deterministas en el círculo son
+\[
+ B_0=[0,s)\cup(1-s,1),\qquad B_1=(s,1-s),
+\]
+omitiendo los puntos separatrices. Sus masas iniciales son $2s$ y $1-2s$, respectivamente. La dinámica sin ruido contrae estas masas hacia los dos mínimos. En consecuencia, el límite iterado
+\begin{equation}\label{eq:two-well-capture}
+ \lim_{t\to\infty}\lim_{\eta\downarrow0}
+ r_\eta(t,x)\,dx
+ =2s\,\delta_0+(1-2s)\delta_{1/2}
+\end{equation}
+describe rigurosamente la captura por cuencas antes de permitir redistribución por ruido. El límite de ruido pequeño a tiempo fijo se justifica por la estabilidad de la EDE respecto de su ecuación determinista; el límite determinista de tiempo grande se sigue de la convergencia al mínimo de cada cuenca y de que las separatrices tienen masa inicial cero.
+
+Para $\eta$ fijo pequeño, esta captura se observa como concentración en vecindades de ambos mínimos, no como masas de Dirac exactas. La aproximación de equilibrio local sugiere anchos $\sqrt{\eta/(18\pi^2)}$ y $\sqrt{\eta/(14\pi^2)}$. Las alturas de barrera desde los dos mínimos son $81/32$ y $49/32$, de modo que las escalas de escape correspondientes son exponenciales en $81/(32\eta)$ y $49/(32\eta)$. Estas escalas explican la posibilidad de un régimen intermedio largo; \eqref{eq:two-well-capture} no es por sí sola una estimación uniforme del error de una aproximación metastable a tiempos dependientes de $\eta$.
+
+Después de la redistribución, $r_\eta(t,x)\,dx$ converge a
+\[
+ \mu_\eta(dx)=I_-(\eta)^{-1}e^{-U(x)/\eta}\,dx
+ \quad\text{en el círculo}.
+\]
+Por Laplace, las masas estacionarias por cuenca satisfacen
+\[
+ \frac{\mu_\eta(B_1)}{\mu_\eta(B_0)}
+ \sim\sqrt{\frac{18}{14}}e^{-1/\eta}.
+\]
+Por tanto, primero equilibrar y después eliminar el ruido da $\delta_0$, a diferencia de \eqref{eq:two-well-capture}. Con $\eta>0$ permanece masa positiva en ambos pozos.
+
+\subsection{Homogenización de las variables aleatorias del mismo problema}
+Para cada $\eta>0$ fijo, el teorema \ref{thm:potential} se aplica a \eqref{eq:IVP} y da
+\begin{equation}\label{eq:explicitCLT}
+ \sqrt\varepsilon Z_{t/\varepsilon}^\eta
+ \Longrightarrow\sqrt{2\Deff(\eta)}B_t,
+ \qquad\Deff(\eta)=\frac{\eta}{I_+(\eta)I_-(\eta)}.
+\end{equation}
+La convergencia es funcional. Para $t>0$ fijo, equivale en particular a la convergencia débil de probabilidades
+\[
+ \frac1{\sqrt\varepsilon}
+ p_\eta\left(\frac{t}{\varepsilon},\frac{x}{\sqrt\varepsilon}\right)dx
+ \ \Longrightarrow\
+ \frac{e^{-x^2/(4\Deff(\eta)t)}}{\sqrt{4\pi\Deff(\eta)t}}\,dx.
+\]
+Se afirma convergencia débil, no convergencia puntual de esas densidades. El perfil límite es el núcleo de la ecuación del calor de coeficiente $\Deff(\eta)$ con dato inicial $\delta_0$: la distribución inicial acotada se contrae al origen bajo el reescalamiento.
+
+En este ejemplo,
+\[
+ \lim_{\eta\downarrow0}\eta\log\frac{\Deff(\eta)}{\eta}
+ =-\frac{81}{32}.
+\]
+El transporte macroscópico es, por tanto, muy lento cuando el ruido es pequeño, aunque a ruido fijo el límite browniano es no degenerado. No hay contradicción entre observar primero concentraciones locales y obtener después un límite difusivo para el desplazamiento.
+
+La ``medida asintótica'' debe identificarse con cuidado: $\mu_\eta$ es el equilibrio de la proyección al círculo. El proceso completo en $\R$ no converge a una probabilidad estacionaria. De hecho, por \eqref{eq:explicitCLT}, su masa en cada compacto fijo tiende a cero cuando el tiempo tiende a infinito. El resultado gaussiano corresponde a sus variables reescaladas. Tampoco se afirma que los dos fenómenos ocurran en una misma ventana temporal: la captura metastable precede a la relajación global, mientras que la homogenización describe el transporte observado en escalas suficientemente grandes.
+
+Este problema proporciona así una formulación concreta para el estudio conjunto: analizar la concentración y las masas por cuenca de $r_\eta$, su relajación hacia $\mu_\eta$, y las leyes reescaladas de $Z^\eta$. El parámetro $\eta$ se fija pequeño para comparar esas etapas; un límite simultáneo $\eta=\eta(\varepsilon)\downarrow0$ sería un problema adicional que necesita controlar sus escalas relativas.
 
 \begin{thebibliography}{9}
 \bibitem{KS} L. B. Koralov y Y. G. Sinai, \emph{Theory of Probability and Random Processes}, Springer, sección 21.5, ``A Problem in Homogenization'', ecuaciones (21.34)--(21.37) y lemas 21.23--21.24. La paginación cambia entre las copias digitales; en la copia utilizada la sección ocupa las pp. impresas 336--339.
