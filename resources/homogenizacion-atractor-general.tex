@@ -1,0 +1,347 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=27mm]{geometry}
+\usepackage{microtype,booktabs}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\newtheorem{theorem}{Teorema}
+\newtheorem{lemma}{Lema}
+\theoremstyle{remark}\newtheorem{remark}{Observación}
+\newcommand{\R}{\mathbb R}
+\newcommand{\T}{\mathbb T}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Law}{\mathcal L}
+\newcommand{\Deff}{D_{\mathrm{eff}}}
+\DeclareMathOperator{\diver}{div}
+\DeclareMathOperator{\Cov}{Cov}
+\title{Homogenización y el atractor general\\[4pt]\large Correctores, difusión efectiva y competencia entre pozos}
+\author{Félix Alfonso Camacho Moya}
+\date{28 de septiembre de 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Probamos el principio de invariancia anunciado en la sección 21.5 de Koralov y Sinai para una difusión con deriva periódica, incompresible y de media cero. El argumento utiliza ecuaciones de Poisson en el toro y una aproximación por martingalas, sin exigir una distribución inicial estacionaria. La comparación con el ``atractor general'' de Arnold y Khesin se centra en la naturaleza de los límites: la homogenización produce una ley efectiva de fluctuaciones a gran escala, mientras que la concentración selecciona regiones del espacio de estados al disminuir el ruido. Distinguimos relajación, metastabilidad y concentración, así como gaussianidad macroscópica y perfiles gaussianos locales. Un potencial periódico unidimensional permite mostrar la compatibilidad de ambos fenómenos; el demo de tres pozos tiene únicamente una función didáctica.
+\end{abstract}
+
+\section{Dos preguntas asintóticas}
+Koralov y Sinai \cite{KS}, sección 21.5, consideran una partícula en un campo periódico y preguntan por su desplazamiento visto a gran escala. Arnold y Khesin \cite{AK}, capítulo V, sección 3.C, pp. 277--281, estudian cómo una densidad transportada por una deriva gradiente, con difusión pequeña, se redistribuye entre pozos. La comparación concierne a estos problemas continuos y sus mecanismos asintóticos. El demo \cite{demo} ilustra la competencia entre contracción local, captura por cuencas y selección del equilibrio; sus parámetros y su discretización no son hipótesis de la comparación.
+
+Las preguntas están relacionadas, pero sus parámetros tienen funciones diferentes. En la homogenización, $\varepsilon$ reescala la observación de una dinámica fija. En la competencia entre pozos, $\eta$ modifica la intensidad del ruido y, con ella, los tiempos de transición. Reservaremos $a$ para la covarianza efectiva por unidad de tiempo y $\Deff$ para el coeficiente del generador efectivo unidimensional: en ese caso $a=2\Deff$.
+
+\section{El principio de invariancia de Koralov--Sinai}
+Sea $W$ un movimiento browniano estándar de dimensión $d$ respecto de una filtración que satisface las condiciones usuales. Consideremos
+\begin{equation}\label{eq:sde}
+ dX_t=v(X_t)\,dt+dW_t,\qquad X_0=\xi,
+\end{equation}
+donde $\xi$ es acotada y $\mathcal F_0$-medible. Suponemos que $v$ es suave, $\mathbb Z^d$-periódico y satisface
+\begin{equation}\label{eq:assumptions}
+ \diver v=0,\qquad \int_{\T^d}v(x)\,dx=0.
+\end{equation}
+El toro tiene volumen uno. La solución existe globalmente porque la deriva es globalmente Lipschitz y acotada.
+
+\begin{theorem}\label{thm:main}
+Existen funciones suaves periódicas $u_i$ de media cero, determinadas por
+\begin{equation}\label{eq:cell}
+ Lu_i=-v_i,\qquad L=\tfrac12\Delta+v\cdot\nabla,
+\end{equation}
+y una matriz simétrica definida positiva
+\begin{equation}\label{eq:a}
+ a_{ij}=\delta_{ij}+\int_{\T^d}\nabla u_i\cdot\nabla u_j\,dx
+\end{equation}
+tales que, con $\sigma=a^{1/2}$,
+\[
+ X_t^\varepsilon:=\sqrt\varepsilon X_{t/\varepsilon}
+ \ \Longrightarrow\ \sigma B_t
+ \quad\hbox{en }C([0,\infty);\R^d).
+\]
+La topología es la de convergencia uniforme en compactos. En particular,
+\[
+ X_t^\varepsilon\Longrightarrow\mathcal N(0,ta)
+ \quad\text{para cada }t\geq0.
+\]
+\end{theorem}
+
+\begin{remark}
+En la frase de la sección 21.5 que describe la marginal gaussiana falta el factor $t$: si $Y_t=\sigma B_t$, entonces $\Cov(Y_t)=t\sigma\sigma^{\mathsf T}$. La matriz $a$ corresponde a tiempo uno o, equivalentemente, a covarianza por unidad de tiempo. La convergencia de segundos momentos, que el libro desarrolla después, no basta por sí sola para demostrar convergencia de leyes.
+\end{remark}
+
+\subsection{Ecuaciones de Poisson en el toro}
+Para funciones periódicas,
+\[
+ L^*=\tfrac12\Delta-v\cdot\nabla,\qquad L^*1=0.
+\]
+La medida uniforme es, por tanto, invariante. La identidad siguiente permite resolver las ecuaciones de Poisson que necesitaremos. En el espacio $H^1$ periódico de media cero, definamos
+\[
+ \mathcal B(u,\varphi)=\frac12\int\nabla u\cdot\nabla\varphi\,dx
+ -\int(v\cdot\nabla u)\varphi\,dx.
+\]
+La periodicidad y $\diver v=0$ implican
+\[
+ \int(v\cdot\nabla u)u\,dx=\frac12\int v\cdot\nabla(u^2)\,dx=0,
+ \qquad\mathcal B(u,u)=\tfrac12\|\nabla u\|_2^2.
+\]
+Por Poincaré, esta forma continua es coerciva en dicho espacio. Para $f$ suave de media cero, Lax--Milgram resuelve
+\[
+ \mathcal B(u,\varphi)=-\int f\varphi\,dx,
+\]
+es decir, $Lu=f$ débilmente. La ecuación también vale para pruebas constantes porque ambos lados tienen integral cero. La regularidad elíptica da una solución suave; la coercividad da unicidad con la normalización $\int u=0$. En particular, existen los correctores de \eqref{eq:cell}; sus derivadas están acotadas.
+
+\subsection{Coordenadas corregidas y martingalas}
+Puesto que $L(x_i+u_i)=0$, la fórmula de Itô da
+\begin{align}
+ M_t^i&:=X_t^i+u_i(X_t)-\xi_i-u_i(\xi)\notag\\
+ &=\sum_{k=1}^d\int_0^t
+ (\delta_{ik}+\partial_k u_i(X_s))\,dW_s^k.\label{eq:mart}
+\end{align}
+Definamos
+\[
+ H_{ik}=\delta_{ik}+\partial_k u_i,\qquad Q=HH^{\mathsf T}.
+\]
+La martingala $M$ es cuadrado-integrable en todo intervalo finito y
+\[
+ \langle M^i,M^j\rangle_t=\int_0^t Q_{ij}(X_s)\,ds.
+\]
+Como
+\[
+ Q_{ij}=\delta_{ij}+\partial_j u_i+\partial_i u_j
+ +\nabla u_i\cdot\nabla u_j,
+\]
+la integral espacial de $Q$ es precisamente $a$ en \eqref{eq:a}. Los términos lineales se anulan al integrar, no punto a punto. Para $\theta\in\R^d$,
+\begin{equation}\label{eq:enhancement}
+ \theta^{\mathsf T}a\theta=|\theta|^2+
+ \int_{\T^d}\left|\nabla\sum_i\theta_i u_i\right|^2dx\geq|\theta|^2.
+\end{equation}
+Así, $a\geq I$ y su raíz cuadrada positiva está bien definida.
+
+\subsection{Promedio de las variaciones cuadráticas sin estacionariedad}
+Sea $N_t^\varepsilon=\sqrt\varepsilon M_{t/\varepsilon}$, con filtración $\mathcal F_{t/\varepsilon}$. Entonces
+\[
+ \langle N^{\varepsilon,i},N^{\varepsilon,j}\rangle_t
+ =\varepsilon\int_0^{t/\varepsilon}Q_{ij}(X_s)\,ds.
+\]
+Resolvamos una segunda ecuación de Poisson,
+\[
+ L\phi_{ij}=Q_{ij}-a_{ij},\qquad\int_{\T^d}\phi_{ij}=0.
+\]
+Su solvencia se sigue de que el lado derecho tiene media cero. Itô implica
+\begin{align*}
+ &\varepsilon\int_0^{t/\varepsilon}(Q_{ij}(X_s)-a_{ij})\,ds\\
+ &\qquad=\varepsilon[\phi_{ij}(X_{t/\varepsilon})-\phi_{ij}(\xi)]
+ -\varepsilon\int_0^{t/\varepsilon}\nabla\phi_{ij}(X_s)\cdot dW_s.
+\end{align*}
+El primer término está acotado por $2\varepsilon\|\phi_{ij}\|_\infty$. Para el segundo, la desigualdad maximal de Doob y la isometría de Itô dan
+\[
+ \E\sup_{t\leq T}\left|\varepsilon\int_0^{t/\varepsilon}
+ \nabla\phi_{ij}(X_s)\cdot dW_s\right|^2
+ \leq4\varepsilon T\|\nabla\phi_{ij}\|_\infty^2.
+\]
+Por consiguiente,
+\begin{equation}\label{eq:bracket}
+ \E\sup_{t\leq T}\left|
+ \langle N^{\varepsilon,i},N^{\varepsilon,j}\rangle_t-ta_{ij}
+ \right|^2\longrightarrow0.
+\end{equation}
+No se ha supuesto que $\xi\bmod\mathbb Z^d$ sea uniforme.
+
+\subsection{Convergencia funcional y eliminación del corrector}
+Detallamos el paso probabilístico para no confundirlo con una simple convergencia de covarianzas. Como $H$ está acotada, Burkholder--Davis--Gundy implica
+\[
+ \E|N_t^\varepsilon-N_s^\varepsilon|^4\leq C|t-s|^2,
+ \qquad 0\leq s\leq t\leq T.
+\]
+El criterio de Kolmogórov asegura tightness de las leyes en $C([0,T];\R^d)$, pues $N_0^\varepsilon=0$. Para cualquier límite subsecuencial $Z$, las identidades de martingala de
+\[
+ N^{\varepsilon,i},\qquad
+ N^{\varepsilon,i}N^{\varepsilon,j}
+ -\langle N^{\varepsilon,i},N^{\varepsilon,j}\rangle
+\]
+pasan al límite. En efecto, se prueban primero contra funciones continuas acotadas de un número finito de valores pasados; las cotas de cuarto momento aseguran integrabilidad uniforme, y \eqref{eq:bracket} sustituye el corchete por $ta_{ij}$. Un argumento de clase monótona extiende las identidades a la filtración natural de $Z$.
+
+Así, $Z$ es una martingala continua, empieza en cero y tiene corchete $\langle Z^i,Z^j\rangle_t=ta_{ij}$. La caracterización de Lévy identifica $a^{-1/2}Z$ como browniano estándar. Todos los límites subsecuenciales tienen la misma ley, luego $N^\varepsilon\Rightarrow a^{1/2}B$.
+
+Por \eqref{eq:mart},
+\[
+ X_t^\varepsilon-N_t^\varepsilon
+ =\sqrt\varepsilon[\xi+u(\xi)-u(X_{t/\varepsilon})],
+\]
+y por tanto
+\[
+ \sup_{t\leq T}|X_t^\varepsilon-N_t^\varepsilon|
+ \leq\sqrt\varepsilon(|\xi|+2\|u\|_\infty)\longrightarrow0.
+\]
+Esto prueba el teorema en cada intervalo finito. Tightness en todos los intervalos $[0,n]$ e identificación compatible de los límites prueban el resultado en $C([0,\infty);\R^d)$.
+
+\begin{remark}
+También se recupera el crecimiento de segundos momentos: la misma ecuación de Poisson da $\E[M_t^iM_t^j]=ta_{ij}+O(1)$. Como $X_t-M_t$ está uniformemente acotado, Cauchy--Schwarz muestra que los términos cruzados son $O(\sqrt t)$, y $t^{-1}\E[X_t^iX_t^j]\to a_{ij}$. Además, $\E X_t$ está acotada, por lo que $t^{-1}\Cov(X_t)\to a$. Este resultado es una consecuencia adicional, no un sustituto del argumento funcional.
+\end{remark}
+
+\section{El modelo del atractor general}
+Consideremos ahora un potencial de período uno y el proceso
+\begin{equation}\label{eq:gradient}
+ dZ_t=-U'(Z_t)\,dt+\sqrt{2\eta}\,dW_t,\qquad\eta>0.
+\end{equation}
+Módulo uno, su densidad satisface
+\[
+ \partial_t\rho=\partial_x(U'\rho)+\eta\partial_{xx}\rho
+ =-\partial_xJ,\qquad J=-U'\rho-\eta\rho'.
+\]
+En equilibrio, $J$ es constante. Multiplicando la ecuación estacionaria por $e^{U/\eta}$ e integrando en un período,
+\[
+ 0=[e^{U/\eta}\rho]_0^1
+ =-\frac{J}{\eta}\int_0^1e^{U/\eta}\,dx,
+\]
+de donde $J=0$. La única densidad estacionaria normalizada es
+\begin{equation}\label{eq:gibbs}
+ \rho_\eta(x)=\frac{e^{-U(x)/\eta}}{I_-(\eta)},
+ \qquad I_\pm(\eta)=\int_0^1e^{\pm U(x)/\eta}\,dx.
+\end{equation}
+Para $\eta$ fijo, la elipticidad y la compacidad del círculo dan relajación hacia este equilibrio. Si $U$ tiene un único mínimo global $x_*$ módulo uno, el principio de Laplace da $\rho_\eta(x)\,dx\Rightarrow\delta_{x_*}$ cuando $\eta\downarrow0$. A ruido fijo, la densidad de Gibbs sigue siendo positiva en todos los pozos.
+
+\subsection{Contracción, redistribución y concentración}
+El mecanismo se formula también en una variedad riemanniana compacta, conexa y sin borde $M$, para un potencial suave $U$ y el generador $\eta\Delta-\nabla U\cdot\nabla$. La medida invariante es
+\[
+ \mu_\eta(dx)=Z_\eta^{-1}e^{-U(x)/\eta}\,d\mathrm{vol}(x).
+\]
+Supongamos que $U$ es de Morse y tiene un único mínimo global $x_*$. Cerca de cada mínimo local $x_i$, la deriva contrae hacia él. En tiempos intermedios y con ruido pequeño, la masa se distribuye entre vecindades de varios mínimos; las transiciones entre cuencas pueden ser muy raras. A $\eta$ fijo, la relajación termina en $\mu_\eta$. Sólo al hacer además $\eta\downarrow0$ se obtiene la concentración total en $x_*$.
+
+La última afirmación se puede verificar sin describir todas las transiciones. Si $V$ es una vecindad de $x_*$ y $M\setminus V$ no es vacío, la unicidad del mínimo y la compacidad dan
+\[
+ \delta=\min_{M\setminus V}U-U(x_*)>0.
+\]
+Existe una vecindad $A\subset V$ de volumen positivo donde $U\leq U(x_*)+\delta/2$. Por tanto,
+\[
+ \mu_\eta(M\setminus V)
+ \leq\frac{\mathrm{vol}(M)}{\mathrm{vol}(A)}
+ e^{-\delta/(2\eta)}\longrightarrow0.
+\]
+Esto prueba $\mu_\eta\Rightarrow\delta_{x_*}$. Si hay varios mínimos globales, se concentra sobre su conjunto y la selección de pesos requiere información adicional. Para mínimos no degenerados de igual profundidad, la aproximación de Laplace asigna pesos proporcionales a $(\det\nabla^2U(x_i))^{-1/2}$.
+
+En dimensión uno, cerca de un mínimo no degenerado con $\kappa_i=U''(x_i)>0$, el perfil de equilibrio condicionado al pozo es aproximadamente gaussiano, de anchura $\sqrt{\eta/\kappa_i}$. La masa total del pozo incluye además el factor $e^{-U(x_i)/\eta}/\sqrt{\kappa_i}$. Así, mayor altura inicial, mayor masa capturada por la cuenca y mayor peso final de Gibbs corresponden a criterios distintos. El demo de tres pozos separa didácticamente esas ventajas, sin pretender que su elección particular describa todos los potenciales.
+
+La separación temporal tampoco es una partición exacta. En el modelo cuadrático local, contraer una anchura inicial fija hasta la escala $\sqrt\eta$ requiere tiempos del orden de $\log(1/\eta)$. Bajo las hipótesis usuales de pozos y barreras no degenerados, las transiciones entre pozos tienen escalas exponenciales en $1/\eta$. La descripción metastable reduce entonces el problema a masas por cuenca y tasas de intercambio; estas dependen de las barreras y no sólo de la profundidad de cada mínimo.
+
+\section{Levantar el círculo a la recta: difusión efectiva exacta}
+Como resultado complementario, la ecuación \eqref{eq:gradient} también define un proceso en $\R$. El levantamiento conserva el desplazamiento acumulado entre períodos. Este caso permite demostrar que concentración dentro de una celda y difusión entre celdas son compatibles; la comparación cualitativa general no requiere este levantamiento ni se restringe a él.
+
+\begin{theorem}\label{thm:potential}
+Sea $U$ periódico de período uno, $C^1$ con derivada Lipschitz, y sea $\eta>0$ fijo. Para condición inicial acotada y adaptada como antes,
+\[
+ \sqrt\varepsilon Z_{t/\varepsilon}
+ \Longrightarrow\sqrt{2\Deff(\eta)}\,B_t,
+ \qquad
+ \Deff(\eta)=\frac{\eta}{I_+(\eta)I_-(\eta)}.
+\]
+La convergencia tiene lugar en $C([0,\infty);\R)$.
+\end{theorem}
+\begin{proof}
+El generador es $\mathcal L_\eta=\eta\partial_{xx}-U'\partial_x$. Busquemos $F(x)=x+\chi(x)$, con $\chi$ periódica, tal que $\mathcal L_\eta F=0$. La ecuación para $F'$ y la condición $F(x+1)-F(x)=1$ dan
+\[
+ F'(x)=\frac{e^{U(x)/\eta}}{I_+(\eta)}.
+\]
+Esta función define $F$ de clase $C^2$ bajo las hipótesis del teorema. Por Itô,
+\[
+ K_t:=F(Z_t)-F(Z_0)
+ =\sqrt{2\eta}\int_0^tF'(Z_s)\,dW_s.
+\]
+El promedio de su tasa de variación cuadrática con respecto a Gibbs es
+\begin{equation}\label{eq:potentialvariance}
+ \int_0^1 2\eta(F')^2\rho_\eta\,dx
+ =\frac{2\eta}{I_+I_-}=2\Deff(\eta).
+\end{equation}
+Justificamos el promedio para cualquier distribución inicial. Si $g$ es periódico continuo y $\int_0^1g\rho_\eta=0$, la ecuación $\mathcal L_\eta\phi=g$ equivale a
+\[
+ (e^{-U/\eta}\phi')'=\eta^{-1}e^{-U/\eta}g.
+\]
+La condición de media cero hace periódica una primitiva del lado derecho; la constante de integración se elige de modo que $\int_0^1\phi'=0$. Así existe una solución periódica $C^2$. Aplicamos esta construcción a $g=2\eta(F')^2-2\Deff(\eta)$. Itô y Doob dan, exactamente como en \eqref{eq:bracket}, convergencia uniforme en probabilidad del corchete reescalado a $2t\Deff(\eta)$. Las constantes pueden depender de $\eta$, que aquí está fijo.
+
+El argumento funcional de martingalas anterior prueba la convergencia de $\sqrt\varepsilon K_{t/\varepsilon}$. Finalmente, $F(x)-x=\chi(x)$ es periódico y acotado, y el error desaparece uniformemente tras multiplicarlo por $\sqrt\varepsilon$. Esto prueba la afirmación.
+\end{proof}
+
+\subsection{Reducción de la difusión y escala de barreras}
+Cauchy--Schwarz implica
+\[
+ I_+I_-\geq\left(\int_0^1e^{U/(2\eta)}e^{-U/(2\eta)}\,dx\right)^2=1,
+ \qquad 0<\Deff(\eta)\leq\eta.
+\]
+La igualdad ocurre sólo para un potencial constante. Los pozos reducen la difusión respecto del browniano libre de generador $\eta\partial_{xx}$. Esto contrasta con \eqref{eq:enhancement}: en Koralov--Sinai, la deriva incompresible aumenta o conserva la difusión respecto de su valor molecular.
+
+Para cualquier potencial continuo periódico, el principio de Laplace da
+\[
+ \lim_{\eta\downarrow0}\eta\log I_+=\max U,
+ \qquad \lim_{\eta\downarrow0}\eta\log I_-=-\min U.
+\]
+Por lo tanto,
+\begin{equation}\label{eq:barrier}
+ \lim_{\eta\downarrow0}\eta\log\frac{\Deff(\eta)}{\eta}
+ =-(\max U-\min U).
+\end{equation}
+Esta afirmación identifica la escala exponencial del transporte en este problema unidimensional periódico; no especifica un prefactor ni una igualdad a ruido finito, ni identifica por sí sola el tiempo de relajación hacia Gibbs.
+
+\section{Naturaleza cualitativa de los dos límites}
+\subsection{Promediar fluctuaciones y seleccionar estados}
+En el teorema \ref{thm:main}, $\varepsilon$ cambia simultáneamente la escala temporal y espacial. La trayectoria original explora muchas celdas; el corrector recoge una modificación microscópica acotada, mientras que la parte martingala acumula fluctuaciones. La geometría del campo no desaparece por completo: permanece en la matriz efectiva $a$. El límite es una ley no degenerada en el espacio de trayectorias, con incrementos brownianos y covarianza $ta$ a tiempo $t$.
+
+La concentración del atractor general responde a otra pregunta: qué regiones del espacio de estados conservan masa cuando el ruido disminuye. La familia de medidas de Gibbs favorece exponencialmente los mínimos más profundos. El límite $\delta_{x_*}$ es una medida espacial singular y expresa selección de estados. No es una ley browniana ni una afirmación de convergencia de trayectorias individuales hacia una curva determinista en un límite conjunto de parámetros.
+
+En ambos casos se obtiene una descripción que retiene menos información microscópica. Pero se conserva información diferente: la homogenización retiene la intensidad y anisotropía de las fluctuaciones acumuladas; la concentración retiene la localización de los estados favorecidos. La independencia del dato inicial en el límite homogenizado procede del reescalamiento y del promedio dinámico. La independencia del dato inicial en el equilibrio a ruido fijo procede de la comunicación entre cuencas, que puede ser extremadamente lenta.
+
+\subsection{La gaussianidad tiene dos significados}
+La marginal gaussiana de la homogenización tiene covarianza $ta$: su dispersión aumenta con el tiempo macroscópico. Cerca de un mínimo no degenerado, la aproximación gaussiana de Gibbs tiene covarianza $\eta(\nabla^2U(x_*))^{-1}$ en coordenadas locales: su anchura disminuye con el ruido. En el primer caso actúa un principio central del límite para desplazamientos acumulados; en el segundo, una expansión cuadrática del potencial y el método de Laplace.
+
+Por ello, la aparición de gaussianas en ambos problemas no identifica sus mecanismos. La gaussiana homogenizada describe una nube que se dispersa en el espacio reescalado. La gaussiana local de Gibbs describe el perfil de una nube concentrada cerca de un estado estable. Tras un reescalamiento local por $1/\sqrt\eta$, esta última puede tener un límite gaussiano no degenerado, aunque la medida espacial sin reescalar tienda a una masa puntual.
+
+\subsection{La medida invariante y las hipótesis geométricas}
+En Koralov--Sinai la medida uniforme en el toro es invariante; la deriva incompresible preserva volumen y no produce sumideros atractores con cuencas abiertas que concentren masa como los mínimos de un potencial. La convergencia de la proyección al equilibrio uniforme en el toro es distinta de la homogenización del desplazamiento en $\R^d$.
+
+Un potencial global periódico que cumpliera $v=-\nabla U$ y $\diver v=0$ satisfaría $\Delta U=0$ en el toro, luego sería constante. Así, la concentración en pozos no es un caso particular no trivial del teorema \ref{thm:main}. El método de correctores sí se aplica a otros generadores, como muestra el teorema \ref{thm:potential}, usando la medida invariante apropiada. En ese caso,
+\[
+ \int_0^1(-U')\rho_\eta\,dx
+ =\frac{\eta}{I_-}[e^{-U/\eta}]_0^1=0.
+\]
+Este centrado elimina la velocidad macroscópica. La diferencia entre $a\geq I$ y $\Deff\leq\eta$ refleja las estructuras particulares de estos dos modelos; no constituye una dicotomía universal para toda homogenización.
+
+\subsection{Compatibilidad de concentración y transporte}
+En el ejemplo periódico gradiente, a $\eta$ fijo,
+\[
+ \Law(Z_t\bmod1)\longrightarrow\rho_\eta(x)\,dx,
+ \qquad
+ \Law(\sqrt\varepsilon Z_{\cdot/\varepsilon})
+ \longrightarrow\Law(\sqrt{2\Deff(\eta)}B).
+\]
+La partícula puede permanecer la mayor parte del tiempo cerca de mínimos y, aun así, acumular desplazamientos mediante transiciones raras. La primera descripción identifica su posición dentro del período; la segunda registra transporte entre períodos. El coeficiente efectivo puede ser muy pequeño sin ser cero.
+
+El tiempo de relajación $1/\lambda_1$ del generador en el espacio compacto y la difusión efectiva en el espacio desplegado son observables diferentes. El primero mide el decaimiento del modo no estacionario más lento, si está presente en el dato inicial. La segunda mide la varianza acumulada del desplazamiento. Una reducción a masas por cuenca describe relajación, pero sólo puede describir transporte si también conserva la información sobre desplazamientos entre celdas. Ninguna identificación entre ambas cantidades se sigue únicamente de la existencia de estados metastables.
+
+\subsection{Orden de los límites y memoria de las cuencas}
+Supongamos un potencial suave con un número finito de mínimos atractores $x_i$, un único mínimo global $x_*$ y cuencas $B_i$ que cubren el espacio salvo un conjunto de masa inicial cero. Sea $\nu$ la ley inicial. Primero equilibrar a ruido fijo y después disminuir el ruido da
+\[
+ \lim_{\eta\downarrow0}\lim_{t\to\infty}\Law(Z_t^\eta)
+ =\delta_{x_*}.
+\]
+En cambio, para tiempo fijo el límite de ruido pequeño es el flujo determinista $\dot z=-\nabla U(z)$. La posterior evolución a tiempo infinito da
+\[
+ \lim_{t\to\infty}\lim_{\eta\downarrow0}\Law(Z_t^\eta)
+ =\sum_i\nu(B_i)\delta_{x_i}.
+\]
+Estos límites pueden diferir. En el primero, las transiciones inducidas por ruido tienen tiempo para redistribuir la masa; en el segundo, la masa conserva la memoria de la cuenca inicial. El demo ilustra esta distinción, pero el argumento depende de las cuencas y de los límites del problema continuo, no de una simulación particular.
+
+La homogenización con ruido fijo tampoco da automáticamente un límite conjunto con ruido decreciente. En el teorema \ref{thm:potential}, sustituir $\eta$ por $\eta(\varepsilon)\downarrow0$ exige estimaciones uniformes de los promedios y del error del corrector. Las escalas metastables pueden crecer exponencialmente y competir con el tiempo de observación $1/\varepsilon$. Además, $\Deff(\eta)\to0$: primero homogenizar y luego eliminar el ruido produce el proceso nulo bajo la normalización espacial original. Un límite no degenerado con ambos parámetros variables necesita una escala adicional y una demostración propia.
+
+\subsection{Alcance de la interpretación}
+La relación conceptual se encuentra en la separación de escalas. La homogenización describe fluctuaciones acumuladas cuando el promedio microscópico es efectivo; la metastabilidad puede retrasar ese promedio mediante largas permanencias en regiones del espacio. La concentración describe, por su parte, cómo se distribuye la masa al disminuir el ruido. Esta relación no convierte al atractor general en un movimiento browniano ni convierte a la homogenización en un principio de selección de mínimos.
+
+La discusión de Gibbs se refiere al caso globalmente gradiente de Arnold--Khesin. Su observación 3.16 incluye potenciales pseudoperiódicos $U(x+1)=U(x)+c$. Si $c\ne0$, la fórmula de Gibbs anterior no es una densidad periódica y puede haber corriente estacionaria. La selección y el transporte requieren entonces otro análisis; la conclusión ``selección del mínimo global'' no se debe extender sin esas precisiones.
+
+El demo \cite{demo} es un artefacto didáctico para visualizar los mecanismos de contracción, captura y redistribución lenta. No aporta evidencia independiente para los teoremas ni fija el alcance de la comparación. Las afirmaciones rigurosas de esta nota se sostienen en las hipótesis indicadas, las ecuaciones de Poisson, la convergencia de martingalas y la concentración de las medidas de Gibbs.
+
+\begin{thebibliography}{9}
+\bibitem{KS} L. B. Koralov y Y. G. Sinai, \emph{Theory of Probability and Random Processes}, Springer, sección 21.5, ``A Problem in Homogenization'', ecuaciones (21.34)--(21.37) y lemas 21.23--21.24. La paginación cambia entre las copias digitales; en la copia utilizada la sección ocupa las pp. impresas 336--339.
+\bibitem{AK} V. I. Arnold y B. A. Khesin, \emph{Topological Methods in Hydrodynamics}, Springer, 1998, capítulo V, sección 3.C, ``Digression on the Fokker--Planck equation'', pp. 277--281.
+\bibitem{demo} F. A. Camacho Moya, \emph{Fokker--Planck: El atractor general}, FelixNet. Modelo periódico de tres pozos y desarrollo de sus escalas de relajación.\newline
+\url{https://symmetricsymplectic.github.io/demos/fokker_planck_attractor.html}
+\bibitem{HP} M. Hairer y É. Pardoux, \emph{Homogenization of periodic linear degenerate PDEs}, Journal of Functional Analysis \textbf{255} (2008), 2462--2487. Referencia para extensiones del principio de homogenización periódica.\newline
+\url{https://arxiv.org/abs/math/0702304}
+\end{thebibliography}
+\end{document}
