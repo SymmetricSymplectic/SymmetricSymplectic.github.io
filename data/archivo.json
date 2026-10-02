@@ -1,6 +1,26 @@
 {
   "items": [
     {
+      "title": "Fórmulas de Feynman-Kac para Procesos de Itô y sus aplicaciones",
+      "author": "Félix Alfonso Camacho Moya",
+      "source": "Facultad de Ciencias, UNAM · 2026",
+      "type": "Tesis de licenciatura",
+      "description": "Fórmulas de representación probabilística, procesos matados, transformadas de Doob y cambios de medida, con aplicaciones a la ley del arcoseno y la valuación de opciones asiáticas.",
+      "url": "resources/tesis-feynman-kac.pdf",
+      "image": "",
+      "tags": ["tesis", "probabilidad", "Feynman-Kac", "matemáticas"]
+    },
+    {
+      "title": "Feynman-Kac: presentación de la defensa",
+      "author": "Félix Alfonso Camacho Moya",
+      "source": "Facultad de Ciencias, UNAM · 2026",
+      "type": "Presentación",
+      "description": "Las técnicas de martingalas locales detrás de las fórmulas de Feynman-Kac, sus conexiones con Doob y Girsanov y una aplicación a opciones asiáticas.",
+      "url": "resources/presentacion-feynman-kac.pdf",
+      "image": "",
+      "tags": ["tesis", "defensa", "probabilidad", "matemáticas"]
+    },
+    {
       "title": "Homogenización y el atractor general",
       "author": "Félix Alfonso Camacho Moya",
       "source": "Nota de estudio",
