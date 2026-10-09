@@ -1,3 +1,9 @@
 #temp folder
 tmp/
-
+#latex useless files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
