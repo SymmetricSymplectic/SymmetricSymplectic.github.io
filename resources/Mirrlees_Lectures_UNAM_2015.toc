@@ -1,0 +1,21 @@
+\contentsline {section}{\numberline {1}Introduction and Methodological Foundations}{2}{section.1}%
+\contentsline {section}{\numberline {2}The Mathematics of Economic Equilibrium}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Static Walrasian General Equilibrium}{2}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Price Simplex and Agents' Decisions}{2}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Excess Demand and Walras' Law}{2}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Existence via Brouwer's Fixed Point Theorem}{3}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}Microfoundations and Production Sets: Kakutani's Extension}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Disequilibrium, Price Adjustments, and Involuntary Unemployment}{4}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Dynamic Asset Pricing, Fixed Assets, and Speculative Bubbles}{4}{subsection.2.4}%
+\contentsline {section}{\numberline {3}The Mathematics of Economic Policy}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Mechanism Design and Information Asymmetry}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}The Mirrlees Optimal Income Tax Model}{5}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Incentive Compatibility Constraint}{5}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Optimal Control Formulation via Pontryagin's Principle}{5}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}The Canonical Marginal Tax Rate Formula}{6}{subsubsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.3}Theoretical Implications for Policy Design}{6}{subsection.3.3}%
+\contentsline {section}{\numberline {4}The Causes and Treatment of Economic and Social Inequalities}{7}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Structural Causes of Rising Modern Inequality}{7}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Policy Remedies: Minimum Wages vs. Employment Subsidies}{7}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Translating Mathematics into Policy: The Mirrlees Review}{7}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Conclusion}{7}{section.5}%
