@@ -5,6 +5,13 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,mathtools}
 \usepackage{graphicx,array,longtable}
+\usepackage{tikz,float}
+\usetikzlibrary{arrows.meta,positioning}
+\tikzset{flowbox/.style={draw,rounded corners=2pt,fill=black!3,align=center,
+ text width=12cm,inner sep=6pt,font=\small},
+ halfbox/.style={flowbox,text width=5.5cm},
+ flowarrow/.style={-{Stealth[length=2.2mm]},thick}}
+
 \usepackage{enumitem}
 \usepackage{microtype}
 \usepackage[unicode,hidelinks]{hyperref}
@@ -23,7 +30,11 @@
 \date{}
 \begin{document}
 \maketitle
+\begingroup
+\small
+\setlength{\parskip}{0pt}
 \tableofcontents
+\endgroup
 \clearpage
 \chapter{Microeconomic Foundations of the TRPF: Stochastic Automation, Superprofits, and Mean Field Equilibria}
 \section{Introduction \& The Micro-Macro Paradox in Marx}
@@ -126,7 +137,7 @@ Factoring out ${r}_{i}(t)$, we obtain the fundamental SDE governing microeconomi
 \begin{enumerate}
 \item As ${r}_{i}\rightarrow 0$ due to severe capital over-accumulation, absolute profit rate volatility decays to zero, trapping the enterprise in a stagnant, low-yielding equilibrium.
 \end{enumerate}
-\section{Coupled Dynamics: Stochastic Exploitation (${e}_{t}$) and Defensive Speedup}
+\section{Coupled Dynamics: Stochastic Exploitation \texorpdfstring{$e_t$}{e(t)} and Defensive Speedup}
 In Section 2, the rate of exploitation was treated as an exogenous constant (${e}_{t}\equiv e$). However, in Marx's analysis of the \emph{counteracting influences} to the TRPF (\emph{Capital Vol. III}, Ch. 14), capital does not passively accept the decay of its valorization rate. Whenever the systemic rate of profit ${r}_{t}$ falls, capital mobilizes counter-tendencies:
 
 \begin{enumerate}
@@ -149,7 +160,7 @@ where:
 \[
 \bar{e}({r}_{t})=\frac{\theta }{{r}_{t}},\theta >0
 \]
-\item This inverse relationship captures the structural imperative: when ${r}_{t}$ compresses, capital must accelerate surplus extraction per worker to defend net cash flows.
+This inverse relationship captures the structural imperative: when ${r}_{t}$ compresses, capital must accelerate surplus extraction per worker to defend net cash flows.
 \item ${\sigma }_{2}>0$ measures the volatility of labor-market friction and institutional resistance (unionization shocks, regulatory shifts, social conflict).
 \item ${W}_{2,t}$ is a standard Brownian motion.
 \end{itemize}
@@ -230,7 +241,7 @@ The derived drift demonstrates the macroeconomic tug-of-war between the TRPF and
 \[
 -\alpha {r}_{t}
 \]
-\item which relentlessly pulls the profit rate downward at an exponential pace determined by the rate of technical progress $\alpha$.
+which relentlessly pulls the profit rate downward at an exponential pace determined by the rate of technical progress $\alpha$.
 \item \textbf{The Correlation Wedge:} If $\rho >0$, the covariance between automation shocks and labor conflict acts as an \emph{additional structural drag} on profitability, steepening the rate of profit decay.
 \end{enumerate}
 \section{Stochastic Optimal Control of the Firm and Superprofit Rents}
@@ -294,7 +305,7 @@ Here, $\rho >0$ is the subjective subjective hurdle rate / pure time preference 
 \subsection{The Hamilton-Jacobi-Bellman (HJB) Equation}
 By Bellman's Dynamic Programming Principle, the stationary value function $V({\omega }_{i},\Omega )$ satisfies the nonlinear elliptic partial differential equation:
 
-\[\fitmath{\rho V({\omega }_{i},\Omega )=\max\limits_{{u}_{i}}\left\{{\frac{e}{\Omega +1}+\gamma ({\omega }_{i}-\Omega )-\frac{1}{2}c{u}_{i}^{2}+LV({\omega }_{i},\Omega )}\right\}}\]
+\[\fitmath{\rho V({\omega }_{i},\Omega )=\max_{{u}_{i}}\left\{{\frac{e}{\Omega +1}+\gamma ({\omega }_{i}-\Omega )-\frac{1}{2}c{u}_{i}^{2}+LV({\omega }_{i},\Omega )}\right\}}\]
 where the infinitesimal generator $L$ acting on test function $V$ is:
 
 \[\fitmath{LV=\left({{u}_{i}-\delta {\omega }_{i}}\right)\frac{\partial V}{\partial {\omega }_{i}}+{\mu }_{\Omega }(\Omega )\frac{\partial V}{\partial \Omega }+\frac{1}{2}{\sigma }_{1}^{2}{\omega }_{i}^{2}\frac{{\partial }^{2}V}{\partial {\omega }_{i}^{2}}+\frac{1}{2}{\sigma }_{\Omega }^{2}{\Omega }^{2}\frac{{\partial }^{2}V}{\partial {\Omega }^{2}}+{\rho }_{\omega \Omega }{\sigma }_{1}{\sigma }_{\Omega }{\omega }_{i}\Omega \frac{{\partial }^{2}V}{\partial {\omega }_{i}\partial \Omega }}\]
@@ -325,7 +336,7 @@ Evaluating the partial derivatives under this ansatz:
 Substitute $\frac{\partial V}{\partial {\omega }_{i}}={X}_{1}$ into the first-order condition:
 
 \[
-{u}_{i}^{*}=\frac{{X}_{1}}{c}(aconstantacrosstimeandindividualstate)
+{u}_{i}^{*}=\frac{{X}_{1}}{c}\quad\text{(constant across time and individual state)}
 \]
 Now, substitute $V$, its derivatives, and ${u}_{i}^{*}$ back into the HJB equation:
 
@@ -398,7 +409,7 @@ where the probability current density $J(t,\omega )$ is defined as:
 J(t,\omega )=b(\omega ,{u}^{*})m(t,\omega )-\frac{1}{2}\frac{\partial }{\partial \omega }\left[{{\sigma }_{1}^{2}{\omega }^{2}m(t,\omega )}\right]
 \]
 \end{enumerate}
-\subsection{Derivation of the Endogenous Macro-Drift $\frac{d\Omega }{dt}$}
+\subsection{Derivation of the Endogenous Macro-Drift \texorpdfstring{$d\Omega/dt$}{dOmega/dt}}
 To determine how the systemic average organic composition $\Omega (t)$ moves across time, we differentiate its definition with respect to $t$:
 
 \[\fitmath{\frac{d\Omega (t)}{dt}=\frac{d}{dt}\int\limits_{0}^{\infty }\omega m(t,\omega )d\omega =\int\limits_{0}^{\infty }\omega \frac{\partial m(t,\omega )}{\partial t}d\omega}\]
@@ -453,7 +464,7 @@ where the long-run terminal saturation limit of the organic composition of capit
 \[
 {\Omega }^{*}=\lim\limits_{{t} \rightarrow {\infty }}\Omega (t)=\frac{\gamma }{c\delta (\rho +\delta )}
 \]
-\subsection{Stationary Distribution of Capitals ${m}^{*}(\omega )$}
+\subsection{Stationary Distribution of Capitals \texorpdfstring{$m^*(\omega)$}{m*(omega)}}
 At the macroeconomic steady state ($\frac{\partial m}{\partial t}=0$), the cross-sectional distribution of capitals reaches a stationary density ${m}^{*}(\omega )$ satisfying the zero-current condition $J(\omega )=0$:
 
 \[
@@ -476,12 +487,12 @@ Exponentiating yields an \textbf{Inverse Gamma Distribution}:
 where:
 
 \begin{itemize}
-\item \textbf{Shape parameter:} ${\alpha }_{dist}=\frac{2\delta }{{\sigma }_{1}^{2}}+1>1$
-\item \textbf{Scale parameter:} ${\beta }_{dist}=\frac{2\bar{u}}{{\sigma }_{1}^{2}}=\frac{2\gamma }{c{\sigma }_{1}^{2}(\rho +\delta )}$
+\item \textbf{Shape parameter:} ${\alpha }_{\mathrm{dist}}=\frac{2\delta }{{\sigma }_{1}^{2}}+1>1$
+\item \textbf{Scale parameter:} ${\beta }_{\mathrm{dist}}=\frac{2\bar{u}}{{\sigma }_{1}^{2}}=\frac{2\gamma }{c{\sigma }_{1}^{2}(\rho +\delta )}$
 \end{itemize}
 The mean of this stationary distribution reproduces the macro-limit:
 
-\[\fitmath{{E}_{{m}^{*}}[\omega ]=\frac{{\beta }_{dist}}{{\alpha }_{dist}-1}=\frac{\frac{2\bar{u}}{{\sigma }_{1}^{2}}}{\frac{2\delta }{{\sigma }_{1}^{2}}}=\frac{\bar{u}}{\delta }=\frac{\gamma }{c\delta (\rho +\delta )}={\Omega }^{*}}\]
+\[\fitmath{{E}_{{m}^{*}}[\omega ]=\frac{{\beta }_{\mathrm{dist}}}{{\alpha }_{\mathrm{dist}}-1}=\frac{\frac{2\bar{u}}{{\sigma }_{1}^{2}}}{\frac{2\delta }{{\sigma }_{1}^{2}}}=\frac{\bar{u}}{\delta }=\frac{\gamma }{c\delta (\rho +\delta )}={\Omega }^{*}}\]
 \subsection{Realization of the TRPF in the Mean Field Limit}
 We can now state the central macroeconomic result of Article 1:
 
@@ -524,7 +535,7 @@ Superprofit rents are zero-sum across society. The planner's instantaneous retur
 The planner chooses an aggregate automation investment path $\{{U}_{t}{\}}_{t\geq 0}$ to maximize:
 
 \[
-{W}_{plan}=\max\limits_{\{{U}_{t}\}}\int\limits_{0}^{\infty }{e}^{-\rho t}\left({\frac{e}{{\Omega }_{t}+1}-\frac{1}{2}c{U}_{t}^{2}}\right)dt
+{W}_{\mathrm{plan}}=\max_{\{{U}_{t}\}}\int\limits_{0}^{\infty }{e}^{-\rho t}\left({\frac{e}{{\Omega }_{t}+1}-\frac{1}{2}c{U}_{t}^{2}}\right)dt
 \]
 subject to the aggregate capital accumulation constraint:
 
@@ -543,7 +554,7 @@ Applying Pontryagin's Maximum Principle:
 
 \begin{enumerate}
 \item \textbf{Stationarity with respect to control $U$:}
-\item $$\frac{\partial \mathcal{H}}{\partial U} = - c U + \lambda = 0 \implies U^*(t) = \frac{\lambda(t)}{c}$$
+\[\frac{\partial \mathcal{H}}{\partial U} = - c U + \lambda = 0 \implies U^*(t) = \frac{\lambda(t)}{c}\]
 \item \textbf{Co-state evolution equation:}
 \[
 \frac{d\lambda }{dt}=\rho \lambda -\frac{\partial H}{\partial \Omega }=\rho \lambda -\left({-\frac{e}{(\Omega +1{)}^{2}}-\delta \lambda }\right)=(\rho +\delta )\lambda +\frac{e}{(\Omega +1{)}^{2}}
@@ -570,14 +581,14 @@ Because ${\lambda }^{*}<0$, the unconstrained optimal control is:
 However, because capital accumulation cannot be negative beyond non-replacement (${U}_{t}\geq 0$ under irreversible investment constraints), the corner solution binds:
 
 \[
-{U}_{plan}^{*}=0
+{U}_{\mathrm{plan}}^{*}=0
 \]
-The planner invests only the bare minimum required for basic replacement or sets investment to zero until the organic composition reaches its structural lower bound ${\Omega }_{\min\limits_{}}\geq 0$ (e.g., ${\Omega }_{plan}^{*}=0$ in normalized units).
+The planner invests only the bare minimum required for basic replacement or sets investment to zero until the organic composition reaches its structural lower bound ${\Omega }_{\min}\geq 0$ (e.g., ${\Omega }_{\mathrm{plan}}^{*}=0$ in normalized units).
 
 Thus, under coordinated planning:
 
 \[
-{r}_{plan}^{*}=\frac{e}{{\Omega }_{plan}^{*}+1}=e
+{r}_{\mathrm{plan}}^{*}=\frac{e}{{\Omega }_{\mathrm{plan}}^{*}+1}=e
 \]
 The planned economy preserves the maximum attainable baseline rate of profit without squandering labor on defensive mechanization races.
 
@@ -586,9 +597,9 @@ Following algorithmic game theory, we evaluate the systemic coordination failure
 
 \subsubsection{Definition: Price of Anarchy in Valorization Efficiency}
 \[
-PoA=\frac{{r}_{plan}^{*}}{{r}_{mfg}^{*}}=\frac{e}{\frac{e}{{\Omega }_{mfg}^{*}+1}}={\Omega }_{mfg}^{*}+1
+PoA=\frac{{r}_{\mathrm{plan}}^{*}}{{r}_{\mathrm{mfg}}^{*}}=\frac{e}{\frac{e}{{\Omega }_{\mathrm{mfg}}^{*}+1}}={\Omega }_{\mathrm{mfg}}^{*}+1
 \]
-Substituting the equilibrium saturation limit ${\Omega }_{mfg}^{*}=\frac{\gamma }{c\delta (\rho +\delta )}$ from Section 5:
+Substituting the equilibrium saturation limit ${\Omega }_{\mathrm{mfg}}^{*}=\frac{\gamma }{c\delta (\rho +\delta )}$ from Section 5:
 
 \[
 PoA=1+\frac{\gamma }{c\delta (\rho +\delta )}
@@ -601,12 +612,12 @@ PoA=1+\frac{\gamma }{c\delta (\rho +\delta )}
 Comparing stationary welfare flows:
 
 \[
-{W}_{plan}^{*}={r}_{plan}^{*}-\frac{1}{2}c({U}_{plan}^{*}{)}^{2}=e-0=e
+{W}_{\mathrm{plan}}^{*}={r}_{\mathrm{plan}}^{*}-\frac{1}{2}c({U}_{\mathrm{plan}}^{*}{)}^{2}=e-0=e
 \]
 In the decentralized Mean Field Equilibrium, each firm maintains ${u}^{*}=\bar{u}=\delta {\Omega }^{*}$ and incurs capital expenditure $\frac{1}{2}c({u}^{*}{)}^{2}=\frac{1}{2}c{\delta }^{2}({\Omega }^{*}{)}^{2}$:
 
 \[
-{W}_{mfg}^{*}={r}_{mfg}^{*}-\frac{1}{2}c({u}^{*}{)}^{2}=\frac{e}{{\Omega }^{*}+1}-\frac{{\gamma }^{2}}{2c(\rho +\delta {)}^{2}}
+{W}_{\mathrm{mfg}}^{*}={r}_{\mathrm{mfg}}^{*}-\frac{1}{2}c({u}^{*}{)}^{2}=\frac{e}{{\Omega }^{*}+1}-\frac{{\gamma }^{2}}{2c(\rho +\delta {)}^{2}}
 \]
 The aggregate welfare destruction equals:
 
@@ -618,30 +629,21 @@ This decomposes the deadweight loss of competitive capitalism into two distinct 
 \item \textbf{Defensive Capex Waste:} The direct expenditure squandered on defensive R\&D and automation that individual firms must undertake simply to avoid being eliminated by competitors.
 \end{enumerate}
 \subsection{Summary of Article 1 Deliverables}
-Individual Firm Level (HJB Control)
 
-u\_i* = $\gamma$ / [c($\rho$ + $\delta$)]  (Pursuit of transitory superprofit)
-
-\begin{center}$\downarrow$\end{center}
-Fokker-Planck Transport of All Capitals
-
-$\partial$m/$\partial$t + $\partial$/$\partial$$\omega$ [(u* - $\delta$$\omega$)m] = 1/2 $\sigma$${}_{1}$${}^2$ $\partial$${}^2$/$\partial$$\omega$${}^2$ [$\omega$${}^2$ m]
-
-\begin{center}$\downarrow$\end{center}
-Mean Field Equilibrium (MFE)
-
-$\Omega$* = $\gamma$ / [c $\delta$ ($\rho$ + $\delta$)]  (Systemic organic composition saturation)
-
-\begin{center}$\downarrow$\end{center}
-Macroeconomic Result (Endogenous TRPF)
-
-r\emph{ = e / ($\Omega$} + 1)  (Systemic rate of profit decay)
-
-\begin{center}$\downarrow$\end{center}
-Systemic Coordination Failure
-
-PoA = 1 + $\Omega$*  (Price of Anarchy of decentralized competition)
-
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
+\node[flowbox] (n0) {\textbf{Individual firm: HJB control}\\[3pt]$u_i^*=\gamma/[c(\rho+\delta)]$\\Pursuit of transitory superprofit};
+\node[flowbox,below=of n0] (n1) {\textbf{Fokker--Planck transport}\\[3pt]$\partial_t m+\partial_\omega[(u^*-\delta\omega)m]=\frac12\sigma_1^2\partial_{\omega\omega}(\omega^2m)$};
+\draw[flowarrow] (n0) -- (n1);
+\node[flowbox,below=of n1] (n2) {\textbf{Mean field equilibrium}\\[3pt]$\Omega^*=\gamma/[c\delta(\rho+\delta)]$};
+\draw[flowarrow] (n1) -- (n2);
+\node[flowbox,below=of n2] (n3) {\textbf{Endogenous TRPF}\\[3pt]$r^*=e/(\Omega^*+1)$};
+\draw[flowarrow] (n2) -- (n3);
+\node[flowbox,below=of n3] (n4) {\textbf{Coordination failure}\\[3pt]$\mathrm{PoA}=1+\Omega^*$};
+\draw[flowarrow] (n3) -- (n4);
+\end{tikzpicture}
+\caption{The micro-to-macro accumulation mechanism.}
+\end{figure}
 \subsection{The Bridge to Article 2: From Real Over-Accumulation to Fictitious Capital}
 Article 1 established the micro-to-macro trajectory of the real circuit of capital ($M \to C \dots P \dots C' \to M'$). However, the systemic consequences of the TRPF do not remain confined to production:
 
@@ -724,25 +726,18 @@ In classical Marxism, the transformation of value into market price occurs in tw
 \end{enumerate}
 The Girsanov change of measure encapsulates both transformations in continuous time.
 
-Individual Sectoral Valorization
-
-$\mu$\_i = e / ($\gamma$\_i + 1) + $\xi$\_i  (Heterogeneous labor-value extraction under P)
-
-\begin{center}$\downarrow$  [1. Equalization of Profit Rates via Market Mobility]\end{center}
-General Rate of Profit
-
-$\bar{r}$ = S / (C + V)  (Economy-wide average surplus-value yield)
-
-\begin{center}$\downarrow$  [2. Financial Bifurcation: Profit of Enterprise vs. Interest]\end{center}
-Rate of Interest-Bearing Capital
-
-r\_f = $\bar{r}$ - m\_risk - $\pi$\_ent  (Benchmark drift under Q)
-
-\begin{center}$\downarrow$\end{center}
-Girsanov Kernel
-
-$\theta$\_i = ($\mu$\_i - r\_f) / $\sigma$\_i  (Surplus-value transfer vector)
-
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
+\node[flowbox] (n0) {\textbf{Individual sectoral valorization}\\[3pt]$\mu_i=e/(\gamma_i+1)+\xi_i$\\Heterogeneous labor-value extraction under $P$};
+\node[flowbox,below=of n0] (n1) {\textbf{Equalization of profit rates}\\[3pt]$\bar r=S/(C+V)$\\Market mobility produces the general rate of profit};
+\draw[flowarrow] (n0) -- (n1);
+\node[flowbox,below=of n1] (n2) {\textbf{Interest and profit of enterprise}\\[3pt]$r_f=\bar r-m_{\mathrm{risk}}-\pi_{\mathrm{ent}}$\\Benchmark financial drift under $Q$};
+\draw[flowarrow] (n1) -- (n2);
+\node[flowbox,below=of n2] (n3) {\textbf{Girsanov kernel}\\[3pt]$\theta_i=(\mu_i-r_f)/\sigma_i$};
+\draw[flowarrow] (n2) -- (n3);
+\end{tikzpicture}
+\caption{The two transformations and their measure-change representation.}
+\end{figure}
 \subsection{The First Stage: Equalization of Heterogeneous Profit Drifts}
 Let the economy comprise $n$ branches of production. Under the physical measure $P$, branch $i$ has organic composition ${\gamma }_{i}={c}_{i}/{v}_{i}$. The real expected profit drift is:
 
@@ -754,7 +749,7 @@ Because ${\gamma }_{i}\ne {\gamma }_{j}$, the physical measure exhibits severe d
 In Marxian theory, capital mobility between sectors enforces the formation of the general rate of profit:
 
 \[
-{\bar{r}}_{t}=\frac{\sum\limits_{i}^{}{S}_{i}(t)}{\sum\limits_{i}^{}({C}_{i}(t)+{V}_{i}(t))}
+{\bar{r}}_{t}=\frac{\sum_{i}{S}_{i}(t)}{\sum_{i}({C}_{i}(t)+{V}_{i}(t))}
 \]
 Capital flowing out of low-profit (high-composition) sectors into high-profit (low-composition) sectors modifies market prices relative to values.
 
@@ -792,7 +787,7 @@ This produces the core illusion of \textbf{capital fetishism} ($M-M'$):
 
 \begin{enumerate}
 \item \textbf{Naturalization of Interest:} Under $Q$, money appears to generate interest autonomously, independent of production.
-\item \textbf{Concealment of Living Labor:} The labor-time parameters (${l}_{i}$), the rate of exploitation ($e$), and the organic compositions (${\gamma }_{i}$) disappear from the pricing equations, subsumed entirely into the discount factor ${e}^{-\int\limits_{}^{}{r}_{s}ds}$.
+\item \textbf{Concealment of Living Labor:} The labor-time parameters (${l}_{i}$), the rate of exploitation ($e$), and the organic compositions (${\gamma }_{i}$) disappear from the pricing equations, subsumed entirely into the discount factor ${e}^{-\int{r}_{s}ds}$.
 \item \textbf{The Girsanov Shift as Surplus Transfer:} The Radon-Nikodym derivative $\frac{dQ}{dP}$ is the formal probabilistic operator that converts the real world of \emph{surplus-value production} into the secondary realm of \emph{pure financial claim circulation}.
 \end{enumerate}
 \section{The Structural Crisis of the Measure Change under the TRPF}
@@ -816,10 +811,10 @@ which compresses the real systemic rate of profit:
 \[
 \lim\limits_{{t} \rightarrow {\infty }}{\bar{r}}_{t}={r}^{*}=\frac{e}{{\Omega }^{*}+1}
 \]
-Now consider the financial sector. Financial liabilities (corporate debt, bank credit, pension claims) are issued with contractual coupon yields ${r}_{debt}$ that compound exponentially. If the financial rate of interest demands a minimum positive return ${r}_{target}>0$ to prevent debt deflation and liquidation:
+Now consider the financial sector. Financial liabilities (corporate debt, bank credit, pension claims) are issued with contractual coupon yields ${r}_{\mathrm{debt}}$ that compound exponentially. If the financial rate of interest demands a minimum positive return ${r}_{target}>0$ to prevent debt deflation and liquidation:
 
 \[
-{r}_{t}\geq {r}_{\min\limits_{}}>0
+{r}_{t}\geq {r}_{\min}>0
 \]
 As the TRPF takes hold and the real valorization rate falls below the financial interest rate:
 
@@ -838,10 +833,10 @@ As mechanization proceeds (${\gamma }_{i}\rightarrow \infty$) or exploitation hi
 \[
 {\mu }_{i,t}\rightarrow 0
 \]
-While finance capital demands ${r}_{t}\geq {r}_{\min\limits_{}}>0$. Consequently:
+While finance capital demands ${r}_{t}\geq {r}_{\min}>0$. Consequently:
 
 \[
-\parallel {\theta }_{i,t}\parallel \rightarrow \frac{{r}_{\min\limits_{}}}{{\sigma }_{i,t}}>0withconstantsign
+\parallel {\theta }_{i,t}\parallel \rightarrow \frac{{r}_{\min}}{{\sigma }_{i,t}}>0\quad\text{with constant sign}
 \]
 If debt compounding forces debt service to escalate while surplus-value generation halts (${\Sigma }_{t}\rightarrow 0$), the financial wedge required to artificially maintain asset prices at their paper valuations diverges:
 
@@ -887,7 +882,7 @@ In our Marxian framework, default is grounded in the \textbf{material reproducti
 \]
 \item Contractual debt service due to finance capital:
 \[
-{\delta }_{i}(t)=({c}_{coupon}+{\alpha }_{amort}){D}_{i}
+{\delta }_{i}(t)=({c}_{\mathrm{coupon}}+{\alpha }_{amort}){D}_{i}
 \]
 \end{itemize}
 Free surplus-value available for debt service is:
@@ -925,37 +920,38 @@ Applying Itô's Lemma to ${M}_{i}({\omega }_{i},\bar{r},t)$:
 \[
 {M}_{i}({H}_{i},\bar{r},t)=R(\bar{r})\cdot {D}_{i}
 \]
-\item where the recovery rate $R(\bar{r})={R}_{0}{\left({\frac{\bar{r}}{{r}_{0}}}\right)}^{\zeta }$ incorporates the devalorization of fixed constant capital during a systemic profitability crisis.
+where the recovery rate $R(\bar{r})={R}_{0}{\left({\frac{\bar{r}}{{r}_{0}}}\right)}^{\zeta }$ incorporates the devalorization of fixed constant capital during a systemic profitability crisis.
 \item \textbf{At High Innovation States (${\omega }_{i}\rightarrow \infty$):}
-\item The firm commands vast superprofits; default probability vanishes:
+The firm commands vast superprofits; default probability vanishes:
 \[
-{M}_{i}({\omega }_{i},\bar{r},t)\rightarrow {D}_{i}\left[{\frac{{c}_{coupon}}{\bar{r}}+\left({1-\frac{{c}_{coupon}}{\bar{r}}}\right){e}^{-\bar{r}(T-t)}}\right]
+{M}_{i}({\omega }_{i},\bar{r},t)\rightarrow {D}_{i}\left[{\frac{{c}_{\mathrm{coupon}}}{\bar{r}}+\left({1-\frac{{c}_{\mathrm{coupon}}}{\bar{r}}}\right){e}^{-\bar{r}(T-t)}}\right]
 \]
 \item \textbf{Terminal Maturity ($t=T$):}
 \[
-{M}_{i}({\omega }_{i},\bar{r},T)={D}_{i}for{\omega }_{i}>{H}_{i}
+{M}_{i}({\omega }_{i},\bar{r},T)={D}_{i}\quad\text{for }{\omega }_{i}>{H}_{i}
 \]
 \end{enumerate}
 \section{Synthesis: The Contradiction Between Production and Finance}
 Article 2 formalizes the structural tension between real value creation and financial valuation:
 
-Production Sphere (P-Measure)          Financial Sphere (Q-Measure)
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
 
-Living labor extracts surplus $\Sigma$        Paper claims compound at interest r
+\node[halfbox] (p) {\textbf{Production sphere: $P$}\\[3pt]
+Living labor extracts surplus $\Sigma$.\\Real capital absorbs volatility $\sigma$.\\
+Competition drives $\bar r(t)\to r^*=e/(\Omega^*+1)$.};
+\node[halfbox,right=8mm of p] (q) {\textbf{Financial sphere: $Q$}\\[3pt]
+Paper claims compound at interest $r$.\\$\theta=(\mu-r)/\sigma$.\\
+$\mathbb E^Q[S_T/B_T]=S_0$.};
+\node[flowbox,below=12mm of p.south east,anchor=north] (b) {\textbf{Valorization barrier $H(t)$}\\[3pt]
+Default when $\Sigma(t)-I^*<\delta_{\mathrm{debt}}$.\\
+The article links long-horizon financial instability to $\lVert\theta\rVert\to\infty$.};
+\draw[flowarrow] (p.south) -- ([xshift=-3cm]b.north);
+\draw[flowarrow] (q.south) -- ([xshift=3cm]b.north);
 
-Firm absorbs volatility $\sigma$ physically    Girsanov shifts drift: $\theta$ = ($\mu$ - r) / $\sigma$
-
-Competitive arms race drives TRPF:     Assumes perpetual martingale growth:
-
-$\bar{r}$(t) ---> r\emph{ = e / ($\Omega$} + 1)            E\textasciicircum{}Q[S\_T / B\_T] = S\_0
-
-\begin{center}$\downarrow$\end{center}
-The Valorization Barrier H(t)
-
-Default triggered when: $\Sigma$(t) - I* < $\delta$\_debt
-
-Long horizons: ||$\theta$|| ---> $\infty$, Q-measure collapses
-
+\end{tikzpicture}
+\caption{Production and finance meet at the material default boundary.}
+\end{figure}
 \begin{enumerate}
 \item \textbf{At the Micro Level:} The individual firm cannot escape diffusion shocks ${\sigma }_{1}$; it internalizes them through real capital expenditures, defensive capex, and operational cushions under $P$.
 \item \textbf{At the Macro Level:} The Girsanov change of measure re-weights path space, projecting the illusion that all assets naturally grow at the uniform rate of interest $r$, divorcing financial expectations from living labor.
@@ -1032,7 +1028,9 @@ Department II's demand for constant capital must match Department I's expenditur
 \subsection{The Fictitious Credit Layer: The Inter-Firm Debt Web}
 In reality, commodities are rarely exchanged against immediate physical cash ($M$). As Marx details in \emph{Capital Vol. III} (Ch. 25, "Credit and Fictitious Capital"), the circulation of commodities is facilitated by \textbf{commercial credit}---producers sell goods to one another against bills of exchange (\emph{Wechsel}), deferred payment obligations, and inter-firm trade credit:
 
-> \emph{"The mutual claims of the producers against one another, represented by bills of exchange, serve as the actual currency... this credit expands with the mere expansion of the scale of production."}
+\begin{quote}
+\emph{"The mutual claims of the producers against one another, represented by bills of exchange, serve as the actual currency... this credit expands with the mere expansion of the scale of production."}
+\end{quote}
 
 Above trade credit sits the \textbf{banking and financial sector}, which discounts these bills, issues credit lines, and leverages loans against physical capital.
 
@@ -1046,9 +1044,8 @@ Let $L(t)=[{L}_{ij}(t)]\in {R}_{+}^{n\times n}$ denote the \textbf{nominal claim
 \item By construction, ${L}_{ii}(t)=0$ (no self-debt).
 \end{itemize}
 \subsubsection{Total Inflows and Outflows of Contractual Debt}
-\begin{enumerate}
-\item \textbf{Total Liabilities (Contractual Debt Outflow):}
-\end{enumerate}
+\textbf{Total Liabilities (Contractual Debt Outflow):}
+
 The total nominal debt service that sector $i$ must pay to all counterparties in the industrial network is:
 
 \[
@@ -1056,9 +1053,8 @@ The total nominal debt service that sector $i$ must pay to all counterparties in
 \]
 where ${\delta }_{bank,i}(t)$ represents non-trade debt obligations owed to external commercial banks and bondholders.
 
-\begin{enumerate}
-\item \textbf{Total Claims (Anticipated Inflow):}
-\end{enumerate}
+\textbf{Total Claims (Anticipated Inflow):}
+
 The nominal volume of trade claims that sector $i$ expects to receive from its debtor sectors is:
 
 \[
@@ -1075,60 +1071,42 @@ ${\pi }_{ij}(t)$ specifies the proportion of sector $i$'s total debt service dir
 \subsection{Coupling Production to Finance: The Cash-Flow Balance}
 The fundamental contradiction of capitalist reproduction sits at the interface between the physical layer and the credit matrix.
 
-[ MATERIAL CIRCUIT: P-LAYER ]
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
 
-Gross Revenue: R\_i = p\_i x\_i
+\node[flowbox] (a) {\textbf{Material production circuit}\\[3pt]
+$R_i=p_i x_i$, $C_i=\sum_k p_k a_{ki}x_i$, $V_i=w l_i x_i$\\
+Operating cash flow: $\Phi_i^{\mathrm{prod}}=\Sigma_i-I_i^*$};
+\node[flowbox,below=of a] (b) {\textbf{Coupling to the fictitious credit network}\\[3pt]
+$\Psi_i=\Phi_i^{\mathrm{prod}}+\sum_k\pi_{ki}p_k^*$\\Operating surplus plus incoming debt receipts};
+\node[flowbox,below=of b] (c) {\textbf{Contractual clearing}\\[3pt]$p_i^*=\min(\bar p_i,\Psi_i)$};
+\node[halfbox,below left=8mm and -5.7cm of c] (d) {\textbf{Fully solvent}\\$p_i^*=\bar p_i$};
+\node[halfbox,right=8mm of d] (e) {\textbf{Valorization breakdown}\\$p_i^*<\bar p_i$\\Cascading default};
+\draw[flowarrow] (a)--(b);\draw[flowarrow] (b)--(c);
+\draw[flowarrow] (c.south)--(d.north);\draw[flowarrow] (c.south)--(e.north);
 
-- Inputs (C\_i = $\Sigma$ p\_k a\_ki x\_i)
-
-- Wages  (V\_i = w l\_i x\_i)
-
-- Defensive Capex (I\_i*)
-
-\begin{center}$\downarrow$\end{center}
-Operating Surplus-Value:
-
-$\Sigma$\_i(t) - I\_i*
-
-\begin{center}[ COUPLING INTERFACE ]\end{center}
-\begin{center}$\downarrow$\end{center}
-[ FICTITIOUS CREDIT NETWORK ]
-
-Liquid Cash Inflow for Node i:
-
-$\Psi$\_i(t) = ($\Sigma$\_i - I\_i*) + $\Sigma$\_k L\_ki (Incoming debt receipts)
-
-\begin{center}$\downarrow$\end{center}
-Contractual Debt Clearing:
-
-p\_i* = min( $\bar{p}$\_i,  $\Psi$\_i(t) )
-
-\begin{center}$\downarrow$                     $\downarrow$\end{center}
-[ Fully Solvent ]     [ Valorization Breakdown ]
-
-p\_i\emph{ = $\bar{p}$\_i            p\_i} < $\bar{p}$\_i  ===> Cascading Default
-
+\end{tikzpicture}
+\caption{Cash-flow transmission from production to debt clearing.}
+\end{figure}
 For each sector $i$, the real operating surplus generated in production per unit time (net of the defensive automation expenditure ${I}_{i}^{*}=\frac{{\gamma }_{i}^{2}}{2c(\rho +\delta {)}^{2}}$ derived in Article 1) is:
 
-\[\fitmath{{\Phi }_{i}^{prod}(t)={\Sigma }_{i}(t)-{I}_{i}^{*}(t)=\left[{{r}_{i}(t)+{\gamma }_{i}({\omega }_{i}(t)-{\Omega }_{t})}\right]({\omega }_{i}(t)+1){V}_{i}(t)-{I}_{i}^{*}(t)}\]
+\[\fitmath{{\Phi }_{i}^{\mathrm{prod}}(t)={\Sigma }_{i}(t)-{I}_{i}^{*}(t)=\left[{{r}_{i}(t)+{\gamma }_{i}({\omega }_{i}(t)-{\Omega }_{t})}\right]({\omega }_{i}(t)+1){V}_{i}(t)-{I}_{i}^{*}(t)}\]
 The total liquid cash flow available to sector $i$ to clear its maturing debt obligations ${\bar{p}}_{i}(t)$ is the sum of its \textbf{internally extracted net surplus-value} and its \textbf{actual incoming debt repayments} from other nodes:
 
 \[
-{\Psi }_{i}(t)={\Phi }_{i}^{prod}(t)+\sum\limits_{k=1}^{n}{p}_{k}^{*}(t){\pi }_{ki}(t)
+{\Psi }_{i}(t)={\Phi }_{i}^{\mathrm{prod}}(t)+\sum\limits_{k=1}^{n}{p}_{k}^{*}(t){\pi }_{ki}(t)
 \]
 where ${p}_{k}^{*}(t)$ is the actual payment realized by debtor node $k$.
 
 \subsection{Structural Vulnerability of the Dual Network}
 The dual circuit exposes the core systemic vulnerability of capitalist financialization:
 
-\begin{enumerate}
-\item \textbf{The Nominal Rigidity of the $\Pi$-Matrix:}
-\end{enumerate}
+\textbf{The Nominal Rigidity of the $\Pi$-Matrix:}
+
 Contractual liabilities ${L}_{ij}$ are denominated in nominal money units and fixed by prior legal contracts. They do not automatically contract when physical production stalls.
 
-\begin{enumerate}
-\item \textbf{The Stochastic Fragility of the Physical Layer (${\Phi }^{prod}$):}
-\end{enumerate}
+\textbf{The Stochastic Fragility of the Physical Layer (${\Phi }^{\mathrm{prod}}$):}
+
 Surplus-value extraction ${\Sigma }_{i}(t)$ is subject to:
 
 \begin{itemize}
@@ -1136,10 +1114,9 @@ Surplus-value extraction ${\Sigma }_{i}(t)$ is subject to:
 \item Class struggle volatility ($d{e}_{t}$).
 \item The secular drag of the TRPF (${\bar{r}}_{t}\rightarrow {r}^{*}$).
 \end{itemize}
-\begin{enumerate}
-\item \textbf{The Leverage Multiplier:}
-\end{enumerate}
-As long as real surplus-value expands ($\dot{\Sigma }>0$), commercial credit $\Pi$ expands even faster ($M \dots M'$ leverage inflation). But if a valorization shortfall strikes Department I, the real inflow ${\Phi }_{1}^{prod}$ drops below ${\bar{p}}_{1}$. Because Department I cannot pay its debts to Department II, the shortfall propagates through the matrix $\Pi$, transforming a local crisis of surplus extraction into a generalized network clearing collapse.
+\textbf{The Leverage Multiplier:}
+
+As long as real surplus-value expands ($\dot{\Sigma }>0$), commercial credit $\Pi$ expands even faster ($M \dots M'$ leverage inflation). But if a valorization shortfall strikes Department I, the real inflow ${\Phi }_{1}^{\mathrm{prod}}$ drops below ${\bar{p}}_{1}$. Because Department I cannot pay its debts to Department II, the shortfall propagates through the matrix $\Pi$, transforming a local crisis of surplus extraction into a generalized network clearing collapse.
 
 \section{Uneven Organic Composition, Sectoral Disproportionality, and the Breakdown of Reproduction}
 In Section 1, we defined the dual network coupling physical input-output flows ($A,l$) to inter-firm credit obligations ($\Pi ,L$). We now formalize how the secular increase in the organic composition of capital ($\omega$) does not proceed uniformly across sectors, but develops with severe structural unevenness.
@@ -1185,8 +1162,8 @@ Let total annual gross output in value terms across both departments be:
 Under \textbf{expanded reproduction} (\emph{erweiterte Reproduktion}), surplus-value ${S}_{k}$ is partitioned into:
 
 \begin{enumerate}
-\item Capitalist unconsumable/reinvested accumulation: ${S}_{k}^{acc}=\Delta {C}_{k}+\Delta {V}_{k}$.
-\item Capitalist unaccumulated luxury consumption: ${S}_{k}^{cons}=(1-{\kappa }_{k}){S}_{k}$, where ${\kappa }_{k}\in (0,1)$ is the accumulation share.
+\item Capitalist unconsumable/reinvested accumulation: ${S}_{k}^{\mathrm{acc}}=\Delta {C}_{k}+\Delta {V}_{k}$.
+\item Capitalist unaccumulated luxury consumption: ${S}_{k}^{\mathrm{cons}}=(1-{\kappa }_{k}){S}_{k}$, where ${\kappa }_{k}\in (0,1)$ is the accumulation share.
 \end{enumerate}
 The material balance of the capitalist economy requires two physical clearing conditions:
 
@@ -1200,13 +1177,13 @@ The material balance of the capitalist economy requires two physical clearing co
 \item \textbf{Department II Output Clearing:} Gross output of consumption goods must equal total wages plus capitalist personal consumption across both departments:
 \end{enumerate}
 \[
-{W}_{2}(t)={V}_{1}(t)+{V}_{2}(t)+{S}_{1}^{cons}(t)+{S}_{2}^{cons}(t)+\Delta {V}_{1}(t)+\Delta {V}_{2}(t)
+{W}_{2}(t)={V}_{1}(t)+{V}_{2}(t)+{S}_{1}^{\mathrm{cons}}(t)+{S}_{2}^{\mathrm{cons}}(t)+\Delta {V}_{1}(t)+\Delta {V}_{2}(t)
 \]
 \subsubsection{The Fundamental Reproduction Equality}
 Subtracting ${C}_{1}(t)+\Delta {C}_{1}(t)$ from both sides of the Department I clearing equation, we obtain the \textbf{canonical condition for continuous macroeconomic reproduction}:
 
 \[
-{C}_{2}(t)+\Delta {C}_{2}(t)={V}_{1}(t)+{S}_{1}^{cons}(t)+\Delta {V}_{1}(t)
+{C}_{2}(t)+\Delta {C}_{2}(t)={V}_{1}(t)+{S}_{1}^{\mathrm{cons}}(t)+\Delta {V}_{1}(t)
 \]
 \begin{itemize}
 \item \textbf{Left-Hand Side:} Department II's gross demand for new and replacement means of production from Department I.
@@ -1220,9 +1197,8 @@ Let accumulation in each department follow technical proportions:
 \[\fitmath{\Delta {C}_{k}(t)={\kappa }_{k}{S}_{k}(t)\left({\frac{{\omega }_{k}(t)}{{\omega }_{k}(t)+1}}\right),\Delta {V}_{k}(t)={\kappa }_{k}{S}_{k}(t)\left({\frac{1}{{\omega }_{k}(t)+1}}\right)}\]
 As mechanization accelerates in Department I (${\omega }_{1}(t)\uparrow$):
 
-\begin{enumerate}
-\item \textbf{Living Labor Compression in ${D}_{I}$:}
-\end{enumerate}
+\textbf{Living Labor Compression in ${D}_{I}$:}
+
 \[
 \frac{\Delta {V}_{1}(t)}{{S}_{1}(t)}=\frac{{\kappa }_{1}}{{\omega }_{1}(t)+1}\rightarrow 0
 \]
@@ -1231,9 +1207,8 @@ Department I expends an ever-smaller fraction of its surplus-value on variable c
 \[
 \lim\limits_{{{\omega }_{1}} \rightarrow {\infty }}\left[{{V}_{1}(t)+\Delta {V}_{1}(t)}\right]\ll {C}_{1}(t)
 \]
-\begin{enumerate}
-\item \textbf{Capacity Overhang in ${D}_{I}$:}
-\end{enumerate}
+\textbf{Capacity Overhang in ${D}_{I}$:}
+
 Department I's gross physical capacity expands at rate:
 
 \[
@@ -1241,9 +1216,8 @@ Department I's gross physical capacity expands at rate:
 \]
 Department I produces an immense physical volume of machinery and intermediate goods that must be realized through sale.
 
-\begin{enumerate}
-\item \textbf{Purchasing Power Deficit in ${D}_{II}$:}
-\end{enumerate}
+\textbf{Purchasing Power Deficit in ${D}_{II}$:}
+
 Department II's capacity to absorb Department I's output is bounded by its own available constant capital replacement fund:
 
 \[
@@ -1258,7 +1232,7 @@ Define the instantaneous realization imbalance $\Xi (t)$:
 Substituting the accumulation equations:
 
 \[
-\Xi (t)=\left({{V}_{1}(t)+{S}_{1}^{cons}(t)+\Delta {V}_{1}(t)}\right)-\left({{C}_{2}(t)+\Delta {C}_{2}(t)}\right)
+\Xi (t)=\left({{V}_{1}(t)+{S}_{1}^{\mathrm{cons}}(t)+\Delta {V}_{1}(t)}\right)-\left({{C}_{2}(t)+\Delta {C}_{2}(t)}\right)
 \]
 Applying Itô's Lemma to the trajectory of $\Xi (t)$ under the stochastic automation paths derived in Article 1:
 
@@ -1267,7 +1241,7 @@ d\Xi (t)={\mu }_{\Xi }({\omega }_{1},{\omega }_{2})dt+{\sigma }_{\Xi }d{W}_{\Xi 
 \]
 where the drift satisfies:
 
-\[\fitmath{{\mu }_{\Xi }=\frac{\partial \Xi }{\partial {\omega }_{1}}{\dot{\omega }}_{1}+\frac{\partial \Xi }{\partial {\omega }_{2}}{\dot{\omega }}_{2}<0for{\omega }_{1}\gg {\omega }_{2}}\]
+\[\fitmath{{\mu }_{\Xi }=\frac{\partial \Xi }{\partial {\omega }_{1}}{\dot{\omega }}_{1}+\frac{\partial \Xi }{\partial {\omega }_{2}}{\dot{\omega }}_{2}<0\quad\text{for }{\omega }_{1}\gg {\omega }_{2}}\]
 Because ${\mu }_{\Xi }<0$, a secular \textbf{structural realization deficit} opens:
 
 \[
@@ -1280,73 +1254,48 @@ How does the capitalist system continue to operate when physical reproduction is
 
 It bridges the gap through the \textbf{Fictitious Credit Layer} ($\Pi ,L$) developed in Section 1.
 
-[ Department I: Overproduction ]
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
+\node[flowbox] (n0) {\textbf{Department I: overproduction}\\[3pt]Excess machinery: $-\Xi(t)>0$.\\Department II lacks cash revenue.};
+\node[flowbox,below=of n0] (n1) {\textbf{Trade credit expansion}\\[3pt]Vendor financing and deferred promissory notes expand $L_{21}$.\\$\Delta L_{21}(t)=\int_0^t|\Xi(s)|\,ds$ (schematic)};
+\draw[flowarrow] (n0) -- (n1);
+\node[flowbox,below=of n1] (n2) {\textbf{Inter-firm claims accumulate}\\[3pt]Department II contractual debt $\bar p_2(t)$ rises.\\Debt service squeezes retained surplus.};
+\draw[flowarrow] (n1) -- (n2);
+\node[flowbox,below=of n2] (n3) {\textbf{Crisis threshold}\\[3pt]$\Psi_2(t)<\bar p_2(t)$ triggers default.};
+\draw[flowarrow] (n2) -- (n3);
+\end{tikzpicture}
+\caption{Overproduction is bridged by trade credit until the clearing threshold is reached.}
+\end{figure}
+\textbf{Vendor Financing and Commercial Credit Expansion:}
 
-Excess Machinery Output: -$\Xi$(t) > 0
-
-Cannot sell for cash (M)
-
-because Dept II lacks revenue
-
-\begin{center}$\downarrow$\end{center}
-[ Trade Credit Expansion ]
-
-Dept I issues vendor financing /
-
-accepts deferred promissory notes:
-
-L\_21(t) += $\int$ |$\Xi$(s)| ds
-
-\begin{center}$\downarrow$\end{center}
-[ Inter-Firm Claims Accumulate ]
-
-Dept II's contractual debt explodes:
-
-$\bar{p}$\_2(t) ---> Diverges upward
-
-\begin{center}$\downarrow$\end{center}
-Real surplus rate compresses:
-
-r\_2(t) ---> Squeezed by debt service
-
-\begin{center}$\downarrow$\end{center}
-[ CRISIS THRESHOLD ]
-
-Default triggered when $\Psi$\_2(t) < $\bar{p}$\_2(t)
-
-\begin{enumerate}
-\item \textbf{Vendor Financing and Commercial Credit Expansion:}
-\end{enumerate}
 Unable to sell its surplus equipment for immediate money-capital ($M$), Department I delivers machinery to Department II on credit, accepting deferred payment obligations, bills of exchange, and long-term notes:
 
 \[
-\frac{d{L}_{21}(t)}{dt}=\max\left({0,-\Xi (t)}\right)+{g}_{spec}{L}_{21}(t)
+\frac{d{L}_{21}(t)}{dt}=\max\left({0,-\Xi (t)}\right)+{g}_{\mathrm{spec}}{L}_{21}(t)
 \]
 Department II's nominal liabilities owed to Department I (${L}_{21}$) expand continuously to absorb the unsold physical output of Department I.
 
-\begin{enumerate}
-\item \textbf{Artificial Prolongation of the Boom:}
-\end{enumerate}
+\textbf{Artificial Prolongation of the Boom:}
+
 On paper, Department I books these credit deliveries as accounts receivable (fictitious asset accumulation: $M \dots M'$). Department I appears profitable and solvent, even though the surplus-value has not been converted into real money (\emph{salto mortale} of the commodity has failed).
 
-\begin{enumerate}
-\item \textbf{Escalation of Contractual Debt Service:}
-\end{enumerate}
+\textbf{Escalation of Contractual Debt Service:}
+
 Department II's total contractual debt obligations to the network expand:
 
 \[
-{\bar{p}}_{2}(t)={L}_{21}(t)+\sum\limits_{j\ne 1}^{}{L}_{2j}(t)+{\delta }_{bank,2}(t)
+{\bar{p}}_{2}(t)={L}_{21}(t)+\sum_{j\ne 1}{L}_{2j}(t)+{\delta }_{bank,2}(t)
 \]
-While its real operating surplus ${\Phi }_{2}^{prod}(t)$ is constrained by living labor extraction:
+While its real operating surplus ${\Phi }_{2}^{\mathrm{prod}}(t)$ is constrained by living labor extraction:
 
 \[
-{\Phi }_{2}^{prod}(t)={e}_{t}{V}_{2}(t)-{I}_{2}^{*}
+{\Phi }_{2}^{\mathrm{prod}}(t)={e}_{t}{V}_{2}(t)-{I}_{2}^{*}
 \]
 \subsection{The Mathematical Limit: The Inevitable Rupture}
 The ratio of contractual debt obligations to extracted surplus-value in Department II defines its \textbf{fictitious leverage ratio}:
 
 \[
-{\Theta }_{2}(t)=\frac{{\bar{p}}_{2}(t)}{{\Phi }_{2}^{prod}(t)}
+{\Theta }_{2}(t)=\frac{{\bar{p}}_{2}(t)}{{\Phi }_{2}^{\mathrm{prod}}(t)}
 \]
 Under continuous accumulation:
 
@@ -1354,13 +1303,13 @@ Under continuous accumulation:
 \item The numerator ${\bar{p}}_{2}(t)$ grows at the rate of capital goods overproduction plus compound interest:
 \end{itemize}
 \[
-\frac{d{\bar{p}}_{2}}{{\bar{p}}_{2}}\sim O\left({\frac{-\Xi (t)}{{\bar{p}}_{2}}+{r}_{debt}}\right)>0
+\frac{d{\bar{p}}_{2}}{{\bar{p}}_{2}}\sim O\left({\frac{-\Xi (t)}{{\bar{p}}_{2}}+{r}_{\mathrm{debt}}}\right)>0
 \]
 \begin{itemize}
-\item The denominator ${\Phi }_{2}^{prod}(t)$ is bounded by the TRPF and the biological/social exploitation ceiling:
+\item The denominator ${\Phi }_{2}^{\mathrm{prod}}(t)$ is bounded by the TRPF and the biological/social exploitation ceiling:
 \end{itemize}
 \[
-\lim\limits_{{t} \rightarrow {\infty }}{\Phi }_{2}^{prod}(t)\leq {e}_{\max}{V}_{2}-{I}_{2}^{*}<\infty
+\lim\limits_{{t} \rightarrow {\infty }}{\Phi }_{2}^{\mathrm{prod}}(t)\leq {e}_{\max}{V}_{2}-{I}_{2}^{*}<\infty
 \]
 Therefore:
 
@@ -1391,16 +1340,16 @@ Let $p^*(t) = (p_1^*(t), \dots, p_n^*(t))^\top \in [0, \bar{p}_1] \times \dots \
 \subsubsection{Grounding the External Cash Flow in Surplus Extraction}
 In the standard Eisenberg-Noe model, node $i$ receives an arbitrary exogenous cash endowment ${e}_{i}$. In our framework, node $i$'s non-network cash flow is the \textbf{net operating surplus-value} extracted in production:
 
-\[\fitmath{{\Phi }_{i}^{prod}(t)={\Sigma }_{i}(t)-{I}_{i}^{*}(t)=\left[{{r}_{i}(t)+{\gamma }_{i}({\omega }_{i}(t)-{\Omega }_{t})}\right]({\omega }_{i}(t)+1){V}_{i}(t)-\frac{{\gamma }_{i}^{2}}{2{c}_{i}(\rho +{\delta }_{i}{)}^{2}}}\]
+\[\fitmath{{\Phi }_{i}^{\mathrm{prod}}(t)={\Sigma }_{i}(t)-{I}_{i}^{*}(t)=\left[{{r}_{i}(t)+{\gamma }_{i}({\omega }_{i}(t)-{\Omega }_{t})}\right]({\omega }_{i}(t)+1){V}_{i}(t)-\frac{{\gamma }_{i}^{2}}{2{c}_{i}(\rho +{\delta }_{i}{)}^{2}}}\]
 The total liquid cash assets available to sector $i$ at clearing time $t$ equal its extracted surplus plus the actual payments received from its customer and debtor sectors:
 
 \[
-{\Psi }_{i}({p}^{*}(t))={\Phi }_{i}^{prod}(t)+\sum\limits_{j=1}^{n}{\pi }_{ji}{p}_{j}^{*}(t)
+{\Psi }_{i}({p}^{*}(t))={\Phi }_{i}^{\mathrm{prod}}(t)+\sum\limits_{j=1}^{n}{\pi }_{ji}{p}_{j}^{*}(t)
 \]
 In vector notation, letting $\Phi^{\text{prod}}(t) = (\Phi_1^{\text{prod}}(t), \dots, \Phi_n^{\text{prod}}(t))^\top$:
 
 \[
-\Psi ({p}^{*}(t))={\Phi }^{prod}(t)+{\Pi }^{\top }{p}^{*}(t)
+\Psi ({p}^{*}(t))={\Phi }^{\mathrm{prod}}(t)+{\Pi }^{\top }{p}^{*}(t)
 \]
 \subsection{The Eisenberg-Noe Clearing Fixed Point}
 Under standard limited liability and absolute priority (\emph{pari passu} sharing among creditors):
@@ -1417,7 +1366,7 @@ p_i^*(t) = \min\left( \bar{p}_i, \; \Phi_i^{\text{prod}}(t) + \sum_{j=1}^n \pi_{
 Or in vector form:
 
 \[
-{p}^{*}(t)=\bar{p}\wedge \left({{\Phi }^{prod}(t)+{\Pi }^{\top }{p}^{*}(t)}\right)
+{p}^{*}(t)=\bar{p}\wedge \left({{\Phi }^{\mathrm{prod}}(t)+{\Pi }^{\top }{p}^{*}(t)}\right)
 \]
 where $\wedge$ denotes the element-wise minimum operator.
 
@@ -1425,7 +1374,7 @@ where $\wedge$ denotes the element-wise minimum operator.
 Define the clearing operator $T:[0,\bar{p}]\rightarrow [0,\bar{p}]$ by:
 
 \[
-T(p)=\bar{p}\wedge \left({{\Phi }^{prod}(t)+{\Pi }^{\top }p}\right)
+T(p)=\bar{p}\wedge \left({{\Phi }^{\mathrm{prod}}(t)+{\Pi }^{\top }p}\right)
 \]
 \begin{enumerate}
 \item \textbf{Monotonicity:} Because all entries of $\Pi$ are non-negative (${\pi }_{ji}\geq 0$), $T(p)$ is an order-preserving monotone operator on the complete lattice $[0,\bar{p}]$ under the standard component-wise partial order ($\leq$):
@@ -1456,12 +1405,12 @@ For any defaulting sector $k\in {D}_{t}$, define its \textbf{clearing shortfall}
 For sectors in ${D}_{t}$, the clearing equation simplifies to a coupled linear system:
 
 \[
-{p}_{D}^{*}(t)={\Phi }_{D}^{prod}(t)+{\Pi }_{SD}^{\top }{\bar{p}}_{S}+{\Pi }_{DD}^{\top }{p}_{D}^{*}(t)
+{p}_{D}^{*}(t)={\Phi }_{D}^{\mathrm{prod}}(t)+{\Pi }_{SD}^{\top }{\bar{p}}_{S}+{\Pi }_{DD}^{\top }{p}_{D}^{*}(t)
 \]
 Solving for the payment vector of defaulting sectors:
 
 \[
-{p}_{D}^{*}(t)={\left({I-{\Pi }_{DD}^{\top }}\right)}^{-1}\left({{\Phi }_{D}^{prod}(t)+{\Pi }_{SD}^{\top }{\bar{p}}_{S}}\right)
+{p}_{D}^{*}(t)={\left({I-{\Pi }_{DD}^{\top }}\right)}^{-1}\left({{\Phi }_{D}^{\mathrm{prod}}(t)+{\Pi }_{SD}^{\top }{\bar{p}}_{S}}\right)
 \]
 The inverse $(I-{\Pi }_{DD}^{\top }{)}^{-1}=\sum\limits_{m=0}^{\infty }({\Pi }_{DD}^{\top }{)}^{m}$ is the \textbf{Leontief-Eisenberg credit multiplier}, which measures the cascade amplification of shortfalls circulating strictly within defaulting capitals.
 
@@ -1471,13 +1420,13 @@ We now connect this network clearing mechanism to the disproportionality dynamic
 Recall from Section 2.5 that Department II accumulates an unsustainable debt burden to absorb Department I's overproduced machinery:
 
 \[
-{\bar{p}}_{2}(t)\uparrow ,\quad\text{while}\quad{\Phi }_{2}^{prod}(t)={e}_{t}{V}_{2}-{I}_{2}^{*}\quad\text{is bounded by the TRPF}
+{\bar{p}}_{2}(t)\uparrow ,\quad\text{while}\quad{\Phi }_{2}^{\mathrm{prod}}(t)={e}_{t}{V}_{2}-{I}_{2}^{*}\quad\text{is bounded by the TRPF}
 \]
 \subsubsection{Stage 1: The Initial Valorization Failure (Node 2 Enters ${D}_{t}$)}
 Default occurs when Department II's isolated surplus fails to cover contractual debt:
 
 \[
-{\Phi }_{2}^{prod}(t)<{\bar{p}}_{2}(t)-\sum\limits_{j\ne 2}^{}{\pi }_{j2}{\bar{p}}_{j}
+{\Phi }_{2}^{\mathrm{prod}}(t)<{\bar{p}}_{2}(t)-\sum_{j\ne 2}{\pi }_{j2}{\bar{p}}_{j}
 \]
 Department II defaults, generating an initial shortfall:
 
@@ -1488,41 +1437,41 @@ Department II defaults, generating an initial shortfall:
 Department I relies on incoming payments from Department II to service its own heavy debt obligations (incurred to build automated plant capacity):
 
 \[
-{\bar{p}}_{1}(t)=\sum\limits_{j}^{}{L}_{1j}+{\delta }_{bank,1}
+{\bar{p}}_{1}(t)=\sum_{j}{L}_{1j}+{\delta }_{bank,1}
 \]
 Department I's liquid cash flow is:
 
 \[
-{\Psi }_{1}(t)={\Phi }_{1}^{prod}(t)+{\pi }_{21}{p}_{2}^{*}(t)={\Phi }_{1}^{prod}(t)+{\pi }_{21}({\bar{p}}_{2}-{\Delta }_{2}(t))
+{\Psi }_{1}(t)={\Phi }_{1}^{\mathrm{prod}}(t)+{\pi }_{21}{p}_{2}^{*}(t)={\Phi }_{1}^{\mathrm{prod}}(t)+{\pi }_{21}({\bar{p}}_{2}-{\Delta }_{2}(t))
 \]
 Department I remains solvent if and only if ${\Psi }_{1}(t)\geq {\bar{p}}_{1}$.
 
 Therefore, Department I is tipped into default if Department II's shortfall exceeds the \textbf{contagion buffer} of Department I's real operating surplus:
 
 \[
-{\Delta }_{2}(t)>\frac{1}{{\pi }_{21}}\left({{\Phi }_{1}^{prod}(t)+{\pi }_{21}{\bar{p}}_{2}-{\bar{p}}_{1}}\right)
+{\Delta }_{2}(t)>\frac{1}{{\pi }_{21}}\left({{\Phi }_{1}^{\mathrm{prod}}(t)+{\pi }_{21}{\bar{p}}_{2}-{\bar{p}}_{1}}\right)
 \]
-[ THE REPRODUCTION CASCADE ]
 
-Department II (Consumption Goods)                 Department I (Means of Production)
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
 
-Real Surplus: $\Phi$\_2\textasciicircum{}prod(t)                         Real Surplus: $\Phi$\_1\textasciicircum{}prod(t)
+\node[halfbox] (a) {\textbf{Department II: consumption goods}\\[3pt]
+Operating surplus $\Phi_2^{\mathrm{prod}}$\\Contractual debt $\bar p_2$};
+\node[halfbox,right=8mm of a] (b) {\textbf{Department I: means of production}\\[3pt]
+Operating surplus $\Phi_1^{\mathrm{prod}}$\\Contractual debt $\bar p_1$};
+\node[halfbox,below=of a] (c) {\textbf{Initial default: $2\in\mathcal D_t$}\\[3pt]
+TRPF and overhang reduce cash flow.\\$\Delta_2=\bar p_2-p_2^*>0$};
+\node[halfbox,below=of b] (d) {\textbf{Contagion check}\\[3pt]
+$\Phi_1^{\mathrm{prod}}+\pi_{21}p_2^*<\bar p_1$?\\Lost receipts: $\pi_{21}\Delta_2$};
+\node[flowbox,below=10mm of c.south east,anchor=north] (e) {\textbf{Cascade if the buffer is exhausted}\\[3pt]
+$1\in\mathcal D_t$: both departments default and trade credit freezes.};
+\draw[flowarrow] (a)--(c);\draw[flowarrow] (b)--(d);
+\draw[flowarrow] (c.east)--(d.west);
+\draw[flowarrow] (d.south)--([xshift=3cm]e.north);
 
-Contractual Debt: $\bar{p}$\_2                             Contractual Debt: $\bar{p}$\_1
-
-\begin{center}[ TRPF + Overhang ]\end{center}
-\begin{center}$\Phi$\_2\textasciicircum{}prod(t) < $\bar{p}$\_2\end{center}
-\begin{center}$\downarrow$                                                 $\downarrow$\end{center}
-DEFAULT: Node 2 in D\_t                           Contagion Check:
-
-Shortfall: $\Delta$\_2 = $\bar{p}$\_2 - p\_2\emph{ > 0                   Does: $\Phi$\_1\textasciicircum{}prod + $\pi$\_21 p\_2} < $\bar{p}$\_1 ?
-
-\begin{center}[ Debt Payment Cut ]\end{center}
-\begin{center}$\pi$\_21 $\Delta$\_2 Loss                  $\downarrow$\end{center}
-CASCADE COMPLETE:
-
-Node 1 in D\_t (Total Gridlock)
-
+\end{tikzpicture}
+\caption{The reproduction cascade from Department II to Department I.}
+\end{figure}
 \subsubsection{The Contagion Sensitivity Derivative}
 The sensitivity of Department I's clearing payment to an incremental reduction in Department II's surplus extraction (${e}_{2}\downarrow$ or ${w}_{2}\uparrow$) is given by:
 
@@ -1532,43 +1481,25 @@ When both departments fall into the default domain ${D}_{t}$, the network multip
 \subsection{Systemic Realization Deficit and Credit Breakdown}
 We summarize the core result of Section 3:
 
-> \textbf{Theorem 3.1 (Network Valorization Cascade):}
+\textbf{Theorem 3.1 (Network Valorization Cascade):}
 
-> Let the industrial credit network be defined by $(\Pi ,\bar{p})$ with operating cash flows ${\Phi }^{prod}(t)$ anchored in Marxian surplus extraction.
+Let the industrial credit network be defined by $(\Pi ,\bar{p})$ with operating cash flows ${\Phi }^{\mathrm{prod}}(t)$ anchored in Marxian surplus extraction.
 
-> If the organic composition in Department I drives inter-firm debt beyond the threshold:
-
->
-
->
+If the organic composition in Department I drives inter-firm debt beyond the threshold:
 
 \[
-{\bar{p}}_{2}(t)>{\Phi }_{2}^{prod}(t)+\sum\limits_{j\ne 2}^{}{\pi }_{j2}{\bar{p}}_{j}
+{\bar{p}}_{2}(t)>{\Phi }_{2}^{\mathrm{prod}}(t)+\sum_{j\ne 2}{\pi }_{j2}{\bar{p}}_{j}
 \]
->
 
->
-
->
-
-> then Department II defaults. Furthermore, if Department I's real valorization rate satisfies:
-
->
-
->
+then Department II defaults. Furthermore, if Department I's real valorization rate satisfies:
 
 \[
-{\Phi }_{1}^{prod}(t)<{\bar{p}}_{1}-{\pi }_{21}{\bar{p}}_{2}+{\pi }_{21}{\Delta }_{2}(t)
+{\Phi }_{1}^{\mathrm{prod}}(t)<{\bar{p}}_{1}-{\pi }_{21}{\bar{p}}_{2}+{\pi }_{21}{\Delta }_{2}(t)
 \]
->
 
->
+then Department I simultaneously defaults.
 
->
-
-> then Department I simultaneously defaults.
-
-> In this state, the unique Eisenberg-Noe clearing vector ${p}^{*}(t)$ strictly falls below nominal commitments across all sectors (${p}_{i}^{*}(t)<{\bar{p}}_{i},\forall i$), freezing inter-firm trade credit and converting an uneven production crisis into a systemic liquidity panic.
+In this state, the unique Eisenberg-Noe clearing vector ${p}^{*}(t)$ strictly falls below nominal commitments across all sectors (${p}_{i}^{*}(t)<{\bar{p}}_{i},\forall i$), freezing inter-firm trade credit and converting an uneven production crisis into a systemic liquidity panic.
 
 This establishes the formal mechanism: \textbf{financial contagion does not require an exogenous banking shock}---it is the inevitable network consequence of uneven capital composition (${\omega }_{1}\gg {\omega }_{2}$) meeting nominal debt rigidity.
 
@@ -1582,39 +1513,39 @@ However, a capitalist crisis does not stop at an accounting liquidity freeze. In
 \item \textbf{Bankruptcy Fire-Sales:} Plant, equipment, and inventories are liquidated at distress prices to cover cash obligations.
 \item \textbf{Discontinuous Devalorization Jumps:} Value destruction is non-smooth; it arrives as sudden, systemic market seizures.
 \end{enumerate}
-To capture this mathematically, we transition from pure continuous diffusions to a \textbf{jump-diffusion framework}, where default jump intensities ${\lambda }_{sys}(t)$ are endogenously driven by the network clearing shortfall derived in Section 3.
+To capture this mathematically, we transition from pure continuous diffusions to a \textbf{jump-diffusion framework}, where default jump intensities ${\lambda }_{\mathrm{sys}}(t)$ are endogenously driven by the network clearing shortfall derived in Section 3.
 
-\subsection{The Endogenous Crisis Jump Intensity ${\lambda }_{sys}(t)$}
+\subsection{The Endogenous Crisis Jump Intensity ${\lambda }_{\mathrm{sys}}(t)$}
 In neoclassical credit risk modeling (e.g., Duffie-Singleton, Lando), default jump intensities are typically treated as exogenous Cox processes or simple affine functions of arbitrary macroeconomic variables.
 
 In our Marxian framework, default jumps are \textbf{endogenous manifestations of the aggregate clearing deficit}. Define the total systemic payment deficit across the $n$ sectors:
 
 \[
-{\Xi }_{def}(t)=\sum\limits_{i=1}^{n}\max\left({0,{\bar{p}}_{i}(t)-{p}_{i}^{*}(t)}\right)=\sum\limits_{k\in {D}_{t}}^{}{\Delta }_{k}(t)
+{\Xi }_{\mathrm{def}}(t)=\sum\limits_{i=1}^{n}\max\left({0,{\bar{p}}_{i}(t)-{p}_{i}^{*}(t)}\right)=\sum\limits_{k\in {D}_{t}}^{}{\Delta }_{k}(t)
 \]
 where ${p}^{*}(t)$ is the maximal Eisenberg-Noe clearing vector and ${D}_{t}$ is the default domain from Section 3.3.
 
-Let $N(t)$ be a point process counting systemic liquidation events, with continuous stochastic intensity ${\lambda }_{sys}(t)$:
+Let $N(t)$ be a point process counting systemic liquidation events, with continuous stochastic intensity ${\lambda }_{\mathrm{sys}}(t)$:
 
 \[
 \mathbb{P}\left( N(t + dt) - N(t) = 1 \;\middle\vert\; \mathcal{F}_t \right) = \lambda_{\text{sys}}(t) dt + o(dt)
 \]
-We formulate ${\lambda }_{sys}(t)$ as a super-linear function of the relative clearing shortfall:
+We formulate ${\lambda }_{\mathrm{sys}}(t)$ as a super-linear function of the relative clearing shortfall:
 
 \[
-{\lambda }_{sys}(t)={\lambda }_{0}\cdot \exp \left({\zeta \cdot \frac{{\Xi }_{def}(t)}{{\bar{P}}_{total}(t)}}\right)-{\lambda }_{0}
+{\lambda }_{\mathrm{sys}}(t)={\lambda }_{0}\cdot \exp \left({\zeta \cdot \frac{{\Xi }_{\mathrm{def}}(t)}{{\bar{P}}_{\mathrm{total}}(t)}}\right)-{\lambda }_{0}
 \]
 where:
 
 \begin{itemize}
-\item ${\bar{P}}_{total}(t)=\sum\limits_{i=1}^{n}{\bar{p}}_{i}(t)$ is total nominal debt commitments across the economy.
+\item ${\bar{P}}_{\mathrm{total}}(t)=\sum\limits_{i=1}^{n}{\bar{p}}_{i}(t)$ is total nominal debt commitments across the economy.
 \item $\zeta >0$ represents the panic elasticity of credit markets (margin calls, collateral seizures).
 \item ${\lambda }_{0}>0$ is a baseline hazard scale.
 \end{itemize}
 \subsubsection{Properties of the Intensity:}
 \begin{itemize}
 \item \textbf{Fully Solvent State ($\mathcal{D}_t = \emptyset$):} $\Xi_{\text{def}}(t) = 0 \implies \lambda_{\text{sys}}(t) = 0$. In the absence of a clearing shortfall, defaults cannot occur as discontinuous jumps.
-\item \textbf{Cascading Breakdown (${\Xi }_{def}(t)\rightarrow {\bar{P}}_{total}$):} As the network shortfall approaches total systemic liabilities, ${\lambda }_{sys}(t)$ diverges exponentially (${\lambda }_{sys}\rightarrow {\lambda }_{0}({e}^{\zeta }-1)\gg 0$), transforming continuous distress into an immediate, inevitable Poisson arrival.
+\item \textbf{Cascading Breakdown (${\Xi }_{\mathrm{def}}(t)\rightarrow {\bar{P}}_{\mathrm{total}}$):} As the network shortfall approaches total systemic liabilities, ${\lambda }_{\mathrm{sys}}(t)$ diverges exponentially (${\lambda }_{\mathrm{sys}}\rightarrow {\lambda }_{0}({e}^{\zeta }-1)\gg 0$), transforming continuous distress into an immediate, inevitable Poisson arrival.
 \end{itemize}
 \subsection{Jump Dynamics on Constant Capital: Moral Depreciation}
 Let ${C}_{i}(t)={\omega }_{i}(t){V}_{i}(t)$ represent the nominal book value of constant capital (plant, machinery, and equipment) deployed in sector $i$.
@@ -1627,7 +1558,7 @@ d{C}_{i}^{c}(t)=\left({{u}_{i}^{*}-\delta {C}_{i}(t)}\right)dt+{\sigma }_{C,i}{C
 When a systemic clearing failure triggers a Poisson jump event ($dN(t)=1$), commercial bankruptcy proceedings force immediate liquidation. Sectoral capital goods are dumped onto secondary markets to service creditors, precipitating \textbf{moral depreciation}:
 
 \[
-d{C}_{i}(t)=d{C}_{i}^{c}(t)-{J}_{C}(i,{\Xi }_{def}){C}_{i}({t}^{-})dN(t)
+d{C}_{i}(t)=d{C}_{i}^{c}(t)-{J}_{C}(i,{\Xi }_{\mathrm{def}}){C}_{i}({t}^{-})dN(t)
 \]
 where ${C}_{i}({t}^{-})=\lim\limits_{s\uparrow t}{C}_{i}(s)$ is the pre-jump capital stock, and ${J}_{C}(i,\cdot )\in (0,1)$ is the \textbf{fractional devalorization haircut}.
 
@@ -1635,14 +1566,14 @@ where ${C}_{i}({t}^{-})=\lim\limits_{s\uparrow t}{C}_{i}(s)$ is the pre-jump cap
 The magnitude of the price collapse depends directly on the severity of the systemic debt overhang:
 
 \[
-{J}_{C}(i,{\Xi }_{def})=1-\exp \left({-{\theta }_{C}\cdot \frac{{\Xi }_{def}({t}^{-})}{\sum\limits_{k}^{}{C}_{k}({t}^{-})}}\right),{\theta }_{C}>0
+{J}_{C}(i,{\Xi }_{\mathrm{def}})=1-\exp \left({-{\theta }_{C}\cdot \frac{{\Xi }_{\mathrm{def}}({t}^{-})}{\sum_{k}{C}_{k}({t}^{-})}}\right),{\theta }_{C}>0
 \]
 \begin{itemize}
 \item If the clearing shortfall is minimal, capital goods retain most of their replacement value (${J}_{C}\approx 0$).
 \item If the shortfall is severe, generalized fire-sales cause the market price of specialized machinery to plunge toward scrap metal value:
-\item $$\lim_{\Xi_{\text{def}} \to \infty} J_C = 1 \implies C_i(t) \to 0$$
-\item This directly operationalizes Marx's dictum in \emph{Capital Vol. III}, Ch. 15:
-\item \emph{"A large portion of the nominal capital of the society, i.e., of the exchange-value of the existing capital, is completely destroyed... their value decreases by one third, one half, or more."}
+\[\lim_{\Xi_{\text{def}} \to \infty} J_C = 1 \implies C_i(t) \to 0\]
+This directly operationalizes Marx's dictum in \emph{Capital Vol. III}, Ch. 15:
+\emph{"A large portion of the nominal capital of the society, i.e., of the exchange-value of the existing capital, is completely destroyed... their value decreases by one third, one half, or more."}
 \end{itemize}
 \subsection{Jump Dynamics on Fictitious Capital: Debt Cancellation and Repudiation}
 The liquidation jump simultaneously strikes the financial credit layer $(\Pi ,L)$. When sector $k\in {D}_{t}$ collapses:
@@ -1651,17 +1582,17 @@ The liquidation jump simultaneously strikes the financial credit layer $(\Pi ,L)
 \item Its outstanding receivables (${L}_{ik}$ for $i\ne k$) become uncollectible bad debts.
 \item Its liabilities (${L}_{kj}$) are repudiated or restructured at pennies on the dollar.
 \end{enumerate}
-Let ${F}_{t}=\sum\limits_{i,j}^{}{L}_{ij}(t)$ denote the total volume of fictitious credit circulating in the inter-firm network. The jump law of motion for total fictitious capital is:
+Let ${F}_{t}=\sum_{i,j}{L}_{ij}(t)$ denote the total volume of fictitious credit circulating in the inter-firm network. The jump law of motion for total fictitious capital is:
 
 \[
-d{F}_{t}=\left({{g}_{F}{F}_{t}}\right)dt-{J}_{F}({\Xi }_{def}){F}_{{t}^{-}}dN(t)
+d{F}_{t}=\left({{g}_{F}{F}_{t}}\right)dt-{J}_{F}({\Xi }_{\mathrm{def}}){F}_{{t}^{-}}dN(t)
 \]
 where the debt cancellation haircut ${J}_{F}\in (0,1]$ satisfies:
 
 \[
-{J}_{F}({\Xi }_{def})=\min\limits_{}\left({1,\frac{{\Xi }_{def}({t}^{-})}{\sum\limits_{j}^{}{\Phi }_{j}^{prod}({t}^{-})}}\right)
+{J}_{F}({\Xi }_{\mathrm{def}})=\min\left({1,\frac{{\Xi }_{\mathrm{def}}({t}^{-})}{\sum_{j}{\Phi }_{j}^{\mathrm{prod}}({t}^{-})}}\right)
 \]
-When the clearing deficit exceeds the aggregate operating surplus of the entire economy (${\Xi }_{def}>\sum\limits_{}^{}{\Phi }^{prod}$), the financial superstructure is mathematically insolvent. The jump forces ${J}_{F}\rightarrow 1$: \textbf{generalized debt jubilee through bankruptcy, bank runs, and contractual cancellation}.
+When the clearing deficit exceeds the aggregate operating surplus of the entire economy (${\Xi }_{\mathrm{def}}>\sum{\Phi }^{\mathrm{prod}}$), the financial superstructure is mathematically insolvent. The jump forces ${J}_{F}\rightarrow 1$: \textbf{generalized debt jubilee through bankruptcy, bank runs, and contractual cancellation}.
 
 \subsection{The Full Master Jump-Diffusion Pricing PDE}
 We now incorporate these jump dynamics into the valuation of financial liabilities. Consider a contingent claim $V(C,F,t)$ (e.g., corporate debt or equity in an industrial conglomerate) written on constant capital $C$ and fictitious debt claims $F$.
@@ -1669,7 +1600,7 @@ We now incorporate these jump dynamics into the valuation of financial liabiliti
 Under the risk-neutral measure $Q$, the jump intensity is compensated:
 
 \[
-d\tilde{N}(t)=dN(t)-{\lambda }_{sys}^{Q}(t)dt
+d\tilde{N}(t)=dN(t)-{\lambda }_{\mathrm{sys}}^{Q}(t)dt
 \]
 By Itô's Lemma for semi-martingales with jumps, $V(C,F,t)$ satisfies the \textbf{Partial Integro-Differential Equation (PIDE)}:
 
@@ -1682,45 +1613,43 @@ The term inside the brackets:
 \]
 is the \textbf{discrete capital loss} suffered by the financial claim when moral depreciation occurs.
 
-Because ${\lambda }_{sys}^{Q}\rightarrow \infty$ as the clearing deficit ${\Xi }_{def}$ mounts, the non-local jump integral dominates standard continuous diffusion hedging:
+Because ${\lambda }_{\mathrm{sys}}^{Q}\rightarrow \infty$ as the clearing deficit ${\Xi }_{\mathrm{def}}$ mounts, the non-local jump integral dominates standard continuous diffusion hedging:
 
 \begin{itemize}
-\item In ordinary times (${\Xi }_{def}=0$), continuous delta-hedging is possible (${\Delta }_{jump}V\cdot \lambda \approx 0$).
-\item In late-stage over-accumulation (${\Xi }_{def}\gg 0$), risk-neutral market makers cannot hedge the jump risk through continuous trading. \textbf{The pricing PDE breaks down: markets experience liquidity black holes and catastrophic gap risk.}
+\item In ordinary times (${\Xi }_{\mathrm{def}}=0$), continuous delta-hedging is possible (${\Delta }_{jump}V\cdot \lambda \approx 0$).
+\item In late-stage over-accumulation (${\Xi }_{\mathrm{def}}\gg 0$), risk-neutral market makers cannot hedge the jump risk through continuous trading. \textbf{The pricing PDE breaks down: markets experience liquidity black holes and catastrophic gap risk.}
 \end{itemize}
 \subsection{The Devalorization Cascade: Summary}
-[ NETWORK CLEARING DEFICIT ]
 
-$\Xi$\_def(t) = $\Sigma$ max(0, $\bar{p}$\_i - p\_i*) > 0
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
 
-\begin{center}$\downarrow$\end{center}
-[ EXPONENTIAL JUMP INTENSITY ]
+\node[flowbox] (a) {\textbf{Network clearing deficit}\\[3pt]
+$\Xi_{\mathrm{def}}=\sum_i\max(0,\bar p_i-p_i^*)>0$};
+\node[flowbox,below=of a] (b) {\textbf{Endogenous jump intensity}\\[3pt]
+$\lambda_{\mathrm{sys}}=\lambda_0[\exp(\zeta\Xi_{\mathrm{def}}/\bar P)-1]$};
+\node[flowbox,below=of b] (c) {\textbf{Poisson arrival: $dN(t)=1$}};
+\node[halfbox,below left=8mm and -5.7cm of c] (d) {\textbf{Physical capital}\\[3pt]
+Moral depreciation and fire sales\\$C_i(t)=(1-J_C)C_i(t^-)$};
+\node[halfbox,right=8mm of d] (e) {\textbf{Fictitious capital}\\[3pt]
+Debt cancellation and repudiation\\$F(t)=(1-J_F)F(t^-)$};
+\node[flowbox,below=10mm of d.south east,anchor=north] (f) {\textbf{Post-crisis valorization reset}\\[3pt]
+$\Omega_{\mathrm{post}}\ll\Omega^*$, $r_{\mathrm{post}}\gg r^*$};
+\draw[flowarrow] (a)--(b);\draw[flowarrow] (b)--(c);
+\draw[flowarrow] (c.south)--(d.north);\draw[flowarrow] (c.south)--(e.north);
+\draw[flowarrow] (d.south)--([xshift=-3cm]f.north);\draw[flowarrow] (e.south)--([xshift=3cm]f.north);
 
-$\lambda$\_sys(t) = $\lambda$\_0 exp( $\zeta$ $\Xi$\_def / $\bar{P}$ )
-
-\begin{center}$\downarrow$  [ Poisson Arrival: dN(t) = 1 ]\end{center}
-\begin{center}$\downarrow$                                                       $\downarrow$\end{center}
-[ PHYSICAL SPHERE: C-LAYER ]                            [ FICTITIOUS SPHERE: F-LAYER ]
-
-Moral Depreciation Haircut J\_C                          Debt Cancellation Haircut J\_F
-
-Machinery fire-sold at scrap value                      Insolvent contracts repudiated
-
-C\_i(t) = (1 - J\_C) C\_i(t-)                              F(t) = (1 - J\_F) F(t-)
-
-\begin{center}$\downarrow$\end{center}
-[ POST-CRISIS VALORIZATION RESET ]
-
-Organic Composition Falls: $\Omega$\_post << $\Omega$*
-
-Profit Rate Rebounds:      r\_post >> r*
-
+\end{tikzpicture}
+\caption{The devalorization cascade and the two capital haircuts.}
+\end{figure}
 The jump-diffusion framework formalizes Marx's insight: capitalist crises do not follow smooth Gaussian paths. They operate as \textbf{discontinuous topological collapses} where fictitious claims and physical capital are forcibly devalorized to match the underlying surplus-value generated by living labor.
 
 \section{The Post-Crisis Purge, Wage Squeeze, and the Restoration of the Profit Rate}
 A capitalist crisis in Marxian political economy is neither an external friction nor a terminal breakdown; it is the \textbf{violent, endogenous mechanism through which capitalist reproduction forcibly restores its own viability}. As Marx summarizes in \emph{Capital Vol. III} (Ch. 15):
 
-> \emph{"The crisis always forms the starting-point of great new investments. It therefore forms, more or less, the new material basis for the next cycle of turnover."}
+\begin{quote}
+\emph{"The crisis always forms the starting-point of great new investments. It therefore forms, more or less, the new material basis for the next cycle of turnover."}
+\end{quote}
 
 In Section 4, we showed that the arrival of the crisis Poisson jump ($dN(t)=1$) destroys book values via moral depreciation (${J}_{C}$) and cancels nominal claims (${J}_{F}$). We now formalize the subsequent \textbf{post-crisis purge}: the systemic reset of the organic composition of capital ($\Omega$), the expansion of the industrial reserve army of labor, the counter-offensive on the rate of exploitation ($e$), and the mathematical restoration of the general rate of profit ($r$).
 
@@ -1736,11 +1665,11 @@ When the systemic default jump occurs ($dN(\tau )=1$), two simultaneous devaluat
 \item \textbf{Physical scrapping and idling:} Less-efficient plant and machinery are abandoned or physically dismantled.
 \item \textbf{Moral devaluation:} Bankrupt capital assets are acquired at distress liquidation auctions by surviving capitals at a fraction $(1-{J}_{C})$ of their original value.
 \end{enumerate}
-Let ${C}_{post}=(1-{\bar{J}}_{C})C({\tau }^{-})$ denote the post-crisis aggregate constant capital stock, where ${\bar{J}}_{C}\in (0,1)$ is the economy-wide average moral depreciation haircut.
+Let ${C}_{\mathrm{post}}=(1-{\bar{J}}_{C})C({\tau }^{-})$ denote the post-crisis aggregate constant capital stock, where ${\bar{J}}_{C}\in (0,1)$ is the economy-wide average moral depreciation haircut.
 
 While constant capital suffers immediate discrete destruction, variable capital $V=wL$ cannot contract by an identical proportion if basic physical reproduction continues. Consequently, the \textbf{effective organic composition of capital drops discontinuously}:
 
-\[\fitmath{{\Omega }_{post}=\frac{{C}_{post}}{{V}_{post}}=\frac{(1-{\bar{J}}_{C})C({\tau }^{-})}{V({\tau }^{-})\cdot (1-{\phi }_{L})}={\Omega }^{*}\cdot \left({\frac{1-{\bar{J}}_{C}}{1-{\phi }_{L}}}\right)}\]
+\[\fitmath{{\Omega }_{\mathrm{post}}=\frac{{C}_{\mathrm{post}}}{{V}_{\mathrm{post}}}=\frac{(1-{\bar{J}}_{C})C({\tau }^{-})}{V({\tau }^{-})\cdot (1-{\phi }_{L})}={\Omega }^{*}\cdot \left({\frac{1-{\bar{J}}_{C}}{1-{\phi }_{L}}}\right)}\]
 where ${\phi }_{L}\in (0,1)$ is the immediate drop in the wage bill due to initial employment contraction.
 
 Because asset write-downs during systemic liquidations vastly outstrip immediate wage-bill reductions (${\bar{J}}_{C}\gg {\phi }_{L}$):
@@ -1750,14 +1679,14 @@ Because asset write-downs during systemic liquidations vastly outstrip immediate
 \]
 The devalorization jump mechanically \textbf{cleanses the denominator} of the systemic profit rate.
 
-\subsection{The Industrial Reserve Army and the Wage Squeeze (${e}_{post}\uparrow$)}
+\subsection{The Industrial Reserve Army and the Wage Squeeze (${e}_{\mathrm{post}}\uparrow$)}
 The destruction of constant capital triggers mass bankruptcies, factory closures, and corporate restructurings, unleashing sudden layoffs across both departments.
 
 \subsubsection{Dynamics of the Industrial Reserve Army}
-Let ${N}_{total}$ be the total available labor force, and let $L(t)$ be the actively employed living labor. The \textbf{unemployment rate} (relative size of the industrial reserve army) is:
+Let ${N}_{\mathrm{total}}$ be the total available labor force, and let $L(t)$ be the actively employed living labor. The \textbf{unemployment rate} (relative size of the industrial reserve army) is:
 
 \[
-{u}_{res}(t)=1-\frac{L(t)}{{N}_{total}}
+{u}_{\mathrm{res}}(t)=1-\frac{L(t)}{{N}_{\mathrm{total}}}
 \]
 At the moment of the crisis jump ($t=\tau$), employment plunges:
 
@@ -1767,20 +1696,20 @@ L(\tau )=(1-{\chi }_{layoff})L({\tau }^{-}),{\chi }_{layoff}\in (0,1)
 causing the reserve army to surge:
 
 \[
-{u}_{res}(\tau )={u}_{res}({\tau }^{-})+{\chi }_{layoff}(1-{u}_{res}({\tau }^{-}))\gg {u}_{res}({\tau }^{-})
+{u}_{\mathrm{res}}(\tau )={u}_{\mathrm{res}}({\tau }^{-})+{\chi }_{layoff}(1-{u}_{\mathrm{res}}({\tau }^{-}))\gg {u}_{\mathrm{res}}({\tau }^{-})
 \]
 \subsubsection{The Marxian Phillips Curve and Wage Repression}
 Following the Goodwin (1967) predator-prey formulation, real wage growth is regulated by the disciplinary pressure of the reserve army:
 
 \[
-\frac{d{w}_{t}}{{w}_{t}}=\Phi ({u}_{res}(t))dt+{\sigma }_{w}d{W}_{w,t}
+\frac{d{w}_{t}}{{w}_{t}}=\Phi ({u}_{\mathrm{res}}(t))dt+{\sigma }_{w}d{W}_{w,t}
 \]
 where $\Phi '(\cdot )<0$.
 
-When the reserve army expands abruptly (${u}_{res}\gg 0$):
+When the reserve army expands abruptly (${u}_{\mathrm{res}}\gg 0$):
 
 \[
-\Phi ({u}_{res}(\tau ))\ll 0
+\Phi ({u}_{\mathrm{res}}(\tau ))\ll 0
 \]
 Labor bargaining power collapses. Capital imposes real wage cuts, eliminates benefits, accelerates line speeds, and lengthens unpaid overtime without resistance.
 
@@ -1790,52 +1719,52 @@ Recall that the rate of surplus-value is ${e}_{t}=\frac{{m}_{t}-{w}_{t}}{{w}_{t}
 As nominal and real wages ${w}_{t}$ are compressed while labor productivity ${m}_{t}$ is enforced through intensified speedups, the rate of exploitation jumps upward:
 
 \[
-{e}_{post}=e(\tau )=\frac{m(\tau )}{w(\tau )}-1\gg e({\tau }^{-})
+{e}_{\mathrm{post}}=e(\tau )=\frac{m(\tau )}{w(\tau )}-1\gg e({\tau }^{-})
 \]
 This formalizes Marx's primary \emph{counteracting influence} (\emph{Capital Vol. III}, Ch. 14): the crisis forcibly raises the rate of surplus-value by depressing wages below the historic value of labor-power.
 
 \subsection{The Mathematical Rebound of the Systemic Rate of Profit}
-We can now compute the immediate post-crisis rate of profit ${r}_{post}$:
+We can now compute the immediate post-crisis rate of profit ${r}_{\mathrm{post}}$:
 
 \[
-{r}_{post}=\frac{{e}_{post}}{{\Omega }_{post}+1}
+{r}_{\mathrm{post}}=\frac{{e}_{\mathrm{post}}}{{\Omega }_{\mathrm{post}}+1}
 \]
-Comparing ${r}_{post}$ to the depressed pre-crisis steady state ${r}^{*}=\frac{e({\tau }^{-})}{{\Omega }^{*}+1}$:
+Comparing ${r}_{\mathrm{post}}$ to the depressed pre-crisis steady state ${r}^{*}=\frac{e({\tau }^{-})}{{\Omega }^{*}+1}$:
 
 \[
-\frac{{r}_{post}}{{r}^{*}}=\left({\frac{{e}_{post}}{e({\tau }^{-})}}\right)\cdot \left({\frac{{\Omega }^{*}+1}{{\Omega }_{post}+1}}\right)
+\frac{{r}_{\mathrm{post}}}{{r}^{*}}=\left({\frac{{e}_{\mathrm{post}}}{e({\tau }^{-})}}\right)\cdot \left({\frac{{\Omega }^{*}+1}{{\Omega }_{\mathrm{post}}+1}}\right)
 \]
 Because:
 
 \begin{enumerate}
-\item ${e}_{post}>e({\tau }^{-})$ (Wage repression and labor speedup increase the numerator), and
-\item ${\Omega }_{post}\ll {\Omega }^{*}$ (Moral depreciation and bankruptcies compress the denominator),
+\item ${e}_{\mathrm{post}}>e({\tau }^{-})$ (Wage repression and labor speedup increase the numerator), and
+\item ${\Omega }_{\mathrm{post}}\ll {\Omega }^{*}$ (Moral depreciation and bankruptcies compress the denominator),
 \end{enumerate}
 both mechanisms act in unison to produce an \textbf{unambiguous, non-linear rebound}:
 
 \[
-{r}_{post}\gg {r}^{*}
+{r}_{\mathrm{post}}\gg {r}^{*}
 \]
-Systemic Rate of Profit r(t)
 
-\textasciicircum{}
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
 
-\begin{center}r\_post|                  /\textbackslash{} (New Accumulation Phase)\end{center}
-|                 /     \textbackslash{}
+\draw[flowarrow] (0,0)--(12,0) node[right] {$t$};
+\draw[flowarrow] (0,0)--(0,5) node[above] {$r(t)$};
+\draw[dashed,gray] (0,1)--(11.6,1) node[right] {$r^*$};
+\draw[very thick] (0.4,3.7) .. controls (1.3,2) and (2.4,1.2) .. (4,1.05);
+\draw[very thick,flowarrow] (4,1.05)--(4,4.1);
+\draw[very thick] (4,4.1) .. controls (6,3.7) and (7.5,1.2) .. (11.3,1.05);
+\draw[dotted] (4,0)--(4,1);
+\node[below] at (4,0) {crisis $\tau$};
+\node[above right,align=left,font=\small] at (4,4.1) {New accumulation phase\\$r_{\mathrm{post}}$};
+\node[align=center,font=\small] at (8.9,3) {Continuous TRPF drift\\$r(t)\to r^*$};
+\node[align=left,font=\small] at (2,4.65) {Discrete rebound\\$dN=1$};
+\node[align=center,font=\small] at (7,0.45) {Moral depreciation and wage squeeze};
 
-|                /       \textbackslash{}   Continuous TRPF Drift:
-
-|               /         \textbackslash{}  r(t) ---> r*
-
-\begin{center}r* |/           \textbackslash{}\end{center}
-|             $\uparrow$
-
-\begin{center}|              Discrete Rebound Jump (dN = 1)\end{center}
-\begin{center}|              \textbullet{} Moral Depreciation ($\Omega$\_post << $\Omega$*)\end{center}
-\begin{center}|              \textbullet{} Wage Squeeze (e\_post >> e)\end{center}
-\begin{center}+> Time (t)\end{center}
-Crisis ($\tau$)
-
+\end{tikzpicture}
+\caption{Schematic profit-rate cycle: continuous decline, crisis jump, and renewed accumulation.}
+\end{figure}
 \subsection{Deleveraging and the Regeneration of the Credit Network}
 The crisis jump similarly purges the fictitious superstructure:
 
@@ -1844,22 +1773,21 @@ The crisis jump similarly purges the fictitious superstructure:
 \item \textbf{Contraction of the Clearing Deficit:}
 \end{enumerate}
 \[
-{\Xi }_{def}({\tau }^{+})=\sum\limits_{i}^{}\max\left({0,{\bar{p}}_{i}({\tau }^{+})-{p}_{i}^{*}({\tau }^{+})}\right)\rightarrow 0
+{\Xi }_{\mathrm{def}}({\tau }^{+})=\sum_{i}\max\left({0,{\bar{p}}_{i}({\tau }^{+})-{p}_{i}^{*}({\tau }^{+})}\right)\rightarrow 0
 \]
-\begin{enumerate}
-\item \textbf{Plunge of the Crisis Hazard Rate:}
-\end{enumerate}
+\textbf{Plunge of the Crisis Hazard Rate:}
+
 Because the clearing deficit collapses to zero, the endogenous jump intensity returns to baseline:
 
 \[
-{\lambda }_{sys}({\tau }^{+})={\lambda }_{0}\left({\exp (0)-1}\right)=0
+{\lambda }_{\mathrm{sys}}({\tau }^{+})={\lambda }_{0}\left({\exp (0)-1}\right)=0
 \]
-With nominal debt burdens wiped out and real profit rates restored (${r}_{post}\gg {r}^{*}$), the distance-to-default ${X}_{t}$ expands dramatically across all surviving firms. Inter-firm trust is re-established, trade credit resumes on a sounder material base, and the equivalent martingale measure $Q$ temporarily regains its operational validity.
+With nominal debt burdens wiped out and real profit rates restored (${r}_{\mathrm{post}}\gg {r}^{*}$), the distance-to-default ${X}_{t}$ expands dramatically across all surviving firms. Inter-firm trust is re-established, trade credit resumes on a sounder material base, and the equivalent martingale measure $Q$ temporarily regains its operational validity.
 
 \subsection{Limit-Cycle Dynamics: The Endogenous Marxian Metacycle}
 The economy has not achieved a static equilibrium; it has merely completed one phase of a continuous, non-linear limit cycle.
 
-Once ${r}_{post}$ is high and the credit network is purged:
+Once ${r}_{\mathrm{post}}$ is high and the credit network is purged:
 
 \begin{enumerate}
 \item Surplus capital re-enters production.
@@ -1875,7 +1803,7 @@ Once ${r}_{post}$ is high and the credit network is purged:
 \frac{d\Omega }{dt}=\frac{\gamma }{c(\rho +\delta )}-\delta \Omega (t)>0
 \]
 \begin{enumerate}
-\item As $\Omega (t)\rightarrow {\Omega }^{*}$, the systemic profit rate decays, unevenness between departments widens (Section 2), the Eisenberg-Noe clearing vector fails (Section 3), jump hazard ${\lambda }_{sys}$ spikes (Section 4), and the system plunges toward its next systemic devalorization jump.
+\item As $\Omega (t)\rightarrow {\Omega }^{*}$, the systemic profit rate decays, unevenness between departments widens (Section 2), the Eisenberg-Noe clearing vector fails (Section 3), jump hazard ${\lambda }_{\mathrm{sys}}$ spikes (Section 4), and the system plunges toward its next systemic devalorization jump.
 \end{enumerate}
 The macro-trajectory of capitalist mathematical finance is therefore not a random walk around a stationary Pareto optimum, but an \textbf{endogenous relaxation oscillator} driven by the contradiction between competitive value production and financial claim accumulation.
 
@@ -1895,88 +1823,55 @@ This trilogy demonstrates that by grounding stochastic calculus, optimal control
 \subsection{The Unified Trilogy Architecture}
 The three articles form an unbroken progression from the microeconomic behavior of individual industrial firms to macroeconomic credit collapse and systemic regeneration:
 
-[ ARTICLE 1: THE REAL MICRO-MACRO ACCUMULATION ENGINE ]
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
+\node[flowbox] (n0) {\textbf{Individual firm: HJB control}\\[3pt]$u_i^*=\gamma/[c(\rho+\delta)]$\\Pursuit of transitory superprofit};
+\node[flowbox,below=of n0] (n1) {\textbf{Fokker--Planck transport}\\[3pt]$\partial_t m+\partial_\omega[(u^*-\delta\omega)m]=\frac12\sigma_1^2\partial_{\omega\omega}(\omega^2m)$};
+\draw[flowarrow] (n0) -- (n1);
+\node[flowbox,below=of n1] (n2) {\textbf{Mean field equilibrium}\\[3pt]$\Omega^*=\gamma/[c\delta(\rho+\delta)]$};
+\draw[flowarrow] (n1) -- (n2);
+\node[flowbox,below=of n2] (n3) {\textbf{Endogenous TRPF}\\[3pt]$r^*=e/(\Omega^*+1)$};
+\draw[flowarrow] (n2) -- (n3);
+\node[flowbox,below=of n3] (n4) {\textbf{Coordination failure}\\[3pt]$\mathrm{PoA}=1+\Omega^*$};
+\draw[flowarrow] (n3) -- (n4);
+\end{tikzpicture}
+\caption{Trilogy architecture, Article 1: the real accumulation engine.}
+\end{figure}
 
-Individual HJB Control:
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
+\node[flowbox] (n0) {\textbf{Production and financial claims}\\[3pt]Real circuit under $P$; fictitious capital under $Q$.};
+\node[flowbox,below=of n0] (n1) {\textbf{Girsanov transformation}\\[3pt]$\theta_i=(\mu_i-r)/\sigma_i$\\Equalization of profit rates and interest partition};
+\draw[flowarrow] (n0) -- (n1);
+\node[flowbox,below=of n1] (n2) {\textbf{Material default boundary}\\[3pt]$\tau_i=\inf\{t:\Sigma_i(t)-I_i^*\leq\delta_{\mathrm{debt},i}\}$};
+\draw[flowarrow] (n1) -- (n2);
+\node[flowbox,below=of n2] (n3) {\textbf{Long-horizon financial instability}\\[3pt]$\bar r(t)\to r^*$ and $\lVert\theta_t\rVert\to\infty$\\The article associates this with a breakdown of financial valuation.};
+\draw[flowarrow] (n2) -- (n3);
+\end{tikzpicture}
+\caption{Trilogy architecture, Article 2: fictitious capital and measure change.}
+\end{figure}
 
-u\_i* = $\gamma$ / [c($\rho$ + $\delta$)]   (Decentralized pursuit of superprofits / Extra-Mehrwert)
-
-\begin{center}$\downarrow$\end{center}
-Fokker-Planck Forward Transport:
-
-$\partial$m/$\partial$t + $\partial$/$\partial$$\omega$ [(u* - $\delta$$\omega$)m] = 1/2 $\sigma$${}_{1}$${}^2$ $\partial$${}^2$/$\partial$$\omega$${}^2$ [$\omega$${}^2$ m]
-
-\begin{center}$\downarrow$\end{center}
-Mean Field Equilibrium (MFE) Macro-Drift:
-
-d$\Omega$/dt = u\emph{ - $\delta$$\Omega$  ===>  $\Omega$} = $\gamma$ / [c $\delta$ ($\rho$ + $\delta$)]
-
-\begin{center}$\downarrow$\end{center}
-Endogenous TRPF \& Price of Anarchy:
-
-r\emph{ = e / ($\Omega$} + 1),     PoA = 1 + $\Omega$*
-
-[ ARTICLE 2: THE FICTITIOUS CAPITAL SUPERSTRUCTURE \& MEASURE CHANGE ]
-
-Ontological Bifurcation:
-
-Real Circuit (P-Sphere, P-measure)  vs.  Fictitious Circuit (M - M', Q-measure)
-
-\begin{center}$\downarrow$\end{center}
-The Girsanov Transformation as Ideological Operator:
-
-$\theta$\_i = ($\mu$\_i - r) / $\sigma$\_i   (Equalization of profit rates \& interest partition)
-
-\begin{center}$\downarrow$\end{center}
-Material Valorization Default Boundary:
-
-$\tau$\_i = inf \{ t : $\Sigma$\_i(t) - I\_i* $\leq$ $\delta$\_debt,i \}
-
-\begin{center}$\downarrow$\end{center}
-Secular Breakdown of the Martingale Measure:
-
-As $\bar{r}$(t) ---> r*, ||$\theta$\_t|| ---> $\infty$  ===>  Q $\ll$$\not\!$ P  (Fictitious pricing collapses)
-
-[ ARTICLE 3: NETWORK CONTAGION, CRISIS JUMPS, AND CYCLIC PURGE ]
-
-Coupled Dual Network:
-
-Leontief Input-Output (A, l)  x  Inter-Firm Credit Liabilities ($\Pi$, L)
-
-\begin{center}$\downarrow$\end{center}
-Sectoral Disproportionality:
-
-$\omega$${}_{1}$ $\gg$ $\omega$${}_{2}$  ===>  Realization Gap: $\Xi$(t) < 0 bridged by credit inflation L${}_{2}$${}_{1}$
-
-\begin{center}$\downarrow$\end{center}
-Eisenberg-Noe Clearing Breakdown:
-
-p\emph{(t) = $\bar{p}$ $\wedge$ ($\Phi$\textasciicircum{}prod(t) + $\Pi$${}^\top$ p}(t))  ===>  Shortfall: $\Xi$\_def(t) > 0
-
-\begin{center}$\downarrow$\end{center}
-Endogenous Poisson Jump Intensity:
-
-$\lambda$\_sys(t) = $\lambda$${}_{0}$ exp( $\zeta$ $\Xi$\_def / $\bar{P}$ )  ===>  dN(t) = 1 (Systemic Devalorization)
-
-\begin{center}$\downarrow$\end{center}
-The Post-Crisis Purge:
-
-\textbullet{} Moral Depreciation:    C\_post = (1 - J\_C) C($\tau$${}^{-}$)  ===>  $\Omega$\_post $\ll$ $\Omega$*
-
-\textbullet{} Reserve Army Squeeze:  u\_res $\uparrow$ ===> w $\downarrow$ ===> e\_post $\gg$ e($\tau$${}^{-}$)
-
-\begin{center}$\downarrow$\end{center}
-Restoration of Valorization:
-
-r\_post = e\_post / ($\Omega$\_post + 1) $\gg$ r*  ===>  New Accumulation Cycle Begins
-
+\begin{figure}[H]\centering
+\begin{tikzpicture}[node distance=6mm]
+\node[flowbox] (n0) {\textbf{Coupled networks}\\[3pt]Leontief input-output $(A,l)$ and inter-firm credit $(\Pi,L)$};
+\node[flowbox,below=of n0] (n1) {\textbf{Sectoral disproportionality}\\[3pt]$\omega_1\gg\omega_2$, $\Xi(t)<0$\\Trade credit $L_{21}$ bridges the realization gap.};
+\draw[flowarrow] (n0) -- (n1);
+\node[flowbox,below=of n1] (n2) {\textbf{Eisenberg--Noe clearing deficit}\\[3pt]$p^*=\bar p\wedge(\Phi^{\mathrm{prod}}+\Pi^\top p^*)$, $\Xi_{\mathrm{def}}>0$};
+\draw[flowarrow] (n1) -- (n2);
+\node[flowbox,below=of n2] (n3) {\textbf{Endogenous crisis jump}\\[3pt]$\lambda_{\mathrm{sys}}=\lambda_0[\exp(\zeta\Xi_{\mathrm{def}}/\bar P)-1]$};
+\draw[flowarrow] (n2) -- (n3);
+\node[flowbox,below=of n3] (n4) {\textbf{Purge and renewal}\\[3pt]$C_{\mathrm{post}}=(1-J_C)C(\tau^-)$; wages fall and exploitation rises.\\$r_{\mathrm{post}}=e_{\mathrm{post}}/(\Omega_{\mathrm{post}}+1)\gg r^*$};
+\draw[flowarrow] (n3) -- (n4);
+\end{tikzpicture}
+\caption{Trilogy architecture, Article 3: contagion, devalorization, and renewal.}
+\end{figure}
 \subsection{Structural Mapping: Neoclassical vs. Marxian Mathematical Finance}
 \begingroup\small\begin{longtable}{|>{\raggedright\arraybackslash}p{0.20\textwidth}|>{\raggedright\arraybackslash}p{0.34\textwidth}|>{\raggedright\arraybackslash}p{0.34\textwidth}|}\hline
 Foundational Concept & Neoclassical / Orthodox Mathematical Finance & Marxian Mathematical Finance (Trilogy Formulation) \\ \hline
 \textbf{Origin of Value} & Subjective utility, marginal productivity, state-contingent claims. & Socially Necessary Labor Time (SNLT) converted via the MELT (${m}_{t}$). \\ \hline
 \textbf{Risk-Neutral Measure ($Q$)} & An analytical pricing artifact resulting from absence of arbitrage (NFLVR). & The formal mathematical dual of the \textbf{equalization of profit rates} and capital fetishism ($M \dots M'$). \\ \hline
 \textbf{Market Price of Risk ($\theta$)} & An exogenous subjective risk-aversion parameter. & The normalized deviation of branch valorization from the social average rate of profit: $\fitmath{{\theta }_{i}=\frac{1}{{\sigma }_{i}}\left({\frac{e}{{\gamma }_{i}+1}-\bar{r}}\right)}$. \\ \hline
-\textbf{Asset Price Determination} & Discounted expected future cash flows ${E}^{Q}[\int\limits_{}^{}{e}^{-rt}C{F}_{t}dt]$. & Capitalized legal claims on future surplus-value (\textbf{fictitious capital}), structurally bounded by living labor extraction: $\int\limits_{}^{}{\delta }_{i}\leq \Sigma$. \\ \hline
+\textbf{Asset Price Determination} & Discounted expected future cash flows ${E}^{Q}[\int{e}^{-rt}C{F}_{t}dt]$. & Capitalized legal claims on future surplus-value (\textbf{fictitious capital}), structurally bounded by living labor extraction: $\int{\delta }_{i}\leq \Sigma$. \\ \hline
 \textbf{Corporate Default Barrier} & Exogenous asset-to-debt threshold (Merton structural equity barrier: ${V}_{t}\leq D$). & \textbf{Material valorization barrier:} When extracted surplus minus defensive automation capex fails to cover contractual debt service: ${\Sigma }_{i}-{I}_{i}^{*}\leq {\delta }_{i}$. \\ \hline
 \textbf{Technical Change} & Exogenous Total Factor Productivity (TFP) shocks. & Endogenous \textbf{Mean Field Game arms race} where individual pursuit of superprofits ($\gamma$) drives systemic organic composition saturation (${\Omega }^{*}$). \\ \hline
 \textbf{Market Inefficiency} & Market frictions, asymmetric information, behavioral biases. & \textbf{Price of Anarchy of Market Competition:} $PoA=1+{\Omega }^{*}$; the structural contradiction between individual rationality and systemic profit sustainability. \\ \hline
