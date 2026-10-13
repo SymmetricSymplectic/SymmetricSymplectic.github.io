@@ -1,0 +1,259 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    citecolor=blue,
+    urlcolor=blue
+}
+
+\title{\textbf{The Architecture of Modern Public Economics:\\Equilibrium, Policy Design, and Inequality}\\[0.5em]
+\large A Synthesized Exposition of Sir James Mirrlees's 2015 Lectures at UNAM}
+\author{\textbf{Sir James Mirrlees}\thanks{Nobel Memorial Prize in Economic Sciences (1996). Synthesized from the lecture series delivered at the Instituto de Matemáticas and Facultad de Ciencias, Universidad Nacional Autónoma de México (UNAM), May 26--28, 2015.}}
+\date{May 2015}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This monograph presents an integrated exposition of the three-lecture series delivered by Sir James Mirrlees at the Universidad Nacional Autónoma de México (UNAM) in May 2015. Over three successive days, Mirrlees connected the abstract mathematics of decentralized general equilibrium with the calculus of optimal government policy and the structural determinants of social inequality. Beginning with the Walrasian framework, Brouwer/Kakutani fixed-point formulations, and dynamic capital-land asset pricing, Mirrlees demonstrates why market economies are prone to coordination failures, effective demand deficits, and speculative bubbles. He then develops the optimal taxation problem under asymmetric information via Pontryagin's maximum principle, deriving the canonical Mirrlees marginal tax formula and the Diamond--Mirrlees production efficiency theorem. Finally, he addresses contemporary rising inequality, contrasting statutory minimum wages with targeted employment subsidies and articulating the comprehensive fiscal architecture developed in the \textit{Mirrlees Review}.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\section{Introduction and Methodological Foundations}
+
+In late May 2015, the Instituto de Matemáticas (IMATE) and the Facultad de Ciencias at the Universidad Nacional Autónoma de México hosted Sir James Mirrlees for the \textit{Seminario de Perspectivas Matemáticas}. Addressing an audience composed primarily of mathematicians and quantitative scientists, Mirrlees presented a unified view of modern economic theory through three lectures:
+\begin{enumerate}
+    \item \textbf{The Mathematics of Economic Equilibrium} (May 26, IMATE, Auditorio Alfonso Nápoles Gándara).
+    \item \textbf{The Mathematics of Economic Policy} (May 27, IMATE, Auditorio Alfonso Nápoles Gándara).
+    \item \textbf{The Causes and Treatment of Economic and Social Inequalities} (May 28, Facultad de Ciencias, Auditorio Alberto Barajas Celis).
+\end{enumerate}
+
+Mirrlees framed economic methodology around a critical epistemological distinction: economic models are deliberate approximations designed to isolate structural mechanisms and draw qualitative lessons, rather than exact physical laws. Determining whether an abstract model is an adequate approximation of the real economy requires empirical judgment. While mathematical game theory had gained immense prominence---with Mirrlees acknowledging the passing of John Nash that same week---he argued that the foundational core of economics remains general equilibrium theory and mechanism design: understanding how large-scale decentralized systems coordinate resources, where competitive markets fail, and how public policy can be rigorously structured under informational constraints.
+
+\section{The Mathematics of Economic Equilibrium}
+
+\subsection{Static Walrasian General Equilibrium}
+Consider an economy with $H$ households ($h = 1, \dots, H$) and $J$ competitive production units ($j = 1, \dots, J$) trading across $n$ commodities.
+
+\subsubsection{Price Simplex and Agents' Decisions}
+Prices represent strictly positive relative price ratios, normalized to the unit simplex:
+\begin{equation}
+S^{n-1} = \left\{ p \in \mathbb{R}^n_+ \;\middle|\; \sum_{i=1}^n p_i = 1 \right\}
+\end{equation}
+Fiat money plays no primitive role, acting purely as an accounting numeraire. 
+
+Each consumer $h$ chooses a trade vector $x_h \in X_h \subset \mathbb{R}^n$ (positive entries denote consumption purchases; negative entries represent factor supplies such as labor) to maximize utility $u_h(x_h)$ subject to the budget constraint $p \cdot x_h \le w_h(p)$, where $w_h(p)$ reflects endowment value and distributed firm profits. Each firm $j$ chooses a production plan $y_j \in Y_j \subset \mathbb{R}^n$ to maximize profit $\pi_j = p \cdot y_j$.
+
+\subsubsection{Excess Demand and Walras' Law}
+Aggregating net trades across all agents and subtracting initial endowments $\omega = \sum_h \omega_h$ yields the aggregate excess demand vector:
+\begin{equation}
+z(p) = \sum_{h=1}^H x_h(p) - \sum_{j=1}^J y_j(p) - \omega
+\end{equation}
+Under local nonsatiation, every consumer's budget constraint binds with equality. Summing across all households and redistributing all firm profits back to owners yields \textbf{Walras' Law}:
+\begin{equation}
+p \cdot z(p) = 0, \quad \forall p \in S^{n-1}
+\end{equation}
+An economic equilibrium is defined by a price vector $p^* \in S^{n-1}$ such that:
+\begin{equation}
+z(p^*) \le 0 \quad \text{and} \quad p_i^* z_i(p^*) = 0, \quad \forall i = 1, \dots, n
+\end{equation}
+allowing for zero equilibrium prices (free goods) in the presence of excess supply.
+
+\subsubsection{Existence via Brouwer's Fixed Point Theorem}
+To prove the existence of an equilibrium price vector when $z(p)$ is a single-valued continuous function, define the continuous mapping $T: S^{n-1} \to S^{n-1}$ component-wise by:
+\begin{equation}
+T_i(p) = \frac{p_i + \max\left(0, z_i(p)\right)}{1 + \sum_{k=1}^n \max\left(0, z_k(p)\right)}, \quad i = 1, \dots, n
+\end{equation}
+Because the simplex $S^{n-1}$ is compact and convex, and $T$ is continuous, \textbf{Brouwer's Fixed Point Theorem} guarantees the existence of a fixed point $p^* \in S^{n-1}$ such that $T(p^*) = p^*$. This implies:
+\begin{equation}
+p_i^* \left[ \sum_{k=1}^n \max\left(0, z_k(p^*)\right) \right] = \max\left(0, z_i(p^*)\right), \quad \forall i
+\end{equation}
+Taking the inner product with $z(p^*)$:
+\begin{equation}
+\left[ \sum_{k=1}^n \max\left(0, z_k(p^*)\right) \right] \left( p^* \cdot z(p^*) \right) = \sum_{i=1}^n z_i(p^*) \max\left(0, z_i(p^*)\right)
+\end{equation}
+By Walras' Law, the left-hand side is identically zero. Because each term in the right-hand summation is non-negative ($z_i \max(0, z_i) = [\max(0, z_i)]^2 \ge 0$), it must be that $\max(0, z_i(p^*)) = 0$ for all $i$. Hence:
+\begin{equation}
+z(p^*) \le 0
+\end{equation}
+which establishes the existence of a competitive equilibrium.
+
+\subsection{Microfoundations and Production Sets: Kakutani's Extension}
+Mirrlees highlights why continuous single-valued excess demand functions are insufficient for actual industrial economies:
+\begin{enumerate}
+    \item \textbf{Constant Returns to Scale (CRS):} When firms can replicate existing plants (doubling inputs to double outputs), if unit cost equals market price, profit is zero regardless of output level. If price exceeds unit cost, desired supply is infinite; if price is below unit cost, supply is zero. Consequently, optimal firm supply $y_j(p)$ is a set-valued correspondence rather than a single-valued function.
+    \item \textbf{Non-Convexities and Increasing Returns:} In high-fixed-cost sectors (software, intellectual property, infrastructure), production sets $Y_j$ violate standard convexity assumptions, breaking decentralized price-taking mechanisms.
+    \item \textbf{Kakutani's Fixed Point Theorem:} To restore equilibrium existence under CRS, aggregate excess demand must be treated as an upper hemi-continuous, non-empty, compact, and convex-valued correspondence $Z(p) \rightrightarrows \mathbb{R}^n$, requiring Kakutani's theorem on generalized correspondences.
+\end{enumerate}
+
+\subsection{Disequilibrium, Price Adjustments, and Involuntary Unemployment}
+Standard stability analyses postulate continuous Walrasian tâtonnement dynamics:
+\begin{equation}
+\dot{p}_i = f_i(z_i(p)), \quad f_i'(z) > 0, \quad f_i(0) = 0
+\end{equation}
+While global asymptotic stability can be established under restrictive conditions such as Gross Substitutability ($\partial z_i / \partial p_j > 0$ for all $i \ne j$), general economies with income effects exhibit multiple, unstable equilibria.
+
+More critically, Mirrlees examines why decentralized price adjustments fail to eliminate involuntary unemployment during major crises (as in Southern Europe post-2008):
+\begin{itemize}
+    \item In Walrasian theory, households simultaneously optimize consumption demand and labor supply over their entire budget set.
+    \item \textbf{The Failure of Effective Demand:} In reality, an unemployed worker who desires to supply labor cannot translate that latent desire into effective purchasing power in commodity markets until wage income is actually realized.
+    \item Observing depressed demand in product markets, firms curtail production and refuse to hire additional labor. This coordination breakdown generates a self-reinforcing underemployment trap that cannot be resolved by downward wage flexibility alone.
+\end{itemize}
+
+\subsection{Dynamic Asset Pricing, Fixed Assets, and Speculative Bubbles}
+Mirrlees extends general equilibrium over an infinite horizon $t = 0, 1, 2, \dots$, analyzing an economy accumulating physical capital $K_t$ alongside a non-reproducible asset with fixed physical supply, land $A$.
+
+Let $P_t$ denote the market price of land, $R_t$ the marginal rental return on land, and $r_t$ the return on capital. The dynamic no-arbitrage condition between physical capital and land demands:
+\begin{equation}
+r_{t+1} = \frac{R_{t+1} + (P_{t+1} - P_t)}{P_t} \implies P_t = \frac{R_{t+1} + P_{t+1}}{1 + r_{t+1}}
+\end{equation}
+Iterating this forward equation across $T$ periods yields:
+\begin{equation}
+P_t = \sum_{\tau=1}^T \left[ \prod_{s=1}^\tau (1 + r_{t+s})^{-1} \right] R_{t+\tau} + \left[ \prod_{s=1}^T (1 + r_{t+s})^{-1} \right] P_{t+T}
+\end{equation}
+Mirrlees shows that in economies characterized by exceptionally high savings rates (such as China saving roughly 50\% of GDP), the terminal transversality condition does not necessarily pin down a unique price path. The general solution admits a continuum of paths:
+\begin{equation}
+P_t = P_t^* + C \prod_{s=1}^t (1 + r_s)
+\end{equation}
+where $P_t^*$ is the fundamental discounted dividend value and $C \ge 0$ is an arbitrary constant. For $C > 0$, the economy embarks on a self-fulfilling speculative bubble path where soaring asset prices absorb excess domestic savings, creating financial fragility and severe banking sector vulnerability when collateral values reverse.
+
+\section{The Mathematics of Economic Policy}
+
+\subsection{Mechanism Design and Information Asymmetry}
+In his second lecture, Mirrlees turns to normative public economics: designing optimal government intervention. Under complete information, a social planner could achieve Pareto-efficient redistribution through individualized lump-sum transfers based on innate ability (First and Second Fundamental Welfare Theorems).
+
+In practice, governments operate under an inescapable \textbf{information asymmetry}:
+\begin{itemize}
+    \item An individual's innate earning ability $n$ is private, unobservable information.
+    \item The state can observe only gross earnings $Y = n \cdot L$, where $L$ is labor effort.
+    \item Imposing a progressive tax $T(Y)$ distorts the labor-leisure trade-off, causing workers to reduce effort or misreport their type.
+\end{itemize}
+
+\subsection{The Mirrlees Optimal Income Tax Model}
+Let individual productivity types $n$ be continuously distributed according to a cumulative distribution function $F(n)$ with density $f(n)$ over the support $[\underline{n}, \bar{n}]$. An agent of type $n$ consumes $C$ and works $L = Y / n$, deriving utility $u(C, L)$.
+
+Facing a non-linear tax schedule $T(Y)$, the agent's net consumption is $C = Y - T(Y)$. By the Revelation Principle, the tax problem is equivalent to choosing a direct incentive-compatible allocation $\{C(n), Y(n)\}_{n \in [\underline{n}, \bar{n}]}$.
+
+\subsubsection{Incentive Compatibility Constraint}
+An agent of type $n$ must not prefer to report type $n'$:
+\begin{equation}
+u\left(C(n), \frac{Y(n)}{n}\right) \ge u\left(C(n'), \frac{Y(n')}{n}\right), \quad \forall n, n'
+\end{equation}
+Defining the indirect utility of type $n$ as $U(n) = \max_{n'} u(C(n'), Y(n')/n)$, the envelope theorem yields the first-order incentive compatibility condition:
+\begin{equation}
+\frac{dU(n)}{dn} = \left. \frac{\partial u(C, Y/n)}{\partial n} \right|_{C(n), Y(n)} = - \frac{Y(n)}{n^2} u_L\left(C(n), \frac{Y(n)}{n}\right)
+\end{equation}
+Subject to the single-crossing (Spence--Mirrlees) condition, this local condition ensures global incentive compatibility.
+
+\subsubsection{Optimal Control Formulation via Pontryagin's Principle}
+The social planner maximizes a Bergson--Samuelson utilitarian social welfare functional:
+\begin{equation}
+\max_{\{C(n), Y(n)\}} \int_{\underline{n}}^{\bar{n}} \Psi(U(n)) f(n) \, dn
+\end{equation}
+subject to:
+\begin{enumerate}
+    \item \textbf{Government Revenue Requirement:}
+    \begin{equation}
+    \int_{\underline{n}}^{\bar{n}} \left[ Y(n) - C(n) \right] f(n) \, dn \ge R_0
+    \end{equation}
+    \item \textbf{Incentive Compatibility Differential Equation:}
+    \begin{equation}
+    \dot{U}(n) = - \frac{Y(n)}{n^2} u_L\left(C(n), \frac{Y(n)}{n}\right)
+    \end{equation}
+\end{enumerate}
+This is formulated as an optimal control problem where:
+\begin{itemize}
+    \item \textbf{State Variable:} Realized utility $U(n)$.
+    \item \textbf{Control Variables:} Consumption $C(n)$ and gross income $Y(n)$.
+    \item \textbf{Co-state Variable:} $\mu(n)$, representing the shadow cost of the incentive compatibility constraint.
+\end{itemize}
+
+The Hamiltonian of the system is:
+\begin{equation}
+\mathcal{H}(U, C, Y, \mu, n) = \left[ \Psi(U(n)) + \lambda (Y(n) - C(n)) \right] f(n) - \mu(n) \frac{Y(n)}{n^2} u_L\left(C(n), \frac{Y(n)}{n}\right)
+\end{equation}
+where $\lambda$ is the Lagrange multiplier on the government budget constraint.
+
+\subsubsection{The Canonical Marginal Tax Rate Formula}
+Solving the co-state differential equation $\dot{\mu}(n) = -\partial \mathcal{H} / \partial U$ with boundary conditions $\mu(\underline{n}) = \mu(\bar{n}) = 0$, and taking first-order conditions with respect to controls, yields the famous \textbf{Mirrleesian marginal tax schedule}:
+\begin{equation}
+\frac{T'(Y(n))}{1 - T'(Y(n))} = \left( 1 + \frac{1}{\varepsilon_u(n)} \right) \frac{1}{n f(n)} \int_n^{\bar{n}} \left( 1 - \frac{\Psi'(U(t)) u_C(t)}{\lambda} \right) f(t) \, dt
+\end{equation}
+where $\varepsilon_u(n)$ represents the compensated elasticity of labor supply at type $n$.
+
+\subsection{Theoretical Implications for Policy Design}
+From this mathematical formulation, Mirrlees derived several foundational insights:
+\begin{enumerate}
+    \item \textbf{Zero Marginal Tax Rate at the Top:} If the productivity distribution is bounded above at $\bar{n} < \infty$, then because $\mu(\bar{n}) = 0$, the optimal marginal tax rate at the very top is identically zero:
+    \begin{equation}
+    T'(Y(\bar{n})) = 0
+    \end{equation}
+    Distorting the highest earner's marginal effort yields zero extra inframarginal tax revenue. Redistribution should be achieved through high average tax rates, not confiscatory marginal rates at the boundary.
+    \item \textbf{U-Shaped Marginal Schedules:} For empirical earnings distributions (lognormal bodies with Pareto upper tails), the optimal marginal tax schedule is typically U-shaped: higher marginal rates at the low end (phasing out guaranteed basic income) and at the top, but lower rates across the broad middle class where tax distortion has the highest deadweight cost.
+    \item \textbf{The Diamond--Mirrlees Production Efficiency Theorem:} Even in a second-best world with distortionary consumer taxes, intermediate goods should not be taxed. Public policy must preserve \textbf{production efficiency}, ensuring that the aggregate economy operates strictly on the boundary of its production possibility frontier.
+\end{enumerate}
+
+\section{The Causes and Treatment of Economic and Social Inequalities}
+
+\subsection{Structural Causes of Rising Modern Inequality}
+In his final lecture at the Facultad de Ciencias, Mirrlees analyzed the drivers of rising 21st-century inequality:
+\begin{itemize}
+    \item \textbf{Skill-Biased Technological Change and ``Superstar'' Dynamics:} Digital technology and global communication networks allow top managers, tech founders, and financiers to scale their output across global markets. This creates extreme Pareto tails ($P(X > x) \sim x^{-\alpha}$) in executive compensation, disconnecting top incomes from median productivity.
+    \item \textbf{Wealth Accumulation and Capital Deepening:} Consistent with modern empirical observations, the accumulation of inherited wealth and corporate profits compounds when capital returns exceed economic growth rates.
+    \item \textbf{Labor Market Polarization and Informality:} The erosion of collective bargaining and the persistence of massive informal sectors in developing economies (such as Mexico) segment the workforce, depressing median real wages.
+\end{itemize}
+
+\subsection{Policy Remedies: Minimum Wages vs. Employment Subsidies}
+Addressing public debates in emerging markets regarding statutory wage interventions, Mirrlees provided a nuanced critique:
+\begin{itemize}
+    \item \textbf{Empirical Effects of the Minimum Wage:} While classical theory asserts that minimum wage hikes directly reduce low-skilled employment, empirical studies show that moderate increases often do not lower employment. Low-wage workers have a marginal propensity to consume near unity; higher wage payouts immediately circulate back into local consumer demand.
+    \item \textbf{The Case for Wage Subsidies:} However, in developing economies with large informal sectors and existing structural unemployment, Mirrlees cautioned that aggressive minimum wage hikes risk driving vulnerable workers into informality. He advocated for \textbf{employment subsidies} (such as expanded negative income taxes or targeted employer payroll subsidies) over regulatory price floors. Subsidies lower the effective cost of labor to firms while guaranteeing living wages to workers, avoiding disemployment while directly bolstering effective demand.
+\end{itemize}
+
+\subsection{Translating Mathematics into Policy: The Mirrlees Review}
+Mirrlees connected these principles to the practical tax reform blueprints established in the landmark \textit{Mirrlees Review} (2011), summarizing the structural requirements for a modern tax system:
+
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}p{3.2cm}p{5.5cm}p{6cm}@{}}
+\toprule
+\textbf{Fiscal Dimension} & \textbf{Conventional Structural Flaw} & \textbf{Mirrleesian Design Principle} \\ \midrule
+\textbf{Personal Income Tax} & Complex, disjointed brackets with high effective marginal traps & Unified, smooth tax schedule integrated with basic income allowances. \\ \addlinespace
+\textbf{Capital Income \& Savings} & Double taxation of savings; unequal treatment across asset classes & Exemption of the normal rate of return via a Rate of Return Allowance (RRA); taxation focused on pure economic rents. \\ \addlinespace
+\textbf{Wealth \& Property} & Distortive transaction taxes (e.g., stamp duties, real estate transfer fees) & Direct taxation of unimproved land value (Land Value Tax), capturing economic rents without creating deadweight loss. \\ \addlinespace
+\textbf{Corporate Income} & Asymmetric tax bias favoring debt over equity financing & Allowance for Corporate Equity (ACE) to equalize debt and equity financing, curbing excessive leverage. \\ \bottomrule
+\end{tabular}
+\caption{Key Reform Principles from the Mirrlees Review (2011).}
+\end{table}
+
+\section{Conclusion}
+
+The three lectures delivered by Sir James Mirrlees at UNAM present a unified and coherent philosophy of mathematical economics:
+\begin{itemize}
+    \item \textbf{Equilibrium Analysis} demonstrates that while decentralized price mechanisms coordinate production and consumption, they are vulnerable to coordination failures, involuntary unemployment, and asset price instability in dynamic environments with scarce fixed assets.
+    \item \textbf{Policy Optimization} proves that overcoming market failures requires mechanism design that respects private information and economic incentives, with optimal tax schedules characterized via the calculus of variations and optimal control.
+    \item \textbf{Social Equity} requires that fiscal systems preserve productive efficiency while capturing economic rents, utilizing targeted wage subsidies and progressive taxation to counter systemic inequality.
+\end{itemize}
+
+\section*{References and Lecture Recordings}
+\begin{enumerate}
+    \item Mirrlees, J. A. (1971). An Exploration in the Theory of Optimum Income Taxation. \textit{Review of Economic Studies}, 38(2), 175--208.
+    \item Diamond, P. A., \& Mirrlees, J. A. (1971). Optimal Taxation and Public Production I: Production Efficiency. \textit{American Economic Review}, 61(1), 8--27.
+    \item Mirrlees, J. A., et al. (Eds.). (2011). \textit{Tax by Design: The Mirrlees Review}. Oxford University Press.
+    \item Mirrlees, J. A. (2015, May 26). \textit{The Mathematics of Economic Equilibrium} [Video lecture]. Instituto de Matemáticas, UNAM. Available at: \url{http://www.youtube.com/watch?v=H3WWFYrN1p0}.
+    \item Mirrlees, J. A. (2015, May 27). \textit{The Mathematics of Economic Policy} [Video lecture]. Instituto de Matemáticas, UNAM. Available at: \url{https://www.youtube.com/watch?v=V8oeaVBbUhQ}.
+    \item Mirrlees, J. A. (2015, May 28). \textit{Inequality: Causes and Cures} [Video lecture]. Facultad de Ciencias, UNAM. Available at: \url{https://www.youtube.com/watch?v=PvSypVY9qr4}.
+\end{enumerate}
+
+\end{document}

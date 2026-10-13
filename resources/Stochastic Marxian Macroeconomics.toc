@@ -1,0 +1,124 @@
+\contentsline {chapter}{\numberline {1}Microeconomic Foundations of the TRPF: Stochastic Automation, Superprofits, and Mean Field Equilibria}{2}{chapter.1}%
+\contentsline {section}{\numberline {1}Introduction \& The Micro-Macro Paradox in Marx}{2}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1}Limitations of Classical Deterministic Models}{3}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.2}The Stochastic Mean Field Game (MFG) Synthesis}{3}{subsection.1.1.2}%
+\contentsline {section}{\numberline {2}Technological Composition Diffusion \& The Baseline Profit Model}{3}{section.1.2}%
+\contentsline {subsection}{\numberline {2.1}The Individual Asset State Space}{3}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {2.2}Baseline Valorization under Constant Exploitation}{4}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {2.3}Derivation of Individual Profit Decay via Itô's Lemma}{4}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {2.4}Analytical Observations on the Micro Dynamics}{5}{subsection.1.2.4}%
+\contentsline {section}{\numberline {3}Coupled Dynamics: Stochastic Exploitation $e_t$ and Defensive Speedup}{5}{section.1.3}%
+\contentsline {subsection}{\numberline {3.1}Mean-Reverting Exploitation SDE}{6}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {3.2}Correlated Noise Structures}{6}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {3.3}The Macroeconomic State Space}{7}{subsection.1.3.3}%
+\contentsline {subsection}{\numberline {3.4}Rigorous Derivation of the Bivariate Itô Expansion}{7}{subsection.1.3.4}%
+\contentsline {subsubsection}{Step 1: Analytical Partial Derivatives}{7}{section*.2}%
+\contentsline {subsubsection}{Step 2: Quadratic Variations and Cross-Variations}{8}{section*.3}%
+\contentsline {subsubsection}{Step 3: Synthesis into the SDE}{8}{section*.4}%
+\contentsline {subsection}{\numberline {3.5}Structural Mechanics of the Coupled System}{8}{subsection.1.3.5}%
+\contentsline {section}{\numberline {4}Stochastic Optimal Control of the Firm and Superprofit Rents}{9}{section.1.4}%
+\contentsline {subsection}{\numberline {4.1}Formalization of Superprofits (Surplus-Profit)}{9}{subsection.1.4.1}%
+\contentsline {subsection}{\numberline {4.2}The Individual Capitalist's Stochastic Control Problem}{10}{subsection.1.4.2}%
+\contentsline {subsubsection}{Controlled State SDE}{10}{section*.5}%
+\contentsline {subsubsection}{Investment Costs}{10}{section*.6}%
+\contentsline {subsubsection}{The Objective Functional}{10}{section*.7}%
+\contentsline {subsection}{\numberline {4.3}The Hamilton-Jacobi-Bellman (HJB) Equation}{11}{subsection.1.4.3}%
+\contentsline {subsection}{\numberline {4.4}First-Order Condition \& Optimal Control Policy}{11}{subsection.1.4.4}%
+\contentsline {subsection}{\numberline {4.5}Solution via Value Function Ansatz}{11}{subsection.1.4.5}%
+\contentsline {subsection}{\numberline {4.6}The Optimal Micro Investment Law}{12}{subsection.1.4.6}%
+\contentsline {subsubsection}{Theoretical Significance of the Policy Law:}{12}{section*.8}%
+\contentsline {section}{\numberline {5}The Mean Field Game (MFG) Framework, Fokker-Planck Transport, and the Endogenous Macroeconomic Drift}{12}{section.1.5}%
+\contentsline {subsection}{\numberline {5.1}The Continuum of Capitals and the Empirical Distribution}{13}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {5.2}The Forward Kolmogorov (Fokker-Planck) Transport Equation}{13}{subsection.1.5.2}%
+\contentsline {subsection}{\numberline {5.3}Derivation of the Endogenous Macro-Drift $d\Omega /dt$}{14}{subsection.1.5.3}%
+\contentsline {subsubsection}{Term 1: Advective Transport}{14}{section*.9}%
+\contentsline {subsubsection}{Term 2: Diffusive Dispersion}{14}{section*.10}%
+\contentsline {subsubsection}{Step 3: Synthesis of the Macro-Drift}{15}{section*.11}%
+\contentsline {subsection}{\numberline {5.4}The Mean Field Equilibrium (MFE)}{15}{subsection.1.5.4}%
+\contentsline {subsection}{\numberline {5.5}Stationary Distribution of Capitals $m^*(\omega )$}{15}{subsection.1.5.5}%
+\contentsline {subsection}{\numberline {5.6}Realization of the TRPF in the Mean Field Limit}{16}{subsection.1.5.6}%
+\contentsline {section}{\numberline {6}Welfare Inefficiency, the Price of Anarchy, and Transition to Article 2}{17}{section.1.6}%
+\contentsline {subsection}{\numberline {6.1}The Social Planner's Coordinated Problem}{17}{subsection.1.6.1}%
+\contentsline {subsubsection}{The Centralized Optimal Control Problem}{17}{section*.12}%
+\contentsline {subsubsection}{The Current-Value Hamiltonian}{18}{section*.13}%
+\contentsline {subsection}{\numberline {6.2}The Steady State of the Coordinated Economy}{18}{subsection.1.6.2}%
+\contentsline {subsubsection}{Fundamental Economic Result:}{18}{section*.14}%
+\contentsline {subsection}{\numberline {6.3}Quantifying the Price of Anarchy (PoA)}{19}{subsection.1.6.3}%
+\contentsline {subsubsection}{Definition: Price of Anarchy in Valorization Efficiency}{19}{section*.15}%
+\contentsline {subsubsection}{Deadweight Loss of Market Competition ($\Delta W$)}{19}{section*.16}%
+\contentsline {subsection}{\numberline {6.4}Summary of Article 1 Deliverables}{20}{subsection.1.6.4}%
+\contentsline {subsection}{\numberline {6.5}The Bridge to Article 2: From Real Over-Accumulation to Fictitious Capital}{20}{subsection.1.6.5}%
+\contentsline {chapter}{\numberline {2}Fictitious Capital, Measure Changes, and Structural Credit Risk under the TRPF}{22}{chapter.2}%
+\contentsline {section}{\numberline {1}Introduction: From Industrial Accumulation to Financial Valuation}{22}{section.2.1}%
+\contentsline {section}{\numberline {2}Microeconomic Volatility Adjustment vs. Macroeconomic Measure Change}{23}{section.2.2}%
+\contentsline {subsection}{\numberline {2.1}The Firm's Internalization of Volatility under $P$}{23}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2}The Macroeconomic Measure Change: Volatility as a Girsanov Normalizer}{24}{subsection.2.2.2}%
+\contentsline {section}{\numberline {3}The Conceptual Role of the Girsanov Measure Change: The Double Transformation}{24}{section.2.3}%
+\contentsline {subsection}{\numberline {3.1}The First Stage: Equalization of Heterogeneous Profit Drifts}{25}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {3.2}The Second Stage: The Partition into Interest and Profit of Enterprise}{25}{subsection.2.3.2}%
+\contentsline {subsubsection}{The Ideological Inversion of the $Q$-Measure}{26}{section*.17}%
+\contentsline {section}{\numberline {4}The Structural Crisis of the Measure Change under the TRPF}{26}{section.2.4}%
+\contentsline {subsection}{\numberline {4.1}Divergence of the Market Price of Risk Kernel}{27}{subsection.2.4.1}%
+\contentsline {section}{\numberline {5}The Micro Credit Pricing PDE under the Material Default Boundary}{28}{section.2.5}%
+\contentsline {subsection}{\numberline {5.1}State Variables and Dynamics under $Q$}{28}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {5.2}The Material Default Stopping Time}{28}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {5.3}Derivation of the Credit Pricing PDE}{29}{subsection.2.5.3}%
+\contentsline {subsubsection}{Boundary Conditions:}{29}{section*.18}%
+\contentsline {section}{\numberline {6}Synthesis: The Contradiction Between Production and Finance}{30}{section.2.6}%
+\contentsline {chapter}{\numberline {3}Networked Valorization Crises: Inter-Departmental Credit Contagion and the Topology of Capitalist Devalorization}{31}{chapter.3}%
+\contentsline {section}{\numberline {1}The Dual Circuit Network Topology: Physical Input-Output and the Fictitious Credit Layer}{31}{section.3.1}%
+\contentsline {subsection}{\numberline {1.1}The Material Production Layer: The Extended Reproduction Schemes}{31}{subsection.3.1.1}%
+\contentsline {subsubsection}{Labor Values and Monetary Expression}{32}{section*.19}%
+\contentsline {subsubsection}{Sectoral Capital Accounting in the Material Layer}{32}{section*.20}%
+\contentsline {subsubsection}{The Two-Department Reproduction Constraint}{33}{section*.21}%
+\contentsline {subsection}{\numberline {1.2}The Fictitious Credit Layer: The Inter-Firm Debt Web}{33}{subsection.3.1.2}%
+\contentsline {subsubsection}{Formalizing the Inter-Firm Financial Topology}{33}{section*.22}%
+\contentsline {subsubsection}{Total Inflows and Outflows of Contractual Debt}{33}{section*.23}%
+\contentsline {subsubsection}{The Relative Liabilities Matrix}{34}{section*.24}%
+\contentsline {subsection}{\numberline {1.3}Coupling Production to Finance: The Cash-Flow Balance}{34}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {1.4}Structural Vulnerability of the Dual Network}{35}{subsection.3.1.4}%
+\contentsline {section}{\numberline {2}Uneven Organic Composition, Sectoral Disproportionality, and the Breakdown of Reproduction}{35}{section.3.2}%
+\contentsline {subsection}{\numberline {2.1}The Asymmetric Composition of Capital: ${\omega }_{1}\gg {\omega }_{2}$}{36}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {2.2}The Disproportionality Condition in Expanded Reproduction}{36}{subsection.3.2.2}%
+\contentsline {subsubsection}{The Fundamental Reproduction Equality}{37}{section*.25}%
+\contentsline {subsection}{\numberline {2.3}The Realization Gap Induced by the TRPF}{37}{subsection.3.2.3}%
+\contentsline {subsubsection}{The Mathematical Realization Gap}{38}{section*.26}%
+\contentsline {subsection}{\numberline {2.4}Fictitious Bridging: The Endogenous Over-Expansion of Inter-Firm Credit}{39}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {2.5}The Mathematical Limit: The Inevitable Rupture}{40}{subsection.3.2.5}%
+\contentsline {section}{\numberline {3}Coupled Network Clearing Dynamics, Eisenberg-Noe Fixed Points, and Cascading Default Thresholds}{40}{section.3.3}%
+\contentsline {subsection}{\numberline {3.1}The Network Liquidity Operator}{41}{subsection.3.3.1}%
+\contentsline {subsubsection}{Grounding the External Cash Flow in Surplus Extraction}{41}{section*.27}%
+\contentsline {subsection}{\numberline {3.2}The Eisenberg-Noe Clearing Fixed Point}{41}{subsection.3.3.2}%
+\contentsline {subsubsection}{Existence and Uniqueness via Tarski's Fixed-Point Theorem}{42}{section*.28}%
+\contentsline {subsection}{\numberline {3.3}Partitioning the Network into Solvency and Default Domains}{42}{subsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.4}The Cascade Threshold: Propagation from Department II to Department I}{43}{subsection.3.3.4}%
+\contentsline {subsubsection}{Stage 1: The Initial Valorization Failure (Node 2 Enters ${D}_{t}$)}{43}{section*.29}%
+\contentsline {subsubsection}{Stage 2: Contagion Feedback to Department I}{43}{section*.30}%
+\contentsline {subsubsection}{The Contagion Sensitivity Derivative}{44}{section*.31}%
+\contentsline {subsection}{\numberline {3.5}Systemic Realization Deficit and Credit Breakdown}{44}{subsection.3.3.5}%
+\contentsline {section}{\numberline {4}Jump-Diffusions, Endogenous Default Poisson Intensities, and Moral Depreciation (\emph {Entwertung})}{45}{section.3.4}%
+\contentsline {subsection}{\numberline {4.1}The Endogenous Crisis Jump Intensity ${\lambda }_{\mathrm {sys}}(t)$}{46}{subsection.3.4.1}%
+\contentsline {subsubsection}{Properties of the Intensity:}{46}{section*.32}%
+\contentsline {subsection}{\numberline {4.2}Jump Dynamics on Constant Capital: Moral Depreciation}{46}{subsection.3.4.2}%
+\contentsline {subsubsection}{The Endogenous Haircut Function}{47}{section*.33}%
+\contentsline {subsection}{\numberline {4.3}Jump Dynamics on Fictitious Capital: Debt Cancellation and Repudiation}{47}{subsection.3.4.3}%
+\contentsline {subsection}{\numberline {4.4}The Full Master Jump-Diffusion Pricing PDE}{48}{subsection.3.4.4}%
+\contentsline {subsubsection}{Analysis of the Non-Local Jump Term:}{48}{section*.34}%
+\contentsline {subsection}{\numberline {4.5}The Devalorization Cascade: Summary}{49}{subsection.3.4.5}%
+\contentsline {section}{\numberline {5}The Post-Crisis Purge, Wage Squeeze, and the Restoration of the Profit Rate}{49}{section.3.5}%
+\contentsline {subsection}{\numberline {5.1}The Post-Jump Capital Purge: Reset of the Organic Composition}{50}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {5.2}The Industrial Reserve Army and the Wage Squeeze (${e}_{\mathrm {post}}\uparrow $)}{50}{subsection.3.5.2}%
+\contentsline {subsubsection}{Dynamics of the Industrial Reserve Army}{50}{section*.35}%
+\contentsline {subsubsection}{The Marxian Phillips Curve and Wage Repression}{51}{section*.36}%
+\contentsline {subsubsection}{The Resulting Exploitation Surge}{51}{section*.37}%
+\contentsline {subsection}{\numberline {5.3}The Mathematical Rebound of the Systemic Rate of Profit}{51}{subsection.3.5.3}%
+\contentsline {subsection}{\numberline {5.4}Deleveraging and the Regeneration of the Credit Network}{52}{subsection.3.5.4}%
+\contentsline {subsection}{\numberline {5.5}Limit-Cycle Dynamics: The Endogenous Marxian Metacycle}{53}{subsection.3.5.5}%
+\contentsline {section}{\numberline {6}Full Trilogy Synthesis \& Epistemological Manifesto}{53}{section.3.6}%
+\contentsline {subsection}{\numberline {6.1}The Unified Trilogy Architecture}{54}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {6.2}Structural Mapping: Neoclassical vs. Marxian Mathematical Finance}{55}{subsection.3.6.2}%
+\contentsline {subsection}{\numberline {6.3}Epistemological Manifesto: Beyond Financial Fetishism}{56}{subsection.3.6.3}%
+\contentsline {subsubsection}{Thesis I: Mathematical Finance Must Abandon Capital Fetishism}{56}{section*.38}%
+\contentsline {subsubsection}{Thesis II: The First Fundamental Theorem of Asset Pricing is Inherently Transitory}{56}{section*.39}%
+\contentsline {subsubsection}{Thesis III: Crises Are Topological Necessities of Capitalist Reproduction}{57}{section*.40}%
+\contentsline {subsection}{\numberline {6.4}The Complete Trilogy Overview}{57}{subsection.3.6.4}%
