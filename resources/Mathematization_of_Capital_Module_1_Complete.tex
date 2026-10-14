@@ -495,5 +495,136 @@ Let an enterprise employ $L$ workers with variable capital per worker $\lambda_{
 \begin{proof}
 Parts (1) and (2) follow immediately from definition and total differentiation of $S(L, T) = L(T - \lambda_{lp})$. For Part (3), since $T \le T_{\max}$, we have $S(L, T) = L(T - \lambda_{lp}) \le L(T_{\max} - \lambda_{lp})$. If $L < L_{\text{crit}} = \frac{S_0}{T_{\max} - \lambda_{lp}}$, then $S(L, T) \le L(T_{\max} - \lambda_{lp}) < S_0$, establishing the absolute upper bound that underpins the Tendency of the Rate of Profit to Fall in Volume III.
 \end{proof}
+\newpage
 
+% ============================================================================
+% PART IV / MODULE 4
+% ============================================================================
+\part{Module 4: Relative Surplus-Value, Superprofit Dynamics, Co-operation, and Machinery (Volume I, Chapters 12--15)}
+
+\section{The Micro-Macro Paradox of Relative Surplus-Value (Chapter 12)}
+
+In Part III of \textit{Capital}, the rate of surplus-value $e = \frac{T - \lambda_{lp}}{\lambda_{lp}}$ was increased extensively by lengthening the working day $T$ ($dT > 0$, Absolute Surplus-Value). In Part IV (Chapters 12--15), $T$ is held fixed ($dT = 0$) and $e$ is increased intensively by contracting Necessary Labor Time $t_n = \lambda_{lp}$ via revolutions in the productivity of labor (\textbf{Relative Surplus-Value}).
+
+Marx identifies a foundational micro-macro paradox in Chapter 12: no individual capitalist introduces productivity-enhancing techniques in order to cheapen the worker's subsistence bundle $\mathbf{b}$ and lower $\lambda_{lp}$. Rather, the individual firm innovates to capture transient \textbf{Extra Surplus-Value (\textit{Extra-Mehrwert} / Superprofit)} by driving its \textit{individual value} below the \textit{social value} $\lambda_j$.
+
+\subsection{Individual Value vs. Social Value and \textit{Extra-Mehrwert}}
+
+Recall from Module 1 that the Social Unit Value (SNLT) of commodity $j \in \mathcal{T}_0$ is the expectation of individual unit labor times over the sectoral producer measure $\mu_j(\omega, t)$:
+\begin{equation}
+    \lambda_j(t) = \mathcal{A}(\mathcal{L}_j) = \int_{\mathcal{L}_j} \tau_j(\omega, t) \, d\mu_j(\omega, t) = \bar{c}_j(t) + \bar{l}_j(t)
+\end{equation}
+where $\bar{c}_j$ and $\bar{l}_j$ denote the socially average transferred constant capital and direct living labor per physical unit $\mathbf{e}_j$.
+
+\begin{definition}[Individual Value and Productivity Multiplier]
+Let an innovating enterprise $\hat{\omega} \in \mathcal{L}_j$ introduce an advanced technique that reduces its direct living labor requirement per physical unit to $l_{\hat{\omega}} < \bar{l}_j$, defining a \textbf{productivity potentiation multiplier}:
+\begin{equation}
+    \theta_{\hat{\omega}}(t) \coloneqq \frac{\bar{l}_j(t)}{l_{\hat{\omega}}} > 1
+\end{equation}
+The enterprise's \textbf{individual unit value} $\lambda_{j,\text{ind}}(\hat{\omega}) = c_{\hat{\omega}} + l_{\hat{\omega}}$ satisfies $\lambda_{j,\text{ind}}(\hat{\omega}) < \lambda_j(t)$.
+\end{definition}
+
+\begin{theorem}[Generation and Competitive Dissipation of Extra Surplus-Value]
+Assume commodities of type $j$ sell at the uniform social market price $p_j(t) = \lambda_j(t) / \lambda_m$ (with $c_{\hat{\omega}} = \bar{c}_j$). Then:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Potentiated Labor Action:} One hour of concrete labor expended inside enterprise $\hat{\omega}$ projects onto the social value manifold as \textbf{potentiated labor} (\textit{potenzierte Arbeit}) of magnitude $\theta_{\hat{\omega}} > 1$. Over a working day of length $T$, each worker in $\hat{\omega}$ produces $\theta_{\hat{\omega}} (T / \bar{l}_j)$ units and realizes net social value added $\Delta V_{\hat{\omega}}(T) = \theta_{\hat{\omega}} T > T$.
+    \item \textbf{Extra Surplus-Value Decomposition:} The total surplus-value realized per worker in firm $\hat{\omega}$ decomposes into normal sectoral surplus-value $s_0 = T - \lambda_{lp}$ plus a strictly positive \textbf{Extra Surplus-Value} $\Delta s_{\hat{\omega}}$:
+    \begin{equation}
+        s_{\hat{\omega}}(t) = \theta_{\hat{\omega}}(t) T - \lambda_{lp} = \underbrace{\left(T - \lambda_{lp}\right)}_{\text{Normal } s_0} + \underbrace{\left(\theta_{\hat{\omega}}(t) - 1\right) T}_{\text{Extra Surplus-Value } \Delta s_{\hat{\omega}} > 0}
+    \end{equation}
+    \item \textbf{Measure Transport and Asymptotic Dissipation:} Under competitive imitation, rival enterprises adopt the superior technique, governing the sectoral measure $\mu_j(\omega, t)$ via the advection-diffusion (Fokker-Planck) transport equation $\partial_t \mu_j + \nabla_\tau \cdot (v_{\text{adopt}} \mu_j) = \frac{\sigma^2}{2}\Delta_\tau \mu_j$. As $\mu_j(\omega, t)$ concentrates on $l_{\hat{\omega}}$:
+    \begin{equation}
+        \lim_{t \to \infty} \bar{l}_j(t) = l_{\hat{\omega}} \implies \lim_{t \to \infty} \theta_{\hat{\omega}}(t) = 1 \implies \lim_{t \to \infty} \Delta s_{\hat{\omega}}(t) = 0
+    \end{equation}
+    Thus, Extra Surplus-Value is strictly self-extinguishing under competitive diffusion.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+In $T$ hours, a worker in $\hat{\omega}$ produces $q_{\hat{\omega}} = T / l_{\hat{\omega}}$ physical units. Selling at the social unit value $\lambda_j = \bar{c}_j + \bar{l}_j$ yields gross revenue $q_{\hat{\omega}}(\bar{c}_j + \bar{l}_j)$. Subtracting transferred constant capital $q_{\hat{\omega}} c_{\hat{\omega}} = q_{\hat{\omega}} \bar{c}_j$ leaves net value added $q_{\hat{\omega}} \bar{l}_j = T (\bar{l}_j / l_{\hat{\omega}}) = \theta_{\hat{\omega}} T$. Deducting the wage $\lambda_{lp}$ yields $s_{\hat{\omega}} = \theta_{\hat{\omega}} T - \lambda_{lp} = (T - \lambda_{lp}) + (\theta_{\hat{\omega}} - 1)T$. As the measure $\mu_j(\omega, t) \rightharpoonup \delta(\tau - \lambda_{j,\text{ind}}(\hat{\omega}))$ weakly as $t \to \infty$, $\bar{l}_j(t) \to l_{\hat{\omega}}$, driving $\theta_{\hat{\omega}}(t) \to 1$ and $\Delta s_{\hat{\omega}}(t) \to 0$.
+\end{proof}
+
+\subsection{Departmental Spectral Partition: Wage-Goods vs. Luxury Goods}
+
+\begin{proposition}[Departmental Sensitivity of the General Rate of Exploitation]
+Let $A = [a_{ik}]_{i,k \in \mathcal{T}_0}$ be the technical input matrix and $\mathbf{l} = (l_1, \dots, l_n)^\top$ the direct living labor vector, so that $\boldsymbol{\lambda}^\top = \mathbf{l}^\top (I - A)^{-1}$ and $\lambda_{lp} = \mathbf{l}^\top (I - A)^{-1} \mathbf{b}$. Partition $\mathcal{T}_0 = \mathcal{T}_{\text{wage}} \sqcup \mathcal{T}_{\text{lux}}$, where $\mathcal{T}_{\text{wage}} = \{k \in \mathcal{T}_0 \mid [(I - A)^{-1}\mathbf{b}]_k > 0\}$ (direct and indirect wage-goods) and $\mathcal{T}_{\text{lux}} = \{k \in \mathcal{T}_0 \mid [(I - A)^{-1}\mathbf{b}]_k = 0\}$ (pure luxury goods). Then:
+\begin{equation}
+    \forall k \in \mathcal{T}_{\text{wage}}: \quad \frac{\partial e}{\partial l_k} = -\frac{T}{\lambda_{lp}^2} \left[(I - A)^{-1}\mathbf{b}\right]_k < 0, \qquad \forall k \in \mathcal{T}_{\text{lux}}: \quad \frac{\partial e}{\partial l_k} \equiv 0
+\end{equation}
+Hence, technological revolutions generate systemic Relative Surplus-Value ($de > 0$) if and only if they occur within the transitive input closure of the worker's subsistence bundle $\mathcal{T}_{\text{wage}}$.
+\end{proposition}
+
+\section{Superadditivity of Co-operation and the Division of Labor (Chapters 13 \& 14)}
+
+\subsection{Co-operation as a Central Limit Equalizer and Superadditive Operator (Chapter 13)}
+
+\begin{proposition}[Statistical Equalization and Collective Productive Power in Co-operation]
+When a capitalist simultaneously employs $L$ workers in a coordinated workshop:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Law of Large Numbers Realization of SNLT:} If individual worker productivity $\tau(\omega_r)$ has mean $\lambda_j$ and finite variance $\sigma_\tau^2 > 0$, the firm's sample unit labor time $\bar{\tau}_L = \frac{1}{L}\sum_{r=1}^L \tau(\omega_r)$ satisfies $\operatorname{Var}(\bar{\tau}_L) = \sigma_\tau^2 / L \to 0$ as $L \to \infty$. Thus, a sufficiently large workforce $L$ converts the stochastic individual labor process into the deterministic social law of value inside the factory.
+    \item \textbf{Superadditivity of the Collective Worker (\textit{Gesamtarbeiter}):} Whereas isolated labor is strictly additive ($\hat{F}_{\text{iso}}(L) = L \bar{f}$), coordinated co-operation induces a superadditive physical output functional $\hat{F}_{\text{coop}}(L) = L^{1+\eta} \bar{f}$ ($\eta > 0$) and subadditive fixed constant capital overhead $C_{\text{fixed}}(L) = c_0 L^\nu$ ($0 < \nu < 1$). Because capital pays $L \lambda_{lp}$ for $L$ isolated labor-powers, the superadditive output wedge $(L^{1+\eta} - L)\bar{f}$ is appropriated gratis as surplus-value.
+\end{enumerate}
+\end{proposition}
+
+\subsection{Manufacture as a Directed Acyclic Task Graph and the Babbage Principle (Chapter 14)}
+
+In Manufacture (Chapter 14), a craft process is decomposed into $K$ specialized partial operations $\mathcal{O} = \{o_1, \dots, o_K\}$ forming a \textbf{Directed Acyclic Graph (DAG)} $\mathcal{G}_{\text{man}} = (\mathcal{O}, E_{\text{flow}})$.
+
+\begin{proposition}[Flow Conservation and Skill Devaluation in Manufacture]
+Let $\tau_a > 0$ be the cycle time of partial operation $o_a \in \mathcal{O}$ and $\epsilon_1 > \epsilon_2 > \dots > \epsilon_K = 0$ be the amortized skill-training reproduction costs of the respective operations:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Marx's Law of Proportional Subgroup Sizes:} Eliminating intermediate inventory bottlenecks and inter-task switching dead-time (\textit{Poren der Arbeitszeit}) requires subgroup headcounts $(L_1, \dots, L_K)$ to satisfy the exact integer flow invariant:
+    \begin{equation}
+        \frac{L_1}{\tau_1} = \frac{L_2}{\tau_2} = \dots = \frac{L_K}{\tau_K} = \Phi_{\text{line}} \implies L_a^* = m \cdot \frac{\tau_a}{\gcd(\tau_1, \dots, \tau_K)} \quad (m \in \mathbb{N})
+    \end{equation}
+    \item \textbf{Structural Devaluation of Labor-Power via Skill Hierarchy:} By restricting each worker subgroup $L_a$ to a single micro-operation $o_a$, capital pays only the task-specific skill cost $\epsilon_a$ rather than the full artisan training cost $\epsilon_1$, strictly lowering the average value of labor-power even at constant wage-good values $\boldsymbol{\lambda}$:
+    \begin{equation}
+        \bar{\lambda}_{lp}^{\text{man}} = \lambda_{lp}^{(0)} + \frac{\sum_{a=1}^K L_a \epsilon_a}{\sum_{a=1}^K L_a} < \lambda_{lp}^{(0)} + \epsilon_1 = \bar{\lambda}_{lp}^{\text{craft}}
+    \end{equation}
+\end{enumerate}
+\end{proposition}
+
+\section{Machinery, Moral Depreciation, and the Bridge to Stochastic Mean Field Accumulation (Chapter 15)}
+
+\subsection{The Capitalist Boundary Condition for Machine Adoption (Chapter 15, Section 2)}
+
+\begin{theorem}[Divergence between Social and Capitalist Automation Boundaries]
+Let a machine require $C_{\text{mach}}$ hours of SNLT to produce and suppose it displaces $L_{\text{disp}}$ workers over its lifespan, where each worker works $T = \lambda_{lp} + s$ hours.
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Social Labor-Saving Criterion:} The machine reduces total human labor expended on society's output if and only if:
+    \begin{equation}
+        C_{\text{mach}} < L_{\text{disp}} \cdot T = L_{\text{disp}} \left(\lambda_{lp} + s\right)
+    \end{equation}
+    \item \textbf{Capitalist Cost-Reduction Criterion:} Because the capitalist pays only for variable capital $\lambda_{lp}$ and not for living labor $T$, the machine is adopted under capitalism if and only if:
+    \begin{equation}
+        C_{\text{mach}} < L_{\text{disp}} \cdot \lambda_{lp} = \frac{L_{\text{disp}} \cdot T}{1 + e}
+    \end{equation}
+    \item \textbf{The Sweatshop Stagnation Wedge:} For any machine satisfying $L_{\text{disp}} \lambda_{lp} \le C_{\text{mach}} < L_{\text{disp}} T$ (a wedge of width $L_{\text{disp}} \cdot e \lambda_{lp}$), automation is socially labor-saving but is rejected by capital. Thus, depressed wages ($\lambda_{lp} \downarrow$) and high exploitation ($e \uparrow$) structurally block technological modernization.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Moral Depreciation and the Compulsion to Extend and Intensify Labor (Chapter 15, Section 3)}
+
+\begin{theorem}[Moral Depreciation Hazard and the Elongation/Condensation of the Working Day]
+Let a machine of initial value $C_0$ transfer value into output at rate $\beta T$ per day while facing continuous technological obsolescence (\textbf{Moral Depreciation}, \textit{moralischer Verschleiß}) at hazard rate $\delta_{\text{moral}} > 0$, which erodes its replacement value as $C(t) = C_0 e^{-\delta_{\text{moral}} t}$. The cumulative fraction of $C_0$ successfully transferred before physical exhaustion at $\tau_{\text{phys}}(T) = C_0 / (\beta T)$ is:
+\begin{equation}
+    \mathcal{R}_{\text{transfer}}(T) = \int_0^{\frac{C_0}{\beta T}} \frac{\beta T}{C_0} e^{-\delta_{\text{moral}} t} \, dt = \frac{\beta T}{\delta_{\text{moral}} C_0} \left(1 - \exp\!\left(-\frac{\delta_{\text{moral}} C_0}{\beta T}\right)\right)
+\end{equation}
+Because $\frac{\partial \mathcal{R}_{\text{transfer}}}{\partial T} > 0$ for all $\delta_{\text{moral}} > 0$, moral depreciation creates an endogenous compulsion to maximize daily machine utilization $T \to 24\text{ hrs}$. When state legislation caps $T \le T_{\text{legal}}$, capital substitutes \textbf{intensive magnitude (condensation of labor $\iota > 1$)} for extensive duration $T$, injecting effective value $\Delta V = \iota T_{\text{legal}}$ per day.
+\end{theorem}
+
+\subsection{Synthesis: Microeconomic Foundations of the Stochastic Mean Field Game (MFG)}
+
+Combining Theorem 15.1 (\textit{Extra-Mehrwert}) and Theorem 17.2 (\textit{Moral Depreciation}) yields the exact micro-foundation for the Volume III \textbf{Tendency of the Rate of Profit to Fall (TRPF)} modeled as a coupled Hamilton-Jacobi-Bellman (HJB) and Fokker-Planck Mean Field Game:
+\begin{enumerate}
+    \item Each enterprise $i \in [0, 1]$ controls its automation rate $u_i(t)$ governing its individual organic composition $\omega_i(t) = C_{i,t}/V_{i,t}$ subject to moral depreciation $\delta_{\text{moral}}$ and adoption noise $\sigma_1$:
+    \begin{equation}
+        d\omega_i(t) = \left(u_i(t) - \delta_{\text{moral}} \omega_i(t)\right) dt + \sigma_1 \omega_i(t) \, dW_{i,t}
+    \end{equation}
+    \item Enterprise $i$'s instantaneous payoff combines the baseline valorization rate $\frac{e}{\omega_i + 1}$ with the Chapter 12 \textit{Extra-Mehrwert} superprofit term proportional to its technological lead over the Mean Field average $\bar{\omega}_t = \int_{\mathbb{R}_+} \omega \, m(\omega, t) \, d\omega$:
+    \begin{equation}
+        r_i(\omega_i, \bar{\omega}_t) = \frac{e(\bar{\omega}_t)}{\omega_i + 1} + \chi \left(\frac{\omega_i - \bar{\omega}_t}{\bar{\omega}_t + 1}\right) - \frac{\phi}{2} u_i^2
+    \end{equation}
+    \item While each atomic firm chooses $u_i^*(t) > 0$ to capture $\chi(\omega_i - \bar{\omega}_t) > 0$, the forward Kolmogorov (Fokker-Planck) transport of the capital distribution $m(\omega, t)$ drives $\bar{\omega}_t$ upward. In the symmetric Mean Field Equilibrium ($\omega_i = \bar{\omega}_t$), the superprofit term vanishes identically ($\chi(\bar{\omega}_t - \bar{\omega}_t) \equiv 0$), trapping the aggregate economy in a higher organic composition $\bar{\omega}_t$ and a secularly declining general rate of profit $r(\bar{\omega}_t) = \frac{e(\bar{\omega}_t)}{\bar{\omega}_t + 1}$.
+\end{enumerate}
 \end{document}
