@@ -1,0 +1,125 @@
+\contentsline {paragraph}{Scope and conventions.}{1}{section*.1}%
+\contentsline {paragraph}{Reading cautions.}{1}{section*.2}%
+\contentsline {section}{\numberline {1}Phase spaces ($\S 1$)}{2}{section.1}%
+\contentsline {subsection}{1.2/1: Two roads and two circular wagons}{2}{section*.4}%
+\contentsline {paragraph}{Review note.}{2}{section*.5}%
+\contentsline {subsection}{1.6/1: Isothermal atmospheric density}{2}{section*.6}%
+\contentsline {subsection}{1.7/1*: Extending a monomial field to the projective line}{2}{section*.7}%
+\contentsline {subsection}{1.8/1: The logistic curve}{3}{section*.8}%
+\contentsline {subsection}{1.8/2: The branch above carrying capacity}{3}{section*.9}%
+\contentsline {subsection}{1.13/1: Free particle with initial state $(a,b)$}{3}{section*.10}%
+\contentsline {subsection}{1.14/1: Free-fall phase curves}{3}{section*.11}%
+\contentsline {subsection}{1.15/1: Circular phase curves of the oscillator}{4}{section*.12}%
+\contentsline {subsection}{1.15/2: Angular speed}{4}{section*.13}%
+\contentsline {subsection}{1.15/3: Oscillator initial-value problem}{4}{section*.14}%
+\contentsline {subsection}{1.15/4: Energy for arbitrary stiffness}{4}{section*.15}%
+\contentsline {subsection}{1.15/5: Helices in extended phase space}{4}{section*.16}%
+\contentsline {subsection}{1.16/1: Equilibria of the mathematical pendulum}{5}{section*.17}%
+\contentsline {subsection}{1.18/1: Spherical-pendulum energy spheres}{5}{section*.18}%
+\contentsline {subsection}{1.18/2: Great circles}{5}{section*.19}%
+\contentsline {subsection}{1.18/3*: The sphere of phase circles}{5}{section*.20}%
+\contentsline {subsection}{1.18/4*: Linking of two phase circles}{6}{section*.21}%
+\contentsline {section}{\numberline {2}Vector fields on the line ($\S 2$)}{6}{section.2}%
+\contentsline {subsection}{2.1/1: The gap in the existence--uniqueness proof}{6}{section*.22}%
+\contentsline {subsection}{2.3/1: Faster-than-exponential approach}{6}{section*.23}%
+\contentsline {subsection}{2.3/2: A derivative that is not continuous}{7}{section*.24}%
+\contentsline {subsection}{2.3/3: The divergent travel-time criterion}{7}{section*.25}%
+\contentsline {subsection}{2.3/4: Lipschitz uniqueness}{7}{section*.26}%
+\contentsline {subsection}{2.3/5: Nonautonomous uniqueness}{8}{section*.27}%
+\contentsline {subsection}{2.3/6: Invariance of the predator--prey quadrant}{8}{section*.28}%
+\contentsline {subsection}{2.3/7: Uniqueness on the whole common domain}{8}{section*.29}%
+\contentsline {subsection}{2.5/1: Five product fields}{8}{section*.30}%
+\contentsline {subsection}{2.5/2: A level set need not be one phase curve}{9}{section*.31}%
+\contentsline {subsection}{2.5/3: All phase curves of a product field}{9}{section*.32}%
+\contentsline {subsection}{2.5/4: A very anisotropic node and saddle}{9}{section*.33}%
+\contentsline {subsection}{2.5/5: Inverted pendulum}{10}{section*.34}%
+\contentsline {subsection}{2.6/1: Four separable direction fields}{10}{section*.35}%
+\contentsline {subsection}{2.6/2: Powers and trigonometric examples}{10}{section*.36}%
+\contentsline {subsection}{2.6/3: Pendulum phase portrait}{11}{section*.37}%
+\contentsline {subsection}{2.7/1: Divergence of the Lotka--Volterra period}{11}{section*.38}%
+\contentsline {subsection}{2.7/2: Logarithmic divergence near an axis}{11}{section*.39}%
+\contentsline {subsection}{2.7/3: Birth and collision of limit cycles}{12}{section*.40}%
+\contentsline {section}{\numberline {3}Linear equations ($\S 3$)}{12}{section.3}%
+\contentsline {paragraph}{Review note.}{12}{section*.41}%
+\contentsline {subsection}{3.2/1: From a multiplier to stability of a cycle}{12}{section*.42}%
+\contentsline {subsection}{3.2/2: A cycle with alternating radial attraction and repulsion}{13}{section*.43}%
+\contentsline {paragraph}{Review note.}{13}{section*.44}%
+\contentsline {subsection}{3.4/1: A rectangular impulse and its limit}{13}{section*.45}%
+\contentsline {subsection}{3.5/1: Periodic forcing with damping}{14}{section*.46}%
+\contentsline {paragraph}{Review note.}{14}{section*.47}%
+\contentsline {subsection}{3.5/2: The inhomogeneous variational equation}{14}{section*.48}%
+\contentsline {section}{\numberline {4}Phase flows ($\S 4$)}{14}{section.4}%
+\contentsline {subsection}{4.1/1: Which maps are transformations?}{14}{section*.49}%
+\contentsline {subsection}{4.1/2: Noncommuting transformations}{14}{section*.50}%
+\contentsline {subsection}{4.1/3: Three reflections}{15}{section*.51}%
+\contentsline {subsection}{4.1/4: Triangle isometries and tetrahedron rotations}{15}{section*.52}%
+\contentsline {subsection}{4.1/5: The additive group of real numbers}{15}{section*.53}%
+\contentsline {subsection}{4.1/6: Permutations of coordinate axes by cube isometries}{15}{section*.54}%
+\contentsline {subsection}{4.1/7: Action on matrices}{15}{section*.55}%
+\contentsline {subsection}{4.1/8: Rotation orbits}{16}{section*.56}%
+\contentsline {subsection}{4.1/9: Orbits partition a set}{16}{section*.57}%
+\contentsline {subsection}{4.1/10: Unordered pairs of tetrahedron edges}{16}{section*.58}%
+\contentsline {subsection}{4.1/11: Six distinct colors on a cube}{16}{section*.59}%
+\contentsline {subsection}{4.3/1: Diffeomorphisms of the real line}{16}{section*.60}%
+\contentsline {subsection}{4.3/2: Must a linear flow split into one-dimensional factors?}{16}{section*.61}%
+\contentsline {subsection}{4.4/1: Generators of three line flows}{17}{section*.62}%
+\contentsline {subsection}{4.4/2: Zeros of the generator are fixed points}{17}{section*.63}%
+\contentsline {subsection}{4.4/3: Every solution is an orbit of the given flow}{17}{section*.64}%
+\contentsline {subsection}{4.4/4: Four explicit flows}{17}{section*.65}%
+\contentsline {subsection}{4.4/5: Three planar flows}{17}{section*.66}%
+\contentsline {subsection}{4.4/6: At most linear growth implies completeness}{18}{section*.67}%
+\contentsline {subsection}{4.4/7: The field $e^x\sin x$}{18}{section*.68}%
+\contentsline {subsection}{4.4/8: Translation on a polynomial space}{18}{section*.69}%
+\contentsline {section}{\numberline {5}Changes of variables and fields ($\S 5$)}{18}{section.5}%
+\contentsline {subsection}{5.1/1: Independence of the curve representing a tangent vector}{18}{section*.70}%
+\contentsline {subsection}{5.1/2: A unit vector under squaring}{18}{section*.71}%
+\contentsline {subsection}{5.1/3: Motions along different axes with the same velocity}{19}{section*.72}%
+\contentsline {subsection}{5.1/4: Linearity of the derivative}{19}{section*.73}%
+\contentsline {subsection}{5.1/5: Derivative of a circle parametrization}{19}{section*.74}%
+\contentsline {subsection}{5.1/6: Critical points and values of the cusp map}{19}{section*.75}%
+\contentsline {subsection}{5.1/7: A diffeomorphism induces tangent-space isomorphisms}{19}{section*.76}%
+\contentsline {subsection}{5.1/8: Invertible derivatives do not imply a global diffeomorphism}{20}{section*.77}%
+\contentsline {subsection}{5.2/1: Pushforward by dilation}{20}{section*.78}%
+\contentsline {subsection}{5.2/2: Pushforward of the Euler field by the exponential}{20}{section*.79}%
+\contentsline {subsection}{5.2/3: Linear invariance of the Euler field}{20}{section*.80}%
+\contentsline {subsection}{5.2/4: Phase curves versus time-parametrized trajectories}{20}{section*.81}%
+\contentsline {subsection}{5.3/1: Polar solution of the oscillator}{21}{section*.82}%
+\contentsline {subsection}{5.3/2: A stable circular limit cycle}{21}{section*.83}%
+\contentsline {subsection}{5.4/1: A direction field without a nonvanishing vector representative}{21}{section*.84}%
+\contentsline {subsection}{5.4/2: Separating a homogeneous equation}{21}{section*.85}%
+\contentsline {subsection}{5.4/3: Straightening $x'=x-1$ globally}{22}{section*.86}%
+\contentsline {subsection}{5.4/4: A plane direction field that cannot be straightened globally}{22}{section*.87}%
+\contentsline {subsection}{5.4/5: Global straightening of $x'=x^2$}{22}{section*.88}%
+\contentsline {subsection}{5.5/1: Conjugation preserves the flow laws}{23}{section*.89}%
+\contentsline {subsection}{5.5/2: Circular and hyperbolic rotations are not conjugate}{23}{section*.90}%
+\contentsline {subsection}{5.5/3: Classifying five scalar vector fields}{23}{section*.91}%
+\contentsline {section}{\numberline {6}Symmetries ($\S 6$)}{24}{section.6}%
+\contentsline {subsection}{6.1/1: Preserving phase curves need not preserve a field}{24}{section*.92}%
+\contentsline {subsection}{6.1/2: Preserving integral curves preserves a direction field}{24}{section*.93}%
+\contentsline {paragraph}{Review note.}{24}{section*.94}%
+\contentsline {subsection}{6.1/3: All global symmetries of the Euler field}{24}{section*.95}%
+\contentsline {subsection}{6.2/1: Reducing dimension using a one-parameter symmetry}{25}{section*.96}%
+\contentsline {subsection}{6.3/1: Three homogeneous equations}{25}{section*.97}%
+\contentsline {subsection}{6.3/2: A homogeneous Riccati-type equation}{25}{section*.98}%
+\contentsline {subsection}{6.3/3: Sketching $y'=2y/x+y^2/x^2$}{25}{section*.99}%
+\contentsline {subsection}{6.3/4: Smoothness of the real blow-up surface}{26}{section*.100}%
+\contentsline {subsection}{6.3/5: The blow-up is an open M\"obius band}{26}{section*.101}%
+\contentsline {subsection}{6.3/6: Resolving the semicubical cusp}{26}{section*.102}%
+\contentsline {subsection}{6.3/7: Lifting a field vanishing at the origin}{27}{section*.103}%
+\contentsline {subsection}{6.4/1: Weights for $y'=-x/y^3$}{27}{section*.104}%
+\contentsline {subsection}{6.4/2: Weights of $x^2y+y^4$}{27}{section*.105}%
+\contentsline {subsection}{6.4/3: Weighted Euler identity}{27}{section*.106}%
+\contentsline {subsection}{6.4/4: Weights for Newton phase curves}{28}{section*.107}%
+\contentsline {subsection}{6.5/1: Degree of differentiation along a weighted field}{28}{section*.108}%
+\contentsline {subsection}{6.5/2: Scaling periods for homogeneous polynomial systems}{28}{section*.109}%
+\contentsline {subsection}{6.5/3: Scaling periods for a weighted field}{28}{section*.110}%
+\contentsline {subsection}{6.5/4: The cubic oscillator's period}{29}{section*.111}%
+\contentsline {subsection}{6.5/5: Scaling Newtonian trajectories}{29}{section*.112}%
+\contentsline {subsection}{6.5/6: Kepler scaling}{29}{section*.113}%
+\contentsline {subsection}{6.5/7: Linear and cubic restoring forces}{29}{section*.114}%
+\contentsline {subsection}{6.5/8: Daily versus annual thermal penetration}{30}{section*.115}%
+\contentsline {subsection}{6.6/1: Radial harmonic functions and their point sources}{30}{section*.116}%
+\contentsline {section}{Additional phase-curve sketches}{31}{section*.117}%
+\contentsline {section}{Review guide and coverage}{32}{section*.118}%
+\contentsline {paragraph}{Suggested first review.}{32}{section*.119}%
+\contentsline {paragraph}{Source.}{32}{section*.120}%

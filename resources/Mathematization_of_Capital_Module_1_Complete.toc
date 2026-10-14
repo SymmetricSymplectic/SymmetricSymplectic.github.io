@@ -1,0 +1,29 @@
+\contentsline {part}{I\hspace {1em}Module 1: Axiomatics of the Commodity-Form, Real Abstraction, and Graph Dynamics of the General Equivalent (Volume I, Chapter 1)}{2}{part.1}%
+\contentsline {section}{\numberline {1}Introduction: Beyond Static Linearism}{2}{section.1}%
+\contentsline {section}{\numberline {2}The Dual Space of the Commodity (Chapter 1, Sections 1 \& 2)}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}The Physical Use-Value Space ($\mathcal {U}$)}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Concrete vs. Abstract Labor and Socially Necessary Labor Time (SNLT)}{2}{subsection.2.2}%
+\contentsline {section}{\numberline {3}The Algebra of the Value-Form (Chapter 1, Section 3)}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}The Value Equivalence Relation ($\sim _V$)}{3}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}The Non-Symmetric Value Expression Operator ($\mathcal {E}$)}{3}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Topological Evolution of the Four Forms of Value}{4}{subsection.3.3}%
+\contentsline {paragraph}{Dialectical Dualization (Form II $\to $ Form III):}{4}{section*.2}%
+\contentsline {section}{\numberline {4}Commodity Fetishism as a Quotient Topology (Chapter 1, Section 4)}{4}{section.4}%
+\contentsline {section}{\numberline {5}Directed Graph Dynamics: Proving the Emergence of the General Equivalent}{5}{section.5}%
+\contentsline {subsection}{\numberline {5.1}The Hollow Row-Stochastic Manifold of Value-Expression Networks}{5}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Micro-Foundations and the Global Social Commensurability Potential}{5}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Replicator Dynamics and the Symmetry-Breaking Theorem}{6}{subsection.5.3}%
+\contentsline {part}{II\hspace {1em}Module 2: Stochastic Exchange, the \textit {Salto Mortale}, and the Metamorphosis $C - M - C'$ (Volume I, Chapters 2 \& 3)}{8}{part.2}%
+\contentsline {section}{\numberline {6}The Mutual Exclusion Principle and Bipartite Exchange Polarity (Chapter 2)}{8}{section.6}%
+\contentsline {section}{\numberline {7}The \textit {Salto Mortale} and the Realization Operator (Chapter 3, Section 2a)}{8}{section.7}%
+\contentsline {section}{\numberline {8}Operator Algebra of the Circuit $C_i - M - C_j$}{9}{section.8}%
+\contentsline {section}{\numberline {9}Breaking Say's Law: Markov Circulation Dynamics and the Crisis Bifurcation (Chapter 3, Sections 2b \& 3)}{9}{section.9}%
+\contentsline {part}{III\hspace {1em}Module 3: The Valorization Operator, the Conservation Contradiction, and the Mechanics of Surplus-Value (Volume I, Chapters 4--11)}{11}{part.3}%
+\contentsline {section}{\numberline {10}Topological Inversion of the Circuit: $C - M - C$ vs. $M - C - M'$ (Chapter 4)}{11}{section.10}%
+\contentsline {section}{\numberline {11}The Impossibility Theorem of Pure Circulation (Chapter 5)}{11}{section.11}%
+\contentsline {section}{\numberline {12}Labor-Power vs. Living Labor: Stock-Flow Operator Splitting (Chapter 6)}{12}{section.12}%
+\contentsline {section}{\numberline {13}Bifurcation of the Production Process: Constant vs. Variable Capital (Chapters 7--9)}{13}{section.13}%
+\contentsline {section}{\numberline {14}Differential Geometry of Exploitation, the Working Day, and the Three Laws of Surplus-Value Mass (Chapters 10--11)}{13}{section.14}%
+\contentsline {subsection}{\numberline {14.1}Total Differential Decomposition of Exploitation Strategies}{13}{subsection.14.1}%
+\contentsline {subsection}{\numberline {14.2}The Antinomy of the Working Day and Biological Spoliation (Chapter 10)}{14}{subsection.14.2}%
+\contentsline {subsection}{\numberline {14.3}Marx's Three Laws of the Mass of Surplus-Value (Chapter 11)}{14}{subsection.14.3}%

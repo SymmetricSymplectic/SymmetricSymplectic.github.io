@@ -10,8 +10,8 @@
 
 \geometry{margin=1in}
 
-\newtheorem{definition}{Definition}[section]
 \newtheorem{axiom}{Axiom}[section]
+\newtheorem{definition}{Definition}[section]
 \newtheorem{lemma}{Lemma}[section]
 \newtheorem{proposition}{Proposition}[section]
 \newtheorem{theorem}{Theorem}[section]
@@ -19,7 +19,8 @@
 \newtheorem{remark}{Remark}[section]
 
 \title{\textbf{Research Programme on the Mathematization of Karl Marx's \textit{Capital}}\\[0.5em]
-\large Modules 1 \& 2: From the Commodity-Form and General Equivalent Dynamics to Stochastic Circulation and the \textit{Salto Mortale} (Volume I, Chapters 1--3)}
+\large Unified Treatise on Volume I, Parts I--III (Chapters 1--11):\\
+Commodity Axiomatics, Stochastic Circulation, and the Valorization Operator}
 \author{Research Programme Working Manuscript}
 \date{\today}
 
@@ -28,14 +29,15 @@
 \maketitle
 
 \begin{abstract}
-This manuscript presents Modules 1 and 2 of a multi-stage research programme dedicated to the rigorous mathematization of Karl Marx's \textit{Capital}. Moving beyond static neo-Ricardian linearism, Module 1 formalizes Volume I, Chapter 1 (\textit{``The Commodity''}) using measure spaces over concrete labor, graded monoids for incommensurable use-values, non-symmetric projection operators for the value-form, fiber-bundle quotient topologies for Commodity Fetishism, and evolutionary potential-game dynamics on the hollow row-stochastic manifold proving the endogenous emergence of the General Equivalent ($G_{\text{I}} \to G_{\text{IV}}$). Module 2 advances to Volume I, Chapters 2 and 3 (\textit{``The Process of Exchange''} and \textit{``Money, or the Circulation of Commodities''}), formalizing the bipartite non-use-value axiom, the stochastic realization filter (\textit{salto mortale}), the non-commutative operator algebra of the circuit $C_i - M - C_j$, Marx's inverted Quantity of Money law, and a continuous-time Markov circulation model proving that hoarding and credit-panic feedbacks generate a saddle-node crisis bifurcation that refutes Say's Law within simple commodity circulation.
+This treatise establishes a unified mathematical formalization of Karl Marx's \textit{Capital}, Volume I, Chapters 1 through 11, organized into three interconnected modules. In \textbf{Module 1 (Chapter 1)}, we construct the dual space of the commodity via graded monoids and probability measure spaces, define the Real Abstraction Operator mapping concrete labor distributions to Socially Necessary Labor Time (SNLT), formalize the non-symmetric Relative-Equivalent Operator, model Commodity Fetishism as a quotient projection over a hidden fiber bundle of social labor relations, and prove the endogenous emergence of the General Equivalent via symmetry-breaking potential game dynamics on the hollow row-stochastic manifold. In \textbf{Module 2 (Chapters 2--3)}, we formalize the exchange process and simple circulation ($C - M - C'$), modeling the \textit{salto mortale} (realization filter), deriving Marx's Law of the Quantity of Circulating Money, and proving a Saddle-Node Crisis Bifurcation Theorem induced by hoarding and liquidity panic. In \textbf{Module 3 (Chapters 4--11)}, we formalize the General Formula for Capital ($M - C - M'$), prove the Conservation of Value in Pure Circulation under arbitrary skew-symmetric bilateral markups, resolve the conservation contradiction via stock-flow operator splitting between Labor-Power and Living Labor, and formulate the differential geometry of the working day and Marx's Three Laws of the Mass of Surplus-Value.
 \end{abstract}
 
 \tableofcontents
-\vspace{1em}
-\hrule
-\vspace{1.5em}
+\newpage
 
+% ============================================================================
+% PART I / MODULE 1
+% ============================================================================
 \part{Module 1: Axiomatics of the Commodity-Form, Real Abstraction, and Graph Dynamics of the General Equivalent (Volume I, Chapter 1)}
 
 \section{Introduction: Beyond Static Linearism}
@@ -142,8 +144,6 @@ Because $\dim(\Omega) \gg \dim(\mathcal{P})$, $\Pi$ is a non-injective surjectio
 
 In Chapter 1, Section 3 (and Chapter 2, ``The Process of Exchange''), Marx identifies a fundamental logical and practical contradiction between the \textbf{Expanded Form of Value ($G_{\text{II}}$)} and the requirements of a coherent commodity-producing society. If every commodity simultaneously attempts to exclude all others as its private out-star, no commodity is excluded, and social commensurability collapses into $O(n^2)$ non-transitive bilateral ratios. Consequently, the ``social action of all other commodities'' (\textit{gesellschaftliche Tat}) must spontaneously break the symmetry of the commodity space $\mathcal{T}$ and isolate a unique sink $u^* \in \mathcal{T}$---transforming the collection of Out-Stars ($G_{\text{II}}$) into a single \textbf{In-Star topology ($G_{\text{III}}$)}.
 
-We formulate and prove this transition as a theorem in non-linear evolutionary graph dynamics and potential games.
-
 \subsection{The Hollow Row-Stochastic Manifold of Value-Expression Networks}
 
 Let $\mathcal{T} = \{1, 2, \dots, n\}$ ($n \ge 3$) be the set of distinct commodity types, with positive unit values $\boldsymbol{\lambda} = (\lambda_1, \dots, \lambda_n) \in \mathbb{R}^n_{>0}$.
@@ -161,15 +161,6 @@ For any state $W \in \mathcal{W}$, define the \textbf{Equivalent Prominence} of 
     d_j(W) \coloneqq \frac{1}{n-1} \sum_{k \neq j} w_{kj} \in [0, 1]
 \end{equation}
 \end{definition}
-
-The canonical forms of value correspond to distinct geometric loci in $\mathcal{W}$:
-\begin{itemize}
-    \item \textbf{Form II (Total / Expanded Form):} The maximally symmetric interior centroid $W^{\text{II}}$, where $w^{\text{II}}_{ij} = \frac{1}{n-1}$ for all $i \neq j$, yielding $d_j(W^{\text{II}}) = \frac{1}{n-1}$ for all $j \in \mathcal{T}$.
-    \item \textbf{Form III (General Form of Value):} A corner configuration $W^{\text{III}(u^*)}$ indexed by a unique \textbf{General Equivalent} $u^* \in \mathcal{T}$, where every ordinary commodity $i \neq u^*$ directs $100\%$ of its value expression into $u^*$:
-    \begin{equation}
-        w^{\text{III}(u^*)}_{i u^*} = 1 \quad (\forall i \neq u^*) \implies d_{u^*}\!\left(W^{\text{III}(u^*)}\right) = 1, \quad d_k\!\left(W^{\text{III}(u^*)}\right) = \frac{w_{u^* k}}{n-1} \le \frac{1}{n-1} \quad (\forall k \neq u^*)
-    \end{equation}
-\end{itemize}
 
 \subsection{Micro-Foundations and the Global Social Commensurability Potential}
 
@@ -241,74 +232,54 @@ At the General Form attractor $W^{\text{III}(u^*)}$:
 \end{enumerate}
 \end{corollary}
 
-\vspace{1.5em}
-\hrule
-\vspace{1.5em}
+\newpage
 
+% ============================================================================
+% PART II / MODULE 2
+% ============================================================================
 \part{Module 2: Stochastic Exchange, the \textit{Salto Mortale}, and the Metamorphosis $C - M - C'$ (Volume I, Chapters 2 \& 3)}
-
-\section{Introduction to Module 2: From Ideal Price to Realized Value}
-
-In Chapter 1, the unit value $\lambda_i$ of a commodity and its money-price $p_i = \lambda_i / \lambda_m$ are derived as \textbf{ideal expectations} over the production measure $\mu_i$. However, as Marx transitions to Chapter 2 (\textit{``The Process of Exchange''}) and Chapter 3 (\textit{``Money, or the Circulation of Commodities''}), a crucial structural contradiction emerges:
-\begin{quote}
-\textit{``Money as a measure of value is the necessary form of appearance of the measure of value which is immanent in commodities, namely labour-time\dots The price of things is an ideal or notional form; they are not yet realized in gold.''} (Vol. I, Ch. 3, Sec. 1--2)
-\end{quote}
-A commodity owner brings a physical bundle $q_i \mathbf{e}_i$ to the market bearing \textbf{potential (ideal) value} $V^{\text{pot}}_i = q_i \lambda_i$. For private labor to be validated as actual social labor, the commodity must pass through a \textbf{stochastic realization filter}---what Marx terms the \textbf{\textit{salto mortale} (mortal leap)} of the commodity ($C_i \to M$). Moreover, once exchange is split into two temporally and spatially separated acts---sale ($C_i \to M$) and purchase ($M \to C_j$)---the identity of Say's Law is broken, and \textbf{the formal possibility of crisis} arises endogenously within simple circulation.
 
 \section{The Mutual Exclusion Principle and Bipartite Exchange Polarity (Chapter 2)}
 
-In Chapter 2, Marx establishes that a commodity cannot function as an immediate use-value to its own producer prior to exchange, whereas for its buyer it must function as a concrete use-value.
+In Chapter 1, unit value $\lambda_i$ and money-price $p_i = \lambda_i / \lambda_m$ are derived as ideal expectations over the production measure $\mu_i$. In Chapters 2 and 3, a commodity bundle $q_i \mathbf{e}_i$ enters the market bearing \textbf{potential (ideal) value} $V^{\text{pot}}_i = q_i \lambda_i$, which must be validated as actual social labor through the stochastic realization process $C_i \to M$ (\textit{salto mortale}).
 
 \begin{definition}[The Agent-Commodity State Tuple]
-Let $\mathcal{A} = \{1, 2, \dots, N\}$ be the population of private commodity owners. At time $t$, agent $\alpha \in \mathcal{A}$ is characterized by the state tuple:
+Let $\mathcal{A} = \{1, 2, \dots, N\}$ be the population of private commodity owners. At time $t$, agent $\alpha \in \mathcal{A}$ is characterized by a state tuple:
 \begin{equation}
     \mathcal{S}_\alpha(t) = \left( \mathbf{q}_\alpha(t), \, m_\alpha(t), \, \mathbf{u}_\alpha \right) \in \mathcal{U} \times \mathcal{U}_m \times \mathcal{B}(\mathcal{T}_0)
 \end{equation}
-where $\mathbf{q}_\alpha(t) = q_{\alpha, i} \mathbf{e}_i \in \mathcal{U}_i$ is the physical commodity bundle held by $\alpha$, $m_\alpha(t) \in \mathbb{R}_{\ge 0} \cdot \mathbf{e}_m$ is agent $\alpha$'s holding of the Universal Equivalent (Money), and $\mathbf{u}_\alpha: \mathcal{T}_0 \to \{0, 1\}$ is a binary \textbf{concrete need indicator} over ordinary commodities $\mathcal{T}_0 = \mathcal{T} \setminus \{m\}$.
+where $\mathbf{q}_\alpha(t) = q_{\alpha, i} \mathbf{e}_i \in \mathcal{U}_i$ is the physical commodity bundle produced by $\alpha$, $m_\alpha(t) \in \mathbb{R}_{\ge 0} \cdot \mathbf{e}_m$ is agent $\alpha$'s holding of Money, and $\mathbf{u}_\alpha: \mathcal{T}_0 \to \{0, 1\}$ is a binary concrete need indicator over ordinary commodities $\mathcal{T}_0 = \mathcal{T} \setminus \{m\}$.
 \end{definition}
 
 \begin{axiom}[The Non-Use-Value Condition of Commodity Production]
-For any commodity producer $\alpha \in \mathcal{A}_i$ producing in sector $i \in \mathcal{T}_0$:
+For any commodity producer $\alpha \in \mathcal{A}$ producing sector $i \in \mathcal{T}_0$:
 \begin{equation}
     u_\alpha(i) = 0 \quad \text{and} \quad \exists j \in \mathcal{T}_0 \setminus \{i\} \text{ such that } u_\alpha(j) = 1
 \end{equation}
+That is, one's own product is a pure bearer of exchange-value (a non-use-value to its owner) and must be alienated to an agent $\beta$ for whom $u_\beta(i) = 1$.
 \end{axiom}
-
-\begin{remark}
-Axiom 7.1 encodes Marx's proposition that a producer's own commodity has zero immediate use-value for its owner; it exists purely as a bearer of exchange-value (\textit{non-use-value to its owner}). To realize its use-value, $q_{\alpha, i}\mathbf{e}_i$ must be alienated to a distinct agent $\beta$ satisfying $u_\beta(i) = 1$.
-\end{remark}
 
 \section{The \textit{Salto Mortale} and the Realization Operator (Chapter 3, Section 2a)}
 
-In Chapter 1, Socially Necessary Labor Time was defined with respect to \textbf{technical production conditions} ($\lambda_i = \int_{\mathcal{L}_i} \sigma_i \tau_i \, d\mu_i$). In Chapter 3, Section 2a (\textit{``The Metamorphosis of Commodities''}), Marx introduces the \textbf{second (market-realization) dimension of SNLT}: even if every yard of linen is woven within the technically necessary labor time $\lambda_i$, if the ``social stomach'' cannot absorb the aggregate quantity $Q_i = \sum_{\alpha \in \mathcal{A}_i} q_{\alpha, i}$ at the normal price $p_i = \lambda_i / \lambda_m$, then a portion of society's labor time is rendered superfluous and devalued.
+In Chapter 3, Section 2a, Marx introduces the \textbf{second dimension of Socially Necessary Labor Time}: even if every unit of commodity $i$ is produced in the technically necessary time $\lambda_i$, if aggregate effective social demand cannot absorb the total sector output $Q_i = \sum_{\alpha \in \mathcal{A}_i} q_{\alpha, i}$, the excess labor time expended in sector $i$ fails to realize as social value.
 
-\begin{definition}[Aggregate Produced Value vs. Stochastic Effective Demand]
-For each sector $i \in \mathcal{T}_0$ over a market clearing horizon $[t, t+\Delta t]$:
-\begin{enumerate}[label=(\arabic*)]
-    \item \textbf{Total Produced Ideal Value ($V^{\text{prod}}_i$):}
-    \begin{equation}
-        V^{\text{prod}}_i = \lambda_i Q_i = \lambda_i \sum_{\alpha \in \mathcal{A}_i} q_{\alpha, i}
-    \end{equation}
-    \item \textbf{Stochastic Effective Monetary Demand ($D_i(\omega_t)$):} Let $M^{\text{circ}}_i(\omega_t) \in \mathbb{R}_{\ge 0}$ be a random variable on a filtered market probability space $(\Xi, \mathcal{F}, (\mathcal{F}_t)_{t \ge 0}, \mathbb{P})$ representing the aggregate quantity of money $\mathbf{e}_m$ directed by buyers toward sector $i$. In units of abstract labor time, the \textbf{socially validated demand for sector $i$} is:
-    \begin{equation}
-        D_i(\omega_t) = \lambda_m M^{\text{circ}}_i(\omega_t)
-    \end{equation}
+\begin{definition}[Produced Ideal Value vs. Effective Social Demand]
+For each sector $i \in \mathcal{T}_0$ over a market clearing period $[t, t+\Delta t]$:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Total Produced Ideal Value:} $V^{\text{prod}}_i = \lambda_i Q_i = \lambda_i \sum_{\alpha \in \mathcal{A}_i} q_{\alpha, i}$.
+    \item \textbf{Stochastic Effective Monetary Demand:} Let $M^{\text{circ}}_i(\omega_t) \in \mathbb{R}_{\ge 0}$ be a random variable on a filtered market probability space $(\Xi, \mathcal{F}, (\mathcal{F}_t)_{t \ge 0}, \mathbb{P})$ representing the total quantity of money $\mathbf{e}_m$ directed by buyers toward sector $i$. In units of abstract labor time, the socially allocated demand is $D_i(\omega_t) = \lambda_m M^{\text{circ}}_i(\omega_t)$.
 \end{enumerate}
 \end{definition}
 
 \begin{definition}[The \textit{Salto Mortale} Realization Operator $\mathcal{R}_i$]
-The transition from ideal commodity value $C_i$ to realized money $M$ is governed by a non-linear \textbf{Realization Operator} $\mathcal{R}_i: \mathcal{U}_i \times \Xi \to \mathcal{U}_m$, operating under two dual adjustment regimes:
-\begin{enumerate}[label=(\roman*)]
-    \item \textbf{Quantity-Rationing / Unsold Inventory Regime (Fixed Price $p_i = \lambda_i / \lambda_m$):} Each unit of commodity $i$ faces a realization survival probability:
+The transition from ideal commodity value $C_i$ to realized money $M$ is governed by a non-linear operator $\mathcal{R}_i: \mathcal{U}_i \times \Xi \to \mathcal{U}_m$:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Quantity-Rationing Regime (Fixed Price $p_i = \lambda_i / \lambda_m$):} Each unit of commodity $i$ faces a realization survival probability:
     \begin{equation}
         \pi_i(\omega_t) = \min\!\left(1, \; \frac{D_i(\omega_t)}{V^{\text{prod}}_i}\right) = \min\!\left(1, \; \frac{\lambda_m M^{\text{circ}}_i(\omega_t)}{\lambda_i Q_i}\right) \in [0, 1]
     \end{equation}
-    The realized value for producer $\alpha$ holding $q_{\alpha, i}\mathbf{e}_i$ is the contraction projection:
-    \begin{equation}
-        V^{\text{real}}_{\alpha, i}(\omega_t) = \lambda_m \mathcal{R}_i(q_{\alpha, i}\mathbf{e}_i, \omega_t) = \pi_i(\omega_t) q_{\alpha, i} \lambda_i \le V^{\text{pot}}_{\alpha, i}
-    \end{equation}
-    The residual $(1 - \pi_i(\omega_t)) q_{\alpha, i} \lambda_i$ represents \textbf{devalued (unvalidated) private labor}.
-    \item \textbf{Price-Flexibility / Market-Price Divergence Regime:} If the entire physical output $Q_i$ clears via an endogenous market price $\tilde{p}_i(\omega_t) = M^{\text{circ}}_i(\omega_t) / Q_i$, then the \textbf{market-validated unit labor value} adjusts to:
+    yielding realized value $V^{\text{real}}_{\alpha, i}(\omega_t) = \lambda_m \mathcal{R}_i(q_{\alpha, i}\mathbf{e}_i, \omega_t) = \pi_i(\omega_t) q_{\alpha, i} \lambda_i \le V^{\text{pot}}_{\alpha, i}$, with residual $(1 - \pi_i(\omega_t)) q_{\alpha, i} \lambda_i$ representing devalued labor time.
+    \item \textbf{Market-Price Divergence Regime (Flexible Price $\tilde{p}_i(\omega_t) = M^{\text{circ}}_i(\omega_t) / Q_i$):} The market-validated unit labor value shifts to:
     \begin{equation}
         \tilde{\lambda}_i(\omega_t) = \lambda_m \tilde{p}_i(\omega_t) = \lambda_i \left(\frac{D_i(\omega_t)}{V^{\text{prod}}_i}\right)
     \end{equation}
@@ -317,103 +288,212 @@ The transition from ideal commodity value $C_i$ to realized money $M$ is governe
 
 \section{Operator Algebra of the Circuit $C_i - M - C_j$}
 
-Simple commodity circulation $C_i - M - C_j$ decomposes into two antithetical phases:
+Simple commodity circulation decomposes into two antithetical operator phases:
 \begin{itemize}
-    \item \textbf{First Metamorphosis (Sale, $C_i \to M$):} Represented by the stochastic \textbf{Alienation Operator} $\hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_m$:
+    \item \textbf{First Metamorphosis (Sale, $C_i \to M$):} The stochastic Alienation Operator $\hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_m$:
     \begin{equation}
         \hat{\mathcal{S}}_i(q_i \mathbf{e}_i) = \left( \pi_i(\omega_t) q_i \frac{\lambda_i}{\lambda_m} \right) \mathbf{e}_m
     \end{equation}
-    \item \textbf{Second Metamorphosis (Purchase, $M \to C_j$):} Represented by the \textbf{Appropriation Operator} $\hat{\mathcal{B}}_j: \mathcal{U}_m \to \mathcal{U}_j$:
+    \item \textbf{Second Metamorphosis (Purchase, $M \to C_j$):} The Appropriation Operator $\hat{\mathcal{B}}_j: \mathcal{U}_m \to \mathcal{U}_j$:
     \begin{equation}
         \hat{\mathcal{B}}_j(m \mathbf{e}_m) = \left( m \frac{\lambda_m}{\lambda_j} \right) \mathbf{e}_j
     \end{equation}
 \end{itemize}
 
-\begin{proposition}[Topological Asymmetry Between Sale $\hat{\mathcal{S}}_i$ and Purchase $\hat{\mathcal{B}}_j$]
-In the Money-Form topology $G_{\text{IV}}$ (In-Star with sink $m$), the operators $\hat{\mathcal{S}}_i$ and $\hat{\mathcal{B}}_j$ exhibit structural polarity:
-\begin{enumerate}[label=(\arabic*)]
-    \item \textbf{Sale ($\hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_m$) is a Stochastic Bottleneck:} Because $i \in \mathcal{T}_0$ occupies the Relative Form, it possesses no immediate exchangeability ($\pi_i(\omega_t) \le 1$) and must leap across the directed edge $(i \to m)$ against finite monetary demand $M^{\text{circ}}_i$.
-    \item \textbf{Purchase ($\hat{\mathcal{B}}_j: \mathcal{U}_m \to \mathcal{U}_j$) Possesses Immediate Universal Exchangeability:} Because Money $m$ occupies the Universal Equivalent sink, moving from $m$ to any $j \in \mathcal{T}_0$ traverses the transposed Out-Star $G_{\text{IV}}^\top$, encountering no realization barrier ($\pi_m \equiv 1$ whenever physical inventories $Q_j > 0$ exist).
-\end{enumerate}
-Consequently, the composite circuit operator $\hat{\mathcal{M}}_{i \to j} \coloneqq \hat{\mathcal{B}}_j \circ \hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_j$ acts as a non-expansive stochastic contraction in value space:
+\begin{proposition}[Topological Asymmetry of Sale $\hat{\mathcal{S}}_i$ and Purchase $\hat{\mathcal{B}}_j$]
+In the Money-Form topology $G_{\text{IV}}$ (In-Star with sink $m$), Sale ($\hat{\mathcal{S}}_i$) is a stochastic contraction ($\pi_i(\omega_t) \le 1$) because ordinary commodities $i \in \mathcal{T}_0$ occupy the Relative Form and lack direct universal exchangeability. Conversely, Purchase ($\hat{\mathcal{B}}_j$) traverses the transposed Out-Star $G_{\text{IV}}^\top$ from the Universal Equivalent sink $m$, possessing unconditional realizability ($\pi_m \equiv 1$ whenever inventories $Q_j > 0$ exist). The composite circuit operator $\hat{\mathcal{M}}_{i \to j} \coloneqq \hat{\mathcal{B}}_j \circ \hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_j$ satisfies:
 \begin{equation}
-    \hat{\mathcal{M}}_{i \to j}(q_i \mathbf{e}_i) = \left( \pi_i(\omega_t) q_i \frac{\lambda_i}{\lambda_j} \right) \mathbf{e}_j \implies \mathbb{E}\!\left[V\!\left(\hat{\mathcal{M}}_{i \to j}(q_i \mathbf{e}_i)\right)\right] = \mathbb{E}[\pi_i] q_i \lambda_i \le V(q_i \mathbf{e}_i)
+    \hat{\mathcal{M}}_{i \to j}(q_i \mathbf{e}_i) = \left( \pi_i(\omega_t) q_i \frac{\lambda_i}{\lambda_j} \right) \mathbf{e}_j, \quad \mathbb{E}\!\left[V\!\left(\hat{\mathcal{M}}_{i \to j}(q_i \mathbf{e}_i)\right)\right] \le V(q_i \mathbf{e}_i)
 \end{equation}
 \end{proposition}
 
-\section{Breaking Say's Law: Continuous-Time Markov Circulation and the Crisis Bifurcation Theorem (Chapter 3, Sections 2b \& 3)}
+\section{Breaking Say's Law: Markov Circulation Dynamics and the Crisis Bifurcation (Chapter 3, Sections 2b \& 3)}
 
-In classical political economy (Say, Ricardo, Mill), money is treated as a neutral veil, collapsing $C_i - M - C_j$ into direct barter $C_i \leftrightarrow C_j$ and rendering general overproduction impossible. Marx refutes Say's Law in Chapter 3 by demonstrating that because $C_i \to M$ and $M \to C_j$ are separated by an intermediate holding state $M$, \textbf{any agent who has sold ($C_i \to M$) is under no immediate compulsion to buy ($M \to C_j$)}. Money can arrest its metamorphosis and petrify into a \textbf{Hoard} (\textit{Schatzbildung}, Ch. 3, Sec. 3a).
+Because $C_i \to M$ and $M \to C_j$ are separated in time by an intermediate holding state $M$, an agent who has sold ($C_i \to M$) is under no compulsion to immediately buy ($M \to C_j$). Money can immobilize itself as a \textbf{Hoard} (\textit{Schatzbildung}).
 
-\subsection{The Four-State Circulation Process and Marx's Quantity of Money Law}
-
-\begin{definition}[Continuous-Time Circulation Process]
-Each unit of social value in the circulation sphere transitions across four macroscopic states $\Sigma = \{\mathbf{C}, \mathbf{M}_{\text{circ}}, \mathbf{M}_{\text{hoard}}, \mathbf{K}\}$:
+\begin{definition}[Four-State Circulation Markov Process]
+Social value in circulation transitions across four states $\Sigma = \{\mathbf{C}, \mathbf{M}_{\text{circ}}, \mathbf{M}_{\text{hoard}}, \mathbf{K}\}$ with macro-distribution $\mathbf{x}(t) = (x_C(t), x_M(t), x_H(t), x_K(t))^\top$:
 \begin{enumerate}[label=(\arabic*)]
-    \item $\mathbf{C}$ (\textbf{Commodity Capital on Market}): Waiting to execute the \textit{salto mortale} $C \to M$.
-    \item $\mathbf{M}_{\text{circ}}$ (\textbf{Active Circulating Medium}): Money actively executing purchases $M \to C$.
-    \item $\mathbf{M}_{\text{hoard}}$ (\textbf{Hoarded Money / Liquidity Reserve}): Money withdrawn from active circulation into idle hoards.
-    \item $\mathbf{K}$ (\textbf{Crisis / Defaulted Inventory}): Unsold commodities whose waiting time exceeds their physical or credit-clearing expiration horizon.
+    \item $\mathbf{C}$ (\textbf{Commodity Capital on Market}): Realizes into $\mathbf{M}_{\text{circ}}$ at rate $\gamma_{\text{sale}}(x_M) = \beta x_M$ ($\beta > 0$), or decays into crisis/default state $\mathbf{K}$ at expiration hazard rate $\delta_{\text{crisis}} > 0$.
+    \item $\mathbf{M}_{\text{circ}}$ (\textbf{Active Circulating Medium}): Executes purchases $\mathbf{M}_{\text{circ}} \to \mathbf{C}$ at rate $\mu_{\text{buy}} > 0$, or withdraws into hoards $\mathbf{M}_{\text{hoard}}$ at rate $\sigma_{\text{hoard}} \ge 0$.
+    \item $\mathbf{M}_{\text{hoard}}$ (\textbf{Hoarded Money / Liquidity Reserve}): Re-enters active circulation $\mathbf{M}_{\text{hoard}} \to \mathbf{M}_{\text{circ}}$ at dishoarding rate $\rho_{\text{dishoard}} > 0$.
+    \item $\mathbf{K}$ (\textbf{Crisis / Unrealized Default State}): Absorbing or distressed inventory state resulting from failed realization.
 \end{enumerate}
-Let $\mathbf{x}(t) = (x_C(t), x_M(t), x_H(t), x_K(t))^\top$ denote the state distribution, with transition rates:
-\begin{itemize}
-    \item $\gamma_{\text{sale}}(x_M) = \beta x_M$: Rate of commodity realization $\mathbf{C} \to \mathbf{M}_{\text{circ}}$, proportional to active circulating money $x_M(t)$ and turnover velocity factor $\beta > 0$.
-    \item $\mu_{\text{buy}} > 0$: Rate at which active money purchases commodities $\mathbf{M}_{\text{circ}} \to \mathbf{C}$.
-    \item $\sigma_{\text{hoard}} \ge 0$: Rate of hoarding withdrawal $\mathbf{M}_{\text{circ}} \to \mathbf{M}_{\text{hoard}}$.
-    \item $\rho_{\text{dishoard}} > 0$: Rate of dishoarding re-injection $\mathbf{M}_{\text{hoard}} \to \mathbf{M}_{\text{circ}}$.
-    \item $\delta_{\text{crisis}} > 0$: Expiration / credit-default hazard rate $\mathbf{C} \to \mathbf{K}$ when realization stalls.
-\end{itemize}
 \end{definition}
 
-\begin{proposition}[Marx's Law of the Quantity of Circulating Money --- Ch. 3, Sec. 2b \& 3b]
-Let $P_{\text{sum}}(t) = \sum_{i \in \mathcal{T}_0} p_i Q_i(t) = \frac{1}{\lambda_m} \sum_{i \in \mathcal{T}_0} \lambda_i Q_i(t)$ be the aggregate sum of commodity prices over period $T$, let $K_{\text{credit}}(t)$ be obligations cleared via mutual bilateral debt cancellation, let $D_{\text{due}}(t)$ be maturing promissory notes requiring settlement in money as Means of Payment, and let $v$ be the average turnover velocity of a unit of money $\mathbf{e}_m$. The required active circulating money stock $M^{\text{active}}(t)$ satisfies:
+\begin{proposition}[Marx's Law of the Quantity of Circulating Money]
+Let $P_{\text{sum}}(t) = \sum_{i \in \mathcal{T}_0} p_i Q_i(t) = \frac{1}{\lambda_m} \sum_{i \in \mathcal{T}_0} \lambda_i Q_i(t)$ be the sum of prices of commodities in circulation over period $T$, $K_{\text{credit}}(t)$ be mutual credit offsets, $D_{\text{due}}(t)$ be maturing debt obligations, and $v$ be the velocity of money. Then the required active circulating money stock is:
 \begin{equation}
     M^{\text{active}}(t) = \frac{P_{\text{sum}}(t) - K_{\text{credit}}(t) + D_{\text{due}}(t)}{v} = \frac{1}{v \lambda_m} \left( \sum_{i \in \mathcal{T}_0} \lambda_i Q_i(t) - \lambda_m K_{\text{credit}}(t) + \lambda_m D_{\text{due}}(t) \right)
 \end{equation}
-Contrary to the neoclassical Quantity Theory ($MV = PY$), intrinsic labor values $(\lambda_i, \lambda_m)$ determine prices $p_i$, which in turn determine $M^{\text{active}}(t)$; fluctuations in $M^{\text{active}}(t)$ relative to total bullion $M^{\text{total}}$ are buffered by the hoard reservoir $M^{\text{hoard}}(t) = M^{\text{total}} - M^{\text{active}}(t)$.
+Unlike neoclassical monetarism ($MV = PY$), prices $p_i = \lambda_i / \lambda_m$ are determined prior to circulation by the production measure $\mu_i$, and fluctuations in required $M^{\text{active}}(t)$ are buffered by the hoard reservoir $M^{\text{hoard}}(t) = M^{\text{total}} - M^{\text{active}}(t)$.
 \end{proposition}
 
-\subsection{The Saddle-Node Realization Crisis Theorem}
-
 \begin{theorem}[Breakability of $C - M - C'$ and the Realization Crisis Phase Transition]
-Let the total money stock be normalized to $x_M(t) + x_H(t) = M_0$, where the liquidity subsystem satisfies:
-\begin{equation}
-    \dot{x}_M = \rho_{\text{dishoard}}(M_0 - x_M) - \sigma_{\text{hoard}} x_M \implies x_M^*(h) = \frac{M_0}{1 + h}, \quad h \coloneqq \frac{\sigma_{\text{hoard}}}{\rho_{\text{dishoard}}} \in [0, \infty)
-\end{equation}
-In steady circulation, the \textbf{Global Realization Efficiency} (the fraction of commodities surviving the \textit{salto mortale} $C \to M$ rather than decaying into $\mathbf{K}$) is:
+Let total money be normalized to $M^{\text{total}} = x_M(t) + x_H(t) = M_0$. Under the hoarding dynamics $\dot{x}_M = \rho_{\text{dishoard}}(M_0 - x_M) - \sigma_{\text{hoard}} x_M$, the steady-state active money stock is $x_M^*(h) = \frac{M_0}{1 + h}$, where $h \coloneqq \sigma_{\text{hoard}} / \rho_{\text{dishoard}}$ is the \textbf{Hoarding Propensity Ratio}, and the \textbf{Global Realization Efficiency} is:
 \begin{equation}
     \mathcal{E}_{\text{real}}(h) = \frac{\gamma_{\text{sale}}(x_M^*)}{\gamma_{\text{sale}}(x_M^*) + \delta_{\text{crisis}}} = \frac{\beta M_0}{\beta M_0 + \delta_{\text{crisis}}(1 + h)}
 \end{equation}
-Suppose hoarding is endogenously coupled to realization failure (flight to liquidity during credit defaults, Ch. 3, Sec. 3b), such that $h(u) = h_0 + \tilde{\xi} u^2$, where $u \coloneqq 1 - \mathcal{E}_{\text{real}} \in [0, 1]$ is the unrealized crisis share, $h_0 = \sigma_0 / \rho_{\text{dishoard}} \ge 0$ is baseline hoarding, and $\tilde{\xi} = \xi / \rho_{\text{dishoard}} > 0$ is credit-panic sensitivity. Then:
-\begin{enumerate}[label=(\arabic*)]
-    \item Every equilibrium crisis share $u^* \in (0, 1)$ satisfies the transcendental balance equation:
+Suppose hoarding is endogenously coupled to realization failure via credit-default panic: $h(u) = h_0 + \tilde{\xi} u^2$, where $u \coloneqq 1 - \mathcal{E}_{\text{real}} \in [0, 1]$ is the unrealized crisis share and $\tilde{\xi} = \xi / \rho_{\text{dishoard}} > 0$ is panic sensitivity. Then:
+\begin{enumerate}[label=(\roman*)]
+    \item Every equilibrium $u^* \in (0, 1)$ satisfies the fixed-point balance equation:
     \begin{equation}
-        L(u) = R(u), \quad \text{where } L(u) \coloneqq \left(\frac{\beta M_0}{\delta_{\text{crisis}}}\right) \frac{u}{1 - u} \quad \text{and} \quad R(u) \coloneqq 1 + h_0 + \tilde{\xi} u^2
+        \underbrace{\frac{\beta M_0}{\delta_{\text{crisis}}} \frac{u}{1 - u}}_{L(u)} = \underbrace{1 + h_0 + \tilde{\xi} u^2}_{R(u)}
     \end{equation}
-    \item There exists a critical panic threshold $\tilde{\xi}_c > 0$ (determined by the tangency condition $L(u_c) = R(u_c)$ and $L'(u_c) = R'(u_c)$) at which the circulation system undergoes a \textbf{saddle-node bifurcation}, generating a stable high-crisis \textbf{Monetary Famine / Realization Collapse Attractor} ($u_3^* \to 1$, $x_M^* \to 0$, $x_H^* \to M_0$).
+    \item As $\tilde{\xi}$ crosses the critical threshold $\tilde{\xi}_c$ defined by the tangency $L(u_c) = R(u_c)$ and $L'(u_c) = R'(u_c)$, the circulation system undergoes a \textbf{saddle-node bifurcation}, generating a stable \textbf{Acute Monetary Crisis / Liquidity Trap Attractor} ($u_3^* \to 1$, $x_M^* \to 0$) even prior to capitalist production.
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-Substituting $x_M^* = \frac{M_0}{1 + h(u)}$ into the definition of the unrealized crisis share $u = 1 - \mathcal{E}_{\text{real}}(h(u))$ gives:
-\begin{equation}
-    u = \frac{\delta_{\text{crisis}}\left(1 + h_0 + \tilde{\xi} u^2\right)}{\beta M_0 + \delta_{\text{crisis}}\left(1 + h_0 + \tilde{\xi} u^2\right)} \iff \left(\frac{\beta M_0}{\delta_{\text{crisis}}}\right) \frac{u}{1 - u} = 1 + h_0 + \tilde{\xi} u^2
-\end{equation}
-establishing $L(u) = R(u)$. On the interval $u \in [0, 1)$, $L(0) = 0 < R(0) = 1 + h_0$ and $\lim_{u \to 1^-} L(u) = +\infty > R(1) = 1 + h_0 + \tilde{\xi}$. For small $\tilde{\xi} > 0$, $L(u)$ and $R(u)$ intersect at a unique low-crisis equilibrium $u_1^* \ll 1$ where $L'(u_1^*) > R'(u_1^*)$ (asymptotically stable). However, for sufficiently large capacity ratio $B / \delta_{\text{crisis}} = \beta M_0 / \delta_{\text{crisis}}$, varying $\tilde{\xi}$ causes the parabola $R(u)$ to become tangent to $L(u)$ at an interior point $u_c \in (0, 2/3)$ satisfying:
-\begin{equation}
-    \frac{\beta M_0}{\delta_{\text{crisis}}} \frac{u_c}{1 - u_c} = 1 + h_0 + \tilde{\xi}_c u_c^2 \quad \text{and} \quad \frac{\beta M_0}{\delta_{\text{crisis}}} \frac{1}{(1 - u_c)^2} = 2 \tilde{\xi}_c u_c
-\end{equation}
-For $\tilde{\xi} > \tilde{\xi}_c$, the system possesses three equilibria $0 < u_1^* < u_2^* < u_3^* < 1$, where $u_2^*$ is an unstable tipping point ($L'(u_2^*) < R'(u_2^*)$) and $u_3^*$ is a locally asymptotically stable \textbf{Realization Crisis Attractor} ($L'(u_3^*) > R'(u_3^*)$). If an exogenous demand or credit shock pushes $u(t)$ above $u_2^*$, self-reinforcing hoarding drains active circulation $x_M \to x_H$, driving the economy to $u_3^*$. Thus, the temporal separation of sale ($C \to M$) and purchase ($M \to C$) combined with the hoarding function of money is mathematically sufficient to generate endogenous realization crises prior to capitalist production.
+Substituting $x_M^* = \frac{M_0}{1 + h(u)}$ into $u = 1 - \mathcal{E}_{\text{real}} = \frac{\delta_{\text{crisis}}}{\beta x_M^* + \delta_{\text{crisis}}}$ yields $u = \frac{\delta_{\text{crisis}}(1 + h_0 + \tilde{\xi} u^2)}{\beta M_0 + \delta_{\text{crisis}}(1 + h_0 + \tilde{\xi} u^2)}$. Rearranging algebraically isolates $L(u) = \frac{\beta M_0}{\delta_{\text{crisis}}} \frac{u}{1-u}$ on the left and $R(u) = 1 + h_0 + \tilde{\xi} u^2$ on the right. Since $L(0) = 0 < R(0) = 1 + h_0$ and $\lim_{u \to 1^-} L(u) = +\infty > R(1)$, at least one root exists in $(0,1)$. Because $L(u)$ is strictly increasing with $L''(u) = \frac{2\beta M_0}{\delta_{\text{crisis}}(1-u)^3}$ and $R(u)$ is quadratic, varying $\tilde{\xi}$ across the tangency condition produces a classic fold (saddle-node) bifurcation with two stable attractors ($u_1^* \ll 1$ and $u_3^* \to 1$) separated by an unstable tipping threshold $u_2^*$.
 \end{proof}
 
-\section{Architecture of the Research Programme}
+\newpage
 
-Our ongoing formalization of \textit{Capital} proceeds across four interconnected modules:
-\begin{itemize}
-    \item \textbf{Module 1: Axiomatics of the Commodity \& Value-Form Dynamics (Vol. I, Ch. 1).} Complete.
-    \item \textbf{Module 2: Stochastic Exchange \& The Metamorphosis $C - M - C'$ (Vol. I, Ch. 2--3).} Complete.
-    \item \textbf{Module 3: The Valorization Operator \& Exploitation $M - C \dots P \dots C' - M'$ (Vol. I, Ch. 4--11).} Dynamical systems modeling the contradiction of the General Formula for Capital, the distinction between Labor-Power (a stock commodity with value $\lambda_{lp}$) and Living Labor (a flow operator injecting $\Delta V > \lambda_{lp}$), and the extraction of absolute and relative surplus-value.
-    \item \textbf{Module 4: Reproduction Schemes, Mean Field Accumulation \& Transformation Invariance (Vol. II \& Vol. III).} Stochastic optimal control, Fokker-Planck capital distributions, and conservation manifolds linking values to prices of production.
-\end{itemize}
+% ============================================================================
+% PART III / MODULE 3
+% ============================================================================
+\part{Module 3: The Valorization Operator, the Conservation Contradiction, and the Mechanics of Surplus-Value (Volume I, Chapters 4--11)}
+
+\section{Topological Inversion of the Circuit: $C - M - C$ vs. $M - C - M'$ (Chapter 4)}
+
+In Part II of \textit{Capital} (Chapters 4--6), Marx introduces the \textbf{General Formula for Capital}:
+\begin{equation}
+    M - C - M' \quad \text{where } M' = M + \Delta M, \; \Delta M > 0
+\end{equation}
+Whereas simple circulation $\hat{\mathcal{M}}_{i \to j} = \hat{\mathcal{B}}_j \circ \hat{\mathcal{S}}_i : \mathcal{U}_i \to \mathcal{U}_j$ maps between qualitatively distinct physical cones under quantitative value equivalence ($V_i = V_j$), the capital circuit $\hat{\mathcal{K}}_i = \hat{\mathcal{S}}'_i \circ \hat{\mathcal{P}} \circ \hat{\mathcal{B}}_i : \mathcal{U}_m \to \mathcal{U}_m$ is an endomorphism on the 1-dimensional Universal Equivalent space $\mathcal{U}_m$. Because its initial and terminal spaces are qualitatively identical ($\mathbb{R}_{\ge 0} \cdot \mathbf{e}_m$), the transformation is tautological unless it achieves a strictly positive scalar dilation $\Delta M > 0$ (\textbf{Surplus-Value} $s$).
+
+\section{The Impossibility Theorem of Pure Circulation (Chapter 5)}
+
+In Chapter 5 (\textit{``Contradictions in the General Formula''}), Marx proves that surplus-value ($\Delta V > 0$) cannot arise inside the sphere of circulation, even under arbitrary non-equivalent exchange (``buying cheap and selling dear'').
+
+\begin{theorem}[Conservation of Value in Pure Circulation under Skew-Symmetric Markups]
+Let $\mathcal{A} = \{1, 2, \dots, N\}$ be a closed system of trading agents. Prior to trade, agent $\alpha \in \mathcal{A}$ holds commodity bundle $\mathbf{q}_\alpha \in \bigoplus_{i \in \mathcal{T}_0} \mathcal{U}_i$ and money stock $m_\alpha \mathbf{e}_m \in \mathcal{U}_m$, with initial total value:
+\begin{equation}
+    V_\alpha(0) = \sum_{i \in \mathcal{T}_0} \lambda_i q_{\alpha, i} + \lambda_m m_\alpha
+\end{equation}
+Suppose any pair of agents $(\alpha, \beta)$ executes bilateral trades of commodity $i$ in physical volume $X_{\alpha \beta}^{(i)} = -X_{\beta \alpha}^{(i)}$ ($X_{\alpha \beta}^{(i)} > 0$ denoting net sale from $\alpha$ to $\beta$) at an arbitrary negotiated market price $p_{\alpha \beta}^{(i)} = \frac{\lambda_i}{\lambda_m}(1 + \delta_{\alpha \beta}^{(i)})$, where $\delta_{\alpha \beta}^{(i)} \in (-1, \infty)$ is an arbitrary bilateral markup/markdown parameter. Then:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Individual Value Shift:} Agent $\alpha$'s post-exchange value changes by:
+    \begin{equation}
+        \Delta V_\alpha = V_\alpha(1) - V_\alpha(0) = \sum_{\beta \in \mathcal{A}} \sum_{i \in \mathcal{T}_0} \lambda_i \delta_{\alpha \beta}^{(i)} X_{\alpha \beta}^{(i)}
+    \end{equation}
+    \item \textbf{Global Conservation Invariance:} Across the entire economy (or any closed trading sub-coalition), aggregate value is strictly invariant:
+    \begin{equation}
+        \Delta V_{\text{total}} = \sum_{\alpha \in \mathcal{A}} \Delta V_\alpha \equiv 0
+    \end{equation}
+    \item \textbf{Zero-Sum Uniform Surcharge:} If every seller imposes a uniform proportional markup $\delta_{\alpha \beta}^{(i)} = \delta > 0$ when selling and pays $\delta$ when buying with balanced trade ($\sum_{i, \beta} \lambda_i X_{\alpha \beta}^{(i)} = 0$), then $\Delta V_\alpha = 0$ for every individual agent $\alpha \in \mathcal{A}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+When $\alpha$ sells $X_{\alpha \beta}^{(i)}$ units of commodity $i$ to $\beta$ at price $p_{\alpha \beta}^{(i)}$, $\alpha$ surrenders commodity value $\lambda_i X_{\alpha \beta}^{(i)}$ and receives money value $\lambda_m p_{\alpha \beta}^{(i)} X_{\alpha \beta}^{(i)} = \lambda_i (1 + \delta_{\alpha \beta}^{(i)}) X_{\alpha \beta}^{(i)}$, yielding a net bilateral value transfer $\pi_{\alpha \beta}^{(i)} = \lambda_i \delta_{\alpha \beta}^{(i)} X_{\alpha \beta}^{(i)}$. For counterparty $\beta$, the net value change is $\pi_{\beta \alpha}^{(i)} = -\lambda_i \delta_{\alpha \beta}^{(i)} X_{\alpha \beta}^{(i)} = -\pi_{\alpha \beta}^{(i)}$. Thus, for each commodity $i$, the value-transfer matrix $\Pi^{(i)} = [\pi_{\alpha \beta}^{(i)}]_{\alpha, \beta \in \mathcal{A}}$ is strictly skew-symmetric: $(\Pi^{(i)})^\top = -\Pi^{(i)}$. Summing over all agents yields:
+\begin{equation}
+    \Delta V_{\text{total}} = \sum_{i \in \mathcal{T}_0} \mathbf{1}^\top \Pi^{(i)} \mathbf{1} = \frac{1}{2} \sum_{i \in \mathcal{T}_0} \mathbf{1}^\top \left(\Pi^{(i)} + \left(\Pi^{(i)}\right)^\top\right) \mathbf{1} = 0
+\end{equation}
+proving that pure circulation is a strictly conservative (measure-preserving) operator on total value.
+\end{proof}
+
+\section{Labor-Power vs. Living Labor: Stock-Flow Operator Splitting (Chapter 6)}
+
+To satisfy the boundary-value problem of Chapter 5---where surplus-value must be generated while obeying strict equivalence ($\delta_{\alpha \beta} \equiv 0$) at every market node---the capitalist must find on the market a commodity whose \textbf{Use-Value is itself the active source of Value}. Marx resolves this via a rigorous dimensional distinction between \textbf{Labor-Power} (\textit{Arbeitskraft}, a stock commodity) and \textbf{Living Labor} (\textit{Arbeit}, a continuous flow operator).
+
+\begin{definition}[Labor-Power $lp \in \mathcal{T}_0$ and its Stock Reproduction Value $\lambda_{lp}$]
+Let $lp \in \mathcal{T}_0$ denote the commodity \textbf{Labor-Power}, sold for a discrete contract period (1 working day) under the \textbf{Double Freedom Precondition} (the worker $\omega$ possesses legal self-ownership over $\mathcal{U}_{lp}$ but holds zero means of production, $\mathbf{q}_\omega^{\text{means}} = \mathbf{0}$). Let $\mathbf{b} = (b_1, b_2, \dots, b_n)^\top \in \mathbb{R}^n_{\ge 0}$ be the culturally and historically determined daily subsistence bundle required to reproduce the worker's capacity, family, and skill. The unit stock value of Labor-Power is the inner product:
+\begin{equation}
+    \lambda_{lp} = V(\mathbf{b}) = \boldsymbol{\lambda}^\top \mathbf{b} = \sum_{i \in \mathcal{T}_0} \lambda_i b_i \quad \text{[measured in hours/day]}
+\end{equation}
+\end{definition}
+
+\begin{definition}[Living Labor as a Value-Generating Flow Operator $\hat{\mathcal{L}}_T$]
+The consumption of the use-value of Labor-Power inside the production process $\mathcal{P}$ over a working day of duration $T \in (0, T_{\max}]$ is \textbf{Living Labor}---a continuous flow operator $\hat{\mathcal{L}}_T$ projecting concrete labor through the Real Abstraction Operator $\mathcal{A}$ at normalized socially average intensity $\iota(t) \equiv 1$:
+\begin{equation}
+    \Delta V(T) = \operatorname{Use-Value}(lp)\big|_{[0, T]} = \int_0^T \iota(t) \, dt = T \quad \text{[measured in hours/day]}
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Resolution of the Conservation Contradiction via Stock-Flow Defect]
+Under strict equivalence of exchange in all commodity and labor markets ($\delta_{\alpha \beta} \equiv 0$), the net surplus-value $s$ generated per worker per day is the \textbf{Stock-Flow Defect} between the flow action of $\hat{\mathcal{L}}_T$ and the stock reproduction value $\lambda_{lp}$:
+\begin{equation}
+    s(T, \mathbf{b}, \boldsymbol{\lambda}) = \Delta V(T) - \lambda_{lp} = \int_0^T \iota(t) \, dt - \boldsymbol{\lambda}^\top \mathbf{b} = T - \sum_{i \in \mathcal{T}_0} \lambda_i b_i
+\end{equation}
+Whenever social productivity satisfies $\boldsymbol{\lambda}^\top \mathbf{b} < T$, strictly positive surplus-value $s > 0$ is generated without violating equivalent exchange at any boundary of circulation.
+\end{theorem}
+
+\section{Bifurcation of the Production Process: Constant vs. Variable Capital (Chapters 7--9)}
+
+Consider the production of $Q_j$ units of commodity $j$ over 1 working day using physical means of production $\mathbf{a}_j = (a_{1j}, \dots, a_{nj})^\top \in \mathbb{R}^n_{\ge 0}$ and $L_j > 0$ living workers each working $T$ hours/day.
+
+\begin{proposition}[Dual Operator Action of Concrete vs. Abstract Labor in Production]
+During the production interval $[0, T]$, living labor executes two simultaneous, orthogonal mathematical operations:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Value-Preservation Homomorphism (Constant Capital $c_j$):} Through its \textit{concrete useful} character, labor preserves and transfers the pre-existing value of the consumed means of production $\mathbf{a}_j$ into the output $Q_j \mathbf{e}_j$ as an exact scalar invariant:
+    \begin{equation}
+        c_j = V_{\text{transferred}}(\mathbf{a}_j) = \boldsymbol{\lambda}^\top \mathbf{a}_j = \sum_{i \in \mathcal{T}_0} \lambda_i a_{ij} \implies \Delta c_j \equiv 0
+    \end{equation}
+    \item \textbf{Value-Dilation Operator (Variable Capital $v_j$):} Through its \textit{abstract social} character, living labor injects fresh value $L_j T$, replacing its advanced variable capital $v_j = L_j \lambda_{lp}$ and generating surplus-value $s_j$:
+    \begin{equation}
+        v_j \xrightarrow{\hat{\mathcal{L}}_T} v_j + s_j = L_j \lambda_{lp} + L_j \left(T - \lambda_{lp}\right) = L_j T \implies \Delta v_j = s_j = L_j \left(T - \boldsymbol{\lambda}^\top \mathbf{b}\right) > 0
+    \end{equation}
+\end{enumerate}
+The total value of output $C'_j = Q_j \mathbf{e}_j$ is the affine functional in $T$:
+\begin{equation}
+    W_j(T) = c_j + v_j + s_j(T) = \underbrace{\boldsymbol{\lambda}^\top \mathbf{a}_j}_{\text{Dead Labor } (c_j)} + \underbrace{L_j \left(\boldsymbol{\lambda}^\top \mathbf{b}\right)}_{\text{Necessary Labor } (v_j)} + \underbrace{L_j \left(T - \boldsymbol{\lambda}^\top \mathbf{b}\right)}_{\text{Surplus Labor } (s_j)}
+\end{equation}
+\end{proposition}
+
+\begin{definition}[Rate of Surplus-Value / Rate of Exploitation $e$]
+The \textbf{Rate of Surplus-Value} $e$ is the fractional dilation of variable capital alone:
+\begin{equation}
+    e \coloneqq \frac{\Delta v}{v} = \frac{s}{v} = \frac{T - \lambda_{lp}}{\lambda_{lp}} = \frac{T - \boldsymbol{\lambda}^\top \mathbf{b}}{\boldsymbol{\lambda}^\top \mathbf{b}} = \frac{t_s}{t_n}
+\end{equation}
+partitioning the working day $T = t_n + t_s$ into Necessary Labor Time $t_n = \frac{T}{1+e}$ and Surplus Labor Time $t_s = \frac{e}{1+e}T$.
+\end{definition}
+
+\section{Differential Geometry of Exploitation, the Working Day, and the Three Laws of Surplus-Value Mass (Chapters 10--11)}
+
+\subsection{Total Differential Decomposition of Exploitation Strategies}
+
+Taking the total differential of $e(T, \boldsymbol{\lambda}, \mathbf{b}) = \frac{T}{\boldsymbol{\lambda}^\top \mathbf{b}} - 1$ on the production manifold yields:
+\begin{equation}
+    de = \underbrace{\left(\frac{1}{\lambda_{lp}}\right) dT}_{\substack{\text{Absolute Surplus-Value} \\ \text{(Ch. 10: Working Day Elongation)}}} + \underbrace{\left(-\frac{T}{\lambda_{lp}^2} \mathbf{b}^\top d\boldsymbol{\lambda}\right)}_{\substack{\text{Relative Surplus-Value} \\ \text{(Ch. 12: Productivity Revolution)}}} + \underbrace{\left(-\frac{T}{\lambda_{lp}^2} \boldsymbol{\lambda}^\top d\mathbf{b}\right)}_{\substack{\text{Real Wage Compression} \\ \text{(Depression below } \lambda_{lp}\text{)}}}
+\end{equation}
+
+\subsection{The Antinomy of the Working Day and Biological Spoliation (Chapter 10)}
+
+In Chapter 10, Marx shows that when the working day $T$ exceeds a physiological regeneration threshold $T_{\text{phys}}$, overwork induces premature exhaustion and shortens the worker's productive lifespan. We formalize this via the \textbf{True Biological Reproduction Cost Functional}:
+\begin{equation}
+    \Lambda_{lp}^{\text{true}}(T) = \lambda_{lp} + \gamma \max\!\left(0, \, T - T_{\text{phys}}\right)^2, \quad \gamma > 0
+\end{equation}
+Whenever $T > T_{\text{phys}}$ while the daily wage remains fixed at $\lambda_{lp}$, capital covertly liquidates the worker's biological stock ($\Lambda_{lp}^{\text{true}}(T) - \lambda_{lp} > 0$), violating long-run equivalent exchange. Because ``between equal rights, force decides,'' the working day $T(t) \in (\lambda_{lp}, T_{\max})$ evolves via the \textbf{Class-Struggle Differential Game}:
+\begin{equation}
+    \dot{T} = \kappa_K \frac{\partial s}{\partial T} (T_{\max} - T) - \kappa_W \frac{\partial \Lambda_{lp}^{\text{true}}}{\partial T} (T - \lambda_{lp}) = \kappa_K (T_{\max} - T) - 2 \kappa_W \gamma \max\!\left(0, \, T - T_{\text{phys}}\right)(T - \lambda_{lp})
+\end{equation}
+where $\kappa_K > 0$ and $\kappa_W > 0$ denote the bargaining/coercive force parameters of Capital and Labor/State factory legislation, respectively.
+
+\subsection{Marx's Three Laws of the Mass of Surplus-Value (Chapter 11)}
+
+\begin{theorem}[The Three Laws of Chapter 11 and the Absolute Substitution Barrier]
+Let an enterprise employ $L$ workers with variable capital per worker $\lambda_{lp}$ and working day $T \le T_{\max} < 24\text{ hrs}$:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{First Law (Proportionality to Variable Capital \& Rate of Exploitation):} The aggregate Mass of Surplus-Value $S$ is given by:
+    \begin{equation}
+        S(L, T, \lambda_{lp}) = V_{\text{total}} \cdot e = L \cdot \lambda_{lp} \left(\frac{T - \lambda_{lp}}{\lambda_{lp}}\right) = L \left(T - \lambda_{lp}\right)
+    \end{equation}
+    \item \textbf{Second Law (Iso-Surplus Compensation Differential):} Along an iso-surplus manifold $S(L, T) = S_0$, a reduction in the living workforce $dL < 0$ (via mechanization) requires a compensating relative increase in the working day (or rate of exploitation):
+    \begin{equation}
+        dS = (T - \lambda_{lp}) dL + L \, dT = 0 \implies \frac{dT}{T - \lambda_{lp}} = -\frac{dL}{L}
+    \end{equation}
+    \item \textbf{Third Law (Absolute Physical Barrier to Labor-Saving Substitution):} Because $T$ is bounded above by $T_{\max} < 24\text{ hrs}$, there exists a strictly positive critical workforce threshold:
+    \begin{equation}
+        L_{\text{crit}} \coloneqq \frac{S_0}{T_{\max} - \lambda_{lp}} > 0
+    \end{equation}
+    such that for any $L < L_{\text{crit}}$, $S(L, T) < S_0$ for all admissible $T \in (\lambda_{lp}, T_{\max}]$. That is, beyond $L_{\text{crit}}$, no extension of the working day or intensification of exploitation can compensate for the expulsion of living labor from production.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Parts (1) and (2) follow immediately from definition and total differentiation of $S(L, T) = L(T - \lambda_{lp})$. For Part (3), since $T \le T_{\max}$, we have $S(L, T) = L(T - \lambda_{lp}) \le L(T_{\max} - \lambda_{lp})$. If $L < L_{\text{crit}} = \frac{S_0}{T_{\max} - \lambda_{lp}}$, then $S(L, T) \le L(T_{\max} - \lambda_{lp}) < S_0$, establishing the absolute upper bound that underpins the Tendency of the Rate of Profit to Fall in Volume III.
+\end{proof}
 
 \end{document}
