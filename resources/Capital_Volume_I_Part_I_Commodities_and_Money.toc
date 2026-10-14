@@ -1,0 +1,29 @@
+\contentsline {section}{\numberline {1}Scope, sources, and method}{2}{section.1}%
+\contentsline {section}{\numberline {2}Chapter 1: quantities and the two aspects of labor}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Goods are typed quantities, not interchangeable numbers}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Concrete activity and a social reduction operator}{3}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}A simultaneous production closure}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Chapter 1: value expressions and their quantitative geometry}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}The simple expression is oriented}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}When do ratios have a common scalar representation?}{5}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}A common equivalent needs an institution}{5}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Chapter 1: a limited representation of fetishism}{6}{section.4}%
+\contentsline {section}{\numberline {5}Chapter 3: labor magnitudes and monetary expression}{6}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Commodity-money standard and value prices}{6}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Quoted prices and realized receipts}{6}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Chapter 2 and Chapter 3: a stochastic exchange model}{7}{section.6}%
+\contentsline {subsection}{\numberline {6.1}State and admissible events}{7}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}The two acts of simple circulation}{8}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Circulation, hoarding, and a finite accounting identity}{9}{subsection.6.3}%
+\contentsline {section}{\numberline {7}Stochastic production coefficients and value prices}{9}{section.7}%
+\contentsline {subsection}{\numberline {7.1}A precise local domain}{9}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}It\^o formula for network labor coefficients}{9}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}Relative prices when money also has a changing labor value}{10}{subsection.7.3}%
+\contentsline {section}{\numberline {8}Worked examples and diagnostic counterexamples}{10}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Two reproducible goods and an external money commodity}{10}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Cycle inconsistency does not identify its social cause}{11}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Money available in aggregate need not be available to a buyer}{11}{subsection.8.3}%
+\contentsline {section}{\numberline {9}Bridge to the existing mathematical-finance research}{11}{section.9}%
+\contentsline {subsection}{\numberline {9.1}What this installment provides}{11}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Finite-horizon measure changes: an explicit check}{11}{subsection.9.2}%
+\contentsline {section}{\numberline {10}Open closures and the next installments}{12}{section.10}%
