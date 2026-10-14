@@ -1,0 +1,419 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\geometry{margin=1in}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{axiom}{Axiom}[section]
+\newtheorem{lemma}{Lemma}[section]
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[section]
+\newtheorem{remark}{Remark}[section]
+
+\title{\textbf{Research Programme on the Mathematization of Karl Marx's \textit{Capital}}\\[0.5em]
+\large Modules 1 \& 2: From the Commodity-Form and General Equivalent Dynamics to Stochastic Circulation and the \textit{Salto Mortale} (Volume I, Chapters 1--3)}
+\author{Research Programme Working Manuscript}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This manuscript presents Modules 1 and 2 of a multi-stage research programme dedicated to the rigorous mathematization of Karl Marx's \textit{Capital}. Moving beyond static neo-Ricardian linearism, Module 1 formalizes Volume I, Chapter 1 (\textit{``The Commodity''}) using measure spaces over concrete labor, graded monoids for incommensurable use-values, non-symmetric projection operators for the value-form, fiber-bundle quotient topologies for Commodity Fetishism, and evolutionary potential-game dynamics on the hollow row-stochastic manifold proving the endogenous emergence of the General Equivalent ($G_{\text{I}} \to G_{\text{IV}}$). Module 2 advances to Volume I, Chapters 2 and 3 (\textit{``The Process of Exchange''} and \textit{``Money, or the Circulation of Commodities''}), formalizing the bipartite non-use-value axiom, the stochastic realization filter (\textit{salto mortale}), the non-commutative operator algebra of the circuit $C_i - M - C_j$, Marx's inverted Quantity of Money law, and a continuous-time Markov circulation model proving that hoarding and credit-panic feedbacks generate a saddle-node crisis bifurcation that refutes Say's Law within simple commodity circulation.
+\end{abstract}
+
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1.5em}
+
+\part{Module 1: Axiomatics of the Commodity-Form, Real Abstraction, and Graph Dynamics of the General Equivalent (Volume I, Chapter 1)}
+
+\section{Introduction: Beyond Static Linearism}
+
+The mathematical formalization of Marxian political economy has historically been dominated by the neo-Ricardian or Sraffian tradition (e.g., Bortkiewicz, Seton, Morishima, Okishio), which models production through non-negative Leontief matrices and Perron-Frobenius spectral theory. While powerful for analyzing intersectoral reproduction and the transformation problem of Volume III, linear input-output algebra bypasses the foundational logical movement of Volume I, Chapter 1 (\textit{``The Commodity''}).
+
+In Chapter 1, Marx does not presuppose a pre-existing scalar metric of price or commensurability. Instead, he investigates how a \textbf{homogeneous metric space (Value)} and a \textbf{universal canonical sink (Money)} emerge endogenously out of a \textbf{heterogeneous space of incommensurable physical objects (Use-Values) and private concrete labors}. Formalizing this genesis requires mathematical structures capable of representing qualitative incommensurability, real abstraction, polar asymmetry, and topological symmetry-breaking.
+
+\section{The Dual Space of the Commodity (Chapter 1, Sections 1 \& 2)}
+
+A commodity $c \in \mathcal{C}$ is a dual entity possessing \textbf{Use-Value} (qualitative, incommensurable) and \textbf{Value} (quantitative, commensurable). We represent this duality by constructing two distinct spaces linked by a social abstraction functor.
+
+\subsection{The Physical Use-Value Space ($\mathcal{U}$)}
+
+Let $\mathcal{T} = \{1, 2, \dots, n\}$ be the index set of distinct concrete commodity types (e.g., linen, coats, iron, corn). Because distinct use-values lack a common physical metric ($1\text{ coat} + 1\text{ ton of iron}$ admits no physical scalar sum), the space of physical commodities is constructed as a \textbf{disjoint union of 1-dimensional positive cones} (a Graded Monoid):
+\begin{equation}
+    \mathcal{U} = \bigsqcup_{i \in \mathcal{T}} \mathcal{U}_i, \quad \text{where } \mathcal{U}_i = \mathbb{R}_{\ge 0} \cdot \mathbf{e}_i
+\end{equation}
+Here, $\mathbf{e}_i$ denotes the basis unit of physical measurement for commodity $i$ (yards, tons, bushels). A specific commodity bundle of type $i$ is written as $q_i \mathbf{e}_i \in \mathcal{U}_i$. There is no native inner product, norm, or addition operator on $\mathcal{U}$ that directly combines or compares $\mathbf{e}_i$ and $\mathbf{e}_j$ for $i \neq j$.
+
+\subsection{Concrete vs. Abstract Labor and Socially Necessary Labor Time (SNLT)}
+
+Let $\mathcal{L}_i$ represent the set of individual producers (or production processes) creating commodity $i$. Each producer $\omega \in \mathcal{L}_i$ expends a specific \textbf{concrete labor} characterized by technical vectors (skill, intensity, tool efficiency) and requires individual physical clock-time $\tau_i(\omega) \in \mathbb{R}_{>0}$ to produce one physical unit $\mathbf{e}_i$.
+
+Let $(\mathcal{L}_i, \Sigma_i, \mu_i)$ be a probability measure space over the producers of sector $i$, where $\mu_i(\omega)$ represents the share of total social output of commodity $i$ produced by agent $\omega$, satisfying $\int_{\mathcal{L}_i} d\mu_i(\omega) = 1$.
+
+\begin{definition}[The Real Abstraction Operator $\mathcal{A}$]
+Commodity exchange strips away the qualitative specificity of concrete labor, projecting heterogeneous labor processes onto a single one-dimensional scalar manifold: \textbf{Abstract Human Labor} ($\mathcal{V} \cong \mathbb{R}_{\ge 0}$). The unit value $\lambda_i$ of commodity $i$---its \textbf{Socially Necessary Labor Time (SNLT)}---is defined via the expectation operator over the sectoral productivity distribution, weighted by skill/intensity multipliers $\sigma_i(\omega) \in \mathbb{R}_{>0}$:
+\begin{equation}
+    \lambda_i = \mathcal{A}(\mathcal{L}_i) \coloneqq \int_{\mathcal{L}_i} \sigma_i(\omega) \tau_i(\omega) \, d\mu_i(\omega)
+\end{equation}
+\end{definition}
+
+\begin{remark}[Comparative Statics of Technological Shock]
+If a technological revolution occurs (e.g., power looms replace handlooms), the measure $\mu_i$ shifts mass toward producers with lower $\tau_i(\omega)$. This immediately depresses $\lambda_i$ across the entire existing inventory of commodity $i$, capturing Marx's insistence that value is a contemporaneous social relation rather than a historical accounting of past effort.
+\end{remark}
+
+The \textbf{Total Value Functional} $V: \mathcal{U} \to \mathbb{R}_{\ge 0}$ acting on a homogeneous commodity bundle $q_i \mathbf{e}_i \in \mathcal{U}_i$ is therefore:
+\begin{equation}
+    V(q_i \mathbf{e}_i) = q_i \lambda_i
+\end{equation}
+
+\section{The Algebra of the Value-Form (Chapter 1, Section 3)}
+
+Marx demonstrates that value ($\lambda_i$) cannot appear directly as an isolated scalar; a commodity cannot express its value in its own physical body. Value requires a \textbf{polar relational mapping} between two distinct commodities.
+
+\subsection{The Value Equivalence Relation ($\sim_V$)}
+
+Define a binary relation $\sim_V$ on the disjoint space $\mathcal{U}$:
+\begin{equation}
+    q_i \mathbf{e}_i \sim_V q_j \mathbf{e}_j \iff V(q_i \mathbf{e}_i) = V(q_j \mathbf{e}_j) \iff q_i \lambda_i = q_j \lambda_j
+\end{equation}
+While $\sim_V$ is mathematically an equivalence relation (reflexive, symmetric, transitive) on the underlying scalar space $\mathcal{V}$, \textbf{its phenomenal expression in the commodity world is strictly non-symmetric}. In the value equation ``$x \text{ commodity } A$ is worth $y \text{ commodity } B$,'' $A$ and $B$ occupy polarized structural roles.
+
+\subsection{The Non-Symmetric Value Expression Operator ($\mathcal{E}$)}
+
+\begin{definition}[Relative-Equivalent Operator]
+For $i \neq j$, define the operator $\mathcal{E}: \mathcal{U}_i \times \{\mathbf{e}_j\} \to \mathcal{U}_j$, where commodity $i$ occupies the \textbf{Relative Form} (the active subject seeking value-expression) and commodity $j$ occupies the \textbf{Equivalent Form} (the passive physical mirror whose bodily use-value measures $i$):
+\begin{equation}
+    \mathcal{E}(q_i \mathbf{e}_i \mid \mathbf{e}_j) = \left( q_i \frac{\lambda_i}{\lambda_j} \right) \mathbf{e}_j \in \mathcal{U}_j
+\end{equation}
+\end{definition}
+
+Two fundamental formal properties directly encode Marx's dialectical exposition:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Irreflexivity of Phenomenal Expression:} For $i = j$, $\mathcal{E}(q_i \mathbf{e}_i \mid \mathbf{e}_i) = q_i \mathbf{e}_i$, which reduces to a meaningless tautology ($20\text{ yards of linen} = 20\text{ yards of linen}$) and fails to express value. Valid value-expressions are strictly restricted to off-diagonal pairs $(i,j) \in \mathcal{T} \times \mathcal{T}$ with $i \neq j$.
+    \item \textbf{Dimensional Projection:} The codomain of $\mathcal{E}(q_i \mathbf{e}_i \mid \mathbf{e}_j)$ is the physical subspace $\mathcal{U}_j$, \textit{not} abstract labor hours $\mathcal{V}$. Abstract value $\lambda_i$ becomes phenomenally visible only by projecting $i$ onto the concrete physical metric of $j$.
+\end{enumerate}
+
+\subsection{Topological Evolution of the Four Forms of Value}
+
+We formalize the progression in Chapter 1, Section 3 as a sequence of \textbf{directed graphs} $G_k = (\mathcal{T}, E_k)$, where a directed edge $(i \to j) \in E_k$ signifies that commodity $i$ (Relative Form) expresses its value in the physical body of commodity $j$ (Equivalent Form):
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}p{0.20\textwidth}p{0.25\textwidth}p{0.25\textwidth}p{0.24\textwidth}@{}}
+\toprule
+\textbf{Form of Value} & \textbf{Graph Topology $G_k$} & \textbf{Algebraic Expression} & \textbf{Structural Defect} \\
+\midrule
+\textbf{I. Elementary / Accidental} & \textbf{Isolated Dyad:} \newline $E_{\text{I}} = \{(i \to j)\}$ & $q_i \mathbf{e}_i \xrightarrow{\mathcal{E}} \left(q_i \frac{\lambda_i}{\lambda_j}\right) \mathbf{e}_j$ & \textit{Local \& Contingent:} Pairwise ratio only; no global transitivity across $\mathcal{T}$. \\
+\textbf{II. Total / Expanded} & \textbf{Out-Star Graph:} \newline $E_{\text{II}} = \{(i \to k) \mid k \neq i\}$ & $\mathbf{E}_{\text{II}}(q_i \mathbf{e}_i) = \bigoplus_{k \neq i} \left(q_i \frac{\lambda_i}{\lambda_k}\right) \mathbf{e}_k$ & \textit{Incomplete \& Heterogeneous:} Non-convergent direct sum of orthogonal metrics. \\
+\textbf{III. General Form} & \textbf{In-Star Graph (Sink):} \newline $E_{\text{III}} = \{(k \to u) \mid k \neq u\}$ & $\forall k \neq u:$ \newline $\mathcal{E}(q_k \mathbf{e}_k \mid \mathbf{e}_u) = \left(q_k \frac{\lambda_k}{\lambda_u}\right) \mathbf{e}_u$ & \textit{Symmetry Degeneracy:} Any $u \in \mathcal{T}$ can act as sink; competing sinks block unity. \\
+\textbf{IV. Money-Form} & \textbf{Symmetry-Broken Sink:} \newline Unique $m \in \mathcal{T}$ (Gold) & $p_k = \frac{\lambda_k}{\lambda_m}$ \newline (Price scalar in $\mathbf{e}_m$) & \textit{Ideal vs. Realized Value:} Bridges Ch. 1 to Ch. 2--3 (\textit{salto mortale}). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Dialectical Dualization (Form II $\to$ Form III):} In graph-theoretic and categorical terms, Form III is the \textbf{transpose (dual graph)} of Form II: $G_{\text{III}} = G_{\text{II}}^\top$. By inverting the rays of the Out-Star so that all $k \in \mathcal{T} \setminus \{u\}$ point into a single excluded commodity $u$, the disjoint space $\mathcal{U}$ acquires a canonical isomorphism to $\mathbb{R}_{\ge 0}$ mediated by the physical basis unit $\mathbf{e}_u$.
+
+\section{Commodity Fetishism as a Quotient Topology (Chapter 1, Section 4)}
+
+In Section 4, Marx introduces \textbf{Commodity Fetishism}: the social relations among private producers $(\mathcal{L}_1, \dots, \mathcal{L}_n)$ do not appear directly as transparent social relations; instead, they appear exclusively as quantitative exchange-ratios (prices) attached to things.
+
+We formalize this via an \textbf{epimorphism (projection) and a hidden fiber bundle}:
+\begin{enumerate}
+    \item Let $\Omega = \prod_{i \in \mathcal{T}} \mathcal{L}_i$ be the \textbf{Total Social Labor Configuration Space}, encoding the complete network of the social division of labor, concrete production relations, and productivity distributions $\mu_i$.
+    \item Let $\mathcal{P} = \mathbb{RP}^{n-1}_{>0}$ be the \textbf{Projective Price Simplex} of observable exchange ratios $[p_1 : p_2 : \dots : p_n]$, where $p_i = \lambda_i / \lambda_m$.
+    \item The market exchange mechanism acts as a projection map $\Pi: \Omega \to \mathcal{P}$.
+\end{enumerate}
+
+Because $\dim(\Omega) \gg \dim(\mathcal{P})$, $\Pi$ is a non-injective surjection with high-dimensional fibers $\Pi^{-1}(\mathbf{p})$. Private producers in a commodity-producing society cannot observe $\Omega$ directly; they receive feedback signals exclusively from $\mathcal{P}$ (fluctuations in relative prices) and reallocate their concrete labor accordingly. \textbf{Fetishism} is the structural illusion induced by the projection $\Pi$, whereby invariants of the fiber space $\Omega$ (social relations of production) are misattributed to the base manifold $\mathcal{P}$ (natural properties of physical commodities).
+
+\section{Directed Graph Dynamics: Proving the Emergence of the General Equivalent}
+
+In Chapter 1, Section 3 (and Chapter 2, ``The Process of Exchange''), Marx identifies a fundamental logical and practical contradiction between the \textbf{Expanded Form of Value ($G_{\text{II}}$)} and the requirements of a coherent commodity-producing society. If every commodity simultaneously attempts to exclude all others as its private out-star, no commodity is excluded, and social commensurability collapses into $O(n^2)$ non-transitive bilateral ratios. Consequently, the ``social action of all other commodities'' (\textit{gesellschaftliche Tat}) must spontaneously break the symmetry of the commodity space $\mathcal{T}$ and isolate a unique sink $u^* \in \mathcal{T}$---transforming the collection of Out-Stars ($G_{\text{II}}$) into a single \textbf{In-Star topology ($G_{\text{III}}$)}.
+
+We formulate and prove this transition as a theorem in non-linear evolutionary graph dynamics and potential games.
+
+\subsection{The Hollow Row-Stochastic Manifold of Value-Expression Networks}
+
+Let $\mathcal{T} = \{1, 2, \dots, n\}$ ($n \ge 3$) be the set of distinct commodity types, with positive unit values $\boldsymbol{\lambda} = (\lambda_1, \dots, \lambda_n) \in \mathbb{R}^n_{>0}$.
+
+\begin{definition}[Value-Expression Adjacency Manifold]
+At time $t \ge 0$, each commodity sector $i \in \mathcal{T}$ allocates weights $w_{ij}(t) \in [0, 1]$ across the other $n-1$ commodities to serve as its \textbf{Equivalent Form}. Because the Relative-Equivalent Operator $\mathcal{E}(q_i \mathbf{e}_i \mid \mathbf{e}_j)$ is strictly irreflexive ($i \neq j$), the weighted directed graph $G(t) = (\mathcal{T}, W(t))$ evolves on the \textbf{hollow row-stochastic manifold}:
+\begin{equation}
+    \mathcal{W} = \left\{ W \in \mathbb{R}^{n \times n}_{\ge 0} \;\middle|\; w_{ii} = 0 \text{ for all } i \in \mathcal{T}, \text{ and } \sum_{j \neq i} w_{ij} = 1 \text{ for all } i \in \mathcal{T} \right\}
+\end{equation}
+\end{definition}
+
+\begin{definition}[Equivalent Prominence / Normalized In-Degree]
+For any state $W \in \mathcal{W}$, define the \textbf{Equivalent Prominence} of commodity $j \in \mathcal{T}$ as:
+\begin{equation}
+    d_j(W) \coloneqq \frac{1}{n-1} \sum_{k \neq j} w_{kj} \in [0, 1]
+\end{equation}
+\end{definition}
+
+The canonical forms of value correspond to distinct geometric loci in $\mathcal{W}$:
+\begin{itemize}
+    \item \textbf{Form II (Total / Expanded Form):} The maximally symmetric interior centroid $W^{\text{II}}$, where $w^{\text{II}}_{ij} = \frac{1}{n-1}$ for all $i \neq j$, yielding $d_j(W^{\text{II}}) = \frac{1}{n-1}$ for all $j \in \mathcal{T}$.
+    \item \textbf{Form III (General Form of Value):} A corner configuration $W^{\text{III}(u^*)}$ indexed by a unique \textbf{General Equivalent} $u^* \in \mathcal{T}$, where every ordinary commodity $i \neq u^*$ directs $100\%$ of its value expression into $u^*$:
+    \begin{equation}
+        w^{\text{III}(u^*)}_{i u^*} = 1 \quad (\forall i \neq u^*) \implies d_{u^*}\!\left(W^{\text{III}(u^*)}\right) = 1, \quad d_k\!\left(W^{\text{III}(u^*)}\right) = \frac{w_{u^* k}}{n-1} \le \frac{1}{n-1} \quad (\forall k \neq u^*)
+    \end{equation}
+\end{itemize}
+
+\subsection{Micro-Foundations and the Global Social Commensurability Potential}
+
+When commodity $i$ expresses its value in commodity $j$ ($i \to j$), that expression achieves social commensurability to the extent that other commodities $k \notin \{i, j\}$ also recognize $j$ as their equivalent ($k \to j$). When both $i \to j$ and $k \to j$ hold, commodity $j$ mediates a convergent two-step wedge $i \to j \leftarrow k$ in the same physical subspace $\mathcal{U}_j$:
+\begin{equation}
+    \frac{\mathcal{E}(q_i \mathbf{e}_i \mid \mathbf{e}_j)}{\mathcal{E}(q_k \mathbf{e}_k \mid \mathbf{e}_j)} = \frac{q_i \lambda_i / \lambda_j}{q_k \lambda_k / \lambda_j} = \frac{q_i \lambda_i}{q_k \lambda_k}
+\end{equation}
+Thus, the strategic payoff to sector $i$ from allocating weight $w_{ij}$ to equivalent $j$ is given by:
+\begin{equation}
+    u_{ij}(W) = \alpha \sum_{k \notin \{i, j\}} w_{kj} + \eta_j
+\end{equation}
+where $\alpha > 0$ measures the \textbf{social commensurability coupling} and $\eta_j \ge 0$ represents physical suitability for the equivalent role (divisibility, durability, uniformity).
+
+\begin{lemma}[Existence of the Social Commensurability Potential]
+The $n$-sector value-expression system on $\mathcal{W} = \prod_{i=1}^n \Delta_i$ is an \textbf{Exact Potential Game} with global potential functional $\Phi: \mathcal{W} \to \mathbb{R}$ defined by:
+\begin{equation}
+    \Phi(W) \coloneqq \frac{\alpha}{2} \sum_{j=1}^n \sum_{i \neq j} \sum_{k \notin \{i, j\}} w_{ij} w_{kj} + \sum_{j=1}^n \eta_j \sum_{i \neq j} w_{ij} = \frac{\alpha}{2} \sum_{j=1}^n \left[ \left(\sum_{i \neq j} w_{ij}\right)^2 - \sum_{i \neq j} w_{ij}^2 \right] + \sum_{j=1}^n \eta_j \left(\sum_{i \neq j} w_{ij}\right)
+\end{equation}
+satisfying $\frac{\partial \Phi(W)}{\partial w_{ij}} = u_{ij}(W)$ for all $i \neq j$.
+\end{lemma}
+
+\begin{proof}
+Direct partial differentiation of $\Phi(W)$ with respect to $w_{ij}$ ($i \neq j$) isolates the $j$-th summand and yields $\frac{\partial \Phi(W)}{\partial w_{ij}} = \alpha \sum_{k \notin \{i, j\}} w_{kj} + \eta_j = u_{ij}(W)$.
+\end{proof}
+
+\subsection{Replicator Dynamics and the Symmetry-Breaking Theorem}
+
+Each commodity sector $i \in \mathcal{T}$ updates its equivalent weights $w_{ij}(t)$ via continuous-time multi-population replicator dynamics:
+\begin{equation}
+    \dot{w}_{ij} = w_{ij} \left( u_{ij}(W) - \bar{u}_i(W) \right), \quad \forall i \in \mathcal{T}, \; j \neq i, \quad \text{where } \bar{u}_i(W) = \sum_{l \neq i} w_{il} u_{il}(W)
+\end{equation}
+
+\begin{theorem}[Instability of the Expanded Form $G_{\text{II}}$ and Global Convergence to the General Form $G_{\text{III}}$]
+Assume pure initial symmetry among commodities ($\eta_1 = \eta_2 = \dots = \eta_n = 0$) and $\alpha > 0$. Under the replicator dynamics on $\mathcal{W}$:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Strict Lyapunov Ascent:} $\Phi(W(t))$ is strictly non-decreasing along trajectories:
+    \begin{equation}
+        \frac{d}{dt} \Phi(W(t)) = \sum_{i=1}^n \sum_{j \neq i} w_{ij} \left(u_{ij}(W) - \bar{u}_i(W)\right)^2 \ge 0
+    \end{equation}
+    with equality if and only if $W$ is a stationary point.
+    \item \textbf{Linear Instability of the Expanded Form ($W^{\text{II}}$):} The symmetric Expanded Form centroid $W^{\text{II}}$ ($w_{ij} = \frac{1}{n-1}$) is dynamically unstable. Any perturbation $S_j = \sum_{i \neq j} \epsilon_{ij}$ to the total in-degree of commodity $j$ grows exponentially with strictly positive eigenvalue:
+    \begin{equation}
+        \mu_{\text{star}} = \alpha \left( \frac{n^2 - 3n + 1}{(n-1)^2} \right) > 0 \quad (\forall n \ge 3)
+    \end{equation}
+    \item \textbf{Global Topological Collapse to the In-Star ($G_{\text{III}}$):} For almost all initial conditions $W(0) \in \operatorname{int}(\mathcal{W})$, the trajectory $W(t)$ converges as $t \to \infty$ to a corner configuration $W^{\text{III}(u^*)}$ where a single commodity $u^* \in \mathcal{T}$ emerges as the unique General Equivalent:
+    \begin{equation}
+        \lim_{t \to \infty} w_{i u^*}(t) = 1 \quad \forall i \in \mathcal{T} \setminus \{u^*\}, \quad \text{and} \quad \lim_{t \to \infty} d_{u^*}(W(t)) = 1
+    \end{equation}
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Part (1):} By the chain rule and Lemma 5.1, $\dot{\Phi} = \sum_{i=1}^n \sum_{j \neq i} u_{ij} w_{ij} (u_{ij} - \bar{u}_i)$. Subtracting $\sum_{i=1}^n \bar{u}_i \sum_{j \neq i} w_{ij}(u_{ij} - \bar{u}_i) = 0$ yields $\dot{\Phi} = \sum_{i=1}^n \sum_{j \neq i} w_{ij}(u_{ij} - \bar{u}_i)^2 \ge 0$. By compactness of $\mathcal{W}$ and LaSalle's Invariance Principle, all trajectories converge to the stationary locus $\{\dot{\Phi} = 0\}$.
+
+\textbf{Part (2):} Linearizing around $w^{\text{II}}_{ij} = \frac{1}{n-1}$ with $w_{ij} = \frac{1}{n-1} + \epsilon_{ij}$ ($\epsilon_{ii} = 0$, $\sum_{j \neq i} \epsilon_{ij} = 0$) and defining $S_j = \sum_{k \neq j} \epsilon_{kj}$ ($\sum_{j=1}^n S_j = 0$), the perturbed payoff is $\delta u_{ij} = \alpha (S_j - \epsilon_{ij})$. Summing the linearized replicator equation over $i \neq j$ gives:
+\begin{equation}
+    \dot{S}_j = \frac{\alpha}{n-1} \sum_{i \neq j} \left[ (S_j - \epsilon_{ij}) - \frac{1}{n-1} \sum_{l \neq i} (S_l - \epsilon_{il}) \right] = \frac{\alpha}{n-1} \left[ (n-2) S_j - \frac{1}{n-1} S_j \right] = \alpha \left( \frac{n^2 - 3n + 1}{(n-1)^2} \right) S_j
+\end{equation}
+Since $n^2 - 3n + 1 \ge 1 > 0$ for all $n \ge 3$, $\mu_{\text{star}} > 0$, proving instability of $W^{\text{II}}$.
+
+\textbf{Part (3):} A rest point $W^*$ is asymptotically stable under replicator dynamics of a potential game if and only if it is a strict local maximizer of $\Phi(W)$. Along any coordinated multi-agent interior perturbation where two agents $i_1, i_2$ shift weight $\pm \delta$ between two distinct equivalents $j_1, j_2$, the second variation of $\Phi$ is $\delta^2 \Phi = 4\alpha \delta^2 > 0$. Thus, no interior or partially mixed multi-sink state can be a local maximum. At pure vertices where each $i$ selects a unique target $f(i) \neq i$ with in-degrees $k_j = |f^{-1}(j)| \in \{0, \dots, n-1\}$ ($\sum_j k_j = n$), $\Phi(W) = \frac{\alpha}{2} \sum_{j=1}^n k_j(k_j - 1)$. By strict convexity of $k(k-1)$, $\Phi$ is uniquely maximized when a single sink $u^*$ achieves $k_{u^*} = n-1$, one node $v = f(u^*)$ has $k_v = 1$, and all other $n-2$ nodes have $k_j = 0$, yielding $\max \Phi = \frac{\alpha}{2}(n-1)(n-2)$ at $W^{\text{III}(u^*)}$.
+\end{proof}
+
+\begin{corollary}[Polar Exclusion of the General Equivalent and Transition to the Money-Form $G_{\text{IV}}$]
+At the General Form attractor $W^{\text{III}(u^*)}$:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Exclusion from the Relative Form:} For the General Equivalent $u^*$ itself, $u_{u^* v}(W^{\text{III}(u^*)}) = \alpha \sum_{k \notin \{u^*, v\}} w_{kv} = 0$ for all $v \neq u^*$, so $\nabla_{\mathbf{w}_{u^*}} \Phi = \mathbf{0}$ (when $\boldsymbol{\eta} = \mathbf{0}$). Thus, $u^*$ is structurally excluded from the active Relative Form; its value can only be read by transposing the In-Star $G_{\text{III}}$ back into the Out-Star $G_{\text{II}}$.
+    \item \textbf{Symmetry Breaking to the Money-Form ($G_{\text{IV}}$):} When physical suitability $\boldsymbol{\eta}$ has a unique maximum $\eta_m > \eta_j$ ($\forall j \neq m$, e.g., Gold), the $S_n$ permutation degeneracy is broken, uniquely selecting $u^* = m$ as the global maximizer $\Phi(W^{\text{III}(m)}) = \frac{\alpha}{2}(n-1)(n-2) + (n-1)\eta_m$ and establishing the canonical price vector $p_i = \lambda_i / \lambda_m$.
+\end{enumerate}
+\end{corollary}
+
+\vspace{1.5em}
+\hrule
+\vspace{1.5em}
+
+\part{Module 2: Stochastic Exchange, the \textit{Salto Mortale}, and the Metamorphosis $C - M - C'$ (Volume I, Chapters 2 \& 3)}
+
+\section{Introduction to Module 2: From Ideal Price to Realized Value}
+
+In Chapter 1, the unit value $\lambda_i$ of a commodity and its money-price $p_i = \lambda_i / \lambda_m$ are derived as \textbf{ideal expectations} over the production measure $\mu_i$. However, as Marx transitions to Chapter 2 (\textit{``The Process of Exchange''}) and Chapter 3 (\textit{``Money, or the Circulation of Commodities''}), a crucial structural contradiction emerges:
+\begin{quote}
+\textit{``Money as a measure of value is the necessary form of appearance of the measure of value which is immanent in commodities, namely labour-time\dots The price of things is an ideal or notional form; they are not yet realized in gold.''} (Vol. I, Ch. 3, Sec. 1--2)
+\end{quote}
+A commodity owner brings a physical bundle $q_i \mathbf{e}_i$ to the market bearing \textbf{potential (ideal) value} $V^{\text{pot}}_i = q_i \lambda_i$. For private labor to be validated as actual social labor, the commodity must pass through a \textbf{stochastic realization filter}---what Marx terms the \textbf{\textit{salto mortale} (mortal leap)} of the commodity ($C_i \to M$). Moreover, once exchange is split into two temporally and spatially separated acts---sale ($C_i \to M$) and purchase ($M \to C_j$)---the identity of Say's Law is broken, and \textbf{the formal possibility of crisis} arises endogenously within simple circulation.
+
+\section{The Mutual Exclusion Principle and Bipartite Exchange Polarity (Chapter 2)}
+
+In Chapter 2, Marx establishes that a commodity cannot function as an immediate use-value to its own producer prior to exchange, whereas for its buyer it must function as a concrete use-value.
+
+\begin{definition}[The Agent-Commodity State Tuple]
+Let $\mathcal{A} = \{1, 2, \dots, N\}$ be the population of private commodity owners. At time $t$, agent $\alpha \in \mathcal{A}$ is characterized by the state tuple:
+\begin{equation}
+    \mathcal{S}_\alpha(t) = \left( \mathbf{q}_\alpha(t), \, m_\alpha(t), \, \mathbf{u}_\alpha \right) \in \mathcal{U} \times \mathcal{U}_m \times \mathcal{B}(\mathcal{T}_0)
+\end{equation}
+where $\mathbf{q}_\alpha(t) = q_{\alpha, i} \mathbf{e}_i \in \mathcal{U}_i$ is the physical commodity bundle held by $\alpha$, $m_\alpha(t) \in \mathbb{R}_{\ge 0} \cdot \mathbf{e}_m$ is agent $\alpha$'s holding of the Universal Equivalent (Money), and $\mathbf{u}_\alpha: \mathcal{T}_0 \to \{0, 1\}$ is a binary \textbf{concrete need indicator} over ordinary commodities $\mathcal{T}_0 = \mathcal{T} \setminus \{m\}$.
+\end{definition}
+
+\begin{axiom}[The Non-Use-Value Condition of Commodity Production]
+For any commodity producer $\alpha \in \mathcal{A}_i$ producing in sector $i \in \mathcal{T}_0$:
+\begin{equation}
+    u_\alpha(i) = 0 \quad \text{and} \quad \exists j \in \mathcal{T}_0 \setminus \{i\} \text{ such that } u_\alpha(j) = 1
+\end{equation}
+\end{axiom}
+
+\begin{remark}
+Axiom 7.1 encodes Marx's proposition that a producer's own commodity has zero immediate use-value for its owner; it exists purely as a bearer of exchange-value (\textit{non-use-value to its owner}). To realize its use-value, $q_{\alpha, i}\mathbf{e}_i$ must be alienated to a distinct agent $\beta$ satisfying $u_\beta(i) = 1$.
+\end{remark}
+
+\section{The \textit{Salto Mortale} and the Realization Operator (Chapter 3, Section 2a)}
+
+In Chapter 1, Socially Necessary Labor Time was defined with respect to \textbf{technical production conditions} ($\lambda_i = \int_{\mathcal{L}_i} \sigma_i \tau_i \, d\mu_i$). In Chapter 3, Section 2a (\textit{``The Metamorphosis of Commodities''}), Marx introduces the \textbf{second (market-realization) dimension of SNLT}: even if every yard of linen is woven within the technically necessary labor time $\lambda_i$, if the ``social stomach'' cannot absorb the aggregate quantity $Q_i = \sum_{\alpha \in \mathcal{A}_i} q_{\alpha, i}$ at the normal price $p_i = \lambda_i / \lambda_m$, then a portion of society's labor time is rendered superfluous and devalued.
+
+\begin{definition}[Aggregate Produced Value vs. Stochastic Effective Demand]
+For each sector $i \in \mathcal{T}_0$ over a market clearing horizon $[t, t+\Delta t]$:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Total Produced Ideal Value ($V^{\text{prod}}_i$):}
+    \begin{equation}
+        V^{\text{prod}}_i = \lambda_i Q_i = \lambda_i \sum_{\alpha \in \mathcal{A}_i} q_{\alpha, i}
+    \end{equation}
+    \item \textbf{Stochastic Effective Monetary Demand ($D_i(\omega_t)$):} Let $M^{\text{circ}}_i(\omega_t) \in \mathbb{R}_{\ge 0}$ be a random variable on a filtered market probability space $(\Xi, \mathcal{F}, (\mathcal{F}_t)_{t \ge 0}, \mathbb{P})$ representing the aggregate quantity of money $\mathbf{e}_m$ directed by buyers toward sector $i$. In units of abstract labor time, the \textbf{socially validated demand for sector $i$} is:
+    \begin{equation}
+        D_i(\omega_t) = \lambda_m M^{\text{circ}}_i(\omega_t)
+    \end{equation}
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[The \textit{Salto Mortale} Realization Operator $\mathcal{R}_i$]
+The transition from ideal commodity value $C_i$ to realized money $M$ is governed by a non-linear \textbf{Realization Operator} $\mathcal{R}_i: \mathcal{U}_i \times \Xi \to \mathcal{U}_m$, operating under two dual adjustment regimes:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Quantity-Rationing / Unsold Inventory Regime (Fixed Price $p_i = \lambda_i / \lambda_m$):} Each unit of commodity $i$ faces a realization survival probability:
+    \begin{equation}
+        \pi_i(\omega_t) = \min\!\left(1, \; \frac{D_i(\omega_t)}{V^{\text{prod}}_i}\right) = \min\!\left(1, \; \frac{\lambda_m M^{\text{circ}}_i(\omega_t)}{\lambda_i Q_i}\right) \in [0, 1]
+    \end{equation}
+    The realized value for producer $\alpha$ holding $q_{\alpha, i}\mathbf{e}_i$ is the contraction projection:
+    \begin{equation}
+        V^{\text{real}}_{\alpha, i}(\omega_t) = \lambda_m \mathcal{R}_i(q_{\alpha, i}\mathbf{e}_i, \omega_t) = \pi_i(\omega_t) q_{\alpha, i} \lambda_i \le V^{\text{pot}}_{\alpha, i}
+    \end{equation}
+    The residual $(1 - \pi_i(\omega_t)) q_{\alpha, i} \lambda_i$ represents \textbf{devalued (unvalidated) private labor}.
+    \item \textbf{Price-Flexibility / Market-Price Divergence Regime:} If the entire physical output $Q_i$ clears via an endogenous market price $\tilde{p}_i(\omega_t) = M^{\text{circ}}_i(\omega_t) / Q_i$, then the \textbf{market-validated unit labor value} adjusts to:
+    \begin{equation}
+        \tilde{\lambda}_i(\omega_t) = \lambda_m \tilde{p}_i(\omega_t) = \lambda_i \left(\frac{D_i(\omega_t)}{V^{\text{prod}}_i}\right)
+    \end{equation}
+\end{enumerate}
+\end{definition}
+
+\section{Operator Algebra of the Circuit $C_i - M - C_j$}
+
+Simple commodity circulation $C_i - M - C_j$ decomposes into two antithetical phases:
+\begin{itemize}
+    \item \textbf{First Metamorphosis (Sale, $C_i \to M$):} Represented by the stochastic \textbf{Alienation Operator} $\hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_m$:
+    \begin{equation}
+        \hat{\mathcal{S}}_i(q_i \mathbf{e}_i) = \left( \pi_i(\omega_t) q_i \frac{\lambda_i}{\lambda_m} \right) \mathbf{e}_m
+    \end{equation}
+    \item \textbf{Second Metamorphosis (Purchase, $M \to C_j$):} Represented by the \textbf{Appropriation Operator} $\hat{\mathcal{B}}_j: \mathcal{U}_m \to \mathcal{U}_j$:
+    \begin{equation}
+        \hat{\mathcal{B}}_j(m \mathbf{e}_m) = \left( m \frac{\lambda_m}{\lambda_j} \right) \mathbf{e}_j
+    \end{equation}
+\end{itemize}
+
+\begin{proposition}[Topological Asymmetry Between Sale $\hat{\mathcal{S}}_i$ and Purchase $\hat{\mathcal{B}}_j$]
+In the Money-Form topology $G_{\text{IV}}$ (In-Star with sink $m$), the operators $\hat{\mathcal{S}}_i$ and $\hat{\mathcal{B}}_j$ exhibit structural polarity:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Sale ($\hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_m$) is a Stochastic Bottleneck:} Because $i \in \mathcal{T}_0$ occupies the Relative Form, it possesses no immediate exchangeability ($\pi_i(\omega_t) \le 1$) and must leap across the directed edge $(i \to m)$ against finite monetary demand $M^{\text{circ}}_i$.
+    \item \textbf{Purchase ($\hat{\mathcal{B}}_j: \mathcal{U}_m \to \mathcal{U}_j$) Possesses Immediate Universal Exchangeability:} Because Money $m$ occupies the Universal Equivalent sink, moving from $m$ to any $j \in \mathcal{T}_0$ traverses the transposed Out-Star $G_{\text{IV}}^\top$, encountering no realization barrier ($\pi_m \equiv 1$ whenever physical inventories $Q_j > 0$ exist).
+\end{enumerate}
+Consequently, the composite circuit operator $\hat{\mathcal{M}}_{i \to j} \coloneqq \hat{\mathcal{B}}_j \circ \hat{\mathcal{S}}_i: \mathcal{U}_i \to \mathcal{U}_j$ acts as a non-expansive stochastic contraction in value space:
+\begin{equation}
+    \hat{\mathcal{M}}_{i \to j}(q_i \mathbf{e}_i) = \left( \pi_i(\omega_t) q_i \frac{\lambda_i}{\lambda_j} \right) \mathbf{e}_j \implies \mathbb{E}\!\left[V\!\left(\hat{\mathcal{M}}_{i \to j}(q_i \mathbf{e}_i)\right)\right] = \mathbb{E}[\pi_i] q_i \lambda_i \le V(q_i \mathbf{e}_i)
+\end{equation}
+\end{proposition}
+
+\section{Breaking Say's Law: Continuous-Time Markov Circulation and the Crisis Bifurcation Theorem (Chapter 3, Sections 2b \& 3)}
+
+In classical political economy (Say, Ricardo, Mill), money is treated as a neutral veil, collapsing $C_i - M - C_j$ into direct barter $C_i \leftrightarrow C_j$ and rendering general overproduction impossible. Marx refutes Say's Law in Chapter 3 by demonstrating that because $C_i \to M$ and $M \to C_j$ are separated by an intermediate holding state $M$, \textbf{any agent who has sold ($C_i \to M$) is under no immediate compulsion to buy ($M \to C_j$)}. Money can arrest its metamorphosis and petrify into a \textbf{Hoard} (\textit{Schatzbildung}, Ch. 3, Sec. 3a).
+
+\subsection{The Four-State Circulation Process and Marx's Quantity of Money Law}
+
+\begin{definition}[Continuous-Time Circulation Process]
+Each unit of social value in the circulation sphere transitions across four macroscopic states $\Sigma = \{\mathbf{C}, \mathbf{M}_{\text{circ}}, \mathbf{M}_{\text{hoard}}, \mathbf{K}\}$:
+\begin{enumerate}[label=(\arabic*)]
+    \item $\mathbf{C}$ (\textbf{Commodity Capital on Market}): Waiting to execute the \textit{salto mortale} $C \to M$.
+    \item $\mathbf{M}_{\text{circ}}$ (\textbf{Active Circulating Medium}): Money actively executing purchases $M \to C$.
+    \item $\mathbf{M}_{\text{hoard}}$ (\textbf{Hoarded Money / Liquidity Reserve}): Money withdrawn from active circulation into idle hoards.
+    \item $\mathbf{K}$ (\textbf{Crisis / Defaulted Inventory}): Unsold commodities whose waiting time exceeds their physical or credit-clearing expiration horizon.
+\end{enumerate}
+Let $\mathbf{x}(t) = (x_C(t), x_M(t), x_H(t), x_K(t))^\top$ denote the state distribution, with transition rates:
+\begin{itemize}
+    \item $\gamma_{\text{sale}}(x_M) = \beta x_M$: Rate of commodity realization $\mathbf{C} \to \mathbf{M}_{\text{circ}}$, proportional to active circulating money $x_M(t)$ and turnover velocity factor $\beta > 0$.
+    \item $\mu_{\text{buy}} > 0$: Rate at which active money purchases commodities $\mathbf{M}_{\text{circ}} \to \mathbf{C}$.
+    \item $\sigma_{\text{hoard}} \ge 0$: Rate of hoarding withdrawal $\mathbf{M}_{\text{circ}} \to \mathbf{M}_{\text{hoard}}$.
+    \item $\rho_{\text{dishoard}} > 0$: Rate of dishoarding re-injection $\mathbf{M}_{\text{hoard}} \to \mathbf{M}_{\text{circ}}$.
+    \item $\delta_{\text{crisis}} > 0$: Expiration / credit-default hazard rate $\mathbf{C} \to \mathbf{K}$ when realization stalls.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}[Marx's Law of the Quantity of Circulating Money --- Ch. 3, Sec. 2b \& 3b]
+Let $P_{\text{sum}}(t) = \sum_{i \in \mathcal{T}_0} p_i Q_i(t) = \frac{1}{\lambda_m} \sum_{i \in \mathcal{T}_0} \lambda_i Q_i(t)$ be the aggregate sum of commodity prices over period $T$, let $K_{\text{credit}}(t)$ be obligations cleared via mutual bilateral debt cancellation, let $D_{\text{due}}(t)$ be maturing promissory notes requiring settlement in money as Means of Payment, and let $v$ be the average turnover velocity of a unit of money $\mathbf{e}_m$. The required active circulating money stock $M^{\text{active}}(t)$ satisfies:
+\begin{equation}
+    M^{\text{active}}(t) = \frac{P_{\text{sum}}(t) - K_{\text{credit}}(t) + D_{\text{due}}(t)}{v} = \frac{1}{v \lambda_m} \left( \sum_{i \in \mathcal{T}_0} \lambda_i Q_i(t) - \lambda_m K_{\text{credit}}(t) + \lambda_m D_{\text{due}}(t) \right)
+\end{equation}
+Contrary to the neoclassical Quantity Theory ($MV = PY$), intrinsic labor values $(\lambda_i, \lambda_m)$ determine prices $p_i$, which in turn determine $M^{\text{active}}(t)$; fluctuations in $M^{\text{active}}(t)$ relative to total bullion $M^{\text{total}}$ are buffered by the hoard reservoir $M^{\text{hoard}}(t) = M^{\text{total}} - M^{\text{active}}(t)$.
+\end{proposition}
+
+\subsection{The Saddle-Node Realization Crisis Theorem}
+
+\begin{theorem}[Breakability of $C - M - C'$ and the Realization Crisis Phase Transition]
+Let the total money stock be normalized to $x_M(t) + x_H(t) = M_0$, where the liquidity subsystem satisfies:
+\begin{equation}
+    \dot{x}_M = \rho_{\text{dishoard}}(M_0 - x_M) - \sigma_{\text{hoard}} x_M \implies x_M^*(h) = \frac{M_0}{1 + h}, \quad h \coloneqq \frac{\sigma_{\text{hoard}}}{\rho_{\text{dishoard}}} \in [0, \infty)
+\end{equation}
+In steady circulation, the \textbf{Global Realization Efficiency} (the fraction of commodities surviving the \textit{salto mortale} $C \to M$ rather than decaying into $\mathbf{K}$) is:
+\begin{equation}
+    \mathcal{E}_{\text{real}}(h) = \frac{\gamma_{\text{sale}}(x_M^*)}{\gamma_{\text{sale}}(x_M^*) + \delta_{\text{crisis}}} = \frac{\beta M_0}{\beta M_0 + \delta_{\text{crisis}}(1 + h)}
+\end{equation}
+Suppose hoarding is endogenously coupled to realization failure (flight to liquidity during credit defaults, Ch. 3, Sec. 3b), such that $h(u) = h_0 + \tilde{\xi} u^2$, where $u \coloneqq 1 - \mathcal{E}_{\text{real}} \in [0, 1]$ is the unrealized crisis share, $h_0 = \sigma_0 / \rho_{\text{dishoard}} \ge 0$ is baseline hoarding, and $\tilde{\xi} = \xi / \rho_{\text{dishoard}} > 0$ is credit-panic sensitivity. Then:
+\begin{enumerate}[label=(\arabic*)]
+    \item Every equilibrium crisis share $u^* \in (0, 1)$ satisfies the transcendental balance equation:
+    \begin{equation}
+        L(u) = R(u), \quad \text{where } L(u) \coloneqq \left(\frac{\beta M_0}{\delta_{\text{crisis}}}\right) \frac{u}{1 - u} \quad \text{and} \quad R(u) \coloneqq 1 + h_0 + \tilde{\xi} u^2
+    \end{equation}
+    \item There exists a critical panic threshold $\tilde{\xi}_c > 0$ (determined by the tangency condition $L(u_c) = R(u_c)$ and $L'(u_c) = R'(u_c)$) at which the circulation system undergoes a \textbf{saddle-node bifurcation}, generating a stable high-crisis \textbf{Monetary Famine / Realization Collapse Attractor} ($u_3^* \to 1$, $x_M^* \to 0$, $x_H^* \to M_0$).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Substituting $x_M^* = \frac{M_0}{1 + h(u)}$ into the definition of the unrealized crisis share $u = 1 - \mathcal{E}_{\text{real}}(h(u))$ gives:
+\begin{equation}
+    u = \frac{\delta_{\text{crisis}}\left(1 + h_0 + \tilde{\xi} u^2\right)}{\beta M_0 + \delta_{\text{crisis}}\left(1 + h_0 + \tilde{\xi} u^2\right)} \iff \left(\frac{\beta M_0}{\delta_{\text{crisis}}}\right) \frac{u}{1 - u} = 1 + h_0 + \tilde{\xi} u^2
+\end{equation}
+establishing $L(u) = R(u)$. On the interval $u \in [0, 1)$, $L(0) = 0 < R(0) = 1 + h_0$ and $\lim_{u \to 1^-} L(u) = +\infty > R(1) = 1 + h_0 + \tilde{\xi}$. For small $\tilde{\xi} > 0$, $L(u)$ and $R(u)$ intersect at a unique low-crisis equilibrium $u_1^* \ll 1$ where $L'(u_1^*) > R'(u_1^*)$ (asymptotically stable). However, for sufficiently large capacity ratio $B / \delta_{\text{crisis}} = \beta M_0 / \delta_{\text{crisis}}$, varying $\tilde{\xi}$ causes the parabola $R(u)$ to become tangent to $L(u)$ at an interior point $u_c \in (0, 2/3)$ satisfying:
+\begin{equation}
+    \frac{\beta M_0}{\delta_{\text{crisis}}} \frac{u_c}{1 - u_c} = 1 + h_0 + \tilde{\xi}_c u_c^2 \quad \text{and} \quad \frac{\beta M_0}{\delta_{\text{crisis}}} \frac{1}{(1 - u_c)^2} = 2 \tilde{\xi}_c u_c
+\end{equation}
+For $\tilde{\xi} > \tilde{\xi}_c$, the system possesses three equilibria $0 < u_1^* < u_2^* < u_3^* < 1$, where $u_2^*$ is an unstable tipping point ($L'(u_2^*) < R'(u_2^*)$) and $u_3^*$ is a locally asymptotically stable \textbf{Realization Crisis Attractor} ($L'(u_3^*) > R'(u_3^*)$). If an exogenous demand or credit shock pushes $u(t)$ above $u_2^*$, self-reinforcing hoarding drains active circulation $x_M \to x_H$, driving the economy to $u_3^*$. Thus, the temporal separation of sale ($C \to M$) and purchase ($M \to C$) combined with the hoarding function of money is mathematically sufficient to generate endogenous realization crises prior to capitalist production.
+\end{proof}
+
+\section{Architecture of the Research Programme}
+
+Our ongoing formalization of \textit{Capital} proceeds across four interconnected modules:
+\begin{itemize}
+    \item \textbf{Module 1: Axiomatics of the Commodity \& Value-Form Dynamics (Vol. I, Ch. 1).} Complete.
+    \item \textbf{Module 2: Stochastic Exchange \& The Metamorphosis $C - M - C'$ (Vol. I, Ch. 2--3).} Complete.
+    \item \textbf{Module 3: The Valorization Operator \& Exploitation $M - C \dots P \dots C' - M'$ (Vol. I, Ch. 4--11).} Dynamical systems modeling the contradiction of the General Formula for Capital, the distinction between Labor-Power (a stock commodity with value $\lambda_{lp}$) and Living Labor (a flow operator injecting $\Delta V > \lambda_{lp}$), and the extraction of absolute and relative surplus-value.
+    \item \textbf{Module 4: Reproduction Schemes, Mean Field Accumulation \& Transformation Invariance (Vol. II \& Vol. III).} Stochastic optimal control, Fokker-Planck capital distributions, and conservation manifolds linking values to prices of production.
+\end{itemize}
+
+\end{document}
