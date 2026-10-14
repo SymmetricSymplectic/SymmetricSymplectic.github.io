@@ -34,13 +34,179 @@ consistent quantitative expressions; a commodity-money standard converts
 labor magnitudes into monetary magnitudes; and a constrained stochastic
 exchange process separates a quoted price from an accomplished sale.
 We prove conditional results on production, exchange consistency,
-conservation, and realization delay, and derive stochastic comparative
-statics. These are results of the stated models, not proofs of Marx's
+conservation, and realization delay. We first justify stochastic modeling
+relative to fixed-point and deterministic methods, then derive stochastic
+comparative statics only for an explicitly conditional diffusion extension.
+Technology is fixed in the baseline exchange model. These are results of
+the stated models, not proofs of Marx's
 theory or of historically inevitable crises.
 \end{abstract}
 \tableofcontents
 
-\section{Scope, sources, and method}
+\section{Why stochastic analysis, and when are It\^o processes justified?}
+\label{sec:method}
+\subsection{The method must follow the question}
+Why use stochastic analysis rather than fixed-point theorems or
+deterministic differential equations? Our answer is conditional:
+stochastic analysis is useful when the objects to explain include the
+distribution of realization times, conditional predictions given current
+information, and probabilities of interrupted circulation. It is not a
+replacement for equilibrium, accounting, or deterministic dynamics.
+Nor does uncertainty by itself justify an It\^o diffusion.
+
+A fixed point can express a consistent configuration: the labor equation
+$v=vA+\ell$ below is already one example. Deterministic differential or
+difference equations describe adjustment along a specified trajectory.
+They can represent delays, cycles, crises, and even deterministic chaos;
+none of those phenomena alone requires randomness. Random initial
+conditions or uncertain parameters can also produce distributions without
+Brownian motion. Fixed-point arguments remain useful for stochastic
+equilibria, invariant laws, and self-consistency of interacting processes.
+These tools answer different questions and can be used together.
+
+The stochastic choice introduces a probability law relative to an
+information set $\F_t$. A producer can know its inventory and quotation
+without knowing its next buyer or sale date. If our explanatory target is
+the conditional law of those events rather than just one possible path,
+we need either a probabilistic model of that uncertainty or a comparably
+explicit alternative. Randomness here represents unresolved variation
+at the chosen descriptive scale. It need not assert that economic events
+are fundamentally indeterministic. The law and its information structure
+are modeling commitments, not consequences of Marx's categories.
+
+\subsection{A simple example: the mean does not determine realization risk}
+Suppose a lot has a constant first-sale hazard $h>0$. Its sale time
+$\tau$ has survival probability $\exp(-ht)$. If the quoted receipt is
+$r>0$, cumulative realized receipts from that lot are
+\[
+ C_t=r\ind_{\{\tau\le t\}},\qquad
+ \E[C_t]=r(1-e^{-ht}),\qquad
+ \operatorname{Var}(C_t)=r^2e^{-ht}(1-e^{-ht}).
+\]
+The deterministic equation
+$\dot c(t)=h(r-c(t))$, $c(0)=0$, reproduces $\E[C_t]$ exactly.
+It does not reproduce the individual path or its variance. At a payment
+deadline $T$, for $0<d\le r$ the probability that receipts are insufficient
+to cover $d$ is $\Pp(C_T<d)=e^{-hT}$. Comparing the expected receipt
+$c(T)$ with $d$ cannot recover that probability. The hazard assumption is
+additional to the text; the calculation illustrates a question for which
+an equation for a mean is insufficient.
+
+The example also establishes a distinction we retain throughout:
+a stochastic exchange model can be a counting process, with no Brownian
+component. The natural baseline for finite transfers is a jump process.
+Stochastic analysis includes such processes and their compensators,
+stopping times, and conditional laws.
+
+\subsection{From discrete adjustments to an ODE and a diffusion approximation}
+For technology, first specify what changes a production coefficient:
+technique adoption, changes in input efficiency, or replacement of
+production capacity. A completed sale transfers ownership and money; it
+does not, by itself, change the quantities of inputs required per unit
+of output. A diffusion for $A$ therefore needs a separate mechanism.
+
+Here is one possible route, not a derivation of the actual economy.
+Let $y^N$ be a vector of intensive technology coordinates for $N$
+production units. At state $y$, an adjustment of type $r$ changes
+$y$ by $\zeta_r/N$, at rate $N\lambda_r(y)$, with finitely many types
+and nonnegative rates. Interpret $\zeta_r$ and $\lambda_r$ through a
+specified adoption or efficiency mechanism before using them. The
+generator is
+\begin{equation}\label{eq:microtech}
+ (\mathcal G_N f)(y)=
+ N\sum_r\lambda_r(y)\bigl[f(y+\zeta_r/N)-f(y)\bigr].
+\end{equation}
+For $C^3$ test functions, bounded jump vectors, and locally bounded
+rates, Taylor expansion on a compact interior domain yields
+\begin{equation}\label{eq:generator-expansion}
+ \mathcal G_N f
+ =b\cdot\nabla f+\frac{1}{2N}Q:D^2f+O(N^{-2}),\qquad
+ b=\sum_r\lambda_r\zeta_r,\quad
+ Q=\sum_r\lambda_r\zeta_r\zeta_r^\top .
+\end{equation}
+Here $Q:D^2f=\sum_{ij}Q_{ij}\partial_{ij}f$. An admissible square root
+$\Gamma$ satisfies $\Gamma\Gamma^\top=Q$; its columns can be chosen as
+$\sqrt{\lambda_r}\zeta_r$. The corresponding finite-$N$ diffusion
+approximation is
+\begin{equation}\label{eq:technology-approximation}
+ \mathrm d\widehat y^N_t=b(\widehat y^N_t)\,\mathrm dt
+       +N^{-1/2}\Gamma(\widehat y^N_t)\,\mathrm dW_t.
+\end{equation}
+The unscaled large-$N$ limit is the ODE $\dot y=b(y)$, not a diffusion
+with fixed nonzero volatility. Under suitable initial convergence,
+regularity, nonexplosion, and localization, a central-limit fluctuation
+$U^N=\sqrt N(y^N-y)$ can instead converge to the linear diffusion
+\[
+ \mathrm dU_t=Db(y_t)U_t\,\mathrm dt+\Gamma(y_t)\,\mathrm dW_t.
+\]
+The generator calculation motivates the approximation; it is not by
+itself a convergence proof. Limit-theorem approaches connecting Markov
+models, ODE limits, and diffusion fluctuations are developed in
+\cite{kang-kurtz-popovic}. Their hypotheses must be checked for any
+economic micro-model proposed here.
+
+This scaling has substantive consequences. Independent small adjustments
+produce noise of order $N^{-1/2}$ in an aggregate. A nonvanishing
+aggregate volatility requires a specified common shock, correlated
+adjustments, finite effective population, or another scaling. Naming
+technological uncertainty does not determine either the volatility or
+its covariance. Moreover, a diffusion for an aggregate does not justify
+Brownian paths for the technique of an individual firm.
+
+\subsection{Why It\^o, and what would invalidate the approximation?}
+In the jump model, rates depend on the state immediately before an
+event. Subtracting the predictable drift leaves martingale increments.
+If those increments admit a Brownian limit, the associated stochastic
+integrals use predictable, pre-increment evaluation: the It\^o
+convention. Its second-order correction then follows from quadratic
+variation, rather than being a discretionary addition to deterministic
+calculus \cite{ks}. For smooth $F$ and
+$\mathrm dY=b\,\mathrm dt+\Gamma\,\mathrm dW$,
+\[
+ \mathrm dF(Y_t)=
+ \left[DF(Y_t)b+\tfrac12
+       (\Gamma\Gamma^\top):D^2F(Y_t)\right]\mathrm dt
+       +DF(Y_t)\Gamma\,\mathrm dW_t.
+\]
+For a vector-valued $F$, apply the Hessian contraction coordinatewise.
+A smooth colored-noise approximation could call for a different
+limiting convention. That mechanism has not been assumed here.
+
+A Brownian approximation requires more than uncertain increments:
+many small changes on the observation scale, a suitable finite-variance
+and weak-dependence or martingale-limit structure, negligible individual
+jumps, and a state description adequate for the proposed Markov closure.
+Large innovations call for jumps; persistent memory can call for an
+enlarged state or a non-Markov model. Random but finite-variation
+technology paths do not acquire a Brownian quadratic variation simply
+because they are random.
+
+Nonnegative coefficients, technological zeros, and productivity boundaries
+also matter. A Gaussian approximation can leave its economic domain
+precisely where shortages or other boundary events are important;
+boundary-aware jump approximations are discussed in
+\cite{bibbona-sirovich}. An economically consequential boundary cannot
+be removed just to simplify the calculus.
+
+\subsection{Model choice for this working draft}
+We therefore adopt a hierarchy rather than prescribe diffusion everywhere.
+The baseline has a fixed normal technology $(A,\ell)$ and stochastic
+bilateral sales. If adjustment paths are specified, deterministic,
+random finite-variation, or piecewise deterministic technology can be
+added. A technology diffusion is an optional approximation only after
+an adjustment mechanism, aggregation scale, covariance, and domain
+restriction have been justified. Innovations with appreciable jump size
+remain jump events.
+
+For an empirical application, the choice must distinguish changes in
+physical technique from measurement error and changing output weights.
+It must also compare incremental variance, jump sizes, serial dependence,
+and boundary behavior across the actual observation intervals. Annual
+input-output tables alone do not identify a continuous Brownian
+technology process. This draft supplies a conditional mathematical
+construction, not empirical evidence that $A$ is a diffusion.
+
+\section{Scope, sources, and mathematical categories}
 The primary textual sequence is Chapter 1 (commodities), Chapter 2
 (exchange), and Chapter 3 (money) \cite{marx1,marx2,marx3}. Chapter and
 section references are used because pagination varies between editions.
@@ -471,6 +637,56 @@ Credit sales, debt settlement, netting, and cross-border payments require
 an expanded ledger before they can be included.
 
 \section{Stochastic production coefficients and value prices}
+\label{sec:stochastic-technology}
+\subsection{An optional extension, separate from sales}
+The exchange model above holds technology fixed. We now investigate the
+consequences of a diffusion extension under the methodological conditions
+of Section \ref{sec:method}. If a choice of aggregate coordinates $Y$
+has justified It\^o dynamics, a smooth technology map $A=F(Y)$ inherits
+It\^o dynamics by the formula in that section. Its drift and covariance
+are thereby constrained by $F$ and the adjustment mechanism; they are
+not arbitrary independent noise assigned to each matrix entry.
+
+In particular, the jump operator \eqref{eq:generator} changes only goods
+and balances. For a smooth test function of technology and holdings, an
+optional joint Markov model has a generator
+\[
+ \mathcal L f=\mathcal D_{\rm tech}f+\mathcal J_{\rm sales}f
+ \quad\text{(plus any specified price or innovation dynamics)}.
+\]
+Sales intensities may depend on technology, and the technology drift may
+depend on a specified history or state of production and exchange.
+Such feedback must be made explicit; choosing random sales does not
+entail a Brownian technology law. For example, production techniques can
+remain unchanged while buyer arrivals are random.
+
+\subsection{One domain-preserving construction and its restrictions}
+Fix input units, allowed input sets $E_j$, and $0<\eta<1$. For latent
+It\^o coordinates $Y_{ij}$, define
+\begin{equation}\label{eq:admissible-technology}
+ A_{ij}(Y)=
+ \begin{cases}
+ \displaystyle\eta\frac{e^{Y_{ij}}}
+               {1+\sum_{k\in E_j}e^{Y_{kj}}},&i\in E_j,\\[6pt]
+ 0,&i\notin E_j.
+ \end{cases}
+\end{equation}
+Then $A\ge0$, $\|A\|_1<\eta$, and
+$\rho(A)\le\|A\|_1<1$. It\^o's formula gives its coefficient matrices,
+including the Hessian drift correction. Direct labor can likewise be
+modeled as $\ell_j=e^{H_j}$ for finite-valued latent processes $H_j$.
+Provided the latent processes exist without explosion, these mappings
+preserve positivity and productivity at all finite times, with
+$\|(I-A)^{-1}\|_1\le(1-\eta)^{-1}$.
+
+This is a mathematically sufficient construction, not an economically
+neutral parameterization. It imposes column-sum bounds in the selected
+physical units and fixes which inputs can occur. Many productive matrices
+do not satisfy those bounds. Allowed inputs never vanish at finite
+latent values, and new input links need a switching mechanism.
+The map therefore illustrates how to supply an invariant domain; it is
+not chosen as the universal empirical technology model.
+
 \subsection{A precise local domain}
 Let $W$ be a $d$-dimensional Brownian motion under $\Pp$. On an open
 domain with $I-A$ invertible, suppose
@@ -623,32 +839,14 @@ goods, money, or surplus-value between owners. Redistribution needs
 cash-flow and ownership equations, such as \eqref{eq:trade}, extended
 to production and claims.
 
-\subsection{Finite-horizon measure changes: an explicit check}
-The existing draft also links asymptotic divergence of a Girsanov kernel
-to failure of finite-horizon equivalence. The implication needs an
-independent proof and is false in general. Let $W$ be Brownian motion
-and take the deterministic kernel $\theta_t=t$. For each finite $T$,
-\[
- \E\exp\left(\tfrac12\int_0^T\theta_t^2\dd t\right)
-       =\exp(T^3/6)<\infty.
-\]
-Thus Novikov's sufficient criterion holds on every finite horizon, and
-\[
- Z_T=\exp\left(-\int_0^Tt\dd W_t-\tfrac12\int_0^Tt^2\dd t\right)
-\]
-is strictly positive with $\E Z_T=1$. It defines an equivalent measure
-on $\F_T$ even though $\theta_t\to\infty$. Infinite-horizon equivalence
-is a different question. Moreover, failure of a \emph{sufficient}
-criterion is not proof that no equivalent measure exists. Stochastic
-integration and change of measure are treated in \cite{ks}.
-
-Falling profits, default, and liquidity restrictions may be important
-economic mechanisms, but their connection to no-arbitrage must be
-established for a specified market, admissible strategies, gain
-processes, and time horizon. A defaultable payoff is not by itself a
-contradiction of arbitrage-free pricing. The counterexample here repairs
-the logical bridge for future work; it is not a review of all claims in
-the earlier manuscript.
+\subsection{Where the measure-change correction belongs}
+The finite-horizon Novikov correction and its counterexample are now
+located in the original \emph{Stochastic Marxian Macroeconomics}
+manuscript \cite{prior}, in the section on measure changes and the TRPF.
+That correction separates a sufficient martingale criterion from a
+necessary condition, and finite-horizon equivalence from behavior as
+time tends to infinity. Those issues concern the later financial model,
+rather than supply a reason to choose diffusion for Part I.
 
 \section{Open closures and the next installments}
 The present construction is a baseline, with several open problems.
@@ -726,5 +924,20 @@ A Working Draft on Automation, Fictitious Capital, and Networked Crises}.
 Undated project manuscript, in the website's \texttt{resources} directory.
 Referenced here for continuity, not as independent verification of its
 mathematical claims.
+
+\bibitem{kang-kurtz-popovic}
+Hye-Won Kang, Thomas G. Kurtz, and Lea Popovic.
+\emph{Central limit theorems and diffusion approximations for multiscale
+Markov chain models}. Annals of Applied Probability
+24(2), 721--759, 2014.
+\url{https://arxiv.org/abs/1208.3783}.
+The cited limit-theorem framework is mathematical; its economic
+application here requires a separately specified micro-model.
+
+\bibitem{bibbona-sirovich}
+Enrico Bibbona and Roberta Sirovich.
+\emph{Strong approximation of density dependent Markov chains on bounded
+domains}. Preprint, revised July 2017.
+\url{https://arxiv.org/abs/1704.07481}.
 \end{thebibliography}
 \end{document}

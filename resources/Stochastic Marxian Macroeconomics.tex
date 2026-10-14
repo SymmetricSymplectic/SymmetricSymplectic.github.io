@@ -652,7 +652,7 @@ Article 1 established the micro-to-macro trajectory of the real circuit of capit
 \item \textbf{The Fictitious Escape Hatch ($D-D'$):} Faced with falling real returns in production, money-capital detaches from the real circuit and flows into speculative financial paper, credit expansion, and synthetic derivatives.
 \item \textbf{The Credit Default Surface:} The upward-drifting organic composition ${\Omega }_{t}$ and the expanding Cost of Anarchy ($PoA$) dynamically push the debt default barrier ${H}_{i}(t)$ upward.
 \end{enumerate}
-\textbf{Article 2} will formalize this financialized layer: constructing the stochastic credit pricing PDE for corporate debt and CDS contracts, proving that under the TRPF, the equivalent martingale measure $Q$ enforces an inevitable structural default horizon.
+\textbf{Article 2} will formalize this financialized layer by constructing a conditional credit-pricing PDE for corporate debt and CDS contracts with a material default boundary. Neither the TRPF alone nor a change of pricing measure establishes an inevitable default horizon; finite-horizon measure existence must be checked separately.
 
 \chapter{Fictitious Capital, Measure Changes, and Structural Credit Risk under the TRPF}
 \section{Introduction: From Industrial Accumulation to Financial Valuation}
@@ -790,63 +790,135 @@ This produces the core illusion of \textbf{capital fetishism} ($M-M'$):
 \item \textbf{Concealment of Living Labor:} The labor-time parameters (${l}_{i}$), the rate of exploitation ($e$), and the organic compositions (${\gamma }_{i}$) disappear from the pricing equations, subsumed entirely into the discount factor ${e}^{-\int{r}_{s}ds}$.
 \item \textbf{The Girsanov Shift as Surplus Transfer:} The Radon-Nikodym derivative $\frac{dQ}{dP}$ is the formal probabilistic operator that converts the real world of \emph{surplus-value production} into the secondary realm of \emph{pure financial claim circulation}.
 \end{enumerate}
-\section{The Structural Crisis of the Measure Change under the TRPF}
-In neoclassical mathematical finance, the existence of an equivalent martingale measure $Q$ is guaranteed as long as the market satisfies the No Free Lunch with Vanishing Risk (NFLVR) condition (Delbaen \& Schachermayer, 1994).
-
-However, Novikov's condition requires that the Girsanov kernel be square-integrable:
-
+\section{Measure Changes under the TRPF: Finite Horizons and Novikov's Criterion}
+\label{sec:measure-correction}
+\subsection{What a change-of-measure theorem actually requires}
+Fix a finite horizon $T$. For a predictable Brownian kernel $\theta$
+with $\int_0^T\|\theta_t\|^2dt<\infty$ almost surely, define
 \[
-{E}^{P}\left[{\exp \left({\frac{1}{2}\int\limits_{0}^{T}\parallel {\theta }_{t}\parallel {}^{2}dt}\right)}\right]<\infty
+ Z_t=\exp\left(-\int_0^t\theta_s\cdot dW_s
+                 -\frac12\int_0^t\|\theta_s\|^2ds\right),
+ \qquad 0\le t\le T.
 \]
-We now examine how the macroeconomic dynamics of Article 1 undermine this condition.
-
-\subsection{Divergence of the Market Price of Risk Kernel}
-From Article 1, competitive automation drives the systemic organic composition toward saturation:
-
+This stochastic exponential is a positive local martingale. To use it
+as a probability density on $\mathcal F_T$, it must be a true
+martingale with $\mathbb E^P[Z_T]=1$. Under the stated finite quadratic
+energy, $Z_T>0$ almost surely, so a normalized density gives
+$Q\sim P$ on $\mathcal F_T$. Novikov's condition
 \[
-\lim\limits_{{t} \rightarrow {\infty }}{\Omega }_{t}={\Omega }^{*}=\frac{\gamma }{c\delta (\rho +\delta )}
+ \mathbb E^P\left[
+       \exp\left(\frac12\int_0^T\|\theta_t\|^2dt\right)\right]<\infty
 \]
-which compresses the real systemic rate of profit:
+is a \textbf{sufficient condition} for that martingale property
+\cite{KS-correction}. It is stronger than almost-sure square
+integrability. Its failure does not establish that $Z$ is a strict
+local martingale, and does not establish that an equivalent pricing
+measure is impossible.
 
+For a specified discounted, locally bounded semimartingale gain process,
+the fundamental theorem relates NFLVR to existence of an equivalent
+local martingale measure \cite{DS-correction}. Its trading and
+admissibility hypotheses must be supplied. In a Brownian diffusion
+market with price volatilities collected in a matrix $\sigma_t$,
+a candidate kernel must also solve
 \[
-\lim\limits_{{t} \rightarrow {\infty }}{\bar{r}}_{t}={r}^{*}=\frac{e}{{\Omega }^{*}+1}
+ \sigma_t\theta_t=\mu_t-r_t\mathbf 1
 \]
-Now consider the financial sector. Financial liabilities (corporate debt, bank credit, pension claims) are issued with contractual coupon yields ${r}_{\mathrm{debt}}$ that compound exponentially. If the financial rate of interest demands a minimum positive return ${r}_{target}>0$ to prevent debt deflation and liquidation:
+for the traded assets. A valid density by itself does not show that
+all discounted gains are local martingales. Conversely, failure of one
+candidate density need not exclude another kernel in an incomplete
+market. These distinctions are necessary before interpreting a
+failure of financial valuation as a mathematical failure of measure
+equivalence.
 
+\subsection{Falling profitability does not by itself imply kernel divergence}
+Article 1's proposed saturation regime gives
 \[
-{r}_{t}\geq {r}_{\min}>0
+ \Omega_t\longrightarrow\Omega^*
+       =\frac{\gamma}{c\delta(\rho+\delta)},\qquad
+ \bar r_t\longrightarrow r^*=\frac{e}{1+\Omega^*}.
 \]
-As the TRPF takes hold and the real valorization rate falls below the financial interest rate:
-
+Conditional on that regime, $r^*>0$ when the parameters are positive.
+It is not the same regime as unbounded technological composition.
+For a scalar diffusion with
+$\theta_{i,t}=(\mu_{i,t}-r_t)/\sigma_{i,t}$, if
+$\mu_{i,t}\to r^*$, $r_t\to r_\infty$, and
+$\sigma_{i,t}\to\sigma_\infty>0$, then
 \[
-\bar{r}_t < r_t \implies p_{e,t} = \bar{r}_t - r_t < 0
+ \theta_{i,t}\longrightarrow
+           \frac{r^*-r_\infty}{\sigma_\infty},
 \]
-The profit of enterprise turns negative: \textbf{the real surplus extracted in production is insufficient to cover the contractual interest claims of finance capital}.
+which is finite. Even the alternative assumption $\mu_{i,t}\to0$
+does not cause divergence when $r_t$ and $\sigma_{i,t}$ approach
+finite limits with $\sigma_\infty>0$. Divergence requires additional
+conditions, such as vanishing volatility with a nonvanishing drift
+wedge, or an unbounded wedge. Compounding contractual debt alone
+does not determine the kernel of a specified traded gain process.
 
-Examine the Girsanov kernel for an industrial capital:
+A rate comparison can suggest pressure on financing, but an actual
+default condition must compare monetary cash flows with debt service
+on consistent capital bases. It should be modeled by a stopping time
+and a recovery rule. Default is compatible with arbitrage-free pricing
+of defaultable gains; it does not by itself establish failure of NFLVR.
 
+\subsection{Counterexample: divergence at infinity with equivalence on every finite horizon}
+Take the deterministic kernel $\theta_t=t$. It diverges as
+$t\to\infty$, but for every finite $T$,
 \[
-{\theta }_{i,t}=\frac{{\mu }_{i,t}-{r}_{t}}{{\sigma }_{i,t}}=\frac{1}{{\sigma }_{i,t}}\left({\frac{{e}_{t}}{{\gamma }_{i,t}+1}-{r}_{t}}\right)
+ \int_0^T\theta_t^2dt=\frac{T^3}{3},\qquad
+ \mathbb E^P\exp\left(\frac12\int_0^T\theta_t^2dt\right)
+       =\exp(T^3/6)<\infty.
 \]
-As mechanization proceeds (${\gamma }_{i}\rightarrow \infty$) or exploitation hits its physical ceiling (${e}_{t}\leq {e}_{\max}$):
-
+Hence
 \[
-{\mu }_{i,t}\rightarrow 0
+ Z_T=\exp\left(-\int_0^Tt\,dW_t-\frac{T^3}{6}\right)
 \]
-While finance capital demands ${r}_{t}\geq {r}_{\min}>0$. Consequently:
+is positive with expectation one and defines an equivalent measure
+on $\mathcal F_T$. Asymptotic divergence therefore does not imply
+failure on any given finite horizon.
 
+Infinite-horizon equivalence asks a different question. In this
+example, $\int_0^\infty\theta_t^2dt=\infty$ and $Z_T\to0$
+almost surely: the Brownian stochastic integral, indexed by its
+quadratic-variation time $T^3/3$, grows sublinearly relative to that
+time almost surely. The density family is not uniformly integrable,
+and its zero limit cannot serve as an equivalent density on the
+infinite-horizon sigma field. That observation cannot be substituted
+for a finite-horizon nonexistence argument.
+
+\subsection{Counterexample: failure of Novikov with a valid density}
+Let $Y$ be standard normal, independent of $W$, and observable at
+time zero, and set $\theta_t=Y$. Use the filtration enlarged by $Y$.
+For $T\ge1$,
 \[
-\parallel {\theta }_{i,t}\parallel \rightarrow \frac{{r}_{\min}}{{\sigma }_{i,t}}>0\quad\text{with constant sign}
+ \mathbb E^P\exp(TY^2/2)=\infty,
 \]
-If debt compounding forces debt service to escalate while surplus-value generation halts (${\Sigma }_{t}\rightarrow 0$), the financial wedge required to artificially maintain asset prices at their paper valuations diverges:
-
+so Novikov's condition fails. Nevertheless
 \[
-\parallel {\theta }_{t}\parallel \rightarrow \infty
+ Z_t=\exp(-YW_t-Y^2t/2)
 \]
-When $\parallel {\theta }_{t}\parallel \rightarrow \infty$:
+is a true martingale on every finite horizon. Conditional on $Y$,
+independent Gaussian Brownian increments give
+$\mathbb E^P[Z_t\mid\mathcal F_s]=Z_s$ for $s\le t$; in particular
+$\mathbb E^P Z_t=1$. It is strictly positive, so it still defines
+an equivalent finite-horizon measure. This explicitly separates
+failure of the sufficient criterion from failure of the density.
 
-\[\fitmath{\int_0^T \Vert{}\theta_t\Vert{}^2 dt \to \infty \implies \mathbb{E}^\mathbb{P}\left[ \exp\left(\frac{1}{2}\int_0^T \Vert{}\theta_t\Vert{}^2 dt\right) \right] = \infty}\]
-The equivalent martingale measure $Q$ ceases to be equivalent to $P$ ($\mathbb{Q} \not\ll \mathbb{P}$). The financial system can no longer price claims as martingales: \textbf{the fictitious capital structure collapses into an endogenous realization and credit crisis}.
+\subsection{Corrected conclusion and conditions for the later pricing model}
+The preceding arguments withdraw the claimed implication from the
+TRPF or long-horizon kernel divergence to loss of finite-horizon
+measure equivalence. The paper's material default boundary remains a
+conditional economic model. To establish a mathematical pricing
+breakdown, one must specify the horizon and gains, and prove failure
+of the appropriate no-arbitrage condition or nonexistence of any
+admissible equivalent pricing measure. No such nonexistence result
+has been established by the profitability calculations above.
+
+The subsequent equations under $Q$ are therefore conditional on
+existence of a valid pricing measure and on appropriate payoff
+integrability. Default probabilities and credit-price dynamics must
+be analyzed within that market; they do not follow simply from
+failure of Novikov's sufficient test.
 
 \section{The Micro Credit Pricing PDE under the Material Default Boundary}
 We now derive the contingent claim pricing PDE for a defaultable corporate liability issued by enterprise $i$, embedding the macro-micro coupling developed across Articles 1 and 2.
@@ -945,7 +1017,7 @@ Paper claims compound at interest $r$.\\$\theta=(\mu-r)/\sigma$.\\
 $\mathbb E^Q[S_T/B_T]=S_0$.};
 \node[flowbox,below=12mm of p.south east,anchor=north] (b) {\textbf{Valorization barrier $H(t)$}\\[3pt]
 Default when $\Sigma(t)-I^*<\delta_{\mathrm{debt}}$.\\
-The article links long-horizon financial instability to $\lVert\theta\rVert\to\infty$.};
+Material default and pricing-measure existence are separate questions.};
 \draw[flowarrow] (p.south) -- ([xshift=-3cm]b.north);
 \draw[flowarrow] (q.south) -- ([xshift=3cm]b.north);
 
@@ -955,7 +1027,7 @@ The article links long-horizon financial instability to $\lVert\theta\rVert\to\i
 \begin{enumerate}
 \item \textbf{At the Micro Level:} The individual firm cannot escape diffusion shocks ${\sigma }_{1}$; it internalizes them through real capital expenditures, defensive capex, and operational cushions under $P$.
 \item \textbf{At the Macro Level:} The Girsanov change of measure re-weights path space, projecting the illusion that all assets naturally grow at the uniform rate of interest $r$, divorcing financial expectations from living labor.
-\item \textbf{The Terminal Breakdown:} Because the TRPF relentlessly compresses real surplus-value ${\bar{r}}_{t}\rightarrow {r}^{*}$, the financial rate of return cannot be sustained out of productive valorization. As the Cost of Anarchy ($PoA$) drives the default boundary ${H}_{i}$ upward, the distance-to-default contracts, credit default spreads diverge, and the mathematical equivalence of the risk-neutral measure $Q$ breaks down.
+\item \textbf{Material Default and Pricing Conditions:} A shortfall of surplus cash flow relative to debt service can trigger the specified default boundary. Credit prices and spreads depend on the resulting payoff and recovery model. This does not prove failure of finite-horizon equivalence of $P$ and $Q$; the separate conditions and counterexamples in Section \ref{sec:measure-correction} apply.
 \end{enumerate}
 \chapter{Networked Valorization Crises: Inter-Departmental Credit Contagion and the Topology of Capitalist Devalorization}
 \section{The Dual Circuit Network Topology: Physical Input-Output and the Fictitious Credit Layer}
@@ -1782,7 +1854,7 @@ Because the clearing deficit collapses to zero, the endogenous jump intensity re
 \[
 {\lambda }_{\mathrm{sys}}({\tau }^{+})={\lambda }_{0}\left({\exp (0)-1}\right)=0
 \]
-With nominal debt burdens wiped out and real profit rates restored (${r}_{\mathrm{post}}\gg {r}^{*}$), the distance-to-default ${X}_{t}$ expands dramatically across all surviving firms. Inter-firm trust is re-established, trade credit resumes on a sounder material base, and the equivalent martingale measure $Q$ temporarily regains its operational validity.
+With nominal debt burdens reduced and real profit rates restored, the distance-to-default may increase for surviving firms. Trade credit may then resume on a stronger cash-flow base. Whether an equivalent pricing measure exists for the reopened market remains a separate finite-horizon question; it cannot be inferred merely from restored profitability.
 
 \subsection{Limit-Cycle Dynamics: The Endogenous Marxian Metacycle}
 The economy has not achieved a static equilibrium; it has merely completed one phase of a continuous, non-linear limit cycle.
@@ -1886,13 +1958,25 @@ In standard mathematical finance, capital is written as a number in a differenti
 
 By grounding asset drift in the Monetary Expression of Labor Time (${m}_{t}$), the organic composition (${\omega }_{t}$), and the rate of exploitation (${e}_{t}$), mathematical finance restores the living worker to the center of asset valuation. Fictitious capital cannot self-expand; it merely discounts claims on surplus labor extracted at the point of production.
 
-\subsubsection{Thesis II: The First Fundamental Theorem of Asset Pricing is Inherently Transitory}
-Orthodox asset pricing assumes that an equivalent martingale measure $Q\sim P$ exists globally in time.
+\subsubsection{Thesis II: Finite-Horizon Pricing and Material Default Are Distinct Questions}
+The financial model must specify its horizon, admissible strategies,
+discounted gains, default payoffs, and recovery rules. Under the relevant
+hypotheses, NFLVR is equivalent to existence of an appropriate equivalent
+pricing measure; it is not an assumption that equivalence holds globally
+on an infinite-horizon sigma field.
 
-We have proved that under competitive accumulation, the TRPF forces the Girsanov kernel to diverge over long horizons:
+Section \ref{sec:measure-correction} corrects the earlier claim that the
+TRPF or divergence of $\theta_t$ as $t\to\infty$ proves failure of
+Novikov's condition at a fixed finite $T$. The kernel $\theta_t=t$
+satisfies Novikov on every finite horizon despite asymptotic divergence.
+Moreover, Novikov is sufficient, not necessary: its failure does not
+prove absence of an equivalent pricing measure.
 
-\[\fitmath{\lim_{t \to \infty} \Vert{}\theta_t\Vert{} = \infty \implies \mathbb{E}^\mathbb{P}\left[ \exp\left( \frac{1}{2}\int_0^T \Vert{}\theta_t\Vert{}^2 dt \right) \right] = \infty}\]
-The equivalent martingale measure $Q$ is not an eternal property of financial markets; it is an \textbf{ideological and mathematical construct that breaks down during valorization crises}. Financial derivatives and credit claims cannot be continuously hedged or priced as martingales when debt service outstrips the physical extraction of surplus-value.
+Material default, interrupted payments, and inability to hedge every
+claim can be important without violating no-arbitrage. Any asserted
+breakdown of equivalent pricing measures requires a separate proof for
+the specified market. The present manuscript has not established that
+nonexistence result.
 
 \subsubsection{Thesis III: Crises Are Topological Necessities of Capitalist Reproduction}
 Crises cannot be legislated away by macro-prudential capital requirements or central bank liquidity injections.
@@ -1909,4 +1993,20 @@ A financial crash is therefore the only mathematical operator capable of resolvi
 \end{itemize}
 This concludes the formal development of the three articles.
 
+\begin{thebibliography}{9}
+\bibitem{KS-correction}
+Ioannis Karatzas and Steven E. Shreve.
+\emph{Brownian Motion and Stochastic Calculus}, 2nd edition.
+Graduate Texts in Mathematics 113, Springer, 1991.
+Chapters 3 and 5, for stochastic exponentials and changes of measure.
+
+\bibitem{DS-correction}
+Freddy Delbaen and Walter Schachermayer.
+\emph{The Fundamental Theorem of Asset Pricing for Unbounded Stochastic
+Processes}. Mathematische Annalen 312, 215--250, 1998.
+For the distinction between locally bounded and general semimartingales,
+and the scope of the 1994 locally bounded theorem, see the authors'
+abstract at
+\url{https://www.mat.univie.ac.at/~schachermayer/pubs/pubabs.php?id=84}.
+\end{thebibliography}
 \end{document}
