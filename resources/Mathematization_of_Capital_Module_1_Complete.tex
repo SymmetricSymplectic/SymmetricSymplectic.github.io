@@ -19,7 +19,7 @@
 \newtheorem{remark}{Remark}[section]
 
 \title{\textbf{Research Programme on the Mathematization of Karl Marx's \textit{Capital}}\\[0.5em]
-\large Unified Treatise on Volume I, Parts I--III (Chapters 1--11):\\
+\large Unified Treatise on Volume I, Parts I--VIII (Chapters 1--33):\\
 Commodity Axiomatics, Stochastic Circulation, and the Valorization Operator}
 \author{Research Programme Working Manuscript}
 \date{\today}
@@ -627,4 +627,155 @@ Combining Theorem 15.1 (\textit{Extra-Mehrwert}) and Theorem 17.2 (\textit{Moral
     \end{equation}
     \item While each atomic firm chooses $u_i^*(t) > 0$ to capture $\chi(\omega_i - \bar{\omega}_t) > 0$, the forward Kolmogorov (Fokker-Planck) transport of the capital distribution $m(\omega, t)$ drives $\bar{\omega}_t$ upward. In the symmetric Mean Field Equilibrium ($\omega_i = \bar{\omega}_t$), the superprofit term vanishes identically ($\chi(\bar{\omega}_t - \bar{\omega}_t) \equiv 0$), trapping the aggregate economy in a higher organic composition $\bar{\omega}_t$ and a secularly declining general rate of profit $r(\bar{\omega}_t) = \frac{e(\bar{\omega}_t)}{\bar{\omega}_t + 1}$.
 \end{enumerate}
+\newpage
+
+% ============================================================================
+% PART V / MODULE 5
+% ============================================================================
+\part{Module 5: Phenomenal Wage Projections, Capital Accumulation, Coagulation Dynamics, and Primordial Dispossession (Volume I, Parts V--VIII, Chapters 16--33)}
+
+\section{The Unified Valorization Manifold and the Wage-Form Projection (Parts V \& VI, Chapters 16--22)}
+
+\subsection{The Three-Dimensional Valorization Manifold (Chapters 16--18)}
+
+Combining the extensive mechanics of Module 3 with the intensive and productivity mechanics of Module 4, let $T \in (\lambda_{lp}, T_{\max}]$ denote the working day, $\iota \ge 1$ the relative intensity (condensation) of labor, and $\lambda_{lp}(\boldsymbol{\lambda}, \mathbf{b}) = \boldsymbol{\lambda}^\top \mathbf{b}$ the value of labor-power. The \textbf{Unified Surplus-Value Functional} is:
+\begin{equation}
+    s(T, \iota, \boldsymbol{\lambda}, \mathbf{b}) = \iota T - \boldsymbol{\lambda}^\top \mathbf{b}, \qquad e(T, \iota, \boldsymbol{\lambda}, \mathbf{b}) = \frac{\iota T}{\boldsymbol{\lambda}^\top \mathbf{b}} - 1
+\end{equation}
+with total exterior differential on the production state manifold:
+\begin{equation}
+    ds = \underbrace{\iota \, dT}_{\text{Extensive (Absolute)}} + \underbrace{T \, d\iota}_{\text{Intensive (Condensation)}} - \underbrace{\left(\mathbf{b}^\top d\boldsymbol{\lambda} + \boldsymbol{\lambda}^\top d\mathbf{b}\right)}_{\text{Productivity (Relative) \& Subsistence Shift}}
+\end{equation}
+
+\subsection{The Wage-Form as a Fetishistic Temporal Projection (Chapters 19--22)}
+
+In Chapter 19, Marx demonstrates that although the capitalist purchases the stock commodity \textbf{Labor-Power} at value $\lambda_{lp}$ (paying money wage $w_m = \lambda_{lp}/\lambda_m$), the transaction appears phenomenally on the surface of circulation as the price of the entire $T$-hour flow of \textbf{Living Labor}.
+
+\begin{definition}[The Wage Fetishism Projection Operator $\mathcal{F}_w$]
+The \textbf{Time-Wage Operator} $\mathcal{F}_w : \mathbb{R}_{>0} \times (\lambda_{lp}, T_{\max}] \to \mathbb{R}_{>0}$ projects the stock reproduction value $\lambda_{lp}$ uniformly across the entire working day $T = t_n + t_s$:
+\begin{equation}
+    w_{\text{hour}} \coloneqq \mathcal{F}_w(\lambda_{lp}, T) = \frac{\lambda_{lp}}{\lambda_m T} \quad \left[\text{units of } \mathbf{e}_m \text{ per hour of living labor}\right]
+\end{equation}
+By smearing the payment of Necessary Labor Time $t_n = \lambda_{lp}$ evenly across $[0, T]$, the step-function indicator of paid labor $\mathbb{I}_{[0, t_n]}(t)$ is replaced by the constant density $\frac{t_n}{T} \mathbb{I}_{[0, T]}(t)$, obliterating the phenomenal visibility of Surplus Labor Time $t_s = T - t_n$.
+\end{definition}
+
+\begin{proposition}[Piece-Wages as an Endogenous Ratchet of Labor Intensity (Chapter 21)]
+Let $\bar{q} = q_0 / T$ be the socially average hourly physical output of a worker at baseline intensity $\iota = 1$. The \textbf{Piece-Wage Rate} is defined by the inverse productivity mapping $p_{\text{piece}} \coloneqq \frac{w_{\text{hour}}}{\bar{q}} = \frac{\lambda_{lp}}{\lambda_m q_0}$. Suppose each worker $\alpha$ chooses individual labor intensity $\iota_\alpha \ge 1$ to maximize net daily payoff $U_\alpha(\iota_\alpha) = p_{\text{piece}} q_0 \iota_\alpha - \frac{\psi}{2}(\iota_\alpha - 1)^2$ ($\psi > 0$). Then:
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Individual Intensification Equilibrium:} Every worker endogenously selects a strictly supra-normal intensity:
+    \begin{equation}
+        \iota^* = 1 + \frac{p_{\text{piece}} q_0}{\psi} = 1 + \frac{\lambda_{lp}}{\lambda_m \psi} > 1
+    \end{equation}
+    \item \textbf{Competitive Piece-Rate Ratchet:} Once the sectoral distribution of worker intensity concentrates at the new social mean $\bar{\iota} = \iota^* > 1$, the socially normal daily output rises to $q'_0 = \iota^* q_0$, inducing capital to reset the piece-rate to $p'_{\text{piece}} = \frac{\lambda_{lp}}{\lambda_m \iota^* q_0} < p_{\text{piece}}$. Thus, piece-wages convert horizontal competition among workers into an endogenous mechanism that permanently elevates labor intensity $\iota$ while holding the daily real wage invariant at $\lambda_{lp}$.
+\end{enumerate}
+\end{proposition}
+
+\section{Simple and Expanded Reproduction: Extinction of Initial Ownership Titles (Part VII, Chapters 23--24)}
+
+\begin{theorem}[Finite-Time Extinction of Original Capital in Simple Reproduction (Chapter 23)]
+Let an enterprise start at $t = 0$ with advanced capital $K_0 = C_0 + V_0 > 0$ acquired entirely through the capitalist's own prior labor. Under Simple Reproduction, the enterprise generates a continuous surplus-value flow $s = e V_0 > 0$, which the capitalist withdraws entirely for personal consumption ($c_{\text{cap}} = s$) while maintaining total capital constant at $K(t) \equiv K_0$. Decompose $K(t) = K_{\text{orig}}(t) + K_{\text{cap}}(t)$ into the remaining unconsumed portion of the original advance $K_{\text{orig}}(t)$ and the cumulative capitalized surplus-value $K_{\text{cap}}(t)$ extracted from living labor. Then:
+\begin{equation}
+    \dot{K}_{\text{orig}}(t) = -s, \quad \dot{K}_{\text{cap}}(t) = +s \quad \forall t \in [0, \tau^*]
+\end{equation}
+At the finite critical turnover horizon:
+\begin{equation}
+    \tau^* \coloneqq \frac{K_0}{s} = \frac{C_0 + V_0}{e V_0} = \frac{\omega_0 + 1}{e} < \infty
+\end{equation}
+we have $K_{\text{orig}}(\tau^*) = 0$ and $K_{\text{cap}}(\tau^*) = K_0$. For all $t \ge \tau^*$, $100\%$ of the existing capital stock consists exclusively of appropriated unpaid alien labor.
+\end{theorem}
+
+\begin{proof}
+Integrating $\dot{K}_{\text{orig}}(t) = -s$ with initial condition $K_{\text{orig}}(0) = K_0$ yields $K_{\text{orig}}(t) = K_0 - s t$, which vanishes identically at $t = \tau^* = K_0 / s = (\omega_0 + 1)/e$. Since $K(t) = K_{\text{orig}}(t) + K_{\text{cap}}(t) = K_0$, $K_{\text{cap}}(\tau^*) = K_0$.
+\end{proof}
+
+\begin{proposition}[Inversion of the Laws of Commodity Appropriation in Expanded Reproduction (Chapter 24)]
+When a fraction $\alpha_{\text{acc}} \in (0, 1]$ of surplus-value is reinvested ($\dot{K}_t = \alpha_{\text{acc}} s_t$), the additional variable capital $\Delta V_t = \frac{\alpha_{\text{acc}} s_t}{\omega_t + 1}$ used to purchase fresh labor-power in period $t + dt$ is financed entirely out of the unpaid surplus labor $s_t$ extracted from the working class in period $t$. Consequently, without violating the Formal Equivalence of Exchange ($\delta_{\alpha \beta} \equiv 0$) at any market node, the substantive content of property inverts: the working class continually reproduces the very fund with which it is purchased, and requires each generation of workers to replace $\Delta V_t$ along with a fresh increment of unpaid surplus-value $\Delta s_{t+dt} = e \Delta V_t$.
+\end{proposition}
+
+\section{The General Law of Capitalist Accumulation (Part VII, Chapter 25)}
+
+\subsection{Concentration and Centralization: Smoluchowski Coagulation-Advection PDE (Chapter 25, Section 2)}
+
+Let $f(k, t)$ denote the density of individual capitals of size $k \in (0, \infty)$ at time $t$. Marx distinguishes internal \textbf{Concentration} (autonomous accumulation at rate $g(k) = \alpha_{\text{acc}} r(k)$) from \textbf{Centralization} (mergers, absorptions, and credit-driven takeovers of smaller capitals by larger ones governed by a symmetric coagulation kernel $\mathcal{K}(k, k') \ge 0$).
+
+\begin{definition}[The Capital Concentration-Centralization Equation]
+The evolution of the capital size distribution $f(k, t)$ is governed by the coupled Advection--Smoluchowski Integro-Partial Differential Equation:
+\begin{equation}
+    \frac{\partial f(k, t)}{\partial t} + \frac{\partial}{\partial k}\big(g(k) k f(k, t)\big) = \frac{1}{2} \int_0^k \mathcal{K}(k', k - k') f(k', t) f(k - k', t) \, dk' - f(k, t) \int_0^\infty \mathcal{K}(k, k') f(k', t) \, dk'
+\end{equation}
+\end{definition}
+
+\begin{proposition}[Mass Conservation and Finite-Time Monopoly Gelation in Centralization]
+Under pure centralization ($g(k) \equiv 0$):
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{Conservation of Aggregate Social Capital:} The first moment $K_{\text{soc}}(t) = \int_0^\infty k f(k, t) \, dk$ is strictly invariant ($\dot{K}_{\text{soc}} = 0$), while the total number of independent capitalists $M(t) = \int_0^\infty f(k, t) \, dk$ is strictly decreasing:
+    \begin{equation}
+        \frac{dM(t)}{dt} = -\frac{1}{2} \int_0^\infty \int_0^\infty \mathcal{K}(k, k') f(k, t) f(k', t) \, dk \, dk' < 0
+    \end{equation}
+    \item \textbf{Monopoly Gelation Transition:} If the financial/competitive takeover advantage scales super-linearly with capital size ($\mathcal{K}(k, k') = \kappa_0 (k k')^\gamma$ with $\gamma > 1/2$), the second moment $\int_0^\infty k^2 f(k, t) \, dk$ diverges at a finite critical time $t_{\text{gel}} < \infty$, forming a macroscopic monopoly cluster (``one single capitalist corporation'' in a given branch, Ch. 25, Sec. 2).
+\end{enumerate}
+\end{proposition}
+
+\subsection{The Marx-Goodwin-Mechanization Dynamical System of the Industrial Reserve Army (Chapter 25, Sections 1, 3 \& 4)}
+
+Let $E_t = L_t / N_t \in (0, 1)$ be the employment rate (so $U_t = 1 - E_t$ is the \textbf{Relative Industrial Reserve Army}), $u_t = \frac{1}{1 + e_t} \in (0, 1)$ be the wage share of net value added, and $\omega_t = C_t / V_t \in \mathbb{R}_{>0}$ be the systemic organic composition of capital.
+
+\begin{theorem}[Endogenous Reproduction of the Industrial Reserve Army and Secular Wage-Share Compression]
+Consider the coupled three-dimensional accumulation system:
+\begin{align}
+    \frac{\dot{E}_t}{E_t} &= \alpha_{\text{acc}} \left(\frac{1 - u_t}{u_t (\omega_t + 1)}\right) - \big(\delta + n + \beta_\omega (\eta_0 + \eta_u u_t)\big) \\
+    \frac{\dot{u}_t}{u_t} &= -\gamma_w + \rho_w E_t \\
+    \frac{\dot{\omega}_t}{\omega_t} &= \eta_0 + \eta_u u_t
+\end{align}
+where $\alpha_{\text{acc}}, \gamma_w, \rho_w, \delta, n > 0$, $\beta_\omega \in (0, 1)$, and $\eta_u \ge 0$ measures induced labor-saving mechanization in response to wage pressure. Then:
+\begin{enumerate}[label=(\arabic*)]
+    \item \textbf{Constant Organic Composition Regime ($\eta_0 = \eta_u = 0, \, \omega_t \equiv \omega_0$, Ch. 25, Sec. 1):} The $(E_t, u_t)$ system forms a conservative Hamiltonian oscillator around the interior center:
+    \begin{equation}
+        E^* = \frac{\gamma_w}{\rho_w}, \qquad u^*(\omega_0) = \frac{\alpha_{\text{acc}}}{\alpha_{\text{acc}} + (\delta + n)(\omega_0 + 1)}
+    \end{equation}
+    with conserved Lyapunov-Hamiltonian functional:
+    \begin{equation}
+        \mathcal{H}(E, u) = \rho_w E - \gamma_w \ln E + \frac{\alpha_{\text{acc}}}{\omega_0 + 1}\left(\ln u + \frac{1}{u}\right) + (\delta + n - \frac{\alpha_{\text{acc}}}{\omega_0 + 1})\ln u = \text{const}
+    \end{equation}
+    Thus, the Industrial Reserve Army $U_t = 1 - E_t$ is endogenously regulated by the pace of capital accumulation itself, expanding whenever wage hikes blunt accumulation and contracting during accumulation booms.
+    \item \textbf{Rising Organic Composition Regime ($\eta_u > 0$, Ch. 25, Sec. 3--4):} As wage pressure induces mechanization ($\dot{\omega}_t > 0$), the quasi-stationary locus $u^*(\omega_t)$ drifts secularly downward:
+    \begin{equation}
+        \frac{\partial u^*(\omega_t)}{\partial \omega_t} = -\frac{\alpha_{\text{acc}}(\delta + n + \beta_\omega \eta_0)}{\left[\alpha_{\text{acc}} + (\delta + n + \beta_\omega \eta_0)(\omega_t + 1)\right]^2} < 0
+    \end{equation}
+    Progressively fewer workers are absorbed per unit of accumulated capital ($\frac{V_t}{K_t} = \frac{1}{\omega_t + 1} \to 0$), generating a consolidated \textbf{Relative Surplus Population} (Floating, Latent, and Stagnant layers of the Reserve Army) alongside growing aggregate wealth $K_t \to \infty$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+For Part (1), setting $\eta_0 = \eta_u = 0$ decouples $\omega_t = \omega_0$. Dividing $\dot{u}_t$ by $\dot{E}_t$ yields the separable differential equation $\frac{-\gamma_w + \rho_w E}{E} dE = \left[\frac{\alpha_{\text{acc}}}{(\omega_0+1)u^2} - \left(\frac{\alpha_{\text{acc}}}{\omega_0+1} + \delta + n\right)\frac{1}{u}\right] du$, whose integration yields the strictly convex level curves of $\mathcal{H}(E, u)$, proving closed periodic orbits around $(E^*, u^*(\omega_0))$. Part (2) follows by differentiating the quasi-static nullcline $\dot{E}_t = 0$ implicitly with respect to $\omega_t$.
+\end{proof}
+
+\section{So-Called Primitive Accumulation and the Historical Topology of Property (Part VIII, Chapters 26--33)}
+
+\subsection{The Dispossession Operator $\hat{\mathcal{D}}_{\text{prim}}$ and Wakefield's Colonial Theorem (Chapters 26--31 \& 33)}
+
+\begin{proposition}[Wakefield's Colonial Non-Valorization Theorem (Chapter 33)]
+Let an economy consist of producers $\alpha \in \mathcal{A}$ who have free access to independent land and means of production ($\mathbf{q}_\alpha^{\text{means}} > \mathbf{0}$), allowing each producer to appropriate the full product of their $T$-hour working day ($V_{\text{self}} = T$). Then no worker voluntarily accepts a wage contract paying $\lambda_{lp} < T$, forcing the equilibrium surplus-value to vanish ($s = T - \lambda_{lp} = 0$). Consequently, stocks of money $M$ and machinery $\mathbf{a}$ cannot function as \textbf{Capital} unless the working population is first topologically separated from $\mathcal{U}^{\text{means}}$.
+\end{proposition}
+
+\begin{definition}[The Primitive Accumulation Dispossession Operator $\hat{\mathcal{D}}_{\text{prim}}$]
+Let $\mathcal{S}_0 = \prod_{\alpha=1}^N \left(\mathcal{U}^{\text{means}}_{>0}\right)_\alpha$ represent the pre-capitalist state of dispersed petty-producer property. \textbf{So-Called Primitive Accumulation} is a non-market, extra-economic projection operator $\hat{\mathcal{D}}_{\text{prim}}$ (enclosures, colonial expropriation, sovereign debt, and penal legislation) that maps $\mathcal{S}_0$ onto the polarized boundary condition required by Module 3:
+\begin{equation}
+    \hat{\mathcal{D}}_{\text{prim}} : \mathcal{S}_0 \longrightarrow \mathcal{S}_1 \coloneqq \underbrace{\{\mathbf{0}\}^{N - M}}_{\text{Proletariat } (\mathbf{q}_\alpha^{\text{means}} = \mathbf{0})} \times \underbrace{\left(\mathcal{U}^{\text{means}}_{>0}\right)^M}_{\text{Capitalist Class}} \quad (M \ll N)
+\end{equation}
+\end{definition}
+
+\subsection{The Negation of the Negation as Topological Closure (Chapter 32)}
+
+\begin{theorem}[Dialectical Closure of Volume I: The Double Topological Inversion]
+The macro-historical trajectory of Volume I forms a closed sequence of two operators connecting three distinct property-production topologies:
+\begin{equation}
+    \mathcal{S}_0 \text{ (Dispersed Petty Property)} \xrightarrow{\hat{\mathcal{D}}_{\text{prim}}} \mathcal{S}_1 \text{ (Capitalist Private Property)} \xrightarrow{\hat{\mathcal{N}}_{\text{soc}}} \mathcal{S}_2 \text{ (Associated Social Property)}
+\end{equation}
+\begin{enumerate}[label=(\roman*)]
+    \item \textbf{First Negation ($\hat{\mathcal{D}}_{\text{prim}}$):} Dissolves private property founded on the producer's own isolated labor ($\hat{F}_{\text{iso}}$), establishing polarized capitalist property ($\mathcal{S}_1$).
+    \item \textbf{Internal Evolution on $\mathcal{S}_1$:} The superadditive production operators of Module 4 ($\hat{F}_{\text{coop}}, \mathcal{G}_{\text{man}}$, and automated industry) socialize the labor process ($\text{dim}(\mathcal{L}_{\text{coop}}) \to N$), while the Smoluchowski Coagulation dynamics of Section 20.1 drive the number of independent capital poles toward the gelation singularity ($M(t) \to O(1)$).
+    \item \textbf{Second Negation ($\hat{\mathcal{N}}_{\text{soc}}$ --- Expropriation of the Expropriators):} At the monopoly centralization limit $M(t) \to O(1)$, the singular concentration of ownership becomes incompatible with the fully socialized production operator, inducing the low-codimension transition $\hat{\mathcal{N}}_{\text{soc}}: \mathcal{S}_1 \to \mathcal{S}_2$ that restores individual possession on the basis of common ownership of $\mathcal{U}^{\text{means}}$.
+\end{enumerate}
+\end{theorem}
 \end{document}
