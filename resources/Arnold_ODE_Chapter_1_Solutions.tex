@@ -17,16 +17,16 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
 \setlength{\emergencystretch}{3em}
-\title{V. I. Arnold: Ordinary Differential Equations\\Chapters 1--3 --- Worked Solutions}
+\title{V. I. Arnold: Ordinary Differential Equations\\Chapters 1--5 --- Worked Solutions}
 \author{Felix Alfonso Camacho Moya}
-\date{15 October 2026}
+\date{18 October 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-Solutions to all explicitly numbered problems in Chapters 1--3, ``Basic Concepts,'' ``Basic Theorems,'' and ``Linear Systems,'' of the third edition, translated by Roger Cooke (Springer, 1992), together with answers to selected embedded proof questions. Statements are summarized; the textbook remains the reference for their full wording. Each identifier has the form section.subsection/problem, so repeated problem numbers are unambiguous. Page references are the printed pages, not the PDF viewer's page numbers (the library scan has an offset of four).
+Solutions to all explicitly numbered problems in Chapters 1--5, ``Basic Concepts,'' ``Basic Theorems,'' ``Linear Systems,'' ``Proofs of the Main Theorems,'' and ``Differential Equations on Manifolds,'' of the third edition, translated by Roger Cooke (Springer, 1992), together with answers to selected embedded proof questions. Statements are summarized; the textbook remains the reference for their full wording. Each identifier has the form section.subsection/problem, so repeated problem numbers are unambiguous. Page references are the printed pages, not the PDF viewer's page numbers (the library scan has an offset of four).
 \end{abstract}
 \paragraph{Scope and conventions.}
-This is a complete three-chapter draft for mathematical review. Solutions are real unless indicated otherwise. A phase curve is the image of a maximal solution; an integral curve includes the time coordinate. Formulas obtained by division are always supplemented by the solutions lost in that division. A flow is global only when its solutions exist for every real time. Stars in the textbook are retained in the relevant headings.
+This is a complete five-chapter draft for mathematical review. Solutions are real unless indicated otherwise. A phase curve is the image of a maximal solution; an integral curve includes the time coordinate. Formulas obtained by division are always supplemented by the solutions lost in that division. A flow is global only when its solutions exist for every real time. Stars in the textbook are retained in the relevant headings.
 \paragraph{Reading cautions.}
 The projective-extension wording on p.~24 requires clarification; see the corresponding solution. Angular velocity for the oscillator is signed $-1$ in the usual orientation. Degenerate zero-radius ``circles'' and ``helices'' are singletons and straight lines, respectively. All diagrams below are original schematic drawings.
 {\small\setlength{\parskip}{0pt}\tableofcontents}
@@ -3061,6 +3061,696 @@ Problem 27.5/2 has a false analyticity qualification in the printed answer. Prob
 Chapters 1--3 now contain 323 numbered problem solutions: 108 in Chapter 1, 96 in Chapter 2, and 119 in Chapter 3. This is a worked-solutions draft for mathematical review.
 \paragraph{Source.}
 V. I. Arnold, \emph{Ordinary Differential Equations}, third edition, translated by Roger Cooke, Springer, 1992, Chapter 3, printed pp.~152--266 (library PDF pages 156--270). Problem identifiers preserve the section, subsection, and problem numbers of that edition.
+
+\clearpage
+\part*{Chapter 4 --- Proofs of the Main Theorems}
+\addcontentsline{toc}{part}{Chapter 4 --- Proofs of the Main Theorems}
+This chapter contains ten numbered exercises. The two starred invariant-manifold problems are proved by constructing a contraction on a space of decaying trajectories. Supplementary review arguments explain the main theorems in the surrounding text; they are distinguished from the numbered exercises. Throughout, norms of linear maps are induced operator norms, and a contraction has one uniform Lipschitz constant strictly less than one.
+
+\section{Contraction mappings (Section 30)}
+\prob{30.1/1}{Three maps of the real line}{267}
+None of the three maps is a contraction of all of $\R$ with its usual distance. If a differentiable map satisfies $|f(x)-f(y)|\leq\lambda|x-y|$, then passing to the limit in a difference quotient gives $|f'(x)|\leq\lambda$ at every point.
+\begin{enumerate}
+\item For $f(x)=\sin x$, $f'(0)=1$, excluding every $\lambda<1$.
+\item For $f(x)=\sqrt{x^2+1}$, $|f'(x)|=|x|/\sqrt{x^2+1}<1$ at each finite $x$, but its supremum on $\R$ equals one. Thus no uniform $\lambda<1$ works.
+\item For $f(x)=\arctan x$, $f'(0)=1$, again excluding a contraction constant below one.
+\end{enumerate}
+All three maps are $1$-Lipschitz. In fact each strictly decreases the distance between any two distinct points, but this weaker property is not the contraction hypothesis. For the second map, for example, there is not even a fixed point: $x=\sqrt{x^2+1}$ is impossible. This also illustrates why a pointwise strict derivative bound is insufficient on a noncompact domain.
+
+\prob{30.1/2}{Replacing the non-strict inequality}{267}
+As written for \emph{all} $x,y$, the sign cannot be replaced by $<$: taking $x=y$ would require $0<0$. If one restricts to $x\ne y$ and retains a uniform constant $\lambda<1$, the two formulations are equivalent. Indeed, from a non-strict bound with constant $\lambda$, choose $\mu$ with $\lambda<\mu<1$; then
+\[\rho(Ax,Ay)\leq\lambda\rho(x,y)<\mu\rho(x,y)\qquad(x\ne y).\]
+Conversely a strict bound with a fixed $\mu<1$ implies the non-strict bound, including on the diagonal. Simply requiring $\rho(Ax,Ay)<\rho(x,y)$ for distinct points is weaker, as the preceding exercise shows.
+
+\paragraph{Review: the fixed-point estimate.}
+Let $A$ act on a complete metric space and have contraction constant $\lambda<1$. Put $x_n=A^nx_0$ and $d=\rho(x_1,x_0)$. The triangle inequality gives, for $m>n$,
+\[\rho(x_m,x_n)\leq\sum_{j=n}^{m-1}\lambda^jd
+ \leq\frac{\lambda^n d}{1-\lambda}.\]
+Completeness supplies a limit $X$; continuity of $A$ gives $AX=X$. If $AY=Y$, then $\rho(X,Y)\leq\lambda\rho(X,Y)$ forces $X=Y$. Taking $m\to\infty$ gives the a priori bound. Applying the same argument starting at $x_n$ gives the useful a posteriori bound
+\[\boxed{\rho(x_n,X)\leq\frac{\rho(x_n,Ax_n)}{1-\lambda}.}\]
+More generally $\rho(z,X)\leq\rho(z,Az)/(1-\lambda)$ for any approximate fixed point $z$. The requirement that $A$ map the complete space into itself is essential.
+
+\section{Existence and continuous dependence (Section 31)}
+\prob{31.3/1}{Six Lipschitz tests}{272}
+The answers on the stated domains are, in order, no, no, yes, no, no, yes.
+\begin{enumerate}
+\item $f(x)=x^2$ on $\R$: with $y=x+1$, the quotient is $|2x+1|$, which is unbounded.
+\item $f(x)=\sqrt{x}$ on $x>0$: use $x=\varepsilon$, $y=4\varepsilon$. The quotient equals $1/(3\sqrt\varepsilon)$ and tends to infinity.
+\item $f(x_1,x_2)=\sqrt{x_1^2+x_2^2}$: the reverse triangle inequality gives $\bigl||u|-|v|\bigr|\leq|u-v|$, so the optimal constant is $L=1$.
+\item $f(x_1,x_2)=\sqrt{x_1^2-x_2^2}$ on $x_1^2\geq x_2^2$: compare $u=(1,1)$ and $v=(1+h,1)$, $h>0$. Their distance is $h$, whereas the difference of the function values is $\sqrt{2h+h^2}$. The quotient tends to infinity as $h\downarrow0$.
+\item $f(x)=x\ln x$ on $0<x\leq1$, with $f(0)=0$: comparison with zero gives quotient $|\ln x|\to\infty$. This function is continuous on the closed interval but not Lipschitz there.
+\item $f(z)=z^2$ on the closed complex unit disk: $|z^2-w^2|=|z-w||z+w|\leq2|z-w|$. Thus $L=2$ works. It is optimal, since $z=1$, $w=1-h$ gives quotient $2-h\to2$.
+\end{enumerate}
+These are global tests on the stated domains. Several negative examples are locally Lipschitz away from their problematic points or at every finite point, without possessing a global Lipschitz constant.
+
+\prob{31.3/2}{Contraction, Lipschitz continuity, and continuity}{272}
+A contraction is Lipschitz by definition, with a constant smaller than one. If $A$ is Lipschitz with constant $L>0$, choose $\delta=\varepsilon/L$; then $\rho_1(x,y)<\delta$ implies $\rho_2(Ax,Ay)<\varepsilon$. When $L=0$ the map is constant. Thus every Lipschitz map is uniformly continuous, hence continuous. Neither converse holds: the identity on $\R$ is Lipschitz but not a contraction, and $\sqrt{x}$ on $[0,1]$ is continuous but not Lipschitz.
+
+\paragraph{Review: the common Picard domain.}
+Choose a closed cylinder $|t-t_0|\leq a$, $|z-x_0|\leq b$ contained in the domain of $v$, with $|v|\leq C$ and $\|D_xv\|\leq L$. Choose $a',b'>0$ such that
+\[a'\leq a,\qquad b'+Ca'\leq b,\qquad q:=La'<1.\]
+On the compact parameter cylinder $K=\{|t-t_0|\leq a',\ |x-x_0|\leq b'\}$, let
+\[M=\{h\in C(K,\R^n): |h(t,x)|\leq C|t-t_0|\}.
+\]
+This is a closed subset of the complete space with the uniform norm, hence is complete. The operator
+\[(Ah)(t,x)=\int_{t_0}^t v(s,x+h(s,x))\dd s\]
+is well defined, maps $M$ to itself, and satisfies $\|Ah-Ak\|_\infty\leq q\|h-k\|_\infty$. Its unique fixed point gives $g(t,x)=x+h(t,x)$, jointly continuous in time and initial position. Differentiation of the integral in time proves $\partial_tg=v(t,g)$ and $g(t_0,x)=x$. The argument also works when $v$ is only continuous in $t$ and locally uniformly Lipschitz in $x$.
+
+\prob{31.8/1}{Uniqueness of the initial-value problem}{276--277}
+Let $u$ and $w$ solve the same equation with $u(t_0)=w(t_0)$, and restrict to a sufficiently small common time interval so that their graphs lie in a cylinder on which $v$ is $L$-Lipschitz in $x$. Subtracting their integral equations gives, on $|t-t_0|\leq h$,
+\[|u(t)-w(t)|\leq L\left|\int_{t_0}^t|u(s)-w(s)|\dd s\right|.
+\]
+If $Lh<1$, taking the supremum yields $D\leq LhD$, where $D=\max|u-w|$, hence $D=0$. This proves local uniqueness for arbitrary competing solutions, not just for a previously chosen Picard family. On the common connected interval of existence, the set of times where $u=w$ is nonempty, relatively closed by continuity, and relatively open by the same local argument at every point of coincidence. It is therefore the whole interval.
+
+\prob{31.9/1}{The inverse function theorem by contraction}{277}
+Let $F:U\subset\R^n\to\R^n$ be $C^1$ and suppose $DF(p)$ is invertible. Translate $p,F(p)$ to zero and multiply the target by $DF(p)^{-1}$. It suffices to treat
+\[F(x)=x+\varphi(x),\qquad \varphi(0)=0,\quad D\varphi(0)=0.\]
+Choose $r>0$ with $\overline B_r\subset U$ and $\sup_{\overline B_r}\|D\varphi\|\leq q<1$. For $|y|<(1-q)r$, the map $T_y(x)=y-\varphi(x)$ takes $\overline B_r$ into itself and is a contraction with constant $q$. Its fixed point $H(y)$ is the unique solution of $F(x)=y$ in the ball. Moreover,
+\[|H(y)-H(z)|\leq\frac{|y-z|}{1-q},\qquad
+ |F(x)-F(w)|\geq(1-q)|x-w|\quad(x,w\in\overline B_r).\]
+In particular $|H(y)|<r$. The open set $V=B_r\cap F^{-1}(B_{(1-q)r})$ is mapped bijectively onto $B_{(1-q)r}$, and $H$ is its continuous inverse.
+
+To prove differentiability, fix $y$, write $x=H(y)$, and put $k=H(y+h)-H(y)$. Taylor's first-order formula and the Lipschitz estimate for $H$ give
+\[h=DF(x)k+o(|k|),\qquad |k|\leq(1-q)^{-1}|h|.
+\]
+Since $DF(x)=I+D\varphi(x)$ is invertible (its inverse is the convergent Neumann series),
+\[H(y+h)-H(y)=DF(H(y))^{-1}h+o(|h|).\]
+Thus $DH(y)=DF(H(y))^{-1}$, continuously in $y$. If $F\in C^r$, repeated differentiation of this identity proves $H\in C^r$, including $r=\infty$. Undoing the translations and linear normalization proves the general theorem.
+
+\prob{31.9/2}{Convergence of Euler broken lines}{277--278}
+Work first on $[t_0,t_0+T]$ in the Picard cylinder, with $LT<1$, and fix initial position $x$. Let $e_\Delta$ be the polygon obtained with mesh size at most $\Delta$, and let $s(t)$ be the left endpoint of the mesh interval containing $t$. Then, except at its corners,
+\[e_\Delta'(t)=v(s(t),e_\Delta(s(t))),\qquad
+ |e_\Delta(t)-e_\Delta(s(t))|\leq C\Delta.
+\]
+The cylinder condition keeps all these polygons in the domain. Let $\omega(\eta)$ be a modulus of uniform continuity of $v$ on that cylinder, using the product distance $|t-s|+|z-w|$. The defect in the integral equation satisfies
+\[r_\Delta(t):=e_\Delta(t)-x-\int_{t_0}^t v(\tau,e_\Delta(\tau))\dd\tau,
+ \qquad \|r_\Delta\|_\infty\leq T\omega((1+C)\Delta).\]
+Writing $P\phi=x+\int v(\tau,\phi(\tau))\dd\tau$ and letting $g$ be its fixed point,
+\[\boxed{\|e_\Delta-g\|_\infty
+ \leq\frac{T\omega((1+C)\Delta)}{1-LT}\longrightarrow0.}\]
+This is uniform convergence of the whole family, with no subsequence extraction. If $v$ is $C^1$, bounded first derivatives give $\omega(\eta)\leq K\eta$, so the uniform error on this fixed interval is $O(\Delta)$. Reverse time for the backward half-interval. On any longer compact interval where the exact solution stays inside the domain, use finitely many such cylinders and continuous dependence to propagate the error from one interval to the next.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=4.8cm,y=1.35cm]
+\draw[->] (0,0)--(1.15,0) node[right] {$t$};
+\draw[->] (0,0)--(0,3.0) node[above] {$x$};
+\draw[gray!40] (1,0)--(1,2.72);
+\draw[black,thick,domain=0:1,samples=60] plot (\x,{exp(\x)});
+\draw[blue!75!black,thick] (0,1)--(.5,1.5)--(1,2.25);
+\draw[red!75!black,thick] (0,1)--(.25,1.25)--(.5,1.5625)--(.75,1.953125)--(1,2.44140625);
+\node[left] at (0,1) {$1$}; \node[below] at (1,0) {$1$};
+\node[right] at (1,2.72) {$e^t$};
+\node[right,red!75!black] at (1,2.44) {$\Delta=1/4$};
+\node[right,blue!75!black] at (1,2.14) {$\Delta=1/2$};
+\end{tikzpicture}
+\caption{Euler polygons for $x'=x$, $x(0)=1$. At each mesh point the slope is reset to the current approximate value. The defect estimate proves convergence beyond this explicit example.}
+\end{figure}
+
+\prob{31.9/3*}{Stable and unstable manifolds of a diffeomorphism}{278}
+Let $A$ be a $C^r$ local diffeomorphism, $r\geq1$, with $A(0)=0$ and no eigenvalues of $DA(0)$ on the unit circle. We construct a $C^r$ local stable manifold tangent to the stable subspace; applying the construction to $A^{-1}$ will give the unstable manifold. Here ``local invariant'' means invariant as long as the iterates under discussion remain in the chosen neighborhood.
+
+\paragraph{1. Splitting and a small nonlinear remainder.}
+Write $\R^n=E^s\oplus E^u$ using the generalized eigenspaces of $DA(0)$, and write
+\[A(s,u)=(Ss+f(s,u),\ Uu+h(s,u)).\]
+The remainder $N=(f,h)$ has $N(0)=0$, $DN(0)=0$. Choose equivalent norms on the two subspaces and a number $a<1$ so that
+\[\|S\|\leq a,\qquad\|U^{-1}\|\leq a,\qquad
+ |(s,u)|=\max(|s|,|u|).\]
+Such norms exist by the spectral-radius condition, for example by weighting Jordan coordinates. Multiply the remainder by a smooth cutoff supported in a sufficiently small ball, equal to one on a smaller ball. Since $DN(0)=0$ and $N(z)=o(|z|)$, the resulting globally defined remainder can be made Lipschitz with any prescribed small constant $\eta>0$. To see the cutoff estimate, the term from its derivative is bounded by a constant times $\sup_{|z|\leq c\rho}|N(z)|/\rho$, which tends to zero as the support radius $\rho$ tends to zero. We use this extension only to construct trajectories; the final sufficiently small ones solve the original map.
+
+\paragraph{2. The contraction on decaying sequences.}
+Fix $a<\beta<1$. In the Banach space
+\[X_\beta=\{z=(z_n)_{n\geq0}: \|z\|_\beta:=\sup_{n\geq0}\beta^{-n}|z_n|<\infty\},\]
+fix the initial stable coordinate $s_0=\xi$ and define
+\begin{align*}
+(\mathcal T_\xi z)^s_n
+ &=S^n\xi+\sum_{j=0}^{n-1}S^{n-1-j}f(z_j),\\
+(\mathcal T_\xi z)^u_n
+ &=-\sum_{j=n}^{\infty}U^{n-1-j}h(z_j).
+\end{align*}
+The first sum is empty when $n=0$. The two geometric-series estimates give
+\[\|\mathcal T_\xi z-\mathcal T_\xi w\|_\beta
+ \leq q\|z-w\|_\beta,\qquad
+ q=\eta\max\left\{\frac1{\beta-a},\frac{a}{1-a\beta}\right\}.
+\]
+Choose $\eta$ so small that $q<1$ and also $\eta/(1-a)<1$. Since $N(0)=0$, the operator maps $X_\beta$ to itself, and it has a unique fixed point $z(\xi)$ with
+\[\|z(\xi)\|_\beta\leq\frac{|\xi|}{1-q}.\]
+Subtracting consecutive formulas shows $z_{n+1}=A(z_n)$ for the extended map. Thus these are actual forward trajectories and $|z_n|\leq\beta^n|\xi|/(1-q)$. For sufficiently small $\xi$ the entire trajectory stays in the ball where the extension agrees with $A$.
+
+\paragraph{3. Smoothness and tangency.}
+We use the following parameter version of the contraction argument. If $T(p,z)$ is $C^r$ on Banach spaces and $\|D_zT\|\leq q<1$, its fixed point $z(p)$ is $C^r$, with
+\[Dz(p)=(I-D_zT(p,z(p)))^{-1}D_pT(p,z(p)).\]
+Indeed, the contraction estimate first bounds $|z(p+k)-z(p)|$ by a constant times $|k|$. Expanding the fixed-point identity to first order then leaves an $o(|k|)$ remainder. Invert $I-D_zT$ by its norm-convergent Neumann series to obtain the displayed derivative. Its continuity follows from the same series; differentiating the identity inductively proves all higher orders. This supplies the parameter result without assuming the desired manifold theorem.
+
+It applies here: the cutoff remainder has bounded derivatives, and pointwise composition on $X_\beta$ is $C^r$. For instance its $j$th derivative applied to $j$ sequences contributes a factor at most $\beta^{(j-1)n}$ after multiplying by the output weight $\beta^{-n}$, so the multilinear norms are bounded. Uniform continuity of the finite-dimensional derivatives on bounded sets controls the differentiation remainders. The geometric summation operators above are bounded. Hence $\xi\mapsto z(\xi)$ is $C^r$.
+
+At $\xi=0$ the fixed point is the zero sequence and $DN(0)=0$, so differentiation gives
+\[D_\xi z_n(0)\zeta=(S^n\zeta,0).\]
+Consequently $\psi(\xi):=z^u_0(\xi)$ is $C^r$, $\psi(0)=0$, $D\psi(0)=0$, and
+\[W^s_{\mathrm{loc}}=\{(\xi,\psi(\xi)):|\xi|<\varepsilon\}\]
+is an embedded manifold of dimension $\dim E^s=m_-$ tangent to $E^s$ at zero.
+
+\paragraph{4. Invariance and the local characterization.}
+Shifting a fixed trajectory by one place produces a decaying trajectory with stable initial coordinate $s_1$, so uniqueness identifies it with $z(s_1)$ whenever that coordinate is in the chosen parameter patch. In particular a smaller patch maps into a larger one, and the manifold germ is invariant. Every point on it tends to zero under forward iteration.
+
+For completeness, any forward orbit staying in a sufficiently small neighborhood belongs to this graph. Such an orbit is bounded. Iterating its unstable recurrence backward from index $N+1$ gives
+\[u_n=U^{-(N+1-n)}u_{N+1}
+       -\sum_{j=n}^{N}U^{n-1-j}h(z_j).
+\]
+The first term tends to zero as $N\to\infty$; the stable recurrence supplies the other fixed-point formula. On the space of bounded sequences the same operator is a contraction with constant at most $\eta/(1-a)<1$. The orbit is therefore the already constructed fixed point, which decays exponentially. Apply the entire argument to the local inverse $A^{-1}$. Its stable subspace is $E^u$, giving a $C^r$ manifold $W^u_{\mathrm{loc}}$ of dimension $m_+$, tangent to $E^u$, with convergence to zero under backward iteration. These are the required incoming and outgoing manifolds. Zero-dimensional stable or unstable subspaces are allowed; the corresponding manifold is just the fixed point.
+
+\prob{31.9/4*}{Stable and unstable manifolds of a vector field}{278}
+Write the $C^r$ vector field near its hyperbolic zero as $v(z)=Bz+R(z)$, with $R(0)=0$, $DR(0)=0$. Let $E^s,E^u$ be the spectral subspaces for eigenvalues of $B$ with negative and positive real parts. There are constants $K\geq1$, $\gamma>0$ such that
+\[\|e^{tB_s}\|\leq Ke^{-\gamma t},\qquad
+  \|e^{-tB_u}\|\leq Ke^{-\gamma t}\quad(t\geq0).\]
+This follows directly from the Jordan exponential formulas, absorbing their polynomial factors into a slightly slower exponential. Choose $0<\sigma<\gamma$, split $R=(R_s,R_u)$, and make a cutoff extension with Lipschitz constant $\eta$ as in the preceding exercise.
+
+On the complete space of continuous paths with norm
+\[\|z\|_\sigma=\sup_{t\geq0}e^{\sigma t}|z(t)|,\]
+fix $s(0)=\xi$ and define
+\begin{align*}
+(\mathcal T_\xi z)_s(t)&=e^{tB_s}\xi+
+ \int_0^t e^{(t-\tau)B_s}R_s(z(\tau))\dd\tau,\\
+(\mathcal T_\xi z)_u(t)&=-\int_t^\infty
+ e^{(t-\tau)B_u}R_u(z(\tau))\dd\tau.
+\end{align*}
+With the maximum norm on the splitting, the contraction constant is at most
+\[q=K\eta\max\{(\gamma-\sigma)^{-1},(\gamma+\sigma)^{-1}\}<1\]
+when $\eta$ is sufficiently small. The unique fixed path satisfies
+\[\|z(\cdot;\xi)\|_\sigma\leq\frac{K|\xi|}{1-q}.\]
+Differentiating the integrals, including the variable lower limit of the unstable integral, gives $z'=Bz+R(z)$. Its initial unstable coordinate $u(0)=\psi(\xi)$ depends $C^r$ on $\xi$ by the parameter-contraction argument just proved (the same weighted composition estimates apply to continuous paths). At zero,
+\[D_\xi z(t;0)\zeta=(e^{tB_s}\zeta,0),\]
+so $D\psi(0)=0$. Thus the graph of $\psi$ is a $C^r$ local stable manifold tangent to $E^s$. Small enough initial parameters keep the whole fixed path inside the original neighborhood, where it decays at least as $e^{-\sigma t}$.
+
+Time translation of a decaying fixed path proves positive local invariance: after a time shift it obeys the same integral formulas with its new stable coordinate. Conversely, any forward trajectory remaining in the small neighborhood is bounded. Variation of constants and $e^{-TB_u}u(T)\to0$ give the two integral formulas. On bounded paths their operator is a contraction when $K\eta/\gamma<1$, which is already ensured by the above choice. Therefore every such bounded local trajectory lies on the stable graph. Apply the same construction to $-v$ to obtain the unstable graph, tangent to $E^u$, with convergence as $t\to-\infty$. This proves both claims and the asserted local invariance, without assuming a prior linearizing conjugacy.
+
+\paragraph{A concrete check of both starred constructions.}
+The map $A(s,u)=(s/2,2u-7s^2/4)$ and the vector field $s'=-s$, $u'=u-3s^2$ both have stable manifold $u=s^2$ and unstable manifold $s=0$. Indeed, in coordinates $w=u-s^2$ the map becomes $(s,w)\mapsto(s/2,2w)$ and the vector field becomes $(s',w')=(-s,w)$. The stable manifold is curved, but its tangent at zero is exactly the stable eigenspace.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=2.6cm,y=2cm]
+\draw[->,gray] (-1.4,0)--(1.45,0) node[right] {$s$};
+\draw[->,gray] (0,-.65)--(0,1.5) node[above] {$u$};
+\draw[blue!75!black,thick,domain=-1.12:1.12,samples=60] plot (\x,{\x*\x});
+\draw[blue!75!black,->,thick] (-.9,.81)--(-.82,.6724);
+\draw[blue!75!black,->,thick] (.9,.81)--(.82,.6724);
+\draw[red!75!black,thick] (0,-.55)--(0,1.35);
+\draw[red!75!black,->,thick] (0,.45)--(0,.8);
+\draw[red!75!black,->,thick] (0,-.18)--(0,-.45);
+\fill (0,0) circle (1.2pt);
+\node[blue!75!black,right] at (1.15,1.2) {$W^s:\ u=s^2$};
+\node[red!75!black,left] at (-.04,1.3) {$W^u:\ s=0$};
+\end{tikzpicture}
+\caption{Exact invariant manifolds for the map and vector field above. Arrows show forward motion: toward zero on the blue parabola and away from zero on the red axis.}
+\end{figure}
+
+\Needspace{14\baselineskip}
+\section{Differentiability and rectification (Section 32)}
+\prob{32.4/1}{Smooth dependence for a smooth vector field}{282}
+Suppose $v\in C^\infty$ near $(t_0,x_0)$. We prove that the local solution map $g(t,x)$ is $C^\infty$ jointly in time and initial position. For any fixed integer $k$, the chapter's preliminary differentiability theorem applied with $r=k+1$ already gives $C^k$ regularity on a neighborhood. To conclude $C^\infty$ on a single open neighborhood, it is useful to establish the sharper result $v\in C^r\Rightarrow g\in C^r$ on a common local flow domain. Here is a proof that also fills in the ``last derivative'' step of Section 32.6.
+
+\paragraph{1. First derivative, assuming only $v\in C^1$.}
+Work on a compact time interval $I$ and a smaller ball of initial values whose trajectories lie in the interior of a fixed compact cylinder. Let $L$ bound $\|D_xv\|$ there. Comparing the integral equations and iterating the integral inequality gives
+\[|g(t,x+h)-g(t,x)|\leq e^{L|t-t_0|}|h|.\]
+For reference, this version of Gronwall's estimate follows by iterating $d(t)\leq d_0+L\int_{t_0}^t d(s)\dd s$: the first $m$ terms are $d_0\sum_{j=0}^{m-1}(L|t-t_0|)^j/j!$, and the bounded remainder tends to zero. Reverse time for $t<t_0$.
+
+Let $J(t,x)$ solve the linear matrix equation
+\[\partial_tJ(t,x)=D_xv(t,g(t,x))J(t,x),\qquad J(t_0,x)=I_n.\]
+Continuous coefficients give a unique solution. Picard iteration for this linear equation, uniformly on compact parameter sets, shows that $J$ is continuous in $(t,x)$. Put $\delta(t)=g(t,x+h)-g(t,x)$ and $e(t)=\delta(t)-J(t,x)h$. Uniform continuity of $D_xv$ and the preceding bound give
+\begin{align*}
+v(t,g(t,x)+\delta(t))-v(t,g(t,x))
+ &=D_xv(t,g(t,x))\delta(t)+r(t,h),\\
+\sup_{t\in I}|r(t,h)|&=o(|h|).
+\end{align*}
+Subtracting the two integral equations yields
+\[e(t)=\int_{t_0}^t\bigl[D_xv(s,g(s,x))e(s)+r(s,h)\bigr]\dd s.\]
+The same integral estimate implies $\sup_{t\in I}|e(t)|=o(|h|)$. Hence $D_xg=J$, continuously. Since $\partial_tg=v(t,g)$ is also continuous, $g$ is jointly $C^1$. No second derivative of $v$ was used.
+
+\paragraph{2. Higher derivatives on a common domain.}
+Induct on $r$. If $v\in C^r$ with $r\geq2$, the augmented system
+\[z'=v(t,z),\qquad Y'=D_xv(t,z)Y\]
+has a $C^{r-1}$ right-hand side. By the induction hypothesis its solution depends $C^{r-1}$ on time and its initial data. Restricting the initial matrix to $I_n$ gives $J=D_xg\in C^{r-1}$. Thus all derivatives of $g$ of order $r$ involving at least one initial-coordinate derivative exist and are continuous. The remaining time derivatives follow from $\partial_tg=v(t,g)$ and the induction hypothesis. Therefore $g\in C^r$.
+
+The time and initial-value neighborhood can be chosen once: fix the smaller cylinder used above, with all original trajectories in its interior. Each variational equation is linear in its highest derivative, with continuous coefficients and forcing on that compact interval, so it exists throughout the same interval. Equivalently, continue the augmented solutions along that interval using finitely many local neighborhoods. The regularity argument is local at every point of this fixed flow domain; it does not require intersecting an infinite sequence of shrinking neighborhoods. Applying it for every finite $r$ proves
+\[\boxed{v\in C^\infty\quad\Longrightarrow\quad g\in C^\infty.}\]
+
+\paragraph{Review: vector and matrix variations (the question on p.~280).}
+If $Y'=A(t)Y$ and $Y(t_0)=I_n$, then $y(t)=Y(t)c$ solves $y'=A(t)y$ with $y(t_0)=c$. Conversely solve the vector equation for the $n$ basis initial vectors and place the solutions in the columns of $Y$. Uniqueness proves that these constructions are inverse. The matrix $Y(t)$ is nonsingular: if $Y(t)c=0$, uniqueness of the vector initial-value problem at that time forces $c=0$. A single vector solution alone generally does not determine an entire fundamental matrix; one needs a basis of initial data.
+
+For the nonlinear equation the matrix $J=D_xg$ is the fundamental matrix of the variation equation along the corresponding trajectory. The second initial derivative, a bilinear map $H=D_x^2g$, satisfies
+\[\partial_t H[a,b]=D_xv(t,g)H[a,b]
+ +D_x^2v(t,g)[Ja,Jb],\qquad H(t_0)[a,b]=0.\]
+This illustrates the higher-order construction: the unknown highest derivative occurs linearly; its forcing involves already obtained lower derivatives.
+
+\paragraph{Review: rectifying a nonautonomous equation.}
+For $x'=v(t,x)$ define $G(t,\xi)=(t,g(t,\xi))$, where $g(t_0,\xi)=\xi$. At $(t_0,x_0)$,
+\[DG=\begin{pmatrix}1&0\\v(t_0,x_0)&I_n\end{pmatrix},\]
+so $G$ is a local $C^r$ diffeomorphism by 31.9/1 when $v\in C^r$, $r\geq1$. Moreover $DG\,(1,0)=(1,v(t,g))$. Thus in the inverse coordinates the extended vector field $(1,v)$ becomes $(1,0)$: time advances and the initial-position coordinate is constant. No nonvanishing hypothesis on $v$ is needed here, since $(1,v)$ never vanishes.
+
+\paragraph{Review: rectifying an autonomous vector field.}
+If $v(x_0)\ne0$, choose a linear map $Q:\R^{n-1}\to\R^n$ whose image complements the line spanned by $v(x_0)$. Let $\Phi_t$ be the local flow and set
+\[F(t,\xi)=\Phi_t(x_0+Q\xi).\]
+Then $DF(0,0)(a,b)=a\,v(x_0)+Qb$ is an isomorphism. The inverse function theorem gives local coordinates $(t,\xi)$, in which $v=\partial_t$ because $\partial_tF=v(F)$. The chart has the same $C^r$ regularity as the field. At a zero of an autonomous field such a rectification to a nonzero constant field is impossible: a diffeomorphism sends a zero tangent vector to zero.
+
+\clearpage
+\section*{Chapter 4 review and coverage}
+\addcontentsline{toc}{section}{Chapter 4 review and coverage}
+All ten explicitly numbered problems in Chapter 4 are covered, including both starred problems. The six tests in 31.3/1 and the three maps in 30.1/1 are grouped under their original problem identifiers.
+\begin{center}
+\begin{tabular}{llr}
+\toprule Section & Problem identifiers & Count\\\midrule
+30 & 30.1/1--2 & 2\\
+31 & 31.3/1--2, 31.8/1, 31.9/1--4 & 7\\
+32 & 32.4/1 & 1\\\midrule
+Total & & 10\\\bottomrule
+\end{tabular}
+\end{center}
+\paragraph{The proof structure.}
+Completeness and a uniform contraction constant give a unique fixed point and an error bound. The Picard operator then gives local existence and continuous dependence; its residual estimate also proves convergence of Euler polygons. The same fixed-point idea yields the inverse function theorem and invariant manifolds. The variation equation identifies the derivative of the flow, and the inverse function theorem turns that flow into rectifying coordinates.
+\paragraph{Points to retain.}
+Strict distance decrease is not a uniform contraction. A smooth function need not be globally Lipschitz on an unbounded domain. The contraction must preserve its complete function space. Local uniqueness extends across the common connected interval. Stable and unstable manifolds are locally invariant and tangent to spectral subspaces; they need not be straight. Smooth dependence has no loss of derivatives. The proof of $C^\infty$ regularity must provide a common open domain, not merely a potentially shrinking neighborhood for each derivative order.
+\paragraph{Qualifications.}
+In 30.1/2 a strict inequality for all pairs fails on the diagonal, although with distinct pairs and an adjustable uniform constant below one it gives an equivalent definition. Invariant-manifold statements refer to sufficiently small local pieces and to iterates or trajectories that remain in their domain. The cutoff extensions in the proofs are auxiliary; the constructed small trajectories solve the original equations. The two figures in this chapter are original drawings based on explicit formulas.
+\paragraph{Cumulative coverage.}
+Chapters 1--4 now contain 333 numbered problem solutions: 108 in Chapter 1, 96 in Chapter 2, 119 in Chapter 3, and 10 in Chapter 4. This remains a worked-solutions draft for mathematical review.
+\paragraph{Source.}
+V. I. Arnold, \emph{Ordinary Differential Equations}, third edition, translated by Roger Cooke, Springer, 1992, Chapter 4, printed pp.~267--287 (library PDF pages 271--291). Identifiers preserve the section, subsection, and problem numbering of that edition.
+
+\clearpage
+\part*{Chapter 5 --- Differential Equations on Manifolds}
+\addcontentsline{toc}{part}{Chapter 5 --- Differential Equations on Manifolds}
+This chapter contains 37 numbered problems, eight of them starred. Unless stated otherwise, manifolds are smooth, Hausdorff, second countable, and without boundary. A compact surface in the index-sum statements is therefore a closed surface. Vector fields are at least $C^1$ where uniqueness or derivatives are used, and smooth in the differential-topological constructions. Index sums refer to isolated zeros, which are finite in number on a compact manifold. The standard orientation of $\C$ is the ordered basis $(1,i)$.
+
+\section{Differentiable manifolds (Section 33)}
+\prob{33.3/1}{Stereographic charts and their transition map}{291}
+Write $S^2=\{(X,Y,Z):X^2+Y^2+Z^2=1\}$, with $N=(0,0,1)$ and $S=(0,0,-1)$. Projecting onto the equatorial plane, define
+\[\varphi_N(X,Y,Z)=\left(\frac X{1-Z},\frac Y{1-Z}\right),\qquad
+\varphi_S(X,Y,Z)=\left(\frac X{1+Z},\frac Y{1+Z}\right).
+\]
+The domains are $S^2\setminus\{N\}$ and $S^2\setminus\{S\}$, and both images are $\R^2$. If $r^2=u^2+v^2$, their inverses are
+\[\varphi_N^{-1}(u,v)=\frac{(2u,2v,r^2-1)}{1+r^2},\qquad
+ \varphi_S^{-1}(u,v)=\frac{(2u,2v,1-r^2)}{1+r^2}.
+\]
+These formulas follow by intersecting the line from the projection pole to $(u,v,0)$ with the sphere. On the overlap the transition is
+\[\varphi_S\circ\varphi_N^{-1}(u,v)=\frac{(u,v)}{u^2+v^2},\qquad (u,v)\ne(0,0).
+\]
+It is smooth and is its own inverse. Thus the charts are consistent and cover the sphere. Projection onto the tangent planes at the opposite poles, as in a common drawing convention, simply multiplies the displayed chart coordinates by two; the transition then becomes $w\mapsto4w/|w|^2$. Either convention defines the same smooth structure. These two real-coordinate charts need not be orientation preserving relative to one another; atlas consistency requires a diffeomorphism, not a positive Jacobian.
+
+\prob{33.4/1}{The topology defined by charts}{293}
+Let $G,H\subset M$ be open in the chart definition. In a chart $\varphi:W\to U$,
+\[\varphi(W\cap G\cap H)=\varphi(W\cap G)\cap\varphi(W\cap H),\]
+which is open in $U$. Thus $G\cap H$ is open. For any family $(G_\alpha)$,
+\[\varphi\left(W\cap\bigcup_\alpha G_\alpha\right)
+ =\bigcup_\alpha\varphi(W\cap G_\alpha),\]
+which is also open. The empty set and $M$ satisfy the definition. This proves the topology axioms; finite intersections follow by induction. Compatibility ensures the same topology for equivalent atlases: on overlaps, change of coordinates takes open sets to open sets.
+
+\prob{33.4/2}{Compactness of the sphere and projective space}{293}
+The sphere $S^n\subset\R^{n+1}$ is closed and bounded, hence compact. Its chart topology agrees with the subspace topology, as the stereographic formulas and their inverses show. The quotient map
+\[\pi:S^n\longrightarrow\RP^n,\qquad x\longmapsto[x_0:\cdots:x_n],\]
+is continuous and surjective: each line has precisely two unit representatives. Its continuity can be checked in an affine chart by the continuous coordinate ratios $x_j/x_i$ on $x_i\ne0$. Therefore $\RP^n$ is compact as the continuous image of a compact space.
+
+Alternatively, directly using the finite-chart criterion in the book, set
+\[F_i=\{[x]: |x_i|\geq|x_j|\text{ for all }j\},\qquad 0\leq i\leq n.
+\]
+Every $F_i$ lies in the affine chart $x_i\ne0$, where its image is the compact cube $[-1,1]^n$. These finitely many sets cover $\RP^n$, proving compactness without appealing to quotient-space terminology.
+
+\prob{33.5/1}{Connectedness of affine and projective quadrics}{293}
+In $\R^3$ consider $x^2-y^2-z^2=C$, $C\ne0$.
+\begin{itemize}
+\item If $C>0$, then $x=\pm\sqrt{C+y^2+z^2}$. There are exactly two components, each parametrized by $(y,z)\in\R^2$; a path cannot change the sign of $x$.
+\item If $C=-c<0$, then $(y,z)=\sqrt{x^2+c}(\cos\theta,\sin\theta)$. This is a diffeomorphism from $\R\times S^1$ onto the quadric, which is connected.
+\end{itemize}
+To interpret the question in $\RP^3$, homogenize the equation:
+\[x^2-y^2-z^2=Cw^2\quad\text{in }[x:y:z:w].\]
+Both resulting projective quadrics are connected. For $C>0$ we have $x\ne0$, so setting $x=1$ identifies the quadric with the ellipsoid $y^2+z^2+Cw^2=1$, hence with $S^2$. The two affine sheets are the regions $w>0$ and $w<0$ in this representative and meet along their common projective circle at infinity $w=0$.
+
+For $C=-c<0$, the equation is $x^2+cw^2=y^2+z^2$. The common value is positive for every projective point, so normalize it to one. This gives
+\[(x,\sqrt c\,w)=(\cos\alpha,\sin\alpha),\qquad
+ (y,z)=(\cos\beta,\sin\beta),\]
+with the remaining identification $(\alpha,\beta)\sim(\alpha+\pi,\beta+\pi)$. The quotient of the connected torus by this identification is connected; indeed it is another torus, since it is $\R^2$ modulo the lattice generated by $(2\pi,0)$ and $(\pi,\pi)$. Neither projective quadric has singular points, since the gradient of its nondegenerate homogeneous quadratic form vanishes only at the excluded zero vector.
+
+\prob{33.5/2}{Components of the real general linear group}{294}
+For $n\geq1$, $GL(n,\R)$ has exactly two components, distinguished by the sign of the determinant. The determinant is continuous and never zero, so the sign is constant on a connected component.
+
+To prove that each sign class is path connected, use the polar decomposition $A=QP$, where $P=(A^TA)^{1/2}$ is positive definite and $Q$ is orthogonal. The path $Q((1-t)P+tI)$ joins $A$ to $Q$ without changing its determinant sign. Every member of $SO(n)$ can be put by orthogonal conjugation into planar rotation blocks and $1$ blocks: real $-1$ eigenvalues occur in pairs and are rotation blocks of angle $\pi$. Decreasing each rotation angle continuously to zero gives a path to $I$. A fixed reflection $R=\operatorname{diag}(-1,1,\ldots,1)$ takes the negative determinant part of $O(n)$ to $SO(n)$, so each negative determinant matrix is connected to $R$. This proves that there are precisely two components, including when $n=1$.
+
+\prob{33.5/3}{The manifold of orthogonal matrices}{294}
+Let $F:M_n(\R)\to\operatorname{Sym}_n(\R)$ be $F(Q)=Q^TQ$. At an orthogonal matrix,
+\[DF_Q(H)=Q^TH+H^TQ.\]
+This map is onto: for a prescribed symmetric matrix $B$, take $H=QB/2$. The implicit function theorem therefore makes $F^{-1}(I)=O(n)$ a smooth embedded manifold, with
+\[\dim O(n)=n^2-\frac{n(n+1)}2=\frac{n(n-1)}2,\qquad
+ T_QO(n)=\{QK:K^T=-K\}.
+\]
+The two components are $SO(n)$ and $R\,SO(n)$, by the paths in the preceding solution. Multiplication by $R$ is a diffeomorphism between them. Thus $O(n)\cong SO(n)\times\{\pm1\}$ as a manifold, as asserted in the book. This notation need not be an assertion of a direct-product group structure. For $n=1$ the two components are single points.
+
+\prob{33.9/1}{Five descriptions of the same three-manifold}{298}
+All five manifolds are diffeomorphic, with the usual convention that a rigid-body configuration records the positions of its labeled material points. We give explicit identifications.
+\paragraph{The unit tangent bundle and the rotation group.}
+A point of $T_1S^2$ is a pair $(a,b)$ with $|a|=|b|=1$ and $a\cdot b=0$. The map
+\[(a,b)\longmapsto [\,a\ \ b\ \ a\times b\,]\in SO(3)\]
+is smooth and has smooth inverse given by the first two columns. This identifies $M_2$ with $M_1$. It also gives a smooth structure on $T_1S^2$ directly. Alternatively its three defining equations in $\R^6$ have independent gradients at every such pair.
+\paragraph{Projective three-space and rotations.}
+Regard $S^3$ as the unit quaternions and $\R^3$ as the imaginary quaternions. The map
+\[q\longmapsto R_q,\qquad R_q(a)=qaq^{-1},\]
+takes values in $SO(3)$, has kernel $\{1,-1\}$, and is onto: rotation through angle $\theta$ about a unit axis $u$ is represented by $q=\cos(\theta/2)+u\sin(\theta/2)$. At $q=1$ its derivative sends an imaginary quaternion $b$ to the infinitesimal rotation $a\mapsto2b\times a$, an isomorphism of three-dimensional tangent spaces. Group translation gives the same rank everywhere. Hence the induced bijection $S^3/\{\pm1\}=\RP^3\to SO(3)$ is a local diffeomorphism and therefore a diffeomorphism. This identifies $M_3$ with $M_1$.
+\paragraph{Rigid-body configurations.}
+Fix an oriented orthonormal material frame at the fixed point in a reference configuration. Any allowed configuration is obtained by one unique orientation-preserving orthogonal map of this frame, so $M_4\cong SO(3)$. If one deliberately identifies physically indistinguishable configurations under a body's symmetry group, a quotient configuration space can result; that is not the labeled-body space used here.
+\paragraph{The complex equations.}
+Write $z=a+ib\in\C^3$. The equations for $M_5$ become
+\[|a|^2-|b|^2=0,\qquad a\cdot b=0,\qquad |a|^2+|b|^2=2.
+\]
+Equivalently $|a|=|b|=1$ and $a\cdot b=0$. Thus $z\mapsto(a,b)$ is a diffeomorphism $M_5\to T_1S^2$, and the displayed frame map identifies $M_5$ with $SO(3)$. In summary,
+\[\boxed{M_1\cong M_2\cong M_3\cong M_4\cong M_5\cong SO(3)\cong\RP^3.}\]
+
+\Needspace{14\baselineskip}
+\section{Tangent bundles and vector fields (Section 34)}
+\prob{34.2/1}{The zero section and the bundle projection}{300}
+In tangent coordinates a point of $TM$ is written $(x,\xi)$, and
+\[i(x)=(x,0),\qquad p(x,\xi)=x.\]
+Both maps are smooth, and $p\circ i=\operatorname{id}_M$. The image of $i$ is locally the coordinate subspace $\xi=0$, so it is an embedded submanifold. The restriction $p|_{i(M)}$ is the smooth inverse of $i:M\to i(M)$, proving the required diffeomorphism. Explicitly, $Di_x(a)=(a,0)$ is injective and $Dp_{(x,\xi)}(a,b)=a$ is surjective. These formulas are compatible with tangent-coordinate changes $(y,\eta)=(y(x),Dy(x)\xi)$.
+
+\prob{34.3/1}{Parallelizing the torus, and the obstruction on a Mobius band}{301}
+On $T^n=\R^n/(2\pi\mathbb Z)^n$, the constant coordinate vectors on $\R^n$ descend to $n$ everywhere independent smooth vector fields $E_1,\ldots,E_n$. They give a bundle isomorphism
+\[T^n\times\R^n\longrightarrow TT^n,\qquad
+ (x,c)\longmapsto\sum_{j=1}^n c_jE_j(x).\]
+Its inverse records the coefficients in this frame. In particular the two-torus is parallelizable.
+
+Model the open Mobius band by $(\theta,s)\in\R\times(-1,1)$ with $(\theta+2\pi,s)\sim(\theta,-s)$. Suppose it had a global frame. Lift its two vectors to the strip and let $B(\theta,s)$ be their coefficient matrix in $(\partial_\theta,\partial_s)$. At the central circle the gluing condition is
+\[B(\theta+2\pi,0)=\begin{pmatrix}1&0\\0&-1\end{pmatrix}B(\theta,0).
+\]
+Thus the nonzero continuous function $\det B(\theta,0)$ would change sign after one turn, which is impossible by the intermediate value theorem. The band is not parallelizable. The same argument applies to the closed band if manifolds with boundary are allowed. A single nowhere-zero field, such as $\partial_\theta$, does exist; parallelizability requires a full frame.
+
+\paragraph{Review: the suggested frame on $S^3$ (p.~302).}
+At a unit quaternion $q$, the vectors $qi,qj,qk$ are tangent to $S^3$ and form an orthonormal basis of $T_qS^3$: left multiplication by $q$ preserves the real Euclidean inner product, and $i,j,k$ are orthogonal to $1$. These three smooth fields give an explicit parallelization. This does not imply that every sphere is parallelizable.
+
+\prob{34.4/1}{The chain rule for tangent mappings}{302--303}
+Represent $\xi\in T_xM$ by a curve $\gamma$ with $\gamma(0)=x$. Then
+\[T(g\circ f)(\xi)=[g\circ f\circ\gamma]
+ =Tg([f\circ\gamma])=(Tg\circ Tf)(\xi).
+\]
+Equivalently, in local coordinates $Tf(x,\xi)=(f(x),Df(x)\xi)$, so
+\[Tg(Tf(x,\xi))=(g(f(x)),Dg(f(x))Df(x)\xi)
+ =T(g\circ f)(x,\xi).
+\]
+This also answers the embedded differentiability question on p.~302: the coordinate formula for $Tf$ is smooth when $f$ is smooth. At finite regularity, $f\in C^r$ gives the natural map $Tf$ of class $C^{r-1}$. Finally $T(\operatorname{id}_M)=\operatorname{id}_{TM}$, so taking tangent mappings respects both identity and composition.
+
+\Needspace{14\baselineskip}
+\section{Global flows (Section 35)}
+\paragraph{Review: why compact support gives completeness.}
+Let a smooth field $v$ vanish outside a compact set $K$. Local existence supplies a common time interval $(-\varepsilon_j,\varepsilon_j)$ for all initial points in each member of an open cover of $K$. Choose a finite subcover and a positive minimum $\varepsilon$. Outside $K$ the constant solution exists for all time; uniqueness makes it the only solution there. Hence every point of $M$ has a solution for at least $|t|<\varepsilon$. Restarting at its endpoint gives existence for arbitrary positive and negative time. Uniqueness yields $\Phi_{s+t}=\Phi_s\circ\Phi_t$ and $\Phi_t^{-1}=\Phi_{-t}$; finite compositions of local solution maps give smooth dependence on $(t,x)$. This proves the global flow theorem. On a compact manifold take $K=M$. For a smooth time-dependent field on a compact $M$, the same finite-cover argument works on each compact time strip, so solutions exist for every time in the field's time domain.
+
+\prob{35.4/1}{Extending a linear field to projective space}{308}
+Embed the affine space as $\{[X_0:X]:X_0\ne0\}\subset\RP^n$ by $x=X/X_0$. The linear flow $x\mapsto e^{tA}x$ extends to
+\[\widehat\Phi_t[X_0:X]=[X_0:e^{tA}X].\]
+These are smooth projective diffeomorphisms and form a one-parameter group. Their velocity field is a smooth extension of $x'=Ax$. The hyperplane at infinity $H=\{X_0=0\}$ is invariant under the entire group, so the extended field is tangent to $H$. The extension is unique because the affine chart is dense and two continuous sections agreeing there agree everywhere.
+
+For a direct coordinate check use the chart $X_1\ne0$ and write $y_1=X_0/X_1=1/x_1$, $y_k=X_k/X_1=x_k/x_1$ for $k\geq2$. Differentiation gives
+\begin{align*}
+\dot y_1&=-y_1\left(a_{11}+\sum_{j=2}^n a_{1j}y_j\right),\\
+\dot y_k&=a_{k1}+\sum_{j=2}^n a_{kj}y_j
+ -y_k\left(a_{11}+\sum_{j=2}^n a_{1j}y_j\right),\quad k\geq2.
+\end{align*}
+These polynomial formulas extend across $y_1=0$ and have $\dot y_1=0$ there. The analogous charts $X_i\ne0$ cover all of $H$.
+
+If $A=A(t)$, the same formulas define a time-dependent smooth field on compact $\RP^n$. It has solutions on every finite time interval. A solution starting off $H$ cannot meet $H$ at a finite time: the solution through such a meeting point stays in $H$, and uniqueness backwards would force the original solution to have started there. Thus solutions of the original linear system remain in the affine chart for all finite times. This gives the geometric global-existence argument of the text.
+
+\Needspace{14\baselineskip}
+\section{Indices and degrees (Section 36)}
+\paragraph{Convention and a correction to p.~317.}
+For $v=(v_1,v_2)\ne0$, the positively oriented angular form is
+\[\omega_v=\frac{v_1\,\mathrm dv_2-v_2\,\mathrm dv_1}{v_1^2+v_2^2},\qquad
+ \operatorname{ind}_v(\gamma)=\frac1{2\pi}\int_\gamma\omega_v.
+\]
+Locally $\omega_v=\mathrm d\arg(v_1+iv_2)$. The numerator printed in equation (1) on p.~317 is incorrect; differentiating $\arctan(v_2/v_1)$ gives the numerator above. In particular $v(z)=z$ on a counterclockwise unit circle has index $+1$, agreeing with the examples and answers elsewhere in the chapter. The form is locally exact and hence closed wherever $v\ne0$.
+
+\prob{36.1/1}{The winding number of a power field}{310}
+For an integer $n$ and $z=e^{i\theta}$, $v(z)=z^n=e^{in\theta}$. A continuous argument along the parametrized circle is $n\theta$, whose change from $0$ to $2\pi$ is $2\pi n$. Therefore
+\[\operatorname{ind}_{z^n}(S^1)=n.\]
+This includes $n=0$ and negative integers; for negative integers the field is defined on the punctured plane, as required. A noninteger real power would not in general define a single-valued field on that domain, so the exponent here must be integral.
+
+\prob{36.3/1}{An equilibrium for a bounded perturbation of the radial field}{311}
+Put $b(x,y)=(P(x,y),Q(x,y))$ and choose $B$ with $|b(x,y)|\leq B$ everywhere. The continuity needed below is part of the chapter's smooth-field setting. On the circle $|z|=R>B$, the homotopy
+\[v_s(z)=z+s\,b(z),\qquad 0\leq s\leq1,\]
+never vanishes, since $|v_s(z)|\geq R-B>0$. Thus $v_1$ has the same boundary index as $v_0(z)=z$, namely one. If $v_1$ had no zero in the disk, its normalized field would extend to the disk and its boundary index would be zero, a contradiction. Hence the system has at least one equilibrium. Boundedness without continuity would not by itself justify this conclusion.
+
+\prob{36.4/1}{An isolated zero with any prescribed integer index}{313}
+For an arbitrary integer $n$, the following polynomial fields, interpreted as complex-valued real planar fields, suffice:
+\[v_n(z)=
+\begin{cases}
+z^n,&n\geq1,\\
+|z|^2,&n=0,\\
+\overline z^{-n},&n\leq-1.
+\end{cases}\]
+Every field is smooth on all of $\R^2$, vanishes at zero, and is nonzero elsewhere. On a positively oriented circle, their arguments change by $2\pi n$, $0$, and $2\pi n$, respectively. Thus the isolated zero has index $n$. The use of $\overline z^{-n}$ for negative $n$ avoids the pole that $z^n$ itself would have at zero. For $n=0$ the vector always points in the positive real direction away from the zero.
+
+\prob{36.4/2}{Independence from the orientation of the plane}{313}
+Reverse the chosen orientation of the plane. The positively oriented small boundary circle is then traversed in the opposite direction, reversing the argument change. The target circle of vector directions also has its positive orientation reversed, reversing the sign assigned to that argument change a second time. The two minus signs cancel. Thus the index of an isolated zero is independent of the chosen plane orientation. This concerns reversal of the ambient orientation together with its induced conventions; reversing only the parametrization of a fixed curve changes that curve's index sign.
+
+\prob{36.5/1}{Counting polynomial roots by a boundary index}{314}
+Let $S=\partial D$ have positive boundary orientation and suppose $p$ has no zeros on $S$. At a root $a$ of multiplicity $m$ write $p(z)=(z-a)^m q(z)$, where $q(a)\ne0$. On a small circle around $a$, the normalized value of $q$ has winding zero because it extends without zeros to the enclosed disk. Hence the local index of $p$ is $m$.
+
+Remove disjoint small disks around all roots in $D$. On the remaining domain $\omega_p$ is closed. Stokes' theorem, with the inner circles negatively oriented as boundary components, gives
+\[\operatorname{ind}_p(S)=\sum_{a\in D:p(a)=0}\operatorname{mult}_a(p).\]
+The left side is precisely the winding number of the curve $p(S)$ about zero. The proof also applies to a multiply connected domain when all boundary components carry their induced orientations. In complex notation it gives
+\[\frac{1}{2\pi i}\int_S\frac{p'(z)}{p(z)}\,\mathrm dz
+ =\sum_{a\in D}\operatorname{mult}_a(p),\]
+since the real part of the logarithmic differential integrates to zero on a closed curve.
+
+\prob{36.6/1*}{Invariance of the local index under a diffeomorphism}{315}
+Let $F$ be a $C^1$ diffeomorphism near an isolated zero $p$ of $v$, and let $w(F(x))=DF(x)v(x)$ be the transformed field. Choose a small disk $D$ centered at $p$ whose closure is in the coordinate domain and contains no other zeros. Set $L=DF(p)$ and $\varepsilon=\operatorname{sgn}\det L$.
+
+For $x\in\partial D$, the nonzero vector loops
+\[DF(p+s(x-p))v(x),\qquad 0\leq s\leq1,\]
+form a homotopy, since every derivative matrix along the segment is invertible. Thus the winding of $w\circ F$ along the positively parametrized $\partial D$ equals the winding of $Lv$ there. The map $a\mapsto La/|La|$ on the direction circle has degree $\varepsilon$: an invertible positive-determinant matrix deforms through invertible matrices to a rotation and then to $I$, and a negative-determinant one deforms to a reflection. Therefore that winding is $\varepsilon\operatorname{ind}_p(v)$.
+
+The parametrized curve $F(\partial D)$ has orientation $\varepsilon$ times the positive boundary orientation of $F(D)$. Converting to the positive boundary therefore introduces another factor $\varepsilon$. Consequently
+\[\operatorname{ind}_{F(p)}(w)=\varepsilon^2\operatorname{ind}_p(v)
+ =\operatorname{ind}_p(v).\]
+The sum-of-indices formula, or deformation through a punctured neighborhood, permits $\partial F(D)$ to replace a small round circle. Hence the calculation proves chart independence as well as invariance under orientation-reversing diffeomorphisms.
+
+\prob{36.6/2*}{Critical points of a function on the sphere}{316}
+Choose any smooth Riemannian metric on $S^2$ and take $v=\nabla f$. At a critical point $p$, its derivative is $G(p)^{-1}\operatorname{Hess}_p f$ in coordinates, where $G$ is the positive-definite metric matrix. Hence it is nonsingular and has determinant sign $(-1)^i$ if the Hessian has $i$ negative eigenvalues. A nonsingular linear part has local index equal to its determinant sign: the remainder is $o(|x-p|)$ and can be homotoped to zero on a sufficiently small circle without introducing a zero there. Thus minima and maxima contribute $+1$, and saddles contribute $-1$.
+
+The index sum on $S^2$ is two, so
+\[\boxed{m_0-m_1+m_2=2.}\]
+For a direct reference field with sum two, use the height gradient $\nabla Z$ on the unit sphere. Its two zeros are the poles, with tangent linearizations $-I_2$ at the north pole and $I_2$ at the south pole, both of index $+1$. The field-independence argument in 36.6/4 below proves that every field with isolated zeros has this same sum, without assuming Euler's polyhedron formula.
+
+\review{The accompanying disk remark needs a boundary condition. Absence of critical points on the boundary alone does not force $m_0-m_1+m_2=1$: the function $f(x,y)=x$ on the disk has no critical points at all. The sum equals one if, for example, the gradient is everywhere outward or everywhere inward along the boundary. More generally it equals the winding number of the nonzero boundary gradient. An island interpreted as a regular level-set region, with the gradient consistently transverse to the coastline, satisfies the relevant extra condition.}
+
+\prob{36.6/3*}{Euler's formula for a convex polyhedron}{316--317}
+The boundary of a convex three-dimensional polyhedron is a topological sphere: radial projection from an interior point is a homeomorphism to $S^2$. Transfer its vertices, edges, and disk-shaped faces to the sphere and smooth the finitely many edge arcs without changing their incidences. We construct a smooth function on the sphere with one minimum for each vertex, one saddle for each edge, and one maximum for each face.
+
+Here are details of the construction behind this reduction. Take mutually disjoint small vertex disks and narrow edge strips, with each strip attached to the appropriate two disk boundaries; their union is a regular neighborhood of the embedded edge graph. The remaining pieces, one inside each face, are disks. Start on each vertex disk with the local minimum model $c+x^2+y^2$. Attach each edge strip as a one-handle, using the saddle model $c-x^2+y^2$ in its center. Away from that center extend the function across collars as a coordinate with strictly positive derivative in the collar direction. Finally cap each remaining boundary component with its face disk and the maximum model $c-x^2-y^2$.
+
+Choose the minimum levels below all saddle levels, and all saddle levels below the maximum levels. Collars can be reparametrized monotonically so that their function values and derivatives match. Smoothing the collar joins preserves the strictly positive transverse derivative there, so it introduces no extra critical points. The three displayed models are nondegenerate. This gives the promised counts $m_i=\alpha_i$. Applying the preceding sphere identity yields
+\[\boxed{\alpha_0-\alpha_1+\alpha_2=2.}\]
+This construction uses only the cellular structure of the polyhedral sphere; it does not assume the alternating-count formula it is proving.
+
+\prob{36.6/4*}{Independence of the index sum on a compact surface}{317}
+We prove independence directly by comparing two smooth fields $v,w$ with isolated zeros. This avoids assuming the Poincare--Hopf conclusion as a premise.
+\paragraph{The oriented case.}
+Choose disjoint coordinate disks $D_j$ whose interiors contain all zeros of both fields and whose boundaries contain none. There are finitely many zeros: an infinite zero set on a compact manifold would have a zero as an accumulation point, contrary to isolation. On
+\[N=M\setminus\bigcup_j\operatorname{int}D_j\]
+both fields are nonzero. Give the surface a metric. The oriented angle from $v$ to $w$ defines a smooth circle-valued map
+\[h:N\to S^1,\qquad
+ h=\frac{\langle v,w\rangle+i\,\operatorname{area}(v,w)}{|v||w|}.
+\]
+Let $\omega$ be the angular one-form on $S^1$. Since $\mathrm d\omega=0$, Stokes' theorem gives $\int_{\partial N}h^*\omega=0$. Relative to any positive frame on $D_j$, the winding of $h$ on its positive boundary is the winding of $w$ minus that of $v$. By the planar sum theorem this equals the total indices of $w$ in $D_j$ minus those of $v$ there. The boundaries of the holes occur with negative signs in $\partial N$, so their differences sum to zero. Consequently
+\[\sum_{p:v(p)=0}\operatorname{ind}_p(v)
+ =\sum_{p:w(p)=0}\operatorname{ind}_p(w).\]
+A coordinate frame can be changed to an oriented orthonormal frame on each disk without changing these boundary degrees: the change-of-frame map extends over the disk and its rotational part has zero boundary winding.
+\paragraph{The nonorientable case.}
+Use the orientation double cover $\widetilde M$, whose points are pairs $(x,o)$ with $o$ an orientation of $T_xM$. Give it the orientation selected by $o$. This is a compact oriented surface and its projection is a local diffeomorphism. Every field lifts uniquely through that projection, and every zero lifts to exactly two zeros, each having the same index as the original by 36.6/1. Applying the oriented result upstairs and dividing by two proves independence downstairs. Disconnected surfaces are treated component by component. This common integer is $\chi(M)$.
+
+\prob{36.6/5}{The torus and surfaces with handles}{317}
+A sphere with $g$ handles admits a smooth function with one minimum, $2g$ saddles, and one maximum. To see the count, build the surface from one disk by attaching $2g$ one-handles in the usual orientable paired pattern and then cap the single remaining boundary circle with a disk. The local function models and collar construction of 36.6/3 give one critical point per handle. Therefore
+\[\chi(\Sigma_g)=1-2g+1=2-2g.\]
+The torus has $g=1$, hence $\chi(T^2)=0$ (also immediate from a nowhere-zero constant angular field). The two-handled ``pretzel'' has $g=2$, hence characteristic $-2$. For $g=0$ the formula returns $\chi(S^2)=2$.
+
+\prob{36.6/6*}{Morse and cellular counts on any closed surface}{317}
+Let $f$ have only nondegenerate critical points on a compact surface $M$, orientable or not. Choose a metric. As in 36.6/2, the gradient has index $(-1)^i$ at a critical point whose Hessian has $i$ negative eigenvalues; this is a local statement and needs no global orientation. By the field independence just proved,
+\[m_0-m_1+m_2=\chi(M).\]
+For a finite triangulation or polygonal cell decomposition with disk faces, repeat the vertex-disk, edge-strip, face-cap construction of 36.6/3. It gives a smooth field, or the gradient of a smooth function, with one minimum per vertex, one saddle per edge, and one maximum per face. A twisted strip on a nonorientable surface changes a gluing map but does not change the local saddle model or its index. Thus
+\[\boxed{m_0-m_1+m_2=\alpha_0-\alpha_1+\alpha_2=\chi(M).}\]
+A finite smooth triangulation supplies such a decomposition for every compact smooth surface. The argument also shows that the alternating cell count is independent of the chosen decomposition. Boundaries would require additional boundary terms or conditions, and are excluded in this statement.
+
+\prob{36.7/1*}{Why the index is an integer}{318}
+Parametrize a closed curve by $\gamma:[0,1]\to U'$ with $\gamma(0)=\gamma(1)$, and let $a(t)=v(\gamma(t))/|v(\gamma(t))|\in S^1$. A continuous argument $\theta(t)$ exists along this interval. One elementary construction subdivides $[0,1]$ into finitely many intervals on which $a$ lies in an open semicircle, chooses an argument there, and adjusts successive choices by multiples of $2\pi$ to agree at endpoints. For a smooth or piecewise smooth curve these arguments are correspondingly differentiable. Hence
+\[\int_\gamma\omega_v=\theta(1)-\theta(0).\]
+Because $a(1)=a(0)$, the two endpoint arguments differ by $2\pi k$ for an integer $k$. Thus the index is $k\in\mathbb Z$. The same lifted-argument definition gives the index for continuous loops; the integral is its smooth version.
+
+\prob{36.7/2*}{Complete justification of the planar index assertions}{318}
+We use the corrected angular form above. The following arguments establish the definitions, invariance properties, applications, and local-zero statements of Sections 36.1--36.4.
+\paragraph{1. Counting turns and continuous deformations.}
+The preceding solution proves that the integral counts the net number of turns of the field direction, and is integral. If a loop of directions $a_s(t)$ varies continuously in $(s,t)$, its winding is constant in $s$. Indeed, by uniform continuity, for nearby parameters the quotient $a_s(t)/a_{s_0}(t)$ lies in an open semicircle around $1$, so it has a single-valued periodic argument and winding zero. Hence the winding is locally constant in $s$, and therefore constant on a parameter interval. This proves both deformation properties: deform the curve through the nonzero region of a fixed field, or deform the field while keeping it nonzero on the curve. No differentiability of the homotopy is required.
+\paragraph{2. Small curves near a regular point.}
+If $v(p)\ne0$, continuity makes all nearby normalized vectors lie in one semicircle. They have a single-valued angle there, so every closed curve in that neighborhood has index zero. More generally, if a field is nonzero on a disk, its normalized boundary loop contracts through its normalized values on the disk and has index zero. Contrapositively, nonzero boundary index forces a zero in the disk. This argument does not require the zeros inside to be isolated.
+\paragraph{3. The fundamental theorem of algebra.}
+For a monic polynomial $p(z)=z^n+a_1z^{n-1}+\cdots+a_n$ of degree $n\geq1$, choose $R>1+\sum_j|a_j|$. On $|z|=R$,
+\[|a_1z^{n-1}+\cdots+a_n|\leq\left(\sum_j|a_j|\right)R^{n-1}<R^n.\]
+Thus $z^n+s(a_1z^{n-1}+\cdots+a_n)$ never vanishes there for $0\leq s\leq1$. Its boundary index is $n$, so $p$ has a zero inside. Division by a root and induction give all $n$ roots counting multiplicities. A nonmonic polynomial is reduced to this case by dividing by its nonzero leading coefficient.
+\paragraph{4. The fixed-point theorem for the disk.}
+Let $f:\overline D_R\to\overline D_R$ be continuous. If it has a boundary fixed point, the result is proved. Otherwise, on $|x|=R$ the field $v_s(x)=s f(x)-x$ is nonzero for $s<1$ because $|s f(x)|<R$, and for $s=1$ by the assumption. It is a nonvanishing boundary homotopy from $-x$ to $f(x)-x$. Its index is one, since $-x$ makes one positive turn. If $f(x)-x$ had no zero in the disk, item 2 would give index zero. This contradiction proves the fixed point, including for continuous maps.
+\paragraph{5. Isolated zeros and the choice of curve.}
+If $p$ is the only zero in a small disk, any two concentric circles inside it are homotopic through the punctured disk, so their indices agree. More generally every loop in that punctured disk is homotopic to a small circle traversed its winding number about $p$ times. This follows by radial retraction to a circle and the lifted-argument construction. Its field index is therefore its winding about $p$ times the local index. In particular any small positive once-around curve gives the same local index. Reversing curve traversal changes its sign; reversing both ambient orientation conventions preserves the local index, as proved in 36.4/2.
+\paragraph{6. Simple zeros and the pictured examples.}
+If $v(p+h)=Ah+r(h)$ with $A$ invertible and $r(h)=o(|h|)$, choose $c>0$ with $|Ah|\geq c|h|$. On a small circle $|r(h)|<c|h|$, so $Ah+s r(h)$ is nonzero for every $s\in[0,1]$. The local index equals that of $Ah$, which is $\operatorname{sgn}\det A$ by deformation within the two components of $GL(2,\R)$. Nodes, foci, and linear centers have positive determinant and index $+1$; saddles have negative determinant and index $-1$. A nonlinear zero whose linearization has purely imaginary eigenvalues still has index $+1$, although linearization alone need not determine whether it is a center or a focus. A radial field along a twice-around loop has index two; a nearly constant field has index zero. Together with the node and saddle computations, these give the four indices $1,0,2,-1$ depicted in Fig.~263.
+\paragraph{7. Additivity and the sum theorem.}
+Concatenating loops adds their argument increments, while reversing a loop negates them. If finitely many isolated zeros lie inside a domain, remove small disks around them and integrate the closed angular form on the remainder. Stokes' theorem gives the outer boundary index as the sum of the local indices (with the induced orientations on any other boundary components). This supplies the precise cancellation principle used in the chapter and completes the planar foundations.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[x=1.1cm,y=1.1cm]
+\foreach \k/\shift in {-1/0,0/3,1/6,2/9}{
+ \begin{scope}[xshift=\shift cm]
+ \draw[gray!55] (0,0) circle (.8);
+ \foreach \a in {0,30,...,330}{
+  \draw[->,blue!75!black,thick]
+   ({.8*cos(\a)-.15*cos(\k*\a)},{.8*sin(\a)-.15*sin(\k*\a)})
+   --({.8*cos(\a)+.15*cos(\k*\a)},{.8*sin(\a)+.15*sin(\k*\a)});
+ }
+ \fill (0,0) circle (1pt);
+ \node at (0,-1.2) {$\operatorname{ind}=\k$};
+ \end{scope}
+}
+\end{tikzpicture}
+\caption{Vector directions along a positive circle for the polynomial fields in 36.4/1, with indices $-1,0,1,2$. These are sampled field arrows, not trajectories. The index counts their net rotation as their base point traverses the circle counterclockwise.}
+\end{figure}
+
+\prob{36.8/1}{Local degree of a real linear automorphism}{319}
+The derivative of $x\mapsto Ax$ at every point is $A$ itself, so its local degree is the same everywhere and equals $\operatorname{sgn}\det A$. To express the sign spectrally, count eigenvalues with algebraic multiplicity. Each nonreal conjugate pair contributes $\lambda\overline\lambda=|\lambda|^2>0$ to the determinant. Each positive real eigenvalue contributes a positive factor, and each negative real eigenvalue contributes a negative factor. The number $m_-$ of eigenvalues with negative real part differs from the number of negative real eigenvalues by an even number, contributed by conjugate pairs in the left half-plane. Therefore
+\[\boxed{\deg_x A=\operatorname{sgn}\det A=(-1)^{m_-}.}\]
+Invertibility excludes zero eigenvalues. Purely imaginary nonzero eigenvalues occur in conjugate pairs and cause no exception to the parity calculation.
+
+\prob{36.8/2}{Local degree of a normalized linear map on a sphere}{319}
+Let $f(x)=Ax/|Ax|$ on $S^{n-1}$, with $A$ invertible. It is a diffeomorphism, with inverse $y\mapsto A^{-1}y/|A^{-1}y|$. Orient the sphere as the boundary of the unit ball. For an oriented tangent basis $v_1,\ldots,v_{n-1}$ at $x$, the ambient basis $(x,v_1,\ldots,v_{n-1})$ is positive. Set $r=|Ax|$ and $y=f(x)$. Differentiation gives
+\[Df_x(v)=\frac1r(I-yy^T)Av.
+\]
+Subtracting multiples of the first column inside a determinant shows
+\[\det[y,Df_xv_1,\ldots,Df_xv_{n-1}]
+ =\frac{\det A}{r^n}\det[x,v_1,\ldots,v_{n-1}].\]
+Consequently $f$ preserves or reverses tangent orientation according to $\operatorname{sgn}\det A$, at every point:
+\[\deg_x f=\operatorname{sgn}\det A.\]
+The formula includes $S^0$ if its two points are given the boundary orientations inherited from the interval; ordinarily this calculation is used for $n\geq2$.
+
+\prob{36.8/3}{The antipodal map}{319}
+Take $A=-I_n$ in the preceding solution. The antipodal diffeomorphism on $S^{n-1}$ has local degree, and global degree,
+\[\deg f=(-1)^n.\]
+The exponent is the dimension of the ambient space, not the dimension $n-1$ of the sphere. The outward normal reverses along with the tangent vectors. In particular the antipodal map preserves the orientation of $S^1$ and reverses that of $S^2$.
+
+\prob{36.8/4}{Realification of a complex linear automorphism}{319}
+Write $A=B+iC$. Its real matrix, in the coordinates consisting of real and imaginary parts, is
+\[A_{\R}=\begin{pmatrix}B&-C\\C&B\end{pmatrix}.
+\]
+Over $\C$ this matrix is similar to $\operatorname{diag}(A,\overline A)$, using the coordinates $z=x+iy$ and $\overline z=x-iy$. Hence
+\[\det_{\R}A_{\R}=\det_{\C}A\,\overline{\det_{\C}A}
+ =|\det_{\C}A|^2>0.\]
+Its local degree is therefore $+1$ everywhere. This is the algebraic reason a nonzero complex derivative preserves the real orientation of a complex line.
+
+\prob{36.8/5}{Degree of a power map on the circle}{320}
+For $f(e^{i\theta})=e^{in\theta}$ and $n\ne0$, every target point has $|n|$ preimages. In angular coordinates the derivative is $n$, so each preimage contributes $\operatorname{sgn}n$. Thus $\deg f=|n|\operatorname{sgn}n=n$. For $n=0$ the map is constant and has degree zero: choose a regular value outside its image, whose preimage is empty. The degree definition does not require surjectivity, despite occasional use of the word ``onto'' in the text.
+
+\prob{36.8/6}{Global degree of a normalized linear map}{320}
+The map $f(x)=Ax/|Ax|$ is a diffeomorphism, so every target point is regular and has exactly one preimage. Its global degree is the local degree at that preimage, computed in 36.8/2:
+\[\boxed{\deg f=\operatorname{sgn}\det A.}\]
+
+\prob{36.8/7}{Power maps on the complex projective line}{320}
+Identify $\mathbb{CP}^1$ with the Riemann sphere, with its complex orientation. For $n\geq1$, the function $z\mapsto z^n$ extends smoothly across infinity: in reciprocal coordinates its expression is again $w\mapsto w^n$. The regular value $1$ has $n$ distinct preimages, and the complex derivative $nz^{n-1}$ is nonzero at each. Each contributes $+1$, so the degree is $n$.
+
+For $z\mapsto\overline z^{\,n}$, the same value has $n$ preimages and each local map is a holomorphic map followed or preceded by conjugation. Conjugation reverses real two-dimensional orientation, so every contribution is $-1$ and the degree is $-n$. Both constant cases $n=0$ have degree zero.
+
+\review{Here the printed answers presume $n\geq0$. If negative integer exponents are also allowed, these are rational or anti-rational maps of the sphere and their degrees are $|n|$ and $-|n|$, respectively. For example, $z\mapsto1/z$ on $\mathbb{CP}^1$ is holomorphic and has degree $+1$, although its restriction to the unit circle has degree $-1$. The real dimensions and orientations in these two questions differ.}
+
+\prob{36.8/8}{Degree of a polynomial on the Riemann sphere}{320}
+Let $p(z)=a_nz^n+\cdots+a_0$, $a_n\ne0$, $n\geq1$. It extends to infinity with $p(\infty)=\infty$, since in reciprocal source and target coordinates it is
+\[w\longmapsto\frac1{p(1/w)}
+ =\frac{w^n}{a_n+a_{n-1}w+\cdots+a_0w^n},\]
+which is holomorphic near $w=0$. Choose a finite value $c$ outside the finite set of critical values $p(\{p'=0\})$. The fundamental theorem of algebra gives exactly $n$ roots of $p(z)-c$, all simple. Every root has nonzero complex derivative and contributes $+1$, while infinity is not a preimage of $c$. Hence $\deg p=n$. A constant polynomial extends as a constant sphere map and has degree zero.
+
+\prob{36.8/9*}{The index is the degree of the direction map}{320}
+Let $h=(v/|v|)\circ\gamma:S^1\to S^1$. Parametrize the source once positively by $t\in[0,1]$ and lift $h$ to an argument $\theta(t)$, so $\theta(1)-\theta(0)=2\pi k$. The angular integral already gives $\operatorname{ind}_v(\gamma)=k$. We show that the signed-preimage definition of degree gives the same integer.
+
+Choose a regular target value $e^{i\alpha}$ distinct from $h(0)$. Its finitely many preimages are the crossings $\theta(t)=\alpha+2\pi j$, and each local degree is the sign of $\theta'(t)$. At an upward crossing the integer-valued function $\lfloor(\theta(t)-\alpha)/(2\pi)\rfloor$ jumps up by one, and at a downward crossing it jumps down by one. Its net change is
+\[\left\lfloor\frac{\theta(1)-\alpha}{2\pi}\right\rfloor
+ -\left\lfloor\frac{\theta(0)-\alpha}{2\pi}\right\rfloor=k.\]
+Thus the signed number of crossings is $k$, proving
+\[\boxed{\operatorname{ind}_v(\gamma)=\deg h.}\]
+If the regular value lies outside the image there are no crossings, and both numbers are zero. Constant direction loops are covered by this case.
+
+\prob{36.8/10}{The index of a nondegenerate zero in any dimension}{320}
+Translate the zero to $0$ and write $v(x)=Ax+r(x)$, where $A=Dv(0)$ is invertible and $r(x)=o(|x|)$. Let $c=\min_{|u|=1}|Au|>0$. On a sufficiently small sphere of radius $\rho$ we have $|r(x)|<c|x|/2$, so
+\[|Ax+s r(x)|\geq c|x|-|r(x)|>0\qquad(0\leq s\leq1).
+\]
+Normalizing these vectors defines a homotopy between the direction map of $v$ and that of $A$. Degree is invariant under this nonvanishing homotopy. Therefore
+\[\operatorname{ind}_0(v)=\deg\left(u\mapsto\frac{Au}{|Au|}\right)
+ =\operatorname{sgn}\det A.
+\]
+The same lower bound shows that zero is isolated, so the index is well defined. This argument works even when $A$ has purely imaginary nonzero eigenvalues; hyperbolicity is not needed for an index computation.
+
+\prob{36.8/11}{The index of an attracting radial field}{321}
+For $v(x)=-x$ on $\R^n$, the linear part is $-I_n$. Hence
+\[\operatorname{ind}_0(v)=\operatorname{sgn}\det(-I_n)=(-1)^n.\]
+Thus this attracting zero has index $+1$ in even dimensions and $-1$ in odd dimensions. Stability alone does not fix an index independently of dimension.
+
+\prob{36.8/12}{Euler characteristics of spheres, projective spaces, and tori}{321--322}
+For $n\geq1$ the answers are
+\[\boxed{\chi(S^n)=1+(-1)^n,\qquad
+\chi(\RP^n)=\frac{1+(-1)^n}{2},\qquad\chi(T^n)=0.}\]
+Here are explicit fields realizing the computations.
+\paragraph{The sphere.}
+On $S^n\subset\R^{n+1}$ the gradient of the height $x_0$ is
+\[v(x)=e_0-x_0x.\]
+Its only zeros are $\pm e_0$. On tangent vectors its linear part is $-I_n$ at $e_0$ and $I_n$ at $-e_0$. Their indices sum to $(-1)^n+1$.
+\paragraph{Real projective space.}
+The two-sheeted local diffeomorphism $S^n\to\RP^n$ lifts any field to one with two zeros of the same local index for each zero downstairs. Thus $\chi(S^n)=2\chi(\RP^n)$. This remains valid when projective space is nonorientable, since the local index is unchanged under a coordinate diffeomorphism: source and target orientation signs cancel.
+
+One can also compute downstairs directly. Choose distinct real numbers $a_0<a_1<\cdots<a_n$ and projectivize the linear flow $\dot X_i=a_iX_i$. Its only fixed points are the coordinate lines $[e_i]$. In the chart $X_i\ne0$, the tangent equations at this point are $\dot y_j=(a_j-a_i)y_j$, $j\ne i$. Exactly $i$ factors are negative, so the local index is $(-1)^i$. Their sum is $\sum_{i=0}^n(-1)^i=(1+(-1)^n)/2$.
+\paragraph{The torus.}
+A constant nonzero angular field on $T^n=\R^n/(2\pi\mathbb Z)^n$ has no zeros, so its index sum is zero. The condition $n\geq1$ matters here: $T^0$ is a single point with characteristic one. Also $S^0$ consists of two points and $\RP^0$ of one point, consistent with the first two formulas.
+
+\prob{36.8/13}{A nowhere-zero field on every odd-dimensional sphere}{322}
+Write $\R^{2n}=\R^n_q\times\R^n_p$ and consider
+\[v(q,p)=(p,-q).\]
+On $S^{2n-1}$ it is tangent because $(q,p)\cdot(p,-q)=0$, and it never vanishes because $|v(q,p)|^2=|q|^2+|p|^2=1$. Its flow is explicit:
+\[(q(t),p(t))=(q_0\cos t+p_0\sin t,\ p_0\cos t-q_0\sin t).
+\]
+This is precisely the first-order system for $q''=-q$ suggested in the hint. Every sphere trajectory is a circle with period $2\pi$. The construction supplies one nowhere-zero vector field, not a full parallelization of the sphere.
+
+\clearpage
+\section*{Chapter 5 review and complete numbered-exercise coverage}
+\addcontentsline{toc}{section}{Chapter 5 review and complete numbered-exercise coverage}
+All 37 explicitly numbered Chapter 5 problems are covered, including the eight starred problems. The section totals are:
+\begin{center}
+\begin{tabular}{llr}
+\toprule Section & Problem identifiers & Count\\\midrule
+33 & 33.3/1, 33.4/1--2, 33.5/1--3, 33.9/1 & 7\\
+34 & 34.2/1, 34.3/1, 34.4/1 & 3\\
+35 & 35.4/1 & 1\\
+36 & 36.1/1, 36.3/1, 36.4/1--2, 36.5/1, & \\
+   & 36.6/1--6, 36.7/1--2, 36.8/1--13 & 26\\\midrule
+Total & & 37\\\bottomrule
+\end{tabular}
+\end{center}
+The starred problems are 36.6/1--4, 36.6/6, 36.7/1--2, and 36.8/9.
+\paragraph{Connections to retain.}
+Charts transfer local ODE theorems to manifolds; compactness supplies uniform continuation times. A tangent bundle need not be a product. A nonzero field need not give a full frame. The index is coordinate independent and, at a nondegenerate zero, equals $\operatorname{sgn}\det Dv$. On a closed surface its total equals both the alternating Morse count and the alternating cell count.
+\paragraph{Corrections and qualifications.}
+The angular form on p.~317 needs correction, and the disk formula on p.~316 needs a boundary condition. Homogenize the affine quadric when passing to projective space. The projective-line power-map answers presume nonnegative exponents. Closed-surface formulas do not automatically extend to surfaces with boundary. The product description of $O(n)$ is a manifold identification; degree does not require surjectivity.
+\paragraph{Complete numbered-problem inventory.}
+\begin{center}
+\begin{tabular}{lr}
+\toprule Chapter & Numbered problems\\\midrule
+1. Basic Concepts & 108\\
+2. Basic Theorems & 96\\
+3. Linear Systems & 119\\
+4. Proofs of the Main Theorems & 10\\
+5. Differential Equations on Manifolds & 37\\\midrule
+Total & 370\\\bottomrule
+\end{tabular}
+\end{center}
+All five chapters' explicitly numbered problems are covered, with multipart exercises grouped under their original headings. This count excludes the concluding ``Examination Topics'' syllabus and unnumbered suggestions. The solutions remain a draft for mathematical review.
+\paragraph{Source.}
+V. I. Arnold, \emph{Ordinary Differential Equations}, third edition, translated by Roger Cooke, Springer, 1992, Chapter 5, printed pp.~288--322 (library PDF pages 292--326). Identifiers preserve the section, subsection, and problem numbering of that edition. The field-direction figure is an original drawing.
 
 \end{document}
 
