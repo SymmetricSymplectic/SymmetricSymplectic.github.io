@@ -1,0 +1,214 @@
+/* DOOM — mobile touch overlay. Synthetic KeyboardEvents dispatched on
+   the canvas; sub-weapon (Castlevania dagger throw) and round-robin
+   weapon-cycle pads are colored independently of the main buttons. */
+
+/* Mobile touch controls. Layered over the canvas after the engine
+   starts; synthetic KeyboardEvents are dispatched on #canvas. */
+#touch-ui {
+  display: none;
+}
+body.mobile #touch-ui {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  width: 100svw;
+  height: 100svh;
+  z-index: 5;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+body.mobile #touch-ui.hidden {
+  display: none !important;
+}
+
+.touch-btn {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--doom-overlay, rgba(20, 20, 24, 0.55));
+  border: 1px solid var(--doom-touch-border, rgba(255, 255, 255, 0.25));
+  color: var(--pure-white);
+  font-size: 20px;
+  font-family: inherit;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  flex: 0 0 auto;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 80ms, transform 80ms;
+}
+.touch-btn.active,
+.touch-btn:active {
+  background: var(--doom-touch-active, rgba(79, 168, 97, 0.7));
+  transform: scale(0.94);
+}
+.touch-btn.action {
+  width: var(--action-size, 56px);
+  height: var(--action-size, 56px);
+  font-size: var(--action-font, 14px);
+  letter-spacing: 1px;
+}
+.touch-btn.action.fire {
+  background: var(--doom-touch-fire, rgba(200, 40, 40, 0.6));
+  width: var(--fire-size, 72px);
+  height: var(--fire-size, 72px);
+  font-size: 22px;
+}
+.touch-btn.action.use {
+  background: var(--doom-touch-use, rgba(79, 168, 97, 0.55));
+}
+.touch-btn.action.jump {
+  background: var(--doom-touch-jump, rgba(80, 130, 200, 0.55));
+}
+/* Sub-weapon / alt-fire (Castlevania dagger throw, etc.) — warmer
+   orange so it reads as "another attack" without competing with FIRE. */
+.touch-btn.action.alt {
+  background: var(--doom-touch-alt, rgba(200, 120, 40, 0.55));
+}
+/* Round-robin weapon cycle — neutral indigo so it reads as "switch",
+   distinct from the colored attack/movement buttons. */
+.touch-btn.action.wpn {
+  background: var(--doom-touch-wpn, rgba(120, 100, 180, 0.55));
+  font-size: 22px;
+}
+
+/* D-pad as a 3x3 grid: one cell size is the only knob, and the four
+   buttons never sit in adjacent cells so the circles keep their gaps at
+   any size. Corners and the center stay empty (dead zone). */
+#touch-move {
+  position: absolute;
+  left: calc(14px + env(safe-area-inset-left, 0px));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  display: grid;
+  grid-template-columns: repeat(3, var(--dpad-cell, 85px));
+  grid-template-rows: repeat(3, var(--dpad-cell, 85px));
+}
+#touch-move .touch-btn {
+  width: 100%;
+  height: 100%;
+  font-size: var(--dpad-font, 26px);
+}
+#touch-move .up {
+  grid-area: 1 / 2;
+}
+#touch-move .left {
+  grid-area: 2 / 1;
+}
+#touch-move .right {
+  grid-area: 2 / 3;
+}
+#touch-move .down {
+  grid-area: 3 / 2;
+}
+
+#touch-actions {
+  position: absolute;
+  right: calc(14px + env(safe-area-inset-right, 0px));
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: var(--action-gap, 10px);
+  align-items: flex-end;
+}
+#touch-actions .row {
+  display: flex;
+  gap: var(--action-gap, 10px);
+  align-items: center;
+}
+
+@media (max-height: 420px) {
+  #touch-move {
+    --dpad-cell: 73px;
+    --dpad-font: 22px;
+  }
+  #touch-actions {
+    --action-size: 48px;
+    --action-font: 12px;
+    --fire-size: 60px;
+  }
+}
+
+/* Portrait. The landscape sizes put the 256px D-pad and the 204px-wide
+   JUMP | USE | FIRE row in the same horizontal band, which needs 474px of
+   the ~362px a phone has across — so MENU landed on top of strafe-right
+   and the whole cluster read as one scrunched blob. Sizing both clusters
+   off the viewport keeps them clear of each other from 320px up, and the
+   extra vertical room portrait gives us pays for a wider row gap. */
+body.mobile.portrait #touch-move {
+  --dpad-cell: clamp(56px, 18vw, 76px);
+  --dpad-font: clamp(20px, 6vw, 26px);
+}
+body.mobile.portrait #touch-actions {
+  --action-size: clamp(44px, 13vw, 54px);
+  --action-font: clamp(11px, 3.2vw, 13px);
+  --fire-size: clamp(56px, 16vw, 68px);
+  --action-gap: 12px;
+}
+
+body.mobile .overlay {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+body.mobile .brand h1 {
+  font-size: 18px;
+}
+body.mobile #cleanLaunchBtn {
+  font-size: 14px;
+  padding: 14px 24px;
+}
+
+/* Site chrome that collides with the touch overlay on phones. share.js's 🎯
+   related-projects toggle is fixed bottom-right, directly on top of FIRE in
+   #touch-actions; the "🔗 Share" pill from share-button.js is fixed
+   top-right over the in-game HUD; and the How to play card / Controls chip
+   sit bottom-left on the D-pad with WASD/mouse copy that does not apply.
+   All stay on desktop. `body.mobile` is set by touch-input.js before these
+   mount, so nothing flashes in first. */
+body.mobile .related-projects-container,
+body.mobile .doom-share-btn,
+body.mobile .play-help,
+body.mobile .play-help-open {
+  display: none;
+}
+
+#landscape-hint {
+  display: none;
+}
+body.mobile.portrait #landscape-hint {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: var(--scrim-strong);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+#landscape-hint .box {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 20px;
+  max-width: 320px;
+}
+#landscape-hint button {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--pure-white);
+  font-family: inherit;
+  font-size: 12px;
+}

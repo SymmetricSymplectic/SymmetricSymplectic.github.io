@@ -74,6 +74,18 @@
         "Taleb",
         "probabilidad"
       ]
+    },
+    {
+      "title": "The Zombie Escape · evasión en la retícula Z²",
+      "description": "Mod de DOOM sobre UZDoom-WASM que simula la evasión de zombis de Bernoulli sobre Z² con el controlador APW de Angel–Prałat–Winkler, con laboratorio de telemetría y regresión log–log de τ frente a 1/λ.",
+      "url": "demos/DOOM-ZombieEscape/public/index.html",
+      "lang": "es",
+      "tags": [
+        "DOOM",
+        "pursuit-evasion",
+        "retícula",
+        "Monte Carlo"
+      ]
     }
   ]
 }

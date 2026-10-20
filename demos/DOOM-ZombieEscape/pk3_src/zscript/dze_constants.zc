@@ -1,0 +1,151 @@
+// ============================================================================
+//  The Zombie Escape -  dze_constants.zc
+//  Dimensiones de la reticula Z^2, parametros del potencial APW y utilidades
+//  numericas sin dependencias del motor.
+//
+//  Referencia: O. Angel (UBC), P. Pralat (TMU) & P. Winkler (Dartmouth),
+//  "The Zombie Escape: Pursuit-evasion by greedy particles on lattices".
+//
+//  NOTA SOBRE EL POTENCIAL
+//  -----------------------
+//  El funcional que minimiza la particula Mindy es
+//
+//      J(p) = w_imm   * sum_{d1 <= 6}  exp(-gamma * (d1(z,p) - 1))
+//           + w_shock * sum_{x_z = x_p | y_z = y_p}  d1(z,p)^(-beta)
+//           + w_valley* sum_{z}  exp(-d1(z,p)^2 / (2 sigma_lambda^2))
+//
+//  con sigma_lambda = 1/sqrt(2*pi*lambda), de modo que
+//  2*sigma_lambda^2 = 1/(pi*lambda) y el nAocleo gaussiano se evalAoa como
+//  exp(-pi*lambda*d^2). El corte implicito `exp(-12) ~= 6e-6` hace que la suma
+//  sobre la nube completa sea exactamente la del libro salvo ese error.
+// ============================================================================
+
+// --- Dimensiones de la reticula -------------------------------------------
+const DZE_LATTICE_R      = 120;     // celdas: -120..120 en cada eje (241 x 241)
+const DZE_CELL_UNITS     = 64;      // map units por celda de Z^2
+const DZE_CELL_TICS_DEF  = 7;       // tics/paso por defecto => 5 pasos/segundo
+const DZE_ROOM_HALF      = 8192;    // media anchura de la sala (map units)
+const DZE_MAX_STEPS      = 3000;    // horizonte del episodio (censura a la derecha)
+const DZE_MAX_ZOMBIES    = 30000;   // tope duro de memoria
+const DZE_MAX_ACTORS     = 2048;    // mallas 3D; por encima se submuestrea
+const DZE_TRAIL_LEN      = 64;      // longitud de la estela dibujada en el radar
+
+// --- Pesos y exponentes del potencial APW --------------------------------
+const DZE_W_IMM          = 1.00;    // w_imm
+const DZE_W_SHOCK        = 0.75;    // w_shock
+const DZE_W_VALLEY       = 1.50;    // w_valley
+const DZE_GAMMA          = 0.35;    // gamma (decaimiento del termino inmediato)
+const DZE_BETA           = 1.00;    // beta (exponente de la linea de choque)
+const DZE_IMM_RADIUS     = 6;       // d1 <= 6 en el termino inmediato
+const DZE_SHOCK_RADIUS   = 64;      // truncamiento de la suma sobre la linea
+const DZE_VALLEY_CUT     = 12.0;    // exp(-12) ~ 6e-6: corte del nAocleo gaussiano
+
+// --- Limites del experimento ---------------------------------------------
+const DZE_LAMBDA_MIN     = 0.002;
+const DZE_LAMBDA_MAX     = 0.35;
+const DZE_SEED_MIX       = 2654435761;   // Knuth: mezcla de la semilla de usuario
+
+// ============================================================================
+//  DZEMath -  exp/ln/pow propios.
+//
+//  ZScript no garantiza `exp` ni `log` en todas las versiones del motor, asi
+//  que el potencial se evalAoa con aritmetica elemental. Esto tambien hace que
+//  la implementaciA3n sea bit-a-bit reproducible en el gemelo de JavaScript
+//  (public/js/dze-model.js), que replica exactamente estas fA3rmulas.
+// ============================================================================
+class DZEMath
+{
+    static double Pi()
+    {
+        return 3.14159265358979323846;
+    }
+
+    // exp(x) para todo x (sA3lo lo usamos con x <= 0).
+    // ReducciA3n de rango por bisecciA3n hasta |t| <= 1 y serie de Taylor de
+    // grado 12 (error < 1e-10) seguida de k elevaciones al cuadrado.
+    static double ExpNeg(double x)
+    {
+        if (x > 0.0)
+        {
+            x = 0.0;
+        }
+        if (x < -700.0)
+        {
+            return 0.0;
+        }
+        double t = x;
+        int k = 0;
+        while (t < -1.0)
+        {
+            t = t * 0.5;
+            k++;
+        }
+        double r = 1.0 + t * (1.0 + t * (0.5 + t * (0.16666666666666666 + t * (0.041666666666666664
+                 + t * (0.008333333333333333 + t * (0.001388888888888889 + t * (0.0001984126984126984
+                 + t * (0.0000248015873015873 + t * (0.0000027557319223985893 + t * (0.00000027557319223985893
+                 + t * 0.00000002505210838544171))))))))));
+        for (int i = 0; i < k; i++)
+        {
+            r = r * r;
+        }
+        return r;
+    }
+
+    // ln(x) para x > 0: reducciA3n x = m * 2^k con m en [1,2) y serie de atanh.
+    static double Ln(double x)
+    {
+        if (x <= 0.0)
+        {
+            return -700.0;
+        }
+        int k = 0;
+        while (x >= 2.0)
+        {
+            x = x * 0.5;
+            k++;
+        }
+        while (x < 1.0)
+        {
+            x = x * 2.0;
+            k--;
+        }
+        double z = (x - 1.0) / (x + 1.0);
+        double z2 = z * z;
+        double s = 0.0;
+        for (int i = 21; i >= 1; i -= 2)
+        {
+            s = s * z2 + 1.0 / double(i);
+        }
+        return 2.0 * z * s + double(k) * 0.69314718055994530942;
+    }
+
+    // d^(-beta), la distancia de la Linea de Choque. Camino rapido para beta = 1.
+    static double InvPow(double d, double beta)
+    {
+        if (d <= 0.0)
+        {
+            return 1.0;
+        }
+        if (beta == 1.0)
+        {
+            return 1.0 / d;
+        }
+        return ExpNeg(-beta * Ln(d));
+    }
+
+    // indice de celda de una coordenada de mundo (redondeo al mas cercano).
+    static int CellOf(double worldUnits, double cell)
+    {
+        double c = worldUnits / cell;
+        if (c >= 0.0)
+        {
+            return int(c + 0.5);
+        }
+        return int(c - 0.5);
+    }
+
+    static int L1(int ax, int ay, int bx, int by)
+    {
+        return abs(ax - bx) + abs(ay - by);
+    }
+}

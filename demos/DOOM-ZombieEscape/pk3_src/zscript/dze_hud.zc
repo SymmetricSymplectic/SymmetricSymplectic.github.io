@@ -1,0 +1,161 @@
+// ============================================================================
+//  The Zombie Escape - dze_hud.zc
+//  Radar tactico 2D dibujado sobre el viewport: reticula Z^2, nube de zombis,
+//  Lineas de Choque (fila/columna de Mindy), estela, particula APW gemela y
+//  contadores del experimento.
+//
+//  Se dibuja desde DZEController.RenderOverlay, que corre en el contexto UI.
+//  Solo lee el estado: nunca lo modifica (ZScript prohibe escribir el playsim
+//  desde UI), de ahi que las consultas a la nube sean de solo lectura.
+// ============================================================================
+
+class DZERadar
+{
+    // Colores (0xRRGGBB; ZScript los convierte al tipo Color).
+    static int ColFondo()    { return 0x101014; }
+    static int ColMarco()    { return 0x6E7A8A; }
+    static int ColRejilla()  { return 0x2A3038; }
+    static int ColEje()      { return 0x3C4652; }
+    static int ColZombi()    { return 0xD2604A; }
+    static int ColChoque()   { return 0xE8A13C; }
+    static int ColMindy()    { return 0x58E0B0; }
+    static int ColFantasma() { return 0xA97BE8; }
+    static int ColTexto()    { return Font.CR_WHITE; }
+    static int ColAlerta()   { return Font.CR_RED; }
+    static int ColTenue()    { return Font.CR_GRAY; }
+
+    // Lado del radar en pixeles (cuadrado, acotado por la pantalla).
+    static ui int Side(int sw, int sh)
+    {
+        int a = sh * 2 / 5;
+        int b = sw / 3;
+        if (a < b)
+        {
+            return a;
+        }
+        return b;
+    }
+
+    static ui int ProjX(int cx, int ox, int side, int r)
+    {
+        return ox + (cx + r) * side / (2 * r + 1);
+    }
+
+    static ui int ProjY(int cy, int oy, int side, int r)
+    {
+        // En pantalla la y crece hacia abajo; en el mapa crece hacia arriba.
+        return oy + side - 1 - (cy + r) * side / (2 * r + 1);
+    }
+
+    static ui void Draw(DZEController st)
+    {
+        if (st == null || !st.ready)
+        {
+            return;
+        }
+
+        int sw = Screen.GetWidth();
+        int sh = Screen.GetHeight();
+        if (sw <= 0 || sh <= 0)
+        {
+            return;
+        }
+
+        int side = Side(sw, sh);
+        if (side < 96)
+        {
+            return;
+        }
+        int ox = 16;
+        int oy = sh - side - 64;   // deja libre la barra de estado
+        int r = DZE_LATTICE_R;
+        int span = 2 * r + 1;
+
+        // --- fondo y marco -------------------------------------------------
+        Screen.Dim(ColFondo(), 0.72, ox - 4, oy - 4, side + 8, side + 8);
+        Screen.DrawLineFrame(ColMarco(), ox - 1, oy - 1, side + 2, side + 2, 1);
+
+        // --- reticula de referencia (cada 20 celdas) -----------------------
+        int g;
+        for (g = -r; g <= r; g += 20)
+        {
+            int gx = ProjX(g, ox, side, r);
+            int gy = ProjY(g, oy, side, r);
+            Screen.DrawLine(gx, oy, gx, oy + side - 1, ColRejilla(), 255);
+            Screen.DrawLine(ox, gy, ox + side - 1, gy, ColRejilla(), 255);
+        }
+        // Ejes de la reticula (x = 0, y = 0).
+        Screen.DrawLine(ProjX(0, ox, side, r), oy, ProjX(0, ox, side, r), oy + side - 1, ColEje(), 255);
+        Screen.DrawLine(ox, ProjY(0, oy, side, r), ox + side - 1, ProjY(0, oy, side, r), ColEje(), 255);
+
+        // --- Lineas de Choque de Mindy (fila y columna) --------------------
+        int mxp = ProjX(st.mx, ox, side, r);
+        int myp = ProjY(st.my, oy, side, r);
+        Screen.DrawLine(ox, myp, ox + side - 1, myp, ColChoque(), 110);
+        Screen.DrawLine(mxp, oy, mxp, oy + side - 1, ColChoque(), 110);
+
+        // --- nube de zombis (submuestreada para no saturar el radar) -------
+        int n = st.zx.Size();
+        int stride = 1;
+        if (n > 400)
+        {
+            stride = (n + 399) / 400;
+        }
+        for (int i = 0; i < n; i += stride)
+        {
+            int zxp = ProjX(st.zx[i], ox, side, r);
+            int zyp = ProjY(st.zy[i], oy, side, r);
+            Screen.DrawLine(zxp, zyp, zxp + 1, zyp, ColZombi(), 255);
+        }
+
+        // --- estela de Mindy ----------------------------------------------
+        int tn = st.trailX.Size();
+        for (int i = 1; i < tn; i++)
+        {
+            Screen.DrawLine(
+                ProjX(st.trailX[i - 1], ox, side, r), ProjY(st.trailY[i - 1], oy, side, r),
+                ProjX(st.trailX[i], ox, side, r), ProjY(st.trailY[i], oy, side, r),
+                ColMindy(), 90);
+        }
+
+        // --- particula APW gemela (modo fantasma) --------------------------
+        if (st.mode == 3)
+        {
+            int gxp = ProjX(st.ghostX, ox, side, r);
+            int gyp = ProjY(st.ghostY, oy, side, r);
+            Screen.DrawLineFrame(ColFantasma(), gxp - 2, gyp - 2, 5, 5, 1);
+        }
+
+        // --- Mindy ---------------------------------------------------------
+        Screen.DrawLine(mxp - 3, myp, mxp + 3, myp, ColMindy(), 255);
+        Screen.DrawLine(mxp, myp - 3, mxp, myp + 3, ColMindy(), 255);
+        Screen.DrawLineFrame(ColMindy(), mxp - 1, myp - 1, 3, 3, 1);
+
+        // --- lectura numerica ----------------------------------------------
+        string modo;
+        if (st.mode == 0)      { modo = "humano"; }
+        else if (st.mode == 1) { modo = "APW"; }
+        else if (st.mode == 2) { modo = "Greedy L1"; }
+        else                   { modo = "humano+fantasma APW"; }
+
+        Screen.DrawText(SmallFont, ColTexto(), ox, oy - 18,
+            String.Format("Z^2  t=%d  min d1=%d  shock=%d  n=%d", st.steps, st.minD, st.shockN, n));
+        Screen.DrawText(SmallFont, ColTexto(), ox, oy - 8,
+            String.Format("lambda=%.3f  modo=%s", st.lambda, modo));
+
+        if (st.finished && st.wasCaught)
+        {
+            Screen.DrawText(SmallFont, ColAlerta(), ox + side / 2 - 32, oy + side / 2 - 4,
+                String.Format("ATRAPADA t=%d", st.steps));
+        }
+        else if (st.finished)
+        {
+            Screen.DrawText(SmallFont, ColTexto(), ox + side / 2 - 40, oy + side / 2 - 4,
+                String.Format("SUPERVIVIO %d", st.steps));
+        }
+
+        // --- ayuda minima ---------------------------------------------------
+        Screen.DrawText(SmallFont, ColTenue(), ox, oy + side + 6,
+            "N/S/E/O o WASD: moverse    ESC: menu    F: pantalla completa");
+    }
+}

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Zombie Escape — evasión de obstáculos en Z² (GZDoom/UZDoom)</title>
+  <meta name="description" content="Mod experimental para UZDoom-WASM que simula la evasión de zombis sobre la retícula Z²: nube de Bernoulli, transición geodésica ℓ¹ y controlador APW de Angel–Prałat–Winkler. Laboratorio estocástico con telemetría en vivo.">
+  <meta name="author" content="Félix Camacho (Facultad de Ciencias / IMATE, UNAM)">
+  <meta name="theme-color" content="#121212">
+
+  <!-- Service Worker de aislamiento COOP/COEP heredado de joeheyming/doom/.
+       Debe cargarse ANTES que cualquier módulo del motor: SharedArrayBuffer
+       (pthreads de Emscripten) exige crossOriginIsolated === true. -->
+  <script src="coi-serviceworker.js"></script>
+
+  <link rel="stylesheet" href="../../../css/demos.css">
+  <link rel="stylesheet" href="css/lab.css">
+</head>
+<body>
+  <nav class="demo-chrome">
+    <a class="demo-chrome-brand" href="../../../index.html">FELIXNET</a>
+    <span class="demo-chrome-links">
+      <a href="../../../index.html">Inicio</a>
+      <a href="../../../journal.html">Journal</a>
+      <a href="../../../archivo.html">Archivo</a>
+      <a href="../../../proyectos.html" aria-current="page">Proyectos</a>
+      <a href="../../../sobre-mi.html">Sobre mí</a>
+    </span>
+  </nav>
+
+  <main class="dze-shell">
+    <header class="dze-hero">
+      <p class="eyebrow">Pursuit–evasion en retículas · UZDoom-WASM</p>
+      <h1>The Zombie Escape</h1>
+      <p class="lead">
+        Un mod de DOOM que convierte el mapa en la retícula <span class="math">Z²</span> y
+        enfrenta a Mindy contra una nube de zombis de Bernoulli(<span class="math">λ</span>)
+        con caminata geodésica <span class="math">ℓ¹</span>. El laboratorio mide el tiempo
+        de supervivencia <span class="math">τ(λ)</span> y ajusta por mínimos cuadrados
+        ordinarios la pendiente <span class="math">α̂₁</span> de
+        <span class="math">log τ</span> contra <span class="math">log(1/λ)</span>.
+      </p>
+      <p class="muted small">
+        Basado en <em>“The Zombie Escape: Pursuit-evasion by greedy particles on lattices”</em>
+        de Omer Angel (UBC), Paweł Prałat (TMU) y Peter Winkler (Dartmouth), presentado en el
+        Seminario de Probabilidad y Procesos Estocásticos (IMATE/IIMAS, UNAM).
+      </p>
+    </header>
+
+    <section class="panel dze-view" aria-labelledby="view-title">
+      <div class="dze-view-head">
+        <h2 id="view-title">Viewport del motor</h2>
+        <div class="toolbar">
+          <button type="button" id="startBtn" class="primary">Iniciar experimento</button>
+          <button type="button" id="fullscreenBtn">Pantalla completa</button>
+          <button type="button" id="resetBtn">Borrar datos guardados</button>
+        </div>
+      </div>
+
+      <div class="viewport" id="enginePanel">
+        <canvas id="canvas" class="hidden" tabindex="-1" oncontextmenu="event.preventDefault()"
+                aria-label="Viewport del motor UZDoom con el mod The Zombie Escape"></canvas>
+        <div id="enginePlaceholder" class="engine-placeholder">
+          <p class="eyebrow">Motor en espera</p>
+          <p>
+            Pulsa <strong>Iniciar experimento</strong> para arrancar UZDoom con
+            <code>zombie-escape.pk3</code>. La primera carga descarga el runtime WASM y
+            Freedoom Phase 1 (~80 MB) desde este mismo sitio.
+          </p>
+          <p class="muted small" id="engineMissing" hidden>
+            Falta <code>public/engine/</code>: ejecuta <code>make bootstrap</code> (o
+            <code>pwsh scripts/bootstrap_infra.ps1</code>) para clonar el runtime de
+            joeheyming/doom.
+          </p>
+        </div>
+      </div>
+
+      <div class="statusline">
+        <span id="statusText" role="status" aria-live="polite">En espera.</span>
+        <span id="progressText" class="muted"></span>
+      </div>
+      <div class="progress"><div class="bar" id="progressBar"></div></div>
+    </section>
+
+    <section class="panel" aria-labelledby="control-title">
+      <h2 id="control-title">Laboratorio estocástico</h2>
+      <div class="dze-controls">
+        <label for="lambdaRange">
+          Densidad de Bernoulli <span class="math">λ</span>
+          <output id="lambdaValue" for="lambdaRange">0.030</output>
+        </label>
+        <input type="range" id="lambdaRange" min="0.005" max="0.20" step="0.005" value="0.03">
+        <p class="muted small">
+          <span class="math">E[#zombis] = λ · (241² − 1) ≈ <span id="lambdaExpect">1742</span></span>
+          en la ventana <span class="math">[−120,120]²</span>.
+        </p>
+
+        <label for="seedInput">Semilla del LCG
+          <input type="number" id="seedInput" min="0" max="2147483647" step="1" value="42">
+        </label>
+
+        <label for="controllerSelect">Controlador
+          <select id="controllerSelect">
+            <option value="0" selected>Humano (teclado/ratón)</option>
+            <option value="1">Algoritmo APW</option>
+            <option value="2">Greedy ℓ¹ (línea base)</option>
+            <option value="3">Humano + fantasma APW</option>
+          </select>
+        </label>
+
+        <p class="muted small" id="controlHint">
+          El algoritmo mueve a Mindy en cada paso; el teclado se ignora y solo puedes girar la vista.
+        </p>
+
+        <label for="stepTicsRange">
+          Tics por paso de la retícula
+          <output id="stepTicsValue" for="stepTicsRange">7</output>
+        </label>
+        <input type="range" id="stepTicsRange" min="1" max="35" step="1" value="7">
+        <p class="muted small">
+          <span class="math">dze_step_tics = 7</span> ⇒ 5 pasos/s a 35 tics/s.
+          Con <span class="math">1</span> el tiempo es continuo.
+        </p>
+
+        <div class="stats">
+          <div><strong id="statSteps">0</strong><span>pasos</span></div>
+          <div><strong id="statMinD">—</strong><span>min d₁</span></div>
+          <div><strong id="statShock">—</strong><span>masa de choque</span></div>
+          <div><strong id="statZombies">—</strong><span>zombis</span></div>
+        </div>
+        <p class="muted small" id="resultText">Sin episodio en curso.</p>
+      </div>
+    </section>
+
+    <section class="dze-dash" aria-label="Panel de gráficas">
+      <article class="panel dash-card">
+        <h3>Trayectoria en la retícula</h3>
+        <p class="muted small">
+          Ruta de Mindy sobre <span class="math">Z²</span>. Las líneas de choque son la
+          fila y la columna ocupadas por el último paso. El rombo violeta es la partícula
+          APW gemela (modo fantasma).
+        </p>
+        <canvas id="radarCanvas" class="plot" role="img"
+                aria-label="Trayectoria de Mindy sobre la retícula con la nube de zombis y las líneas de choque"></canvas>
+      </article>
+
+      <article class="panel dash-card">
+        <h3>Distancia mínima y masa de choque</h3>
+        <p class="muted small">
+          <span class="math">min d₁(t)</span> (serie 1) y número de zombis sobre las líneas
+          de choque de Mindy (serie 2, reescalado).
+        </p>
+        <canvas id="seriesCanvas" class="plot" role="img"
+                aria-label="Series temporales de distancia mínima y masa de choque"></canvas>
+      </article>
+
+      <article class="panel dash-card">
+        <h3>Regresión log–log</h3>
+        <p class="muted small">
+          <span class="math">log τ</span> frente a <span class="math">log(1/λ)</span>;
+          la pendiente ajustada es <span class="math">α̂₁</span>.
+        </p>
+        <canvas id="regressionCanvas" class="plot" role="img"
+                aria-label="Dispersión logarítmica del tiempo de supervivencia frente a la densidad con la recta de mínimos cuadrados"></canvas>
+        <p class="muted small" id="alphaText">α̂₁ = — (sin datos)</p>
+      </article>
+    </section>
+
+    <section class="panel" aria-labelledby="analitico-title">
+      <h2 id="analitico-title">Modo analítico (sin motor)</h2>
+      <p>
+        El mismo modelo —idéntico LCG, misma transición geodésica y mismo funcional— corre
+        en JavaScript (<code>js/dze-model.js</code>). Sirve para lanzar lotes Monte Carlo en
+        segundos y para comprobar la reproducibilidad del mod.
+      </p>
+      <div class="toolbar-wrap">
+        <label for="batchEpisodes">Episodios por densidad
+          <input type="number" id="batchEpisodes" min="1" max="60" step="1" value="8">
+        </label>
+        <label for="batchController">Controlador del lote
+          <select id="batchController">
+            <option value="1" selected>APW</option>
+            <option value="2">Greedy ℓ¹</option>
+          </select>
+        </label>
+        <button type="button" id="batchBtn">Ejecutar lote Monte Carlo</button>
+        <button type="button" id="exampleBtn">Ver un episodio de ejemplo</button>
+      </div>
+      <div class="statusline">
+        <span id="batchStatus" role="status" aria-live="polite">Sin lote ejecutado.</span>
+      </div>
+      <table class="dze-table">
+        <caption class="muted small">Resumen por densidad (media ± error estándar de τ)</caption>
+        <thead>
+          <tr><th scope="col">λ</th><th scope="col">log(1/λ)</th><th scope="col">n</th>
+              <th scope="col">τ̄</th><th scope="col">ee(τ)</th><th scope="col">capturas</th></tr>
+        </thead>
+        <tbody id="batchTable">
+          <tr><td colspan="6" class="muted">Todavía no hay resultados.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel" aria-labelledby="modelo-title">
+      <h2 id="modelo-title">El modelo</h2>
+      <div class="grid">
+        <div>
+          <h3>Transición geodésica ℓ¹</h3>
+          <p>
+            En cada paso, tras moverse Mindy a <span class="math">(x_m, y_m)</span>, cada
+            zombi en <span class="math">z = (x_z, y_z)</span> evalúa
+            <span class="math">dx = x_m − x_z</span> y <span class="math">dy = y_m − y_z</span>.
+            Si ambos son distintos de cero lanza una moneda y avanza en <span class="math">X</span>
+            o en <span class="math">Y</span>; si está sobre una <strong>línea de choque</strong>
+            (<span class="math">dx = 0</span> o <span class="math">dy = 0</span>) avanza de forma
+            determinista por ese eje. Toda la dinámica se decide con un LCG módulo
+            <span class="math">2³²</span>, así que un episodio queda fijado por
+            <span class="math">(λ, semilla)</span>.
+          </p>
+          <h3>Política APW</h3>
+          <p>
+            Mindy minimiza sobre los cinco candidatos
+            <span class="math">p ∈ N[M_t]</span>:
+          </p>
+          <pre class="math">J(p) = w_imm    · Σ_{d₁ ≤ 6} e^{−γ(d₁(z,p)−1)}
+     + w_shock  · Σ_{x_z = x_p ∨ y_z = y_p} d₁(z,p)^{−β}
+     + w_valley · Σ_z e^{−d₁(z,p)² / (2σ_λ²)}</pre>
+          <p class="muted small">
+            con <span class="math">σ_λ = 1/√(2πλ)</span>. Pesos por defecto:
+            <span class="math">w_imm = 1.0</span>, <span class="math">w_shock = 0.75</span>,
+            <span class="math">w_valley = 1.5</span>, <span class="math">γ = 0.35</span>,
+            <span class="math">β = 1</span>.
+          </p>
+        </div>
+        <div>
+          <h3>Protocolo</h3>
+          <ul>
+            <li>Nube de <span class="math">Bernoulli(λ)</span> sobre
+              <span class="math">[−120,120]² \ {(0,0)}</span>, <span class="math">λ ≈ 0.03</span>
+              ⇒ ~1 742 zombis.</li>
+            <li>Un paso cada <span class="math">dze_step_tics</span> tics; el episodio termina
+              cuando un zombi comparte celda con Mindy (<span class="math">τ</span>) o al
+              alcanzar el horizonte de 3 000 pasos (censura a la derecha).</li>
+            <li>Cada paso emite <code>[DZE_STEP]</code> y el desenlace
+              <code>[DZE_RESULT]</code> por <code>Console.Printf</code> →
+              <code>Module.print</code> → <code>telemetry-bridge.js</code>.</li>
+            <li>La regresión usa <span class="math">x = log(1/λ)</span>,
+              <span class="math">y = log τ</span>: si
+              <span class="math">τ ∼ λ^{−α}</span>, entonces
+              <span class="math">α̂₁</span> estima <span class="math">α</span>.</li>
+          </ul>
+          <h3>Controles en el juego</h3>
+          <p class="muted small">
+            <code>W A S D</code> o flechas · <code>E</code>/<code>Espacio</code> usar ·
+            <code>Ctrl</code>/clic disparar · <code>Esc</code> menú · <code>F11</code> o
+            <code>F</code> pantalla completa. Móvil: se muestran controles táctiles.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer id="citations-and-credits" class="panel dze-credits">
+      <h2>Créditos y citación</h2>
+      <div class="grid">
+        <div>
+          <h3>Infraestructura web y motor</h3>
+          <p class="muted small">
+            Adaptado de la implementación web de DOOM en
+            <a href="https://joeheyming.github.io/doom/" rel="noopener">Heyming OS</a>
+            desarrollada por <strong>Joe Heyming</strong>
+            (<a href="https://github.com/joeheyming/joeheyming.github.com" rel="noopener">github.com/joeheyming/joeheyming.github.com</a>).
+            Ejecutado sobre <strong>UZDoom</strong> compilado a WebAssembly
+            (<code>uzdoom-wasm</code>, <strong>GNU GPL v3</strong>) con los recursos libres de
+            <strong>Freedoom Phase 1</strong> (licencia BSD de 3 cláusulas).
+          </p>
+        </div>
+        <div>
+          <h3>Modelo matemático</h3>
+          <p class="muted small">
+            Basado en <em>“The Zombie Escape: Pursuit-evasion by greedy particles on
+            lattices”</em> de <strong>Omer Angel</strong> (University of British Columbia),
+            <strong>Paweł Prałat</strong> (Toronto Metropolitan University) y
+            <strong>Peter Winkler</strong> (Dartmouth College), presentado en la sesión
+            extraordinaria del Seminario de Probabilidad y Procesos Estocásticos
+            (IMATE / IIMAS, UNAM).
+          </p>
+        </div>
+        <div>
+          <h3>Diseño experimental y código</h3>
+          <p class="muted small">
+            <strong>Félix Camacho</strong> (Facultad de Ciencias, UNAM):
+            diseño experimental, mod ZScript estocástico y controlador APW.
+          </p>
+        </div>
+      </div>
+      <p class="muted small">
+        Código fuente del mod: <code>pk3_src/</code> · Compilación:
+        <code>scripts/build_pk3.py</code> · Procedencia del motor:
+        <code>public/engine/PROVENANCE.json</code>.
+      </p>
+    </footer>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

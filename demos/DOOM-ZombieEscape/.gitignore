@@ -1,0 +1,16 @@
+# Artefactos generados localmente
+build/
+.tmp_joeheyming_clone/
+__pycache__/
+*.py[cod]
+node_modules/
+*.log
+
+# El runtime del motor (~79 MB) SÍ se versiona para que el sitio funcione en
+# GitHub Pages tal cual. Si prefieres un repositorio ligero, descomenta la línea
+# siguiente y ejecuta `make bootstrap` durante el despliegue:
+# public/engine/
+
+# El pk3 se versiona (es el artefacto del demo), pero puede regenerarse con
+# `make build-pk3`. Descomenta si prefieres compilarlo en CI:
+# public/mods/zombie-escape.pk3

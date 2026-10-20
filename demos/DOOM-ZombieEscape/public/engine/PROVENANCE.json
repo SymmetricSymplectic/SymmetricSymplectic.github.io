@@ -1,0 +1,24 @@
+{
+    "upstream_repo":  "https://github.com/joeheyming/joeheyming.github.com",
+    "upstream_path":  "doom/",
+    "upstream_url":  "https://joeheyming.github.io/doom/",
+    "upstream_commit":  "ccd3e7d55bde6f78edb161ab72af8c472e4668d2",
+    "upstream_short":  "ccd3e7d",
+    "fetched_at_utc":  "2026-10-20T19:40:44Z",
+    "author":  "Joe Heyming",
+    "engine":  "uzdoom-wasm (GPL v3)",
+    "iwad":  "Freedoom Phase 1 (BSD 3-Clause)",
+    "pruned":  [
+                   "mariodoom.pk3",
+                   "met2.pk3",
+                   "Castlevania.ipk3",
+                   "sonicdoom-legacy.pk3",
+                   "LegendOfDoom-1.1.0.pk3"
+               ],
+    "entry_points":  {
+                         "engine_glue":  "engine/uzdoom.js",
+                         "engine_wasm":  "engine/uzdoom.wasm",
+                         "engine_data":  "engine/uzdoom.data",
+                         "preload_set":  "engine/uzdoom.pk3, game_support.pk3, brightmaps.pk3, lights.pk3, game_widescreen_gfx.pk3"
+                     }
+}

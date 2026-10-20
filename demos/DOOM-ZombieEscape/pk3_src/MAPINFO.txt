@@ -1,0 +1,22 @@
+// ============================================================================
+//  The Zombie Escape - MAPINFO.txt
+//
+//  Registra el EventHandler global (DZEController) y declara MAP01 como la
+//  reticula Z^2 generada por scripts/build_pk3.py.
+//
+//  `AddEventHandlers` en el bloque gameinfo es la forma canonica de registrar
+//  un EventHandler para todos los mapas (ZDoom requiere aqui el nombre de la
+//  clase ZScript, no el del actor).
+// ============================================================================
+
+gameinfo
+{
+    AddEventHandlers = "DZEController"
+}
+
+map MAP01 "The Zombie Escape: reticula Z^2"
+{
+    levelnum = 1
+    music = "$MUSIC_E1M1"
+    sky1 = "SKY1"
+}

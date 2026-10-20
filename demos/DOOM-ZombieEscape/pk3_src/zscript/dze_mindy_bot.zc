@@ -1,0 +1,149 @@
+// ============================================================================
+//  The Zombie Escape - dze_mindy_bot.zc
+//  Politica de Mindy: el controlador APW (Angel-Pralat-Winkler) y la linea
+//  base "Greedy L1".
+//
+//  El controlador APW elige, entre los 5 movimientos candidatos
+//  p in N[M_t] = {(0,0), (+-1,0), (0,+-1)}, el que minimiza
+//
+//      J(p) = w_imm   * sum_{d1(z,p) <= 6} exp(-gamma (d1(z,p) - 1))
+//           + w_shock * sum_{x_z = x_p  o  y_z = y_p} d1(z,p)^(-beta)
+//           + w_valley* sum_{z} exp(-d1(z,p)^2 / (2 sigma_lambda^2))
+//
+//  con sigma_lambda = 1/sqrt(2 pi lambda). El primer termino penaliza la
+//  inmediatez (zombis a menos de 6 celdas), el segundo castiga pisar una Linea
+//  de Choque (una fila/columna ocupada por algun zombi: ahi el perseguidor ya
+//  no oscila, avanza recto) y el tercero busca los valles de densidad de
+//  Poisson. Las sumas se truncan con los cortes de dze_constants.zc.
+//
+//  Los empates se rompen rotando el orden de evaluacion de los candidatos con
+//  un indice pseudoaleatorio derivado del LCG, de modo que el bot es
+//  determinista pero no tiene sesgo hacia ningun eje.
+// ============================================================================
+
+class DZEBot
+{
+    // Desplazamientos de los 5 candidatos (el 0 es "quedarse").
+    static int Dx(int idx)
+    {
+        if (idx == 1) return 1;
+        if (idx == 2) return -1;
+        return 0;
+    }
+
+    static int Dy(int idx)
+    {
+        if (idx == 3) return 1;
+        if (idx == 4) return -1;
+        return 0;
+    }
+
+    static int Count()
+    {
+        return 5;
+    }
+
+    // Coste J(p) del candidato (px, py).
+    static double Cost(Array<int> zx, Array<int> zy, int px, int py, double lambda)
+    {
+        int n = zx.Size();
+        double kValley = DZEMath.Pi() * lambda;   // 1/(2 sigma^2)
+        double j = 0.0;
+        for (int i = 0; i < n; i++)
+        {
+            int d = DZEMath.L1(zx[i], zy[i], px, py);
+
+            // Celda ocupada por un zombi: movimiento prohibido. Se devuelve un
+            // coste enorme (no infinito) para no producir NaN en las sumas.
+            if (d == 0)
+            {
+                return 1.0e30;
+            }
+
+            if (d <= DZE_IMM_RADIUS)
+            {
+                j += DZE_W_IMM * DZEMath.ExpNeg(-DZE_GAMMA * double(d - 1));
+            }
+
+            if (d <= DZE_SHOCK_RADIUS && (zx[i] == px || zy[i] == py))
+            {
+                j += DZE_W_SHOCK * DZEMath.InvPow(double(d), DZE_BETA);
+            }
+
+            double e = double(d) * double(d) * kValley;
+            if (e <= DZE_VALLEY_CUT)
+            {
+                j += DZE_W_VALLEY * DZEMath.ExpNeg(-e);
+            }
+        }
+        return j;
+    }
+
+    // Politica APW: argmin J(p) sobre N[(cx,cy)].
+    static int ChooseAPW(Array<int> zx, Array<int> zy, int cx, int cy, double lambda, uint rng)
+    {
+        // OJO: `rng % 5` con uint puede evaluarse como modulo con signo (-4, -2, ...),
+        // y entonces (k + rot) % 5 da indices negativos: Dx/Dy devuelven 0 para
+        // todos y el bot se queda quieto. Se usan bits altos y modulo sin signo.
+        int rot = int((rng >> 8) % uint(5));
+        int best = 0;
+        double bestCost = 0.0;
+        bool have = false;
+        for (int k = 0; k < 5; k++)
+        {
+            int idx = (k + rot) % 5;
+            double c = Cost(zx, zy, cx + Dx(idx), cy + Dy(idx), lambda);
+            if (!have || c < bestCost - 1.0e-9)
+            {
+                bestCost = c;
+                best = idx;
+                have = true;
+            }
+        }
+        return best;
+    }
+
+    // Linea base "Greedy L1": maximiza la distancia l1 al zombi mas cercano y,
+    // en caso de empate, la suma de distancias a los zombis dentro del radio de
+    // choque (una huida puramente geometrica, sin mirar el potencial).
+    static int ChooseGreedy(Array<int> zx, Array<int> zy, int cx, int cy, uint rng)
+    {
+        int n = zx.Size();
+        // OJO: `rng % 5` con uint puede evaluarse como modulo con signo (-4, -2, ...),
+        // y entonces (k + rot) % 5 da indices negativos: Dx/Dy devuelven 0 para
+        // todos y el bot se queda quieto. Se usan bits altos y modulo sin signo.
+        int rot = int((rng >> 8) % uint(5));
+        int best = 0;
+        int bestMin = -1;
+        int bestSum = -1;
+        bool have = false;
+        for (int k = 0; k < 5; k++)
+        {
+            int idx = (k + rot) % 5;
+            int px = cx + Dx(idx);
+            int py = cy + Dy(idx);
+            int mn = 1 << 20;
+            int sumNear = 0;
+            for (int i = 0; i < n; i++)
+            {
+                int d = DZEMath.L1(zx[i], zy[i], px, py);
+                if (d < mn)
+                {
+                    mn = d;
+                }
+                if (d <= DZE_SHOCK_RADIUS)
+                {
+                    sumNear += d;
+                }
+            }
+            if (!have || mn > bestMin || (mn == bestMin && sumNear > bestSum))
+            {
+                bestMin = mn;
+                bestSum = sumNear;
+                best = idx;
+                have = true;
+            }
+        }
+        return best;
+    }
+}

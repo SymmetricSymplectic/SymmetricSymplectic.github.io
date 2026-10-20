@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"
+    />
+
+    <title>Play DOOM in Browser — Classic &amp; Fan Mods Online</title>
+    <meta name="theme-color" content="#FAFAFA" />
+    <meta name="author" content="Joe Heyming" />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="description"
+      content="Play DOOM in your browser — Classic DOOM (1993), Freedoom, the Zelda-themed Legend of DOOM, Mario DOOM, Metroid DOOM, Castlevania: Simon's Destiny, or Sonic DOOM (AeriaVelocity's Sonic the Hedgehog in DOOM: Legacy Edition). Free, unblocked, no install or plugins. Open-source on GitHub."
+    />
+
+    <meta
+      name="keywords"
+      content="DOOM, play DOOM online, DOOM unblocked, DOOM in browser, browser DOOM, DOOM browser, DOOM github, DOOM github.io, DOOM github online, DOOM unblocked github, classic DOOM online, DOOM emulator, DOOM html, doom web browser, doom browsergame, Freedoom, Legend of DOOM, Zelda DOOM mod, Mario DOOM, MarioDoom, Super Mario DOOM, Mario Doom mod, Valigarmander, Metroid DOOM, Metroid Doom mod, Spram Metroid Doom, Metroidvania DOOM, Samus DOOM, Castlevania DOOM, Simon's Destiny, Castlevania Simons Destiny, Batandy, Castlevania first person, Konami DOOM mod, Nintendo DOOM mods, Sonic DOOM, Sonic Doom mod, Sonic the Hedgehog in DOOM, Sonic Lock and Load, AeriaVelocity, Sega DOOM mod, GZDoom browser, UZDoom-WASM, WebAssembly DOOM, retro games, FPS, doom 1993"
+    />
+
+    <!-- International keyword coverage. Real demand from Search Console:
+         doom网页版, doom在线, doom ブラウザ, doom navegador, doom emulador,
+         doom no navegador, doom im browser, doom en ligne. Lightweight
+         hidden meta until full hreflang landing pages exist. -->
+    <meta
+      name="description-zh"
+      content="在浏览器中免费玩DOOM网页版 — 经典DOOM（1993）、Freedoom、Legend of DOOM、Mario DOOM、Metroid DOOM、Castlevania: Simon's Destiny 以及 Sonic DOOM。无需安装，无插件。"
+    />
+    <meta
+      name="description-ja"
+      content="ブラウザでDOOMをプレイ — クラシックDOOM (1993)、Freedoom、Legend of DOOM、Mario DOOM、Metroid DOOM、Castlevania: Simon's Destiny、Sonic DOOM。インストール不要。"
+    />
+    <meta
+      name="description-es"
+      content="Juega DOOM en el navegador — DOOM clásico (1993), Freedoom, Legend of DOOM, Mario DOOM, Metroid DOOM, Castlevania: Simon's Destiny y Sonic DOOM. Gratis, sin instalación."
+    />
+    <meta
+      name="description-pt"
+      content="Jogue DOOM no navegador — DOOM clássico (1993), Freedoom, Legend of DOOM, Mario DOOM, Metroid DOOM, Castlevania: Simon's Destiny e Sonic DOOM. Grátis, sem instalação."
+    />
+    <meta
+      name="description-de"
+      content="DOOM im Browser spielen — Classic DOOM (1993), Freedoom, Legend of DOOM, Mario DOOM, Metroid DOOM, Castlevania: Simon's Destiny und Sonic DOOM. Kostenlos, keine Installation."
+    />
+    <meta
+      name="description-fr"
+      content="Jouez à DOOM en ligne dans votre navigateur — DOOM classique (1993), Freedoom, Legend of DOOM, Mario DOOM, Metroid DOOM, Castlevania: Simon's Destiny et Sonic DOOM. Gratuit, sans installation."
+    />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="joeheyming.github.io" />
+    <meta property="og:title" content="Play DOOM in Browser — Classic &amp; Fan Mods Online" />
+    <meta
+      property="og:description"
+      content="Classic DOOM, Freedoom, Legend of DOOM (Zelda), Mario DOOM, Metroid DOOM, Castlevania: Simon's Destiny, and Sonic DOOM — seven flavors playable instantly in your browser. Free, unblocked, no install. Open-source on GitHub."
+    />
+    <meta property="og:url" content="https://joeheyming.github.io/doom/" />
+    <meta property="og:image" content="https://joeheyming.github.io/doom/doom-preview.png" />
+    <meta
+      property="og:image:secure_url"
+      content="https://joeheyming.github.io/doom/doom-preview.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="DOOM title screen with the iconic logo." />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Play DOOM in Browser — Classic &amp; Fan Mods Online" />
+    <meta
+      name="twitter:description"
+      content="Seven DOOM flavors in your browser — Classic, Freedoom, Legend of DOOM (Zelda), Mario DOOM, Metroid DOOM, Castlevania: Simon's Destiny, and Sonic DOOM. Free, unblocked, no install."
+    />
+    <meta name="twitter:image" content="https://joeheyming.github.io/doom/doom-preview.png" />
+    <meta name="twitter:image:alt" content="DOOM title screen with the iconic logo." />
+
+    <link rel="canonical" href="https://joeheyming.github.io/doom/" />
+
+    <!-- JSON-LD: tells search engines this page is a playable browser
+         game so it can surface in richer result cards. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "VideoGame",
+            "name": "DOOM (browser)",
+            "alternateName": [
+              "DOOM Online",
+              "DOOM Unblocked",
+              "DOOM in Browser",
+              "Browser DOOM",
+              "DOOM Browser Edition",
+              "DOOM Emulator",
+              "DOOM GitHub",
+              "DOOM GitHub Online",
+              "DOOM github.io",
+              "DOOM Unblocked GitHub",
+              "Classic DOOM Online",
+              "DOOM HTML",
+              "DOOM Web Browser",
+              "Mario DOOM",
+              "Super Mario DOOM",
+              "MarioDoom",
+              "Metroid DOOM",
+              "Spram's Metroid Doom",
+              "Metroidvania DOOM",
+              "Legend of DOOM",
+              "Zelda DOOM",
+              "Castlevania DOOM",
+              "Castlevania: Simon's Destiny",
+              "Simon's Destiny",
+              "Sonic DOOM",
+              "Sonic Doom",
+              "Sonic the Hedgehog in DOOM",
+              "Sonic: Lock & Load"
+            ],
+            "description": "Play DOOM in your browser, free and unblocked. Seven flavors: Classic DOOM (1993), Freedoom, the Legend of DOOM Zelda total conversion, Mario DOOM (Valigarmander's MarioDoom gameplay mod), Metroid DOOM (Spram's Metroidvania total conversion), Castlevania: Simon's Destiny (Batandy's standalone first-person Castlevania total conversion), and Sonic DOOM (AeriaVelocity's Sonic the Hedgehog in DOOM: Legacy Edition). No install, no plugins.",
+            "url": "https://joeheyming.github.io/doom/",
+            "image": "https://joeheyming.github.io/doom/doom-preview.png",
+            "author": {
+              "@type": "Person",
+              "name": "Joe Heyming",
+              "url": "https://joeheyming.github.io/about/"
+            },
+            "applicationCategory": "Game",
+            "operatingSystem": "Web Browser",
+            "gamePlatform": ["Web Browser", "HTML5", "WebAssembly"],
+            "genre": ["First-person shooter", "Total conversion mod", "Metroidvania"],
+            "playMode": "SinglePlayer",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "ItemList",
+            "name": "DOOM flavors playable in this browser build",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Classic DOOM (1993)",
+                "url": "https://joeheyming.github.io/doom/?flavor=classic"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Freedoom Phase 1",
+                "url": "https://joeheyming.github.io/doom/?flavor=freedoom"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Legend of DOOM (Zelda total conversion)",
+                "url": "https://joeheyming.github.io/doom/?flavor=legend"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "Mario DOOM (Valigarmander's MarioDoom)",
+                "url": "https://joeheyming.github.io/doom/?flavor=mario"
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "name": "Metroid DOOM (Spram's Metroidvania total conversion)",
+                "url": "https://joeheyming.github.io/doom/?flavor=metroid"
+              },
+              {
+                "@type": "ListItem",
+                "position": 6,
+                "name": "Castlevania: Simon's Destiny (Batandy's standalone first-person Castlevania)",
+                "url": "https://joeheyming.github.io/doom/?flavor=castlevania"
+              },
+              {
+                "@type": "ListItem",
+                "position": 7,
+                "name": "Sonic DOOM (AeriaVelocity's Sonic the Hedgehog in DOOM: Legacy Edition)",
+                "url": "https://joeheyming.github.io/doom/?flavor=sonic"
+              }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Is this the real DOOM?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes — id Software's DOOM (1993) running through GZDoom compiled to WebAssembly (UZDoom). The page also ships Freedoom, the open-source replacement assets that play the same maps without proprietary content."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do I need to install anything?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. DOOM runs entirely in your browser. There's nothing to install, no plugins, and no account. WAD files stream from disk on first load and cache locally for instant replay."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What flavors of DOOM are included?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Seven: Classic DOOM (the 1993 original), Freedoom (open-source assets), Legend of DOOM (a Zelda-themed total conversion), Mario DOOM (Valigarmander's MarioDoom mod), Metroid DOOM (Spram's Metroidvania conversion), Castlevania: Simon's Destiny (Batandy's standalone first-person Castlevania), and Sonic DOOM (AeriaVelocity's Sonic the Hedgehog in DOOM: Legacy Edition). All seven are launchable via the flavor picker on the start screen."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What are the controls?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "WASD or arrow keys to move, mouse to aim, left-click to fire, space to open doors, 1–7 to switch weapons, Esc for the menu. The browser pointer-lock API captures the mouse for proper FPS control. On mobile, an on-screen joystick + fire/jump buttons appear automatically."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What is Legend of DOOM, Mario DOOM, Metroid DOOM, Simon's Destiny, or Sonic DOOM?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Legend of DOOM is a fan-made Zelda-themed total conversion. Mario DOOM (MarioDoom by Valigarmander) replaces enemies and weapons with Mario-universe assets. Metroid DOOM (Spram's mod) is a Metroidvania-style conversion using Samus Aran. Castlevania: Simon's Destiny (Batandy's mod) is a standalone first-person Castlevania built on the GZDoom engine. Sonic DOOM is AeriaVelocity's Sonic the Hedgehog in DOOM: Legacy Edition — Sonic movement, rings, boost, and Super Sonic over Freedoom Phase 2, from the author of Sonic: Lock & Load. All five are loaded as WADs alongside the engine."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is it safe to play DOOM in a browser?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes — the entire stack (engine + WAD parser) runs in the browser sandbox. No code reaches your filesystem and no data is uploaded. The site is open source on GitHub."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Why isn't sound working?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Browsers require user interaction before audio can start. Click anywhere on the canvas to unlock sound. If audio is still silent, check that your browser tab isn't muted in the tab strip or in site permissions."
+                }
+              }
+            ]
+          },
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Joe Heyming",
+                "item": "https://joeheyming.github.io/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "DOOM"
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💀</text></svg>"
+    />
+
+    <!-- Cross-Origin Isolation bootstrap. uzdoom uses pthreads via
+         SharedArrayBuffer, which requires crossOriginIsolated===true.
+         GitHub Pages does not send COOP/COEP natively so the service
+         worker injects them on navigation and auto-reloads on first
+         visit. Load this FIRST, before any engine scripts. -->
+    <script src="/coi-serviceworker.js"></script>
+
+    <!-- Site chrome: analytics + back button + feedback widget. -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q62Q3E20Y0"></script>
+    <script src="/analytics.js"></script>
+    <script src="/nav.js" data-nav-size="compact"></script>
+    <script src="/feedback.js"></script>
+    <!-- data-share-fab="off" suppresses share.js's generic floating share
+         button on this page. Doom ships its own dedicated chrome share
+         button (share-button.js below) and we don't want both. The
+         🎯 related-projects panel from share.js still renders normally. -->
+    <script src="/share.js" data-share-fab="off"></script>
+    <script src="/achievements.js"></script>
+    <!-- Persistent "Share DOOM" button in the page chrome. Doom has no easy
+         level-end hook so the share moment has to be always-on rather than
+         tied to a gameplay event. -->
+    <script src="share-button.js"></script>
+    <!-- Shared CORS proxy service. Used by the moddb browser to fetch
+         listings, mod pages, and binary downloads cross-origin. Safe to
+         load on every visit — does not run anything until called. -->
+    <script src="/proxy.js"></script>
+
+    <!-- Engine subsystems. Deferred so they run after HTML parse but
+         before DOMContentLoaded, in document order. -->
+    <script type="module" src="lifecycle.js"></script>
+    <script type="module" src="coi.js"></script>
+    <script type="module" src="touch-input.js"></script>
+    <script type="module" src="gamepad-input.js"></script>
+    <!-- moddb mod browser. The three files are independent of the WASM
+         engine (no COI dependency) and only invoke it via UZDoomLoader
+         after the user clicks "Fetch & launch". Order matters: archive +
+         iwad helpers must publish their globals before the browser
+         touches them. Deferred so they run after HTML parse and after
+         /proxy.js has installed window.proxyService. -->
+    <script type="module" src="moddb-archive.js"></script>
+    <script type="module" src="moddb-iwad.js"></script>
+    <script type="module" src="moddb-browser.js"></script>
+
+    <!-- uzdoom-loader.js expects a specific DOM layout and specific IDs
+         (iwadPicker, modPicker, sfPicker, launchBtn, status, canvas,
+         etc.). We preserve the upstream layout exactly; site branding
+         is layered ONLY in the boot overlay before launch. -->
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/boot.css" />
+    <link rel="stylesheet" href="styles/picker.css" />
+    <link rel="stylesheet" href="styles/in-game.css" />
+    <link rel="stylesheet" href="styles/touch.css" />
+    <!-- moddb mod browser (loaded only via the inline switcher's "Browse
+         moddb" item or ?manual=browse). The browser itself doesn't pull
+         the engine — that still requires user action. -->
+    <link rel="stylesheet" href="moddb-browser.css" />
+    <!-- Reusable live chat overlay (desktop). Demo mode until Form/Sheet wired. -->
+    <link rel="stylesheet" href="/live-chat/live-chat.css" />
+
+    <!-- Heyming OS brand foundation -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500;600&display=optional"
+    />
+    <link rel="stylesheet" href="/brand.css" />
+  </head>
+
+  <body>
+    <!-- Mode switch driven by URL params:
+           ?manual=1        → no body class (full picker UI)
+           ?manual=browse   → no body class + auto-opens moddb browser
+                              (moddb-browser.js handles the auto-open;
+                              the boot overlay is hidden by body.moddb-open)
+           ?flavor=NAME     → body.clean (hero + auto-prime, single Launch)
+           (default)        → body.picker-mode (flavor picker cards)
+         Set as early as possible so CSS doesn't flash the wrong layout.
+         Also tags body.flavor-classic / body.flavor-freedoom /
+         body.flavor-legend / body.flavor-sonic for accent color
+         theming when a flavor is locked in. -->
+    <script src="mode-switch.js"></script>
+
+    <!-- Landscape-orientation nudge for phones. -->
+    <div id="landscape-hint" aria-hidden="true">
+      <div class="box">
+        <div>🔄 Rotate your device to landscape for the best experience.</div>
+        <button type="button" id="landscapeDismiss">Play anyway</button>
+      </div>
+    </div>
+
+    <!-- Touch overlay. Hidden until the engine is running. -->
+    <div id="touch-ui" class="hidden" aria-hidden="true">
+      <div id="touch-move" aria-label="Movement">
+        <button class="touch-btn up" type="button" data-action="forward" aria-label="Forward">
+          ▲
+        </button>
+        <button class="touch-btn left" type="button" data-action="strafeL" aria-label="Strafe left">
+          ◀
+        </button>
+        <button
+          class="touch-btn right"
+          type="button"
+          data-action="strafeR"
+          aria-label="Strafe right"
+        >
+          ▶
+        </button>
+        <button class="touch-btn down" type="button" data-action="back" aria-label="Back">▼</button>
+      </div>
+
+      <div id="touch-actions">
+        <div class="row">
+          <button
+            class="touch-btn action wpn"
+            type="button"
+            data-action="weapnext"
+            aria-label="Next weapon"
+          >
+            ⇄
+          </button>
+          <button
+            class="touch-btn action alt"
+            type="button"
+            data-action="alt"
+            aria-label="Alt fire / sub-weapon"
+          >
+            ALT
+          </button>
+        </div>
+        <div class="row">
+          <button class="touch-btn action" type="button" data-action="menu" aria-label="Menu">
+            MENU
+          </button>
+          <button class="touch-btn action" type="button" data-action="confirm" aria-label="Confirm">
+            OK
+          </button>
+        </div>
+        <div class="row">
+          <button class="touch-btn action jump" type="button" data-action="jump" aria-label="Jump">
+            JUMP
+          </button>
+          <button class="touch-btn action use" type="button" data-action="use" aria-label="Use">
+            USE
+          </button>
+          <button class="touch-btn action fire" type="button" data-action="fire" aria-label="Fire">
+            🔫
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boot / picker overlay. Upstream's DOM, preserved verbatim except
+         for the branding header, the flavor picker section, and the hero
+         tagline. uzdoom-loader.js drives everything inside .panel via
+         ID lookups; do not rename or restructure it. -->
+    <div class="overlay" id="boot">
+      <div class="brand">
+        <span class="sword" id="brandEmoji">💀</span>
+        <h1 id="brandTitle">
+          DOOM
+          <span class="sub">POWERED BY UZDOOM-WASM</span>
+        </h1>
+      </div>
+
+      <!-- SEO intro: kept in DOM for crawlers but visually hidden.
+           Mentions every flavor by both common name and mod author so
+           crawlers index "Mario Doom by Valigarmander", "Spram's Metroid
+           Doom", "Castlevania Simon's Destiny by Batandy", "Sonic Doom
+           by AeriaVelocity", etc. as long-tail queries. -->
+      <p class="seo-intro" hidden>
+        <strong>Play DOOM online for free in your browser.</strong>
+        No install, no plugins, no signup &mdash; works unblocked on school and work networks. Pick
+        from seven DOOM flavors below: Classic DOOM (the original 1993 id Software shareware),
+        Freedoom Phase 1 (the open-source DOOM-compatible IWAD), the Zelda-themed Legend of DOOM
+        total conversion by DeTwelveGames, Mario DOOM (Valigarmander's MarioDoom gameplay mod
+        layered over Freedoom), Metroid DOOM (Spram's Metroidvania total conversion with Samus, beam
+        upgrades, energy tanks, and Mother Brain), Castlevania: Simon's Destiny (Batandy's
+        standalone first-person reimagining of the NES Castlevania, with whip combat, sub-weapons,
+        and Castle Dracula across six reimagined levels), and Sonic DOOM (AeriaVelocity's Sonic the
+        Hedgehog in DOOM: Legacy Edition — rings, boost, and Super Sonic over Freedoom Phase 2; from
+        the author of Sonic: Lock &amp; Load). Saves persist locally in your browser.
+      </p>
+
+      <p class="intro">
+        The full
+        <a
+          href="https://github.com/UZDoom/UZDoom"
+          style="color: var(--accent)"
+          target="_blank"
+          rel="noopener"
+        >
+          UZDoom
+        </a>
+        engine (GZDoom family) compiled to WebAssembly via the
+        <a
+          href="https://github.com/abootnet/uzdoom-wasm"
+          style="color: var(--accent)"
+          target="_blank"
+          rel="noopener"
+        >
+          uzdoom-wasm
+        </a>
+        port. Everything stays local — files are stored in your browser and never leave this
+        machine.
+      </p>
+
+      <div class="warn-banner">
+        <strong>⚠ Experimental tech demo.</strong>
+        Expect long load times on first visit (~60 MB download). Saves persist locally; use
+        <em>Reset saved data</em>
+        below to clear them. For a smoother native experience, install
+        <a
+          href="https://zdoom.org/downloads"
+          target="_blank"
+          rel="noopener"
+          style="color: var(--accent)"
+        >
+          GZDoom
+        </a>
+        and run locally.
+      </div>
+
+      <!-- Flavor picker (default landing). Each card is the user gesture
+           that triggers prime + launch — no separate "Launch" button is
+           shown in this mode, so the click both unlocks AudioContext
+           and starts the boot. Cards stay disabled until UZDoomLoader
+           publishes (engine scripts loaded, COI ok). -->
+      <section id="flavorPicker" aria-label="Pick a flavor of DOOM">
+        <button
+          type="button"
+          class="flavor-card"
+          data-flavor="classic"
+          disabled
+          aria-label="Launch Classic DOOM"
+        >
+          <span class="name">Classic DOOM</span>
+          <span class="desc">
+            The original 1993 id Software DOOM shareware IWAD (~4 MB), fetched from CDN on first
+            launch. Knee-Deep in the Dead, the way it shipped.
+          </span>
+          <span class="cta" data-default-cta="Preparing engine">Preparing engine</span>
+        </button>
+        <button
+          type="button"
+          class="flavor-card"
+          data-flavor="freedoom"
+          disabled
+          aria-label="Launch Freedoom"
+        >
+          <span class="name">Freedoom</span>
+          <span class="desc">
+            Freedoom Phase 1 — the open-source DOOM-compatible game (BSD-style). Bundled in the
+            engine, no extra download.
+          </span>
+          <span class="cta" data-default-cta="Preparing engine">Preparing engine</span>
+        </button>
+        <button
+          type="button"
+          class="flavor-card"
+          data-flavor="legend"
+          disabled
+          aria-label="Launch Legend of DOOM"
+        >
+          <span class="name">🗡️ Legend of DOOM</span>
+          <span class="desc">
+            Zelda total conversion running on Freedoom Phase 1 + the Legend of DOOM mod PK3 (~8 MB
+            extra download).
+          </span>
+          <span class="cta" data-default-cta="Preparing engine">Preparing engine</span>
+        </button>
+        <button
+          type="button"
+          class="flavor-card"
+          data-flavor="mario"
+          disabled
+          aria-label="Launch Mario DOOM"
+        >
+          <span class="name">🍄 Mario DOOM</span>
+          <span class="desc">
+            Valigarmander's MarioDoom gameplay mod — Mario sprites, sounds, and music layered over
+            Freedoom Phase 1 (~5 MB extra download).
+          </span>
+          <span class="cta" data-default-cta="Preparing engine">Preparing engine</span>
+        </button>
+        <button
+          type="button"
+          class="flavor-card"
+          data-flavor="metroid"
+          disabled
+          aria-label="Launch Metroid DOOM"
+        >
+          <span class="name">🛸 Metroid DOOM</span>
+          <span class="desc">
+            Spram's Metroidvania total conversion (v2.2) on Freedoom Phase 2 — explore Zebes, find
+            beam upgrades, fight Mother Brain (~28 MB extra download).
+          </span>
+          <span class="cta" data-default-cta="Preparing engine">Preparing engine</span>
+        </button>
+        <button
+          type="button"
+          class="flavor-card"
+          data-flavor="castlevania"
+          disabled
+          aria-label="Launch Castlevania DOOM"
+        >
+          <span class="name">🦇 Castlevania</span>
+          <span class="desc">
+            Batandy's Castlevania: Simon's Destiny (v1.4) — standalone first-person whip combat
+            through Castle Dracula. 6 levels reimagined from the NES original (~73 MB extra
+            download).
+          </span>
+          <span class="cta" data-default-cta="Preparing engine">Preparing engine</span>
+        </button>
+        <button
+          type="button"
+          class="flavor-card"
+          data-flavor="sonic"
+          disabled
+          aria-label="Launch Sonic DOOM"
+        >
+          <span class="name">💨 Sonic DOOM</span>
+          <span class="desc">
+            AeriaVelocity's Sonic the Hedgehog in DOOM: Legacy Edition — rings, boost, and Super
+            Sonic over Freedoom Phase 2. Same author as Sonic: Lock &amp; Load (~36 MB extra
+            download).
+          </span>
+          <span class="cta" data-default-cta="Preparing engine">Preparing engine</span>
+        </button>
+      </section>
+
+      <!-- Inline flavor dropdown for the picker page. Mirrors the in-game
+           #flavorSwitcher widget so users have one consistent way to
+           change flavors and reach Manual mode. The 3 flavor items are
+           redundant with the cards above (intentional: gives a compact
+           alternative); the Manual item is the only way into custom-files
+           UI without typing `?manual=1` into the URL. -->
+      <div id="flavorPickerSwitcher" class="flavor-switcher inline">
+        <button
+          type="button"
+          class="flavor-switch-btn"
+          data-role="toggle"
+          aria-haspopup="menu"
+          aria-expanded="false"
+        >
+          🎮 More options…
+        </button>
+        <div class="flavor-switch-menu hidden" data-role="menu" role="menu">
+          <button type="button" role="menuitem" data-switch="classic">
+            <span class="dot" aria-hidden="true"></span>
+            Classic DOOM
+          </button>
+          <button type="button" role="menuitem" data-switch="freedoom">
+            <span class="dot" aria-hidden="true"></span>
+            Freedoom
+          </button>
+          <button type="button" role="menuitem" data-switch="legend">
+            <span class="dot" aria-hidden="true"></span>
+            Legend of DOOM
+          </button>
+          <button type="button" role="menuitem" data-switch="mario">
+            <span class="dot" aria-hidden="true"></span>
+            🍄 Mario DOOM
+          </button>
+          <button type="button" role="menuitem" data-switch="metroid">
+            <span class="dot" aria-hidden="true"></span>
+            🛸 Metroid DOOM
+          </button>
+          <button type="button" role="menuitem" data-switch="castlevania">
+            <span class="dot" aria-hidden="true"></span>
+            🦇 Castlevania
+          </button>
+          <button type="button" role="menuitem" data-switch="sonic">
+            <span class="dot" aria-hidden="true"></span>
+            💨 Sonic DOOM
+          </button>
+          <div class="flavor-switch-sep" role="separator"></div>
+          <button type="button" role="menuitem" data-switch="moddb">
+            <span class="dot" aria-hidden="true"></span>
+            🛒 Browse Doom mods on moddb…
+          </button>
+          <button type="button" role="menuitem" data-switch="manual">
+            <span class="dot" aria-hidden="true"></span>
+            Manual mode (custom IWAD / mods)…
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero (used in ?flavor=... auto-launch mode only). The auto-prime
+           script enables the button when the lifecycle reports `primed`,
+           and the click forwards to UZDoomLoader.launch(). -->
+      <div class="hero" id="cleanHero">
+        <p class="tagline">
+          <span class="what" id="heroTagline">DOOM, running in your browser.</span>
+          Click Launch when ready.
+        </p>
+        <button id="cleanLaunchBtn" disabled>Preparing…</button>
+        <p class="fineprint">
+          Experimental. ~60 MB first-load download. Saves persist in this browser.
+        </p>
+      </div>
+
+      <!-- Manual-mode instructions. Hidden in clean/picker mode via CSS;
+           revealed when the URL contains ?manual=1. -->
+      <div class="instructions manual-only" id="autoInstructions">
+        <b>Manual mode.</b>
+        <ol style="margin: 6px 0 0 18px; padding: 0">
+          <li>
+            Click
+            <b>Use bundled Freedoom</b>
+            for the IWAD.
+          </li>
+          <li>
+            (Optional) Upload
+            <code>LegendOfDoom-1.1.0.pk3</code>
+            (or any other pk3) into
+            <b>Mods</b>
+            .
+          </li>
+          <li>
+            Hit
+            <b>Launch</b>
+            .
+          </li>
+        </ol>
+        <div style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border)">
+          Don't have a mod handy?
+          <button type="button" id="openModdbBrowserBtn" class="btn" style="margin-left: 6px">
+            🛒 Browse moddb
+          </button>
+        </div>
+      </div>
+
+      <!-- Upstream loader DOM. uzdoom-loader.js queries these IDs. -->
+      <div class="panel">
+        <div class="section-title">
+          Game files
+          <span class="hint">click a tile or drop files</span>
+        </div>
+
+        <label class="picker" id="iwadPicker">
+          <span class="title">IWAD (required) — or use bundled Freedoom</span>
+          <span class="desc" id="iwadDesc">No IWAD selected.</span>
+          <input type="file" accept=".wad,.WAD,.pk3,.PK3,.ipk3,.IPK3" />
+        </label>
+
+        <label class="picker" id="modPicker">
+          <span class="title">Mods / PK3s (optional)</span>
+          <span class="desc" id="modDesc">No mods selected. Multi-select supported.</span>
+          <input
+            type="file"
+            multiple
+            accept=".wad,.WAD,.pk3,.PK3,.ipk3,.IPK3,.pk7,.PK7,.deh,.DEH,.bex,.BEX"
+          />
+          <div class="chips" id="modChips"></div>
+        </label>
+
+        <label class="picker" id="sfPicker">
+          <span class="title">SoundFont .sf2 (optional — MIDI music)</span>
+          <span class="desc" id="sfDesc">Using bundled SoundFont.</span>
+          <input type="file" accept=".sf2,.SF2" />
+        </label>
+
+        <div class="btn-row">
+          <button class="btn" id="useFreedoomBtn">Use bundled Freedoom</button>
+          <button class="btn primary" id="launchBtn" disabled>Launch</button>
+        </div>
+
+        <div class="status-line">
+          <span id="status">Idle.</span>
+          <span id="statusRight"></span>
+        </div>
+        <div class="progress" id="progress" style="display: none">
+          <div class="bar"></div>
+        </div>
+        <div id="assetList"></div>
+
+        <div class="section-title" style="margin-top: 4px">Data &amp; settings</div>
+        <div class="btn-row">
+          <button
+            class="btn ghost"
+            id="resetBtn"
+            title="Wipe saved games, configs, and uploaded WADs from this browser"
+          >
+            Reset saved data
+          </button>
+        </div>
+      </div>
+
+      <p class="intro" style="font-size: 10px">
+        UZDoom is GPL v3. This page ships Freedoom (BSD-style), the UZDoom WASM engine, and — for
+        the Legend of DOOM flavor —
+        <code>LegendOfDoom-1.1.0.pk3</code>
+        (© DeTwelveGames) as an asset fetched at launch. The Mario DOOM flavor ships
+        <code>mariodoom.pk3</code>
+        by Valigarmander; the Metroid DOOM flavor ships
+        <code>met2.pk3</code>
+        (Spram's Metroid Doom v2.2, bugfix by OkDoomer174); the Castlevania flavor ships
+        <code>Castlevania.ipk3</code>
+        (Batandy's Castlevania: Simon's Destiny v1.4); the Sonic DOOM flavor ships
+        <code>sonicdoom-legacy.pk3</code>
+        (AeriaVelocity's Sonic the Hedgehog in DOOM: Legacy Edition, 2023-04-11). Mario, Metroid,
+        Castlevania, and Sonic assets are © Nintendo / © Konami / © SEGA respectively, bundled here
+        as non-profit fan projects, not endorsed by those companies. Reload with
+        <code>?manual=1</code>
+        to upload your own copy instead.
+      </p>
+
+      <!-- Cross-link footer: kept in DOM for crawler PageRank flow, hidden
+           from users to keep the boot screen minimal. -->
+      <nav aria-label="More retro games" class="seo-intro" hidden>
+        <strong>More retro games:</strong>
+        <a href="/badapple/">Bad Apple ASCII</a>
+        &middot;
+        <a href="/starwars/">ASCII Star Wars</a>
+        &middot;
+        <a href="/pacman/">3D Pac-Man</a>
+        &middot;
+        <a href="/minesweeper/">Minesweeper</a>
+        &middot;
+        <a href="/emulator/nes/">NES Emulator</a>
+        &middot;
+        <a href="/stepmania/">StepMania</a>
+        &middot;
+        <a href="/terminal/">Web Terminal</a>
+        &middot;
+        <a href="/about/">About</a>
+      </nav>
+    </div>
+
+    <!-- Session-ended overlay. Upstream structure. -->
+    <div class="hidden overlay" id="exited">
+      <div class="brand">
+        <span class="sword">💀</span>
+        <h2>
+          DOOM
+          <span class="sub">SESSION ENDED</span>
+        </h2>
+      </div>
+      <div class="panel" style="gap: 14px">
+        <div class="outcome ok" id="exitOutcome">Thanks for playing.</div>
+        <div class="detail">
+          Save games and configuration have been saved to your browser. Use the button below to
+          start a new session, try
+          <a href="/badapple/" style="color: var(--accent)">Bad Apple</a>
+          or
+          <a href="/pacman/" style="color: var(--accent)">3D Pac-Man</a>
+          , or head back
+          <a href="/" style="color: var(--accent)">home</a>
+          .
+        </div>
+        <div class="reason" id="exitReason"></div>
+        <div class="btn-row">
+          <button class="btn primary" id="relaunchBtn">Relaunch</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="hidden" id="fsBtn" title="Toggle fullscreen (F11 also works)">Fullscreen</button>
+
+    <aside id="playHelp" class="play-help" aria-label="How to play">
+      <button type="button" id="playHelpClose" class="play-help-close" aria-label="Hide controls">
+        ✕
+      </button>
+      <p class="play-help-title">How to play</p>
+      <ul>
+        <li>
+          <strong>Move</strong>
+          WASD or arrows
+        </li>
+        <li>
+          <strong>Look</strong>
+          mouse (click the game)
+        </li>
+        <li>
+          <strong>Fire</strong>
+          left click or Ctrl
+        </li>
+        <li>
+          <strong>Open doors</strong>
+          Space or E
+        </li>
+        <li>
+          <strong>Menu</strong>
+          Esc
+        </li>
+      </ul>
+      <p>
+        <a href="/doom/?manual=browse">Mods</a>
+      </p>
+    </aside>
+    <button type="button" id="playHelpOpen" class="play-help-open" hidden>Controls</button>
+    <script src="play-help.js"></script>
+
+    <!-- In-game flavor switcher. Hidden until lifecycle reaches `playing`
+         (flavor controller toggles `.hidden`). Click the button to open
+         the menu; pick a flavor to reload the page with ?flavor=NAME and
+         re-launch the engine. Saves persist in IDBFS so a switch is
+         non-destructive. -->
+    <div class="hidden flavor-switcher floating" id="flavorSwitcher">
+      <button
+        id="flavorSwitchBtn"
+        class="flavor-switch-btn"
+        type="button"
+        title="Switch DOOM flavor"
+        data-role="toggle"
+        aria-haspopup="menu"
+      >
+        🎮 Flavor
+      </button>
+      <div class="flavor-switch-menu hidden" id="flavorSwitchMenu" data-role="menu" role="menu">
+        <button type="button" role="menuitem" data-switch="classic">
+          <span class="dot" aria-hidden="true"></span>
+          Classic DOOM
+        </button>
+        <button type="button" role="menuitem" data-switch="freedoom">
+          <span class="dot" aria-hidden="true"></span>
+          Freedoom
+        </button>
+        <button type="button" role="menuitem" data-switch="legend">
+          <span class="dot" aria-hidden="true"></span>
+          Legend of DOOM
+        </button>
+        <button type="button" role="menuitem" data-switch="mario">
+          <span class="dot" aria-hidden="true"></span>
+          🍄 Mario DOOM
+        </button>
+        <button type="button" role="menuitem" data-switch="metroid">
+          <span class="dot" aria-hidden="true"></span>
+          🛸 Metroid DOOM
+        </button>
+        <button type="button" role="menuitem" data-switch="castlevania">
+          <span class="dot" aria-hidden="true"></span>
+          🦇 Castlevania
+        </button>
+        <button type="button" role="menuitem" data-switch="sonic">
+          <span class="dot" aria-hidden="true"></span>
+          💨 Sonic DOOM
+        </button>
+        <div class="flavor-switch-sep" role="separator"></div>
+        <button type="button" role="menuitem" data-switch="moddb">
+          <span class="dot" aria-hidden="true"></span>
+          🛒 Browse Doom mods on moddb…
+        </button>
+        <button type="button" role="menuitem" data-switch="manual">
+          <span class="dot" aria-hidden="true"></span>
+          Manual mode (custom IWAD / mods)…
+        </button>
+      </div>
+    </div>
+
+    <canvas
+      class="hidden"
+      id="canvas"
+      tabindex="-1"
+      oncontextmenu="event.preventDefault()"
+    ></canvas>
+
+    <!-- Reset confirmation modal. -->
+    <div class="hidden modal" id="resetModal">
+      <div class="body">
+        <h3>Reset all saved data?</h3>
+        <p>
+          This will delete every save game, configuration file, uploaded WAD, and uploaded PK3
+          stored in this browser. Bundled Freedoom and engine assets are not affected.
+        </p>
+        <p style="color: var(--warn)">This cannot be undone.</p>
+        <div class="btn-row">
+          <button class="btn" id="resetCancelBtn">Cancel</button>
+          <button class="btn primary" id="resetConfirmBtn">Delete everything</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Emscripten module stub. uzdoom.js attaches to window.Module; the
+         stub here has to be in place BEFORE uzdoom.js runs, so the loader
+         can override Module.onRuntimeInitialized, Module.setStatus, etc.
+         from its own IIFE. -->
+    <script src="module-stub.js"></script>
+
+    <!-- Engine script injection. Gated on cross-origin isolation via
+         UZDoomCOI.whenReady(). If COI never arrives, the promise rejects
+         and we bail; coi.js has already put up the error card and
+         flipped the lifecycle to error{coi}. -->
+    <script src="engine-loader.js"></script>
+
+    <!-- Flavor controller. URL modes:
+           ?manual=1        → bail; full uzdoom-loader picker UI takes over.
+           ?flavor=classic  → auto-prime original DOOM (doom.wad fetched
+                              from CDN); hero button launches.
+           ?flavor=freedoom → auto-prime bundled Freedoom; hero button
+                              launches.
+           ?flavor=legend   → auto-prime Freedoom + LoD pk3; hero button
+                              launches.
+           (default)        → flavor picker is the user gesture; click a
+                              card to prime + launch the chosen flavor.
+
+         The picker click is itself the user gesture for the chosen flavor,
+         which means AudioContext / fullscreen unlock the same way they
+         would on a single hero-button click. The hero is unused in picker
+         mode and stays hidden via body.picker-mode CSS. -->
+    <script src="flavor-controller.js"></script>
+    <!-- Live chat (desktop only). room=doom; Meta!A1 kill switch when wired. -->
+    <script type="module">
+      import { mountLiveChat } from '/live-chat/index.js';
+      mountLiveChat({ room: 'doom' });
+    </script>
+  </body>
+</html>

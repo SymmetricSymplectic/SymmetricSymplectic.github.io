@@ -1,0 +1,20 @@
+// ============================================================================
+//  The Zombie Escape - ZSCRIPT.zc
+//  Punto de entrada del codigo ZScript del mod.
+//
+//  El compilador de ZScript lee este lump y sigue los #include relativos a la
+//  raiz del PK3. El orden de inclusion no afecta a la resolucion de tipos
+//  (ZScript compila el conjunto completo antes de enlazar), pero se mantiene
+//  de "abajo hacia arriba": constantes, actores, politica, HUD, controlador.
+//
+//  `version` fija el nivel de lenguaje: 4.10.0 es el minimo que necesitamos y
+//  lo soportan GZDoom 4.10+ y UZDoom (GZDoom 4.15), que es el runtime del mod.
+// ============================================================================
+
+version "4.10.0"
+
+#include "zscript/dze_constants.zc"
+#include "zscript/dze_zombie.zc"
+#include "zscript/dze_hud.zc"
+#include "zscript/dze_mindy_bot.zc"
+#include "zscript/dze_controller.zc"

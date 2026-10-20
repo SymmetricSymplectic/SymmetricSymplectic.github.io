@@ -1,0 +1,588 @@
+// ============================================================================
+//  The Zombie Escape - dze_controller.zc
+//  Dueno del modelo: LCG determinista, nube de Bernoulli(lambda), transicion
+//  geodesica l1 de los zombis, orquestacion del bot y telemetria JSON.
+//
+//  Protocolo de telemetria (una linea por evento, capturada por
+//  public/js/telemetry-bridge.js a traves de Module.print):
+//
+//    [DZE_BOOT]   {"lambda":F,"seed":I,"controller":I,"step_tics":I,
+//                  "zombies":I,"actors":I,"radius":I}
+//    [DZE_STEP]   {"t":I,"mx":I,"my":I,"min_d1":I,"shock":I,"n":I,
+//                  "gx":I,"gy":I,"caught":I}
+//    [DZE_RESULT] {"caught":I,"tau":I,"lambda":F,"seed":I,"controller":I,
+//                  "zombies":I,"steps":I,"censored":I}
+//
+//  Reglas del modelo (identicas a public/js/dze-model.js y a los tests de
+//  tests/model.test.js):
+//
+//   1. La nube se sortea recorriendo (i, j) en x = -R..R y, para cada x,
+//      j = -R..R, saltando (0,0), con un LCG de Numerical Recipes:
+//      x_{n+1} = 1664525 x_n + 1013904223 (mod 2^32),
+//      u = (x >> 8) / 2^24, y se anade el zombi si u < lambda.
+//   2. En cada paso, tras moverse Mindy, cada zombi calcula dx = x_m - x_z,
+//      dy = y_m - y_z. Si dx != 0 y dy != 0 lanza una moneda (bit 16 del LCG)
+//      para elegir eje; si esta sobre una Linea de Choque (dx == 0 o dy == 0)
+//      avanza de forma determinista por ese eje. Siempre hacia Mindy.
+//   3. Mindy queda atrapada cuando algun zombi comparte su celda.
+// ============================================================================
+
+class DZEController : EventHandler
+{
+    // ------------------------------------------------------------------
+    //  Configuracion (CVARINFO.txt)
+    // ------------------------------------------------------------------
+    double lambda;
+    int seed;
+    int mode;
+    int stepTics;
+
+    // ------------------------------------------------------------------
+    //  Nube de zombis (estado autoritativo del modelo)
+    // ------------------------------------------------------------------
+    Array<int> zx;
+    Array<int> zy;
+    Array<Actor> zActors;
+
+    // ------------------------------------------------------------------
+    //  Mindy, su gemela APW y la estela dibujada en el radar
+    // ------------------------------------------------------------------
+    int mx;
+    int my;
+    int ghostX;
+    int ghostY;
+    Actor ghost;
+    Array<int> trailX;
+    Array<int> trailY;
+
+    // ------------------------------------------------------------------
+    //  Reloj, estado y telemetria
+    // ------------------------------------------------------------------
+    bool ready;
+    bool finished;
+    bool wasCaught;
+    int steps;
+    int ticAcc;
+    int minD;
+    int shockN;
+    int zombieCount;
+    int actorCount;
+    int driftCount;      // pasos en que el jugador no estaba en la celda del bot
+    int stayCount;       // pasos en que el bot eligio quedarse quieto
+    int inputTics;       // tics con entrada humana de movimiento (suprimida en bot)
+    uint rngState;
+    double floorZ;
+
+    // ==================================================================
+    //  Ciclo de vida
+    // ==================================================================
+    override void WorldLoaded(WorldEvent e)
+    {
+        ResetState();
+        if (level.mapname != 'MAP01')
+        {
+            return;
+        }
+        ReadConfig();
+    }
+
+    override void WorldTick()
+    {
+        if (finished)
+        {
+            return;
+        }
+
+        // Modos automaticos: la interfaz humana no puede desplazar a Mindy.
+        if (ready && (mode == 1 || mode == 2))
+        {
+            LockHumanControl();
+        }
+
+        if (!ready)
+        {
+            Actor mo = GetPlayerPawn();
+            if (mo == null)
+            {
+                return;
+            }
+            if (level.mapname != 'MAP01')
+            {
+                return;
+            }
+            Init(mo);
+            return;
+        }
+
+        ticAcc++;
+        if (ticAcc < stepTics)
+        {
+            return;
+        }
+        ticAcc = 0;
+        Step();
+    }
+
+    override void RenderOverlay(RenderEvent e)
+    {
+        DZERadar.Draw(self);
+    }
+
+    // ==================================================================
+    //  Inicializacion
+    // ==================================================================
+    void ResetState()
+    {
+        zx.Clear();
+        zy.Clear();
+        zActors.Clear();
+        trailX.Clear();
+        trailY.Clear();
+        ghost = null;
+        ready = false;
+        finished = false;
+        wasCaught = false;
+        steps = 0;
+        ticAcc = 0;
+        minD = 0;
+        shockN = 0;
+        zombieCount = 0;
+        actorCount = 0;
+        driftCount = 0;
+        stayCount = 0;
+        inputTics = 0;
+        mx = 0;
+        my = 0;
+        ghostX = 0;
+        ghostY = 0;
+        lambda = 0.03;
+        seed = 42;
+        mode = 0;
+        stepTics = DZE_CELL_TICS_DEF;
+        floorZ = 0.0;
+    }
+
+    void ReadConfig()
+    {
+        CVar c = CVar.FindCVar('dze_lambda');
+        if (c != null)
+        {
+            lambda = c.GetFloat();
+        }
+        c = CVar.FindCVar('dze_seed');
+        if (c != null)
+        {
+            seed = c.GetInt();
+        }
+        c = CVar.FindCVar('dze_controller');
+        if (c != null)
+        {
+            mode = c.GetInt();
+        }
+        c = CVar.FindCVar('dze_step_tics');
+        if (c != null)
+        {
+            stepTics = c.GetInt();
+        }
+
+        // Saneamiento: el laboratorio puede mandar valores fuera de rango por
+        // la linea de comandos; nunca se aborta, se acota y se avisa.
+        bool fixed = false;
+        if (lambda < DZE_LAMBDA_MIN) { lambda = DZE_LAMBDA_MIN; fixed = true; }
+        if (lambda > DZE_LAMBDA_MAX) { lambda = DZE_LAMBDA_MAX; fixed = true; }
+        if (stepTics < 1) { stepTics = 1; fixed = true; }
+        if (stepTics > 70) { stepTics = 70; fixed = true; }
+        if (mode < 0) { mode = 0; fixed = true; }
+        if (mode > 3) { mode = 3; fixed = true; }
+        if (fixed)
+        {
+            Console.Printf("DZE: configuracion fuera de rango; se uso lambda=%.4f, controller=%d, step_tics=%d\n",
+                lambda, mode, stepTics);
+        }
+    }
+
+    Actor GetPlayerPawn()
+    {
+        if (consoleplayer < 0 || consoleplayer >= MAXPLAYERS)
+        {
+            return null;
+        }
+        PlayerInfo p = players[consoleplayer];
+        if (p == null)
+        {
+            return null;
+        }
+        return p.mo;
+    }
+
+    void Init(Actor mo)
+    {
+        floorZ = mo.floorz;
+        rngState = uint(seed) * uint(DZE_SEED_MIX) + 1013904223;
+
+        BuildCloud();
+
+        mx = DZEMath.CellOf(mo.pos.x, DZE_CELL_UNITS);
+        my = DZEMath.CellOf(mo.pos.y, DZE_CELL_UNITS);
+        ghostX = mx;
+        ghostY = my;
+
+        SpawnActors();
+        if (mode == 3)
+        {
+            ghost = Actor.Spawn("DZEGhost", CellOrigin(ghostX, ghostY));
+        }
+
+        ready = true;
+        zombieCount = zx.Size();
+
+        Console.Printf("[DZE_BOOT] {\"lambda\":%f,\"seed\":%d,\"controller\":%d,\"step_tics\":%d,\"zombies\":%d,\"actors\":%d,\"radius\":%d,\"hash\":%d}\n",
+            lambda, seed, mode, stepTics, zombieCount, actorCount, DZE_LATTICE_R, int(CloudHash()));
+        Console.Printf("DZE: nube de Bernoulli lambda=%.4f con %d zombis en Z^2; modo %d.\n", lambda, zombieCount, mode);
+    }
+
+    // Sortea la nube de Bernoulli(lambda) sobre (-R..R)^2 \ {(0,0)}.
+    void BuildCloud()
+    {
+        zx.Clear();
+        zy.Clear();
+        zActors.Clear();
+
+        int r = DZE_LATTICE_R;
+        for (int i = -r; i <= r; i++)
+        {
+            for (int j = -r; j <= r; j++)
+            {
+                if (i == 0 && j == 0)
+                {
+                    continue;   // Mindy arranca en el origen
+                }
+                RngNext();
+                double u = double(rngState >> 8) * (1.0 / 16777216.0);
+                if (u < lambda)
+                {
+                    zx.Push(i);
+                    zy.Push(j);
+                    zActors.Push(null);
+                    if (zx.Size() >= DZE_MAX_ZOMBIES)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    // Mallas 3D: si la nube es enorme se submuestrea con un paso constante.
+    void SpawnActors()
+    {
+        int n = zx.Size();
+        if (n <= 0)
+        {
+            return;
+        }
+        int stride = 1;
+        if (n > DZE_MAX_ACTORS)
+        {
+            stride = (n + DZE_MAX_ACTORS - 1) / DZE_MAX_ACTORS;
+        }
+        for (int i = 0; i < n; i += stride)
+        {
+            Actor a = Actor.Spawn("LatticeZombie", CellOrigin(zx[i], zy[i]));
+            if (a != null)
+            {
+                zActors[i] = a;
+                actorCount++;
+            }
+        }
+    }
+
+    // Checksum FNV-1a de la nube (para comparar el estado con el gemelo JS).
+    uint CloudHash()
+    {
+        uint h = 2166136261;
+        int n = zx.Size();
+        for (int i = 0; i < n; i++)
+        {
+            h = (h ^ uint(zx[i] + 1000)) * 16777619;
+            h = (h ^ uint(zy[i] + 1000)) * 16777619;
+        }
+        return h;
+    }
+
+    vector3 CellOrigin(int cx, int cy)
+    {
+        // Se construye campo a campo: el constructor vector3(a,b,c) no est?
+        // disponible como funcion en todas las versiones del compilador.
+        vector3 v;
+        v.x = double(cx) * double(DZE_CELL_UNITS);
+        v.y = double(cy) * double(DZE_CELL_UNITS);
+        v.z = floorZ;
+        return v;
+    }
+
+    // ==================================================================
+    //  Bloqueo de la interfaz humana (modos 1 y 2)
+    //
+    //  En los modos automaticos Mindy la mueve solo el algoritmo. Sin esto, el
+    //  jugador puede caminar entre paso y paso (cada paso son dze_step_tics
+    //  tics) y sacarla de la celda, con lo que el modelo se desincroniza y el
+    //  paseo deja de ser un movimiento legal de Z^2. Se anula la orden de
+    //  movimiento de cada tic (el motor la aplica despues de WorldTick), se
+    //  pone la velocidad a cero y se ancla la posicion al centro de la celda.
+    //  La vista (yaw/pitch) sigue libre: es cosmetica para el modelo.
+    // ==================================================================
+    void LockHumanControl()
+    {
+        if (consoleplayer < 0 || consoleplayer >= MAXPLAYERS)
+        {
+            return;
+        }
+        PlayerInfo p = players[consoleplayer];
+        if (p == null)
+        {
+            return;
+        }
+        if (p.cmd.forwardmove != 0 || p.cmd.sidemove != 0 || p.cmd.upmove != 0)
+        {
+            inputTics++;
+        }
+        p.cmd.forwardmove = 0;
+        p.cmd.sidemove = 0;
+        p.cmd.upmove = 0;
+
+        Actor mo = p.mo;
+        if (mo == null)
+        {
+            return;
+        }
+        mo.vel = (0, 0, 0);
+        vector3 dest = CellOrigin(mx, my);
+        dest.z = mo.pos.z;
+        mo.SetOrigin(dest, true);
+    }
+
+    // ==================================================================
+    //  LCG (identico a public/js/dze-model.js)
+    // ==================================================================
+    void RngNext()
+    {
+        rngState = rngState * 1664525 + 1013904223;
+    }
+
+    double RngUnit()
+    {
+        RngNext();
+        return double(rngState >> 8) * (1.0 / 16777216.0);
+    }
+
+    // Moneda 1/2 con el bit 16 (los bits altos del LCG son los menos
+    // correlacionados; el bit 0 de un LCG modulo 2^32 tiene periodo 2).
+    bool Coin()
+    {
+        RngNext();
+        return ((rngState >> 16) & 1) == 1;
+    }
+
+    // ==================================================================
+    //  Un paso del modelo
+    // ==================================================================
+    void Step()
+    {
+        Actor mo = GetPlayerPawn();
+        if (mo == null)
+        {
+            return;
+        }
+
+        // 1) Movimiento de Mindy.
+        if (mode == 1 || mode == 2)
+        {
+            // 0) Integridad: el jugador debe seguir en la celda que fijo el bot
+            //    en el paso anterior. Si no (deriva del motor, empujon, etc.),
+            //    se re-sincroniza el modelo con la realidad y se cuenta.
+            int ax = ClampCell(DZEMath.CellOf(mo.pos.x, DZE_CELL_UNITS));
+            int ay = ClampCell(DZEMath.CellOf(mo.pos.y, DZE_CELL_UNITS));
+            if (ax != mx || ay != my)
+            {
+                driftCount++;
+                mx = ax;
+                my = ay;
+            }
+
+            int idx = (mode == 1)
+                ? DZEBot.ChooseAPW(zx, zy, mx, my, lambda, rngState)
+                : DZEBot.ChooseGreedy(zx, zy, mx, my, rngState);
+            int nx = ClampCell(mx + DZEBot.Dx(idx));
+            int ny = ClampCell(my + DZEBot.Dy(idx));
+            if (nx == mx && ny == my)
+            {
+                stayCount++;
+            }
+            mx = nx;
+            my = ny;
+            vector3 dest = CellOrigin(mx, my);
+            // Se conserva la altura actual del jugador: si floorZ viniera sin
+            // inicializar, el teleport lo dejaria dentro del piso/techo.
+            dest.z = mo.pos.z;
+            mo.SetOrigin(dest, true);
+            mo.vel = (0, 0, 0);
+        }
+        else
+        {
+            // Humano (0) o humano + fantasma (3): se cuantiza su posicion real.
+            mx = ClampCell(DZEMath.CellOf(mo.pos.x, DZE_CELL_UNITS));
+            my = ClampCell(DZEMath.CellOf(mo.pos.y, DZE_CELL_UNITS));
+        }
+
+        // 2) Transicion geodesica l1 de los zombis.
+        MoveZombies();
+
+        // 3) La particula APW gemela (modo fantasma) tambien juega su paso.
+        if (mode == 3)
+        {
+            int gidx = DZEBot.ChooseAPW(zx, zy, ghostX, ghostY, lambda, rngState);
+            ghostX = ClampCell(ghostX + DZEBot.Dx(gidx));
+            ghostY = ClampCell(ghostY + DZEBot.Dy(gidx));
+            if (ghost != null)
+            {
+                ghost.SetOrigin(CellOrigin(ghostX, ghostY), true);
+            }
+        }
+
+        // 4) Medicion del estado resultante.
+        int n = zx.Size();
+        int best = 1 << 24;
+        int shock = 0;
+        int caughtN = 0;
+        for (int i = 0; i < n; i++)
+        {
+            int d = DZEMath.L1(zx[i], zy[i], mx, my);
+            if (d < best) { best = d; }
+            if (zx[i] == mx || zy[i] == my) { shock++; }
+            if (d == 0) { caughtN++; }
+        }
+        minD = best;
+        shockN = shock;
+        steps++;
+        PushTrail();
+
+        // 5) Telemetria.
+        int ax = ClampCell(DZEMath.CellOf(mo.pos.x, DZE_CELL_UNITS));
+        int ay = ClampCell(DZEMath.CellOf(mo.pos.y, DZE_CELL_UNITS));
+        Console.Printf("[DZE_STEP] {\"t\":%d,\"mx\":%d,\"my\":%d,\"min_d1\":%d,\"shock\":%d,\"n\":%d,\"gx\":%d,\"gy\":%d,\"caught\":%d,\"wz\":%d,\"ax\":%d,\"ay\":%d,\"drift\":%d,\"stay\":%d,\"h\":%d,\"in\":%d}\n",
+            steps, mx, my, minD, shockN, n, ghostX, ghostY, caughtN, int(mo.pos.z), ax, ay, driftCount, stayCount, int(CloudHash()), inputTics);
+
+        if (caughtN > 0)
+        {
+            wasCaught = true;
+            Finish();
+            return;
+        }
+        if (steps >= DZE_MAX_STEPS)
+        {
+            wasCaught = false;
+            Finish();
+        }
+    }
+
+    int ClampCell(int c)
+    {
+        if (c > DZE_LATTICE_R + 6) { return DZE_LATTICE_R + 6; }
+        if (c < -DZE_LATTICE_R - 6) { return -DZE_LATTICE_R - 6; }
+        return c;
+    }
+
+    // Al terminar el episodio, las mallas que comparten celda con Mindy se
+    // apartan media celda: si no, la camara queda dentro del sprite del zombi
+    // que la atrapo y solo se ve marron. Es puramente cosmetico: el estado del
+    // modelo (zx/zy) no cambia.
+    void ReleaseOverlappingActors()
+    {
+        int n = zx.Size();
+        for (int i = 0; i < n; i++)
+        {
+            if (zx[i] != mx || zy[i] != my)
+            {
+                continue;
+            }
+            Actor a = zActors[i];
+            if (a == null)
+            {
+                continue;
+            }
+            vector3 p = CellOrigin(zx[i], zy[i]);
+            p.x += ((i % 2) == 0) ? 40.0 : -40.0;
+            p.y += ((i % 3) == 0) ? 40.0 : -34.0;
+            a.SetOrigin(p, true);
+        }
+    }
+
+    void PushTrail()
+    {
+        trailX.Push(mx);
+        trailY.Push(my);
+        if (trailX.Size() > DZE_TRAIL_LEN)
+        {
+            trailX.Delete(0);
+            trailY.Delete(0);
+        }
+    }
+
+    void MoveZombies()
+    {
+        int n = zx.Size();
+        for (int i = 0; i < n; i++)
+        {
+            int dx = mx - zx[i];
+            int dy = my - zy[i];
+            if (dx == 0 && dy == 0)
+            {
+                continue;   // ya comparte celda: se contabiliza al medir
+            }
+            if (dx != 0 && dy != 0)
+            {
+                // Fuera de la Linea de Choque: el zombi oscila, elige eje al azar.
+                if (Coin())
+                {
+                    zx[i] += (dx > 0) ? 1 : -1;
+                }
+                else
+                {
+                    zy[i] += (dy > 0) ? 1 : -1;
+                }
+            }
+            else if (dx != 0)
+            {
+                // Sobre la Linea de Choque: avance determinista por ese eje.
+                zx[i] += (dx > 0) ? 1 : -1;
+            }
+            else
+            {
+                zy[i] += (dy > 0) ? 1 : -1;
+            }
+
+            Actor a = zActors[i];
+            if (a != null)
+            {
+                a.SetOrigin(CellOrigin(zx[i], zy[i]), true);
+            }
+        }
+    }
+
+    void Finish()
+    {
+        finished = true;
+        ReleaseOverlappingActors();
+        Console.Printf("[DZE_RESULT] {\"caught\":%d,\"tau\":%d,\"lambda\":%f,\"seed\":%d,\"controller\":%d,\"zombies\":%d,\"steps\":%d,\"censored\":%d}\n",
+            wasCaught ? 1 : 0, steps, lambda, seed, mode, zombieCount, steps, wasCaught ? 0 : 1);
+        if (wasCaught)
+        {
+            Console.Printf("DZE: Mindy fue atrapada en el paso %d (tau = %d).\n", steps, steps);
+        }
+        else
+        {
+            Console.Printf("DZE: horizonte de %d pasos alcanzado sin captura (episodio censurado).\n", steps);
+        }
+    }
+}

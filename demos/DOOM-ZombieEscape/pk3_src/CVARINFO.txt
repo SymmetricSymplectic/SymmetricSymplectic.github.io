@@ -1,0 +1,12 @@
+// ============================================================================
+//  The Zombie Escape - CVARINFO.txt
+//  Variables de control del experimento (especificacion -4.2).
+//
+//  Son `server` para que el laboratorio web pueda fijarlas desde la linea de
+//  comandos del motor (`+set dze_lambda 0.05 ...`) antes de cargar MAP01.
+// ============================================================================
+
+server float dze_lambda      = 0.03;   // densidad inicial de Bernoulli en Z^2
+server int   dze_seed        = 42;     // semilla del LCG (experimentos pareados humano vs bot)
+server int   dze_controller  = 0;      // 0 = humano, 1 = APW, 2 = Greedy L1, 3 = humano + fantasma APW
+server int   dze_step_tics   = 7;      // tics por paso de la reticula (5 pasos/s a 35 tics/s)
