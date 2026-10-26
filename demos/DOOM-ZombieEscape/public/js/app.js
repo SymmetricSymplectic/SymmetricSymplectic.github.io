@@ -39,6 +39,7 @@ const ui = {
   statMinD: $('statMinD'),
   statShock: $('statShock'),
   statZombies: $('statZombies'),
+  statCell: $('statCell'),
   resultText: $('resultText'),
   batchEpisodes: $('batchEpisodes'),
   batchController: $('batchController'),
@@ -156,6 +157,7 @@ function ensureEngine() {
         ui.statSteps.textContent = String(payload.t);
         ui.statMinD.textContent = String(payload.min_d1);
         ui.statShock.textContent = String(payload.shock);
+        ui.statCell.textContent = payload.mx + ', ' + payload.my;
       } else if (kind === 'result') {
         plots.setResult(payload);
         const caught = Number(payload.caught) === 1;

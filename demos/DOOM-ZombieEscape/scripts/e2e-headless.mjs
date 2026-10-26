@@ -38,6 +38,11 @@ const delayMs = Number(args.get('delay') || 0);
 const fullPage = args.get('full') === '1';
 const logFile = args.get('log') || '';
 const holdKey = args.get('hold-key') || '';
+const focusCanvas = args.get('focus-canvas') === '1';
+const shotTimes = (args.get('shots') || '')
+  .split(',')
+  .map((s) => Number(s))
+  .filter((n) => Number.isFinite(n) && n > 0);
 const chromePath =
   args.get('chrome') ||
   process.env.CHROME_PATH ||
@@ -206,7 +211,12 @@ async function main() {
       KeyW: { key: 'w', code: 'KeyW', vk: 87 },
       KeyA: { key: 'a', code: 'KeyA', vk: 65 },
       KeyS: { key: 's', code: 'KeyS', vk: 83 },
-      KeyD: { key: 'd', code: 'KeyD', vk: 68 }
+      KeyD: { key: 'd', code: 'KeyD', vk: 68 },
+      ArrowUp: { key: 'ArrowUp', code: 'ArrowUp', vk: 38 },
+      ArrowDown: { key: 'ArrowDown', code: 'ArrowDown', vk: 40 },
+      ArrowLeft: { key: 'ArrowLeft', code: 'ArrowLeft', vk: 37 },
+      ArrowRight: { key: 'ArrowRight', code: 'ArrowRight', vk: 39 },
+      Space: { key: ' ', code: 'Space', vk: 32 }
     };
     const k = keyMap[holdKey] || keyMap.KeyW;
     holdTimer = setInterval(() => {
@@ -237,15 +247,31 @@ async function main() {
       }).catch(() => null);
       if (probe && probe.result) record('probe', probe.result.value || '');
     }
-    if (screenshot && elapsed === Math.min(30, Math.floor(seconds / 2))) {
+    const wantShots = shotTimes.filter((s) => s === elapsed);
+    const singleShot = screenshot && elapsed === Math.min(30, Math.floor(seconds / 2));
+    if (wantShots.length || singleShot) {
+      if (focusCanvas) {
+        await send(ws, 'Runtime.evaluate', {
+          expression:
+            "(() => { const c = document.getElementById('canvas');" +
+            " if (c) c.scrollIntoView({ block: 'start' });" +
+            " return window.scrollY; })()",
+          returnByValue: true
+        }).catch(() => null);
+        await sleep(400);
+      }
       const shot = await send(ws, 'Page.captureScreenshot', {
         format: 'png',
         captureBeyondViewport: fullPage
       }).catch(() => null);
       if (shot && shot.data) {
-        await mkdir(path.dirname(screenshot), { recursive: true });
-        await writeFile(screenshot, Buffer.from(shot.data, 'base64'));
-        record('shot', 'captura en ' + screenshot);
+        const tags = wantShots.length ? wantShots.map((s) => 't' + s) : ['default'];
+        for (const tag of tags) {
+          const file = screenshot.replace(/\.png$/i, '-' + tag + '.png');
+          await mkdir(path.dirname(file) || '.', { recursive: true });
+          await writeFile(file, Buffer.from(shot.data, 'base64'));
+          record('shot', 'captura en ' + file);
+        }
       }
     }
   }
@@ -256,7 +282,8 @@ async function main() {
       'status: (document.getElementById("statusText")||{}).textContent, ' +
       'steps: (document.getElementById("statSteps")||{}).textContent, ' +
       'minD: (document.getElementById("statMinD")||{}).textContent, ' +
-      'zombies: (document.getElementById("statZombies")||{}).textContent})',
+      'zombies: (document.getElementById("statZombies")||{}).textContent, ' +
+      'scrollY: window.scrollY, active: (document.activeElement||{}).tagName})',
     returnByValue: true
   }).catch(() => null);
 

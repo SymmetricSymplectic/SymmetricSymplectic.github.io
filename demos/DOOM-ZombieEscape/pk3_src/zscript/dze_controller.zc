@@ -70,6 +70,7 @@ class DZEController : EventHandler
     int driftCount;      // pasos en que el jugador no estaba en la celda del bot
     int stayCount;       // pasos en que el bot eligio quedarse quieto
     int inputTics;       // tics con entrada humana de movimiento (suprimida en bot)
+    int stillSteps;      // pasos seguidos sin cambiar de celda (modos humanos)
     uint rngState;
     double floorZ;
 
@@ -151,6 +152,7 @@ class DZEController : EventHandler
         driftCount = 0;
         stayCount = 0;
         inputTics = 0;
+        stillSteps = 0;
         mx = 0;
         my = 0;
         ghostX = 0;
@@ -431,8 +433,18 @@ class DZEController : EventHandler
         else
         {
             // Humano (0) o humano + fantasma (3): se cuantiza su posicion real.
-            mx = ClampCell(DZEMath.CellOf(mo.pos.x, DZE_CELL_UNITS));
-            my = ClampCell(DZEMath.CellOf(mo.pos.y, DZE_CELL_UNITS));
+            int hx = ClampCell(DZEMath.CellOf(mo.pos.x, DZE_CELL_UNITS));
+            int hy = ClampCell(DZEMath.CellOf(mo.pos.y, DZE_CELL_UNITS));
+            if (hx == mx && hy == my)
+            {
+                stillSteps++;
+            }
+            else
+            {
+                stillSteps = 0;
+            }
+            mx = hx;
+            my = hy;
         }
 
         // 2) Transicion geodesica l1 de los zombis.
@@ -470,8 +482,8 @@ class DZEController : EventHandler
         // 5) Telemetria.
         int ax = ClampCell(DZEMath.CellOf(mo.pos.x, DZE_CELL_UNITS));
         int ay = ClampCell(DZEMath.CellOf(mo.pos.y, DZE_CELL_UNITS));
-        Console.Printf("[DZE_STEP] {\"t\":%d,\"mx\":%d,\"my\":%d,\"min_d1\":%d,\"shock\":%d,\"n\":%d,\"gx\":%d,\"gy\":%d,\"caught\":%d,\"wz\":%d,\"ax\":%d,\"ay\":%d,\"drift\":%d,\"stay\":%d,\"h\":%d,\"in\":%d}\n",
-            steps, mx, my, minD, shockN, n, ghostX, ghostY, caughtN, int(mo.pos.z), ax, ay, driftCount, stayCount, int(CloudHash()), inputTics);
+        Console.Printf("[DZE_STEP] {\"t\":%d,\"mx\":%d,\"my\":%d,\"min_d1\":%d,\"shock\":%d,\"n\":%d,\"gx\":%d,\"gy\":%d,\"caught\":%d,\"wz\":%d,\"ax\":%d,\"ay\":%d,\"drift\":%d,\"stay\":%d,\"h\":%d,\"in\":%d,\"still\":%d}\n",
+            steps, mx, my, minD, shockN, n, ghostX, ghostY, caughtN, int(mo.pos.z), ax, ay, driftCount, stayCount, int(CloudHash()), inputTics, stillSteps);
 
         if (caughtN > 0)
         {

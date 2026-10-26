@@ -204,7 +204,7 @@ termina en `Module.print` y la captura `public/js/telemetry-bridge.js`:
 ```text
 [DZE_BOOT]   {"lambda":F,"seed":I,"controller":I,"step_tics":I,"zombies":I,"actors":I,"radius":I,"hash":I}
 [DZE_STEP]   {"t":I,"mx":I,"my":I,"min_d1":I,"shock":I,"n":I,"gx":I,"gy":I,"caught":I,
-              "wz":I,"ax":I,"ay":I,"drift":I,"stay":I,"h":I,"in":I}
+              "wz":I,"ax":I,"ay":I,"drift":I,"stay":I,"h":I,"in":I,"still":I}
 [DZE_RESULT] {"caught":I,"tau":I,"lambda":F,"seed":I,"controller":I,"zombies":I,"steps":I,"censored":I}
 ```
 
@@ -218,7 +218,9 @@ termina en `Module.print` y la captura `public/js/telemetry-bridge.js`:
 * `hash`/`h` — checksum FNV‑1a de la nube (boot) y tras cada paso: permite
   comparar el estado con el gemelo JS bit a bit;
 * `in` — tics en los que la interfaz humana pidió movimiento. En los modos
-  automáticos se cuenta y se **suprime** (ver §7).
+  automáticos se cuenta y se **suprime** (ver §7);
+* `still` — pasos consecutivos sin cambiar de celda (sólo modos humanos; el HUD
+  avisa a los 30 con «SIN MOVIMIENTO»).
 
 El puente reensambla líneas partidas, valida claves mínimas, guarda un
 histórico acotado y expone `parseLine`, `linearRegression`, `fitLogLog` y
@@ -236,7 +238,9 @@ histórico acotado y expone `parseLine`, `linearRegression`, `fitLogLog` y
   `+set dze_lambda … +set dze_seed … +set dze_controller … +set dze_step_tics …`,
   tal como pide la especificación §5.
 * **Laboratorio estocástico**: λ, semilla, controlador y tics por paso; cifras
-  en vivo (pasos, `min d₁`, masa de choque, número de zombis).
+  en vivo (pasos, `min d₁`, masa de choque, número de zombis y **celda de
+  Mindy**), con un aviso que explica quién mueve al personaje según el
+  controlador elegido.
 * **Gráficas**: trayectoria de Mindy sobre Z² (con líneas de choque y, si
   corres un episodio de ejemplo, la nube completa), series de `min d₁(t)` y
   masa de choque, y la regresión log–log con α̂₁.
@@ -347,6 +351,23 @@ Verifica, sobre los datos del motor:
   porque es cosmética para el modelo. En los modos 0 y 3 no se aplica: ahí
   manda el humano. Para comprobarlo: `node scripts/e2e-headless.mjs … --hold-key
   KeyW` deja `in` creciendo y `drift` en 0.
+* **La página no se mueve sola**: `ArrowUp/ArrowDown/Espacio` disparaban el
+  scroll del navegador (medido: `scrollY = 334`) en vez de mover al jugador, y
+  el `canvas.focus()` inicial arrastraba la página. Ahora el loader captura el
+  teclado del juego con `preventDefault` (sin detener la propagación, así que el
+  motor recibe el evento), enfoca el canvas con `preventScroll` y desenfoca los
+  botones al pulsarlos para que `Espacio` (usar) no vuelva a pulsar «Iniciar».
+* **Velocidad acotada al paso de la retícula**: `NormForwardMove` y
+  `NormSideMove` valen `10.0, 16.0` map units/tic en vez de los 24/40 de Doom.
+  Con los valores por defecto el humano corría ~4 celdas por paso, cruzaba la
+  sala de 128 celdas en segundos y acababa mirando el ladrillo de la pared
+  («no nos movemos»); ahora avanza ~1 celda por paso, igual que los zombis y el
+  bot, que es lo que pide el modelo 1:1.
+* **Avisos en el radar** (sólo modos humanos): «SIN MOVIMIENTO: W A S D o
+  flechas» tras 30 pasos sin cambiar de celda y «FUERA DE LA NUBE: vuelve al
+  centro» si `|x|` o `|y|` superan 120. El panel muestra además la celda de
+  Mindy en vivo, para que el movimiento se vea en cifras aunque la vista no
+  cambie.
 * **Cuidado con `%` y `uint` en ZScript**: `rng % 5` con un `uint` puede
   evaluarse como módulo *con signo* y devolver `-4`, `-2`, … Con índices
   negativos `Dx`/`Dy` devuelven 0, los cinco candidatos colapsan al mismo punto
@@ -374,6 +395,9 @@ Verifica, sobre los datos del motor:
 | 404 en `uzdoom.data` | Falta `public/engine/`; ejecuta `make bootstrap`. El loader resuelve las rutas siempre contra `engine/`. |
 | «Script error … zombie-escape.pk3» | El ZScript no compiló: revisa el mensaje en la consola del navegador y el archivo indicado; recompila con `make build-pk3`. |
 | El motor arranca pero no hay zombis | Abre `MAP01` (el mod solo actúa en ese mapa) y revisa que `MAPINFO.txt` registre `DZEController`. |
+| Las flechas o Espacio hacen scroll de la página | Corregido: el visor captura esas teclas mientras el juego corre. Si usas una versión antigua, recarga con Ctrl+F5. |
+| Veo ladrillo marrón y no me muevo | Estás pegado a una pared. Con la velocidad normalizada (10/16 u/tic) hace falta mucho más tiempo para llegar al borde de la sala; mira la cifra «celda de Mindy» del panel para confirmar que avanzas. |
+| El fantasma APW se mueve y yo no | Ocurría cuando la página se desplazaba sola al arrancar (375 px) y las teclas iban al navegador; ya está corregido. En el modo 3 tú mueves a Mindy y el rombo violeta juega el algoritmo. |
 | No puedo moverme en los modos APW/Greedy | Es intencional: el controlador bloquea la interfaz humana para que el paseo sea una retícula limpia. Cambia a *Humano* (0) o *Humano + fantasma* (3) si quieres moverte tú. |
 | El bot «mira a la pared» | Es la política: la esquina minimiza la densidad local. Usa el modo fantasma o el humano para ver la horda desde dentro. |
 | Sin sonido | Los navegadores exigen un gesto del usuario: pulsa la pantalla del juego. |

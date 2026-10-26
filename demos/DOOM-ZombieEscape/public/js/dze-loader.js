@@ -270,8 +270,16 @@ export class DzeEngine {
 
       if (this.canvas) {
         this.canvas.classList.remove('hidden');
-        this.canvas.focus();
+        // preventScroll: enfocar el canvas no debe arrastrar la página; el
+        // salto de scroll se percibía como si los controles «se movieran solos».
+        try {
+          this.canvas.focus({ preventScroll: true });
+        } catch (_e) {
+          this.canvas.focus();
+        }
       }
+
+      this.installInputCapture();
 
       try {
         Module.callMain(this.args);
@@ -336,6 +344,59 @@ export class DzeEngine {
       script.onerror = () => reject(new Error('No se pudo cargar ' + src));
       document.body.appendChild(script);
     });
+  }
+
+  /**
+   * Mientras el motor corre, las teclas del juego no deben disparar acciones
+   * del navegador: con el foco en el canvas, ArrowUp/ArrowDown/Espacio hacían
+   * scroll de la página (el visor se iba de la pantalla) y Backspace podía
+   * navegar atrás. Se anula el comportamiento por defecto sin detener la
+   * propagación, así que el motor sigue recibiendo el evento.
+   */
+  installInputCapture() {
+    if (this.inputCaptureInstalled) return;
+    this.inputCaptureInstalled = true;
+
+    const GAME_KEYS = new Set([
+      'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space',
+      'ControlLeft', 'ControlRight', 'ShiftLeft', 'ShiftRight',
+      'KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyE', 'KeyF', 'KeyQ', 'KeyR',
+      'PageUp', 'PageDown', 'Home', 'End', 'Backspace'
+    ]);
+    const isFormField = (el) =>
+      !!el && el.tagName && /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName);
+
+    this._onKeyDown = (e) => {
+      if (!this.booted) return;
+      // En un campo de la UI (semilla, episodios…) el teclado es del usuario.
+      if (isFormField(e.target)) return;
+      if (!GAME_KEYS.has(e.code)) return;
+      e.preventDefault();
+      const c = this.canvas;
+      if (c && document.activeElement !== c && c.focus) {
+        try {
+          c.focus({ preventScroll: true });
+        } catch (_e) {
+          c.focus();
+        }
+      }
+    };
+    window.addEventListener('keydown', this._onKeyDown, { capture: true, passive: false });
+
+    // Rueda del ratón sobre el visor: no debe desplazar la página mientras se juega.
+    const panel = this.canvas && this.canvas.parentElement;
+    if (panel) {
+      this._onWheel = (e) => {
+        if (this.booted) e.preventDefault();
+      };
+      panel.addEventListener('wheel', this._onWheel, { passive: false });
+    }
+
+    // Los botones no conservan el foco: si lo hicieran, Espacio (usar) los
+    // volvería a pulsar y reiniciaría el experimento.
+    for (const btn of document.querySelectorAll('.toolbar button, .toolbar-wrap button, #startBtn')) {
+      btn.addEventListener('click', () => btn.blur());
+    }
   }
 
   requestPointerLock() {

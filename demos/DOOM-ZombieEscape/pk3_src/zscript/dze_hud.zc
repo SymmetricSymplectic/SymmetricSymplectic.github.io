@@ -143,6 +143,19 @@ class DZERadar
         Screen.DrawText(SmallFont, ColTexto(), ox, oy - 8,
             String.Format("lambda=%.3f  modo=%s", st.lambda, modo));
 
+        if ((st.mode == 0 || st.mode == 3) && !st.finished
+            && (abs(st.mx) > DZE_LATTICE_R || abs(st.my) > DZE_LATTICE_R))
+        {
+            Screen.DrawText(SmallFont, ColAlerta(), ox + 4, oy + side / 2 - 14,
+                "FUERA DE LA NUBE: vuelve al centro");
+        }
+
+        if ((st.mode == 0 || st.mode == 3) && !st.finished && st.stillSteps >= 30)
+        {
+            Screen.DrawText(SmallFont, ColAlerta(), ox + 4, oy + side / 2 + 10,
+                "SIN MOVIMIENTO: W A S D o flechas");
+        }
+
         if (st.finished && st.wasCaught)
         {
             Screen.DrawText(SmallFont, ColAlerta(), ox + side / 2 - 32, oy + side / 2 - 4,
