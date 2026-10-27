@@ -88,13 +88,13 @@ if (boot && steps.length) {
   for (const b of illegal.slice(0, 3)) console.log(`        t=${b.t} salto ${b.d} de (${b.from}) a (${b.to})`);
 
   const moved = steps.filter((s, i) => i > 0 && (s.mx !== steps[i - 1].mx || s.my !== steps[i - 1].my)).length;
-  check(steps.length < 2 || moved / (steps.length - 1) >= 0.5, `el bot se mueve (${moved}/${steps.length - 1} pasos con desplazamiento)`);
+  check(steps.length < 2 || moved / (steps.length - 1) >= 0.5, `el marine se mueve (${moved}/${steps.length - 1} pasos con desplazamiento)`);
 
   const last = steps[steps.length - 1];
   check((last.drift ?? 0) === 0, `drift acumulado = ${last.drift} (debe ser 0)`);
   if (last.in !== undefined) {
     console.log(
-      `  --  interfaz humana: ${last.in} tics con orden de movimiento (suprimidos por el controlador)`
+      `  --  entrada del jugador (ignorada): ${last.in} tics con orden de movimiento (suprimidos por el controlador)`
     );
   }
 
@@ -125,5 +125,5 @@ if (boot && steps.length) {
   }
 }
 
-console.log(failures.length ? `\n${failures.length} comprobación(es) fallida(s)` : '\ncontrol del bot: OK');
+console.log(failures.length ? `\n${failures.length} comprobación(es) fallida(s)` : '\ncontrol del marine: OK');
 process.exit(failures.length ? 1 : 0);

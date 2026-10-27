@@ -30,6 +30,13 @@ const DZE_MAX_ZOMBIES    = 30000;   // tope duro de memoria
 const DZE_MAX_ACTORS     = 2048;    // mallas 3D; por encima se submuestrea
 const DZE_TRAIL_LEN      = 64;      // longitud de la estela dibujada en el radar
 
+// --- Camara libre (vista externa del experimento) -------------------------
+const DZE_CAM_OFFSET_X   = 0;       // desplazamiento lateral respecto al marine
+const DZE_CAM_OFFSET_Y   = -520;    // la camara se situa al sur del marine
+const DZE_CAM_HEIGHT     = 150;      // a la altura de los ojos (vista trasera)
+const DZE_CAM_ANGLE      = 90;      // mira al norte (el marine queda delante)
+const DZE_CAM_PITCH      = 0;       // el motor ignora el pitch del actor camara
+
 // --- Pesos y exponentes del potencial APW --------------------------------
 const DZE_W_IMM          = 1.00;    // w_imm
 const DZE_W_SHOCK        = 0.75;    // w_shock

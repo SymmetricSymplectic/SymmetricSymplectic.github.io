@@ -477,6 +477,13 @@ export function buildArgs(config = {}) {
     String(cfg.stepTics),
     '+vid_fullscreen',
     '0',
+    // Observador: sin barra de estado y con campo de vision amplio.
+    '+set',
+    'screenblocks',
+    '11',
+    '+set',
+    'fov',
+    '100',
     '+map',
     'MAP01'
   ];

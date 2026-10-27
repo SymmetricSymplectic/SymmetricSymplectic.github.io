@@ -13,13 +13,6 @@ gameinfo
 {
     AddEventHandlers = "DZEController"
 
-    // Velocidad del jugador acotada al paso de la reticula. En Doom se corre a
-    // 40 map units/tic (~1400 u/s), o sea ~4 celdas por paso: en una sala de
-    // 128 celdas el jugador se planta contra la pared en segundos y solo ve
-    // ladrillo ampliado ("no nos movemos"). Con 10/16 u/tic avanza ~1 celda por
-    // paso (5 pasos/s), igual que los zombis y que el bot: el modelo es 1:1.
-    NormForwardMove = 10.0, 16.0
-    NormSideMove = 10.0, 16.0
 }
 
 map MAP01 "The Zombie Escape: reticula Z^2"

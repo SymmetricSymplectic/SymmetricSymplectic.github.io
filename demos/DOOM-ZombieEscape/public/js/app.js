@@ -77,15 +77,13 @@ function updateOutputs() {
 }
 
 const CONTROL_HINTS = {
-  0: 'T? mueves a Mindy con WASD o las flechas; los zombis avanzan cada dze_step_tics tics.',
-  1: 'El algoritmo APW mueve a Mindy en cada paso; el teclado se ignora y solo puedes girar la vista.',
-  2: 'El Greedy ?? mueve a Mindy en cada paso; el teclado se ignora y solo puedes girar la vista.',
-  3: 'T? mueves a Mindy; el rombo violeta del radar es la gemela APW que juega el algoritmo.'
+  1: 'El algoritmo APW conduce al marine NPC; tú observas desde la cámara libre (sin control del personaje).',
+  2: 'El Greedy ℓ¹ conduce al marine NPC; tú observas desde la cámara libre (sin control del personaje).'
 };
 
 function updateControlHint() {
   if (!ui.controlHint) return;
-  ui.controlHint.textContent = CONTROL_HINTS[Number(ui.controller.value)] || CONTROL_HINTS[0];
+  ui.controlHint.textContent = CONTROL_HINTS[Number(ui.controller.value)] || CONTROL_HINTS[1];
 }
 
 for (const el of [ui.lambda, ui.seed, ui.controller, ui.stepTics]) {
@@ -237,7 +235,11 @@ ui.reset.addEventListener('click', () => {
     if (Number.isFinite(l)) ui.lambda.value = String(Math.min(0.2, Math.max(0.005, l)));
   }
   if (params.has('seed')) ui.seed.value = params.get('seed');
-  if (params.has('controller')) ui.controller.value = params.get('controller');
+  if (params.has('controller')) {
+    // 0 (humano) y 3 (fantasma) ya no existen: cualquier otro valor cae en APW.
+    const c = Number(params.get('controller'));
+    ui.controller.value = c === 2 ? '2' : '1';
+  }
   if (params.has('tics')) ui.stepTics.value = params.get('tics');
   updateOutputs();
 

@@ -34,7 +34,7 @@
       <h1>The Zombie Escape</h1>
       <p class="lead">
         Un mod de DOOM que convierte el mapa en la retícula <span class="math">Z²</span> y
-        enfrenta a Mindy contra una nube de zombis de Bernoulli(<span class="math">λ</span>)
+        enfrenta a Mindy —un marine NPC— contra una nube de zombis de Bernoulli(<span class="math">λ</span>)
         con caminata geodésica <span class="math">ℓ¹</span>. El laboratorio mide el tiempo
         de supervivencia <span class="math">τ(λ)</span> y ajusta por mínimos cuadrados
         ordinarios la pendiente <span class="math">α̂₁</span> de
@@ -101,15 +101,13 @@
 
         <label for="controllerSelect">Controlador
           <select id="controllerSelect">
-            <option value="0" selected>Humano (teclado/ratón)</option>
-            <option value="1">Algoritmo APW</option>
+            <option value="1" selected>Algoritmo APW</option>
             <option value="2">Greedy ℓ¹ (línea base)</option>
-            <option value="3">Humano + fantasma APW</option>
           </select>
         </label>
 
         <p class="muted small" id="controlHint">
-          El algoritmo mueve a Mindy en cada paso; el teclado se ignora y solo puedes girar la vista.
+          El algoritmo conduce a un marine NPC; tú observas desde la cámara libre.
         </p>
 
         <label for="stepTicsRange">
@@ -127,7 +125,7 @@
           <div><strong id="statMinD">—</strong><span>min d₁</span></div>
           <div><strong id="statShock">—</strong><span>masa de choque</span></div>
           <div><strong id="statZombies">—</strong><span>zombis</span></div>
-          <div><strong id="statCell">0, 0</strong><span>celda de Mindy</span></div>
+          <div><strong id="statCell">0, 0</strong><span>celda del marine</span></div>
         </div>
         <p class="muted small" id="resultText">Sin episodio en curso.</p>
       </div>
@@ -137,9 +135,9 @@
       <article class="panel dash-card">
         <h3>Trayectoria en la retícula</h3>
         <p class="muted small">
-          Ruta de Mindy sobre <span class="math">Z²</span>. Las líneas de choque son la
-          fila y la columna ocupadas por el último paso. El rombo violeta es la partícula
-          APW gemela (modo fantasma).
+          Ruta del marine sobre <span class="math">Z²</span>. Las líneas de choque son la
+          fila y la columna ocupadas por el último paso; el rombo verde es el marine y la
+          estela, la trayectoria ideal que sigue el algoritmo.
         </p>
         <canvas id="radarCanvas" class="plot" role="img"
                 aria-label="Trayectoria de Mindy sobre la retícula con la nube de zombis y las líneas de choque"></canvas>
@@ -252,9 +250,9 @@
           </ul>
           <h3>Controles en el juego</h3>
           <p class="muted small">
-            <code>W A S D</code> o flechas · <code>E</code>/<code>Espacio</code> usar ·
-            <code>Ctrl</code>/clic disparar · <code>Esc</code> menú · <code>F11</code> o
-            <code>F</code> pantalla completa. Móvil: se muestran controles táctiles.
+            No conduces al personaje: el algoritmo mueve al marine y la cámara lo sigue
+            desde fuera. <code>Esc</code> abre el menú y <code>F11</code> alterna pantalla
+            completa; el ratón solo hace falta para los menús del motor.
           </p>
         </div>
       </div>

@@ -3,7 +3,7 @@
  *
  * Tres vistas:
  *   1. radar: trayectoria de Mindy sobre Z^2, nube de zombis del episodio de
- *      ejemplo, líneas de choque y partícula APW gemela.
+ *      ejemplo, líneas de choque y estela del marine.
  *   2. series: min d1(t) y masa de choque a lo largo del episodio en vivo.
  *   3. regresión: log τ frente a log(1/λ) con la recta de MCO y α̂₁.
  *
@@ -173,21 +173,6 @@ export function createPlots(refs) {
         if (i === 0) ctx.moveTo(X, Y);
         else ctx.lineTo(X, Y);
       });
-      ctx.stroke();
-    }
-
-    // Partícula APW gemela.
-    if (last && state.boot && Number(state.boot.controller) === 3 && last.gx !== undefined) {
-      const gx = px(last.gx);
-      const gy = py(last.gy);
-      ctx.strokeStyle = c.series[2];
-      ctx.lineWidth = 1.4;
-      ctx.beginPath();
-      ctx.moveTo(gx, gy - 4);
-      ctx.lineTo(gx + 4, gy);
-      ctx.lineTo(gx, gy + 4);
-      ctx.lineTo(gx - 4, gy);
-      ctx.closePath();
       ctx.stroke();
     }
 

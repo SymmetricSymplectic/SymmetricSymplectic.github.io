@@ -44,7 +44,7 @@ from pathlib import Path
 CELL = 64                    # map units por celda de Z^2
 HALF_CELLS = 128             # celdas por semieje: -128..128
 HALF = HALF_CELLS * CELL     # 8192 map units
-CEIL_HEIGHT = 128
+CEIL_HEIGHT = 256
 LATTICE_HALF = 120           # radio de la nube de zombis (celdas)
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -53,7 +53,7 @@ BUILD = ROOT / "build"
 PK3_OUT = ROOT / "public" / "mods" / "zombie-escape.pk3"
 
 FLOOR_FLAT = "DZEFLOOR"
-CEIL_FLAT = "DZECEIL"
+CEIL_FLAT = "F_SKY1"   # techo de cielo: arena abierta
 WALL_TEX = "DZEWALL"
 
 # Orden canónico de los lumps de un mapa Doom.
@@ -654,7 +654,6 @@ def pk3_entries(wad: bytes) -> list[tuple[str, bytes]]:
         entries.append((rel, path.read_bytes()))
 
     entries.append((f"flats/{FLOOR_FLAT}.png", make_floor_flat()))
-    entries.append((f"flats/{CEIL_FLAT}.png", make_ceiling_flat()))
     entries.append((f"textures/{WALL_TEX}.png", make_wall_texture()))
     return entries
 
@@ -685,7 +684,6 @@ def verify_pk3(path: Path) -> dict:
             "zscript/dze_controller.zc",
             "zscript/dze_hud.zc",
             "flats/DZEFLOOR.png",
-            "flats/DZECEIL.png",
             "textures/DZEWALL.png",
         }
         missing = sorted(required - names)

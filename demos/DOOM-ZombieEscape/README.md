@@ -12,7 +12,7 @@ supervivencia τ(λ), lo grafica en vivo y ajusta la pendiente α̂₁ de
 > (Dartmouth), presentado en el Seminario de Probabilidad y Procesos
 > Estocásticos (IMATE / IIMAS, UNAM).
 
-![Radar táctico y nube de zombis sobre la retícula](docs/captura-hud.png)
+![El marine NPC rodeado por la horda, visto desde la cámara libre](docs/captura-freecam.png)
 
 ---
 
@@ -203,15 +203,15 @@ termina en `Module.print` y la captura `public/js/telemetry-bridge.js`:
 
 ```text
 [DZE_BOOT]   {"lambda":F,"seed":I,"controller":I,"step_tics":I,"zombies":I,"actors":I,"radius":I,"hash":I}
-[DZE_STEP]   {"t":I,"mx":I,"my":I,"min_d1":I,"shock":I,"n":I,"gx":I,"gy":I,"caught":I,
-              "wz":I,"ax":I,"ay":I,"drift":I,"stay":I,"h":I,"in":I,"still":I}
+[DZE_STEP]   {"t":I,"mx":I,"my":I,"min_d1":I,"shock":I,"n":I,"caught":I,
+              "ax":I,"ay":I,"drift":I,"stay":I,"h":I,"in":I,"still":I}
 [DZE_RESULT] {"caught":I,"tau":I,"lambda":F,"seed":I,"controller":I,"zombies":I,"steps":I,"censored":I}
 ```
 
 * `mx, my` — celda que decidió el algoritmo; `min_d1` — distancia ℓ¹ al zombi
   más cercano; `shock` — zombis sobre la fila o la columna de Mindy (masa de
   choque);
-* `gx, gy` — partícula APW gemela; `wz` — altura del jugador;
+* `ax, ay` — celda medida sobre el actor del marine (debe coincidir con `mx, my`);
 * `ax, ay` — celda **medida** sobre `mo.pos`: debe coincidir con `mx, my`
   (diagnóstico del teleport); `drift` — pasos en que no coincidió (contador
   acumulado); `stay` — pasos en que el bot eligió quedarse (candidato legal);
@@ -238,10 +238,10 @@ histórico acotado y expone `parseLine`, `linearRegression`, `fitLogLog` y
   `+set dze_lambda … +set dze_seed … +set dze_controller … +set dze_step_tics …`,
   tal como pide la especificación §5.
 * **Laboratorio estocástico**: λ, semilla, controlador y tics por paso; cifras
-  en vivo (pasos, `min d₁`, masa de choque, número de zombis y **celda de
-  Mindy**), con un aviso que explica quién mueve al personaje según el
+  en vivo (pasos, `min d₁`, masa de choque, número de zombis y **celda del
+  marine**), con un aviso que explica quién mueve al personaje según el
   controlador elegido.
-* **Gráficas**: trayectoria de Mindy sobre Z² (con líneas de choque y, si
+* **Gráficas**: trayectoria del marine sobre Z² (con líneas de choque y, si
   corres un episodio de ejemplo, la nube completa), series de `min d₁(t)` y
   masa de choque, y la regresión log–log con α̂₁.
 * **Modo analítico**: el mismo modelo en JS corre lotes Monte Carlo sin motor
@@ -261,7 +261,7 @@ histórico acotado y expone `parseLine`, `linearRegression`, `fitLogLog` y
 | 2 | `make build-pk3` genera `MAP01.wad` con cabeceras `PWAD` válidas y compila el `.pk3` | `scripts/build_pk3.py` | `make build-pk3` (el script verifica ~36 000 invariantes del WAD y el contenido del pk3) |
 | 3 | Pruebas de `node --test` para el parser `[DZE_STEP]`/`[DZE_RESULT]` y la pendiente α̂₁ por MCO sobre `(log(1/λ), log τ)` | `tests/telemetry.test.js`, `tests/model.test.js` | `make test` |
 | 4 | `make serve` levanta `http://localhost:8080`, registra el Service Worker de `SharedArrayBuffer` y permite jugar o correr el bot APW | `scripts/serve.py`, `public/coi-serviceworker.js` | `make serve` y abrir la URL |
-| 5 | El algoritmo controla de verdad a Mindy en los modos 1 y 2 | `dze_controller.zc` (teleport por celda), `scripts/check-bot.mjs` | `make audit-bot` |
+| 5 | El algoritmo conduce de verdad al marine NPC (modos 1 y 2) y el jugador solo observa | `dze_controller.zc` (teleport por celda + `DZEFreecam`), `scripts/check-bot.mjs` | `make audit-bot` |
 
 Comprobación adicional de extremo a extremo (sin interacción humana):
 
@@ -274,12 +274,11 @@ node scripts/e2e-headless.mjs \
 Arranca Chrome headless con el protocolo DevTools, recoge consola y excepciones,
 y falla si aparece un `Script error` de ZScript o una excepción de JavaScript.
 
-### Auditoría del control del bot
+### Auditoría del control del marine
 
-![Modo APW: el algoritmo lleva a Mindy y el radar dibuja su ruta](docs/captura-bot-apw.png)
 
 `make audit-bot` corre el motor con los controladores 1 (APW) y 2 (Greedy) y
-compara la traza real con el modelo de referencia:
+compara la traza real del marine con el modelo de referencia:
 
 ```bash
 node scripts/check-bot.mjs build/bot-apw.json --controller 1
@@ -337,37 +336,20 @@ Verifica, sobre los datos del motor:
 * **Mallas 3D**: se instancian como mucho `DZE_MAX_ACTORS = 2048` actores
   `LatticeZombie`; por encima se submuestrea con un paso constante (la nube
   matemática y el radar siguen completos). Con λ = 0.03 son 1 742 sprites.
-* **Cómo se controla a Mindy en los modos bot**: en cada paso el controlador
-  elige candidato, actualiza su celda y hace `SetOrigin` al centro de esa celda
-  conservando la altura del jugador; la velocidad se anula y el paso siguiente
-  comprueba contra `mo.pos` que el jugador siga ahí. Si no, re-sincroniza el
-  modelo y lo cuenta en `drift` (siempre 0 en las auditorías).
-* **La interfaz humana está bloqueada en los modos 1 y 2**: cada paso son
-  `dze_step_tics` tics y, sin candado, el jugador puede caminar entre paso y
-  paso y sacar a Mindy de su celda (rompiendo el paseo de Z²). Por eso
-  `LockHumanControl()` anula `cmd.ForwardMove/SideMove/UpMove` en **cada** tic,
-  pone la velocidad a cero y ancla la posición al centro de la celda; los tics
-  con orden de movimiento se cuentan en `in`. La vista (ratón) sigue libre
-  porque es cosmética para el modelo. En los modos 0 y 3 no se aplica: ahí
-  manda el humano. Para comprobarlo: `node scripts/e2e-headless.mjs … --hold-key
-  KeyW` deja `in` creciendo y `drift` en 0.
-* **La página no se mueve sola**: `ArrowUp/ArrowDown/Espacio` disparaban el
-  scroll del navegador (medido: `scrollY = 334`) en vez de mover al jugador, y
-  el `canvas.focus()` inicial arrastraba la página. Ahora el loader captura el
-  teclado del juego con `preventDefault` (sin detener la propagación, así que el
-  motor recibe el evento), enfoca el canvas con `preventScroll` y desenfoca los
-  botones al pulsarlos para que `Espacio` (usar) no vuelva a pulsar «Iniciar».
-* **Velocidad acotada al paso de la retícula**: `NormForwardMove` y
-  `NormSideMove` valen `10.0, 16.0` map units/tic en vez de los 24/40 de Doom.
-  Con los valores por defecto el humano corría ~4 celdas por paso, cruzaba la
-  sala de 128 celdas en segundos y acababa mirando el ladrillo de la pared
-  («no nos movemos»); ahora avanza ~1 celda por paso, igual que los zombis y el
-  bot, que es lo que pide el modelo 1:1.
-* **Avisos en el radar** (sólo modos humanos): «SIN MOVIMIENTO: W A S D o
-  flechas» tras 30 pasos sin cambiar de celda y «FUERA DE LA NUBE: vuelve al
-  centro» si `|x|` o `|y|` superan 120. El panel muestra además la celda de
-  Mindy en vivo, para que el movimiento se vea en cifras aunque la vista no
-  cambie.
+* **Cómo se mueve el marine**: en cada paso el controlador elige candidato,
+  actualiza su celda y hace `SetOrigin` al centro de esa celda; el paso
+  siguiente comprueba contra `pos` que siga ahí y, si no, re-sincroniza el
+  modelo (`drift`, siempre 0 en las auditorías). La cámara se reencuadra al
+  final de cada paso para no quedarse una celda atrás.
+* **El jugador no controla al personaje**: cada tic se anulan sus órdenes de
+  movimiento y de acción, se le congela el pawn en el origen y se le oculta
+  (`bInvisible`); los tics con orden recibida se cuentan en `in`. No hay modos
+  de control humano: `dze_controller` acepta 1 (APW) y 2 (Greedy ℓ¹), y
+  cualquier otro valor cae en 1.
+* **Arena abierta**: el techo del sector es `F_SKY1` y mide 256 map units, así
+  la cámara ve el suelo reticular, la horda y el cielo de Freedoom con sus
+  montañas, sin techo que tape el encuadre. Se oculta la barra de estado
+  (`screenblocks 11`) y se abre el campo de visión a 100°.
 * **Cuidado con `%` y `uint` en ZScript**: `rng % 5` con un `uint` puede
   evaluarse como módulo *con signo* y devolver `-4`, `-2`, … Con índices
   negativos `Dx`/`Dy` devuelven 0, los cinco candidatos colapsan al mismo punto
@@ -395,10 +377,10 @@ Verifica, sobre los datos del motor:
 | 404 en `uzdoom.data` | Falta `public/engine/`; ejecuta `make bootstrap`. El loader resuelve las rutas siempre contra `engine/`. |
 | «Script error … zombie-escape.pk3» | El ZScript no compiló: revisa el mensaje en la consola del navegador y el archivo indicado; recompila con `make build-pk3`. |
 | El motor arranca pero no hay zombis | Abre `MAP01` (el mod solo actúa en ese mapa) y revisa que `MAPINFO.txt` registre `DZEController`. |
-| Las flechas o Espacio hacen scroll de la página | Corregido: el visor captura esas teclas mientras el juego corre. Si usas una versión antigua, recarga con Ctrl+F5. |
-| Veo ladrillo marrón y no me muevo | Estás pegado a una pared. Con la velocidad normalizada (10/16 u/tic) hace falta mucho más tiempo para llegar al borde de la sala; mira la cifra «celda de Mindy» del panel para confirmar que avanzas. |
-| El fantasma APW se mueve y yo no | Ocurría cuando la página se desplazaba sola al arrancar (375 px) y las teclas iban al navegador; ya está corregido. En el modo 3 tú mueves a Mindy y el rombo violeta juega el algoritmo. |
-| No puedo moverme en los modos APW/Greedy | Es intencional: el controlador bloquea la interfaz humana para que el paseo sea una retícula limpia. Cambia a *Humano* (0) o *Humano + fantasma* (3) si quieres moverte tú. |
+| Las flechas o Espacio hacen scroll de la página | El visor captura esas teclas mientras el juego corre; si persiste, recarga con Ctrl+F5. |
+| No puedo mover al marine | Es el diseño: el personaje lo conduce el algoritmo y tú observas desde la cámara libre. Elige APW o Greedy en el panel. |
+| La cámara no se mueve | Sigue al marine; si el episodio ya terminó (`ATRAPADO`), la escena queda congelada. Pulsa «Reiniciar con estos parámetros». |
+| Veo la horda y al marine pero no el techo | Es intencional: la arena tiene techo de cielo (`F_SKY1`) para que la cámara libre vea desde fuera. |
 | El bot «mira a la pared» | Es la política: la esquina minimiza la densidad local. Usa el modo fantasma o el humano para ver la horda desde dentro. |
 | Sin sonido | Los navegadores exigen un gesto del usuario: pulsa la pantalla del juego. |
 
