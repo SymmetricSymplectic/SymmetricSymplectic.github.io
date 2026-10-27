@@ -635,6 +635,15 @@ class DZEController : EventHandler
             if (frac > 1.0) { frac = 1.0; }
         }
 
+        // Cuadro de caminata: A..D mientras el actor avanza; A quieto. Es solo
+        // presentacion: el modelo no cambia (los zombis y el marine siguen
+        // estando exactamente en su celda).
+        int walkFrame = 0;
+        if (ticAcc > 0)
+        {
+            walkFrame = (ticAcc / 2) % 4;
+        }
+
         // Marine: imprescindible, la camara lo sigue.
         if (mindy != null)
         {
@@ -643,6 +652,14 @@ class DZEController : EventHandler
             a.x = a.x + (b.x - a.x) * frac;
             a.y = a.y + (b.y - a.y) * frac;
             mindy.SetOrigin(a, true);
+            if (mx != pmx || my != pmy)
+            {
+                mindy.frame = walkFrame;
+            }
+            else
+            {
+                mindy.frame = 0;
+            }
         }
 
         // Zombis cercanos.
@@ -659,6 +676,14 @@ class DZEController : EventHandler
             a.x = a.x + (b.x - a.x) * frac;
             a.y = a.y + (b.y - a.y) * frac;
             act.SetOrigin(a, true);
+            if (pzx[i] != zx[i] || pzy[i] != zy[i])
+            {
+                act.frame = walkFrame;
+            }
+            else
+            {
+                act.frame = 0;
+            }
         }
     }
 

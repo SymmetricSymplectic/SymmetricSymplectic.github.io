@@ -283,7 +283,8 @@ async function main() {
       'steps: (document.getElementById("statSteps")||{}).textContent, ' +
       'minD: (document.getElementById("statMinD")||{}).textContent, ' +
       'zombies: (document.getElementById("statZombies")||{}).textContent, ' +
-      'scrollY: window.scrollY, active: (document.activeElement||{}).tagName})',
+      'scrollY: window.scrollY, active: (document.activeElement||{}).tagName, ' +
+      'lock: !!document.pointerLockElement})',
     returnByValue: true
   }).catch(() => null);
 

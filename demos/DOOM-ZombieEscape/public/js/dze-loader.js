@@ -355,6 +355,7 @@ export class DzeEngine {
    */
   installInputCapture() {
     if (this.inputCaptureInstalled) return;
+    this.disablePointerLock();
     this.inputCaptureInstalled = true;
 
     const GAME_KEYS = new Set([
@@ -399,12 +400,56 @@ export class DzeEngine {
     }
   }
 
+  /**
+   * La cámara es fija: no hay ratón que capturar. El motor (SDL) pide
+   * pointer-lock al activar el ratón relativo en el arranque, y el navegador
+   * se queda con el cursor; aquí se desactiva esa petición para que el ratón
+   * siga siendo del usuario (menús, rueda, selección de texto).
+   */
+  disablePointerLock() {
+    if (this.pointerLockDisabled) return;
+    this.pointerLockDisabled = true;
+
+    const noop = () => Promise.resolve();
+    const c = this.canvas;
+    if (c) {
+      for (const name of [
+        'requestPointerLock',
+        'mozRequestPointerLock',
+        'webkitRequestPointerLock',
+        'msRequestPointerLock'
+      ]) {
+        try {
+          c[name] = noop;
+        } catch (_e) {
+          /* propiedad de solo lectura: se ignora */
+        }
+      }
+    }
+    // Otros caminos que usan Emscripten (document.body.requestPointerLock).
+    try {
+      if (document.body) document.body.requestPointerLock = noop;
+    } catch (_e) {
+      /* ignore */
+    }
+
+    // Red de seguridad: si aun así se bloquea, se libera de inmediato.
+    document.addEventListener('pointerlockchange', () => {
+      if (document.pointerLockElement) {
+        try {
+          document.exitPointerLock();
+        } catch (_e) {
+          /* ignore */
+        }
+      }
+    });
+  }
+
   requestPointerLock() {
     const c = this.canvas;
     if (!c || !c.requestPointerLock) return;
-    if (document.pointerLockElement === c) return;
-    const p = c.requestPointerLock();
-    if (p && typeof p.catch === 'function') p.catch(() => {});
+    // Desactivado a propósito: la cámara es fija (ver disablePointerLock).
+    return;
   }
 
   toggleFullscreen() {

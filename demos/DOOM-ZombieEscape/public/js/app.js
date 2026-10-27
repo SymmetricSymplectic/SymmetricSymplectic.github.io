@@ -207,8 +207,15 @@ async function startExperiment() {
 
 ui.start.addEventListener('click', startExperiment);
 
+// Sin pointer-lock: la cámara la mueve el motor y el cursor queda libre.
 ui.canvas.addEventListener('click', () => {
-  if (engine) engine.requestPointerLock();
+  if (engine && engine.canvas) {
+    try {
+      engine.canvas.focus({ preventScroll: true });
+    } catch (_e) {
+      engine.canvas.focus();
+    }
+  }
 });
 
 ui.fullscreen.addEventListener('click', () => {

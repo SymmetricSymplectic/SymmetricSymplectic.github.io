@@ -336,6 +336,16 @@ Verifica, sobre los datos del motor:
 * **Mallas 3D**: se instancian como mucho `DZE_MAX_ACTORS = 2048` actores
   `LatticeZombie`; por encima se submuestrea con un paso constante (la nube
   matemática y el radar siguen completos). Con λ = 0.03 son 1 742 sprites.
+* **El motor no secuestra el ratón**: SDL pide pointer-lock al activar el ratón
+  relativo y el navegador se quedaba con el cursor. Como la cámara es fija, el
+  loader anula `requestPointerLock` en el canvas (y sus alias con prefijo) antes
+  de que el motor lo normalice; si algo consiguiera bloquearlo, la red de
+  seguridad llama a `exitPointerLock()`. Se comprueba con
+  `document.pointerLockElement === null` tras pulsar el visor.
+* **Animación de caminata**: mientras una malla avanza, su `frame` cicla A..D
+  (`(ticAcc/2) % 4`) y vuelve a A cuando se detiene, así que el marine y los
+  zombis «caminan» sin tocar el estado ni el modelo. Con `dze_step_tics = 14`
+  se aprecia mejor.
 * **Movimiento continuo sin tocar el modelo**: el paso sigue siendo discreto
   (una celda por `dze_step_tics`), pero cada tic se coloca cada malla en la
   interpolación lineal entre su celda anterior y la nueva
