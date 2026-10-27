@@ -71,13 +71,23 @@ check(boot && boot.controller === wantsController, `controlador ${wantsControlle
 check(steps.length > 3, `hay pasos suficientes (${steps.length})`);
 
 if (boot && steps.length) {
-  const consistent = steps.filter((s) => s.ax === s.mx && s.ay === s.my);
+  // `ax, ay` se mide sobre la malla al empezar el paso; con animación continua
+  // la malla está a medio camino dentro del paso, así que la invariante es que
+  // al empezar estuviera en la celda que dejó el paso anterior.
+  let consistent = 0;
+  const bad = [];
+  steps.forEach((s, i) => {
+    const prev = i === 0 ? [0, 0] : [steps[i - 1].mx, steps[i - 1].my];
+    if (s.ax === prev[0] && s.ay === prev[1]) consistent++;
+    else if (bad.length < 3) bad.push({ t: s.t, prev, medido: [s.ax, s.ay] });
+  });
   check(
-    consistent.length === steps.length,
-    `celda real == celda decidida en ${consistent.length}/${steps.length} pasos`
+    consistent === steps.length,
+    `malla en la celda del paso anterior al iniciar cada paso: ${consistent}/${steps.length}`
   );
-  const bad = steps.filter((s) => s.ax !== s.mx || s.ay !== s.my).slice(0, 3);
-  for (const b of bad) console.log(`        t=${b.t} decidida=(${b.mx},${b.my}) real=(${b.ax},${b.ay})`);
+  for (const b of bad) {
+    console.log(`        t=${b.t} esperada=(${b.prev}) medida=(${b.medido})`);
+  }
 
   const illegal = [];
   for (let i = 1; i < steps.length; i++) {

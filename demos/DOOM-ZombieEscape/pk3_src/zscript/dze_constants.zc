@@ -37,6 +37,11 @@ const DZE_CAM_HEIGHT     = 150;      // a la altura de los ojos (vista trasera)
 const DZE_CAM_ANGLE      = 90;      // mira al norte (el marine queda delante)
 const DZE_CAM_PITCH      = 0;       // el motor ignora el pitch del actor camara
 
+// --- Animacion del movimiento (solo representacion) -----------------------
+// Radio en celdas dentro del cual las mallas de los zombis se interpolan tic a
+// tic. Fuera de el no se ven, asi que se recolocan de golpe y se ahorra trabajo.
+const DZE_ANIM_RADIUS    = 70;
+
 // --- Pesos y exponentes del potencial APW --------------------------------
 const DZE_W_IMM          = 1.00;    // w_imm
 const DZE_W_SHOCK        = 0.75;    // w_shock

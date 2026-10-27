@@ -49,6 +49,8 @@ class DZEController : EventHandler
     // ------------------------------------------------------------------
     Array<int> zx;
     Array<int> zy;
+    Array<int> pzx;        // celda anterior (interpolacion de la malla)
+    Array<int> pzy;
     Array<Actor> zActors;
 
     // ------------------------------------------------------------------
@@ -58,6 +60,8 @@ class DZEController : EventHandler
     Actor cam;
     int mx;
     int my;
+    int pmx;               // celda anterior del marine
+    int pmy;
     Array<int> trailX;
     Array<int> trailY;
 
@@ -108,15 +112,17 @@ class DZEController : EventHandler
 
         // El jugador solo observa: se anula su entrada y se congela su pawn.
         LockPlayer();
-        UpdateCamera();
 
+        // Un paso del modelo cada stepTics tics; el resto de tics la malla se
+        // desliza entre la celda anterior y la nueva.
         ticAcc++;
-        if (ticAcc < stepTics)
+        if (ticAcc >= stepTics)
         {
-            return;
+            ticAcc = 0;
+            Step();
         }
-        ticAcc = 0;
-        Step();
+        AnimateVisuals();
+        UpdateCamera();
     }
 
     override void WorldUnloaded(WorldEvent e)
@@ -153,6 +159,8 @@ class DZEController : EventHandler
     {
         zx.Clear();
         zy.Clear();
+        pzx.Clear();
+        pzy.Clear();
         zActors.Clear();
         trailX.Clear();
         trailY.Clear();
@@ -173,6 +181,8 @@ class DZEController : EventHandler
         stillSteps = 0;
         mx = 0;
         my = 0;
+        pmx = 0;
+        pmy = 0;
         lambda = 0.03;
         seed = 42;
         mode = 1;
@@ -312,6 +322,8 @@ class DZEController : EventHandler
                 {
                     zx.Push(i);
                     zy.Push(j);
+                    pzx.Push(i);
+                    pzy.Push(j);
                     zActors.Push(null);
                     if (zx.Size() >= DZE_MAX_ZOMBIES)
                     {
@@ -379,7 +391,9 @@ class DZEController : EventHandler
         {
             return;
         }
-        vector3 c = CellOrigin(mx, my);
+        // Posicion interpolada del marine: la camara se desliza con el, no
+        // salta de celda en celda.
+        vector3 c = mindy != null ? mindy.pos : CellOrigin(mx, my);
         c.x += DZE_CAM_OFFSET_X;
         c.y += DZE_CAM_OFFSET_Y;
         c.z = floorZ + DZE_CAM_HEIGHT;
@@ -467,6 +481,8 @@ class DZEController : EventHandler
         }
 
         // 1) Movimiento del marine.
+        pmx = mx;
+        pmy = my;
         int idx = (mode == 1)
             ? DZEBot.ChooseAPW(zx, zy, mx, my, lambda, rngState)
             : DZEBot.ChooseGreedy(zx, zy, mx, my, rngState);
@@ -478,7 +494,6 @@ class DZEController : EventHandler
         }
         mx = nx;
         my = ny;
-        mindy.SetOrigin(CellOrigin(mx, my), true);
 
         // 2) Transicion geodesica l1 de los zombis.
         MoveZombies();
@@ -500,11 +515,12 @@ class DZEController : EventHandler
         steps++;
         PushTrail();
 
-        // 4) Telemetria.
-        int axp = ClampCell(DZEMath.CellOf(mindy.pos.x, DZE_CELL_UNITS));
-        int ayp = ClampCell(DZEMath.CellOf(mindy.pos.y, DZE_CELL_UNITS));
+        // 4) Telemetria. `ax, ay` es la celda medida sobre la malla al INICIAR el
+        //    paso (antes de moverse): con movimiento continuo la malla esta a
+        //    medio camino dentro del paso, asi que lo comprobable es que al
+        //    empezar estuviera donde la dejo el paso anterior.
         Console.Printf("[DZE_STEP] {\"t\":%d,\"mx\":%d,\"my\":%d,\"min_d1\":%d,\"shock\":%d,\"n\":%d,\"caught\":%d,\"ax\":%d,\"ay\":%d,\"drift\":%d,\"stay\":%d,\"h\":%d,\"in\":%d,\"still\":%d}\n",
-            steps, mx, my, minD, shockN, n, caughtN, axp, ayp, driftCount, stayCount, int(CloudHash()), inputTics, stillSteps);
+            steps, mx, my, minD, shockN, n, caughtN, ax, ay, driftCount, stayCount, int(CloudHash()), inputTics, stillSteps);
 
         if (caughtN > 0)
         {
@@ -548,6 +564,8 @@ class DZEController : EventHandler
         {
             int dx = mx - zx[i];
             int dy = my - zy[i];
+            pzx[i] = zx[i];
+            pzy[i] = zy[i];
             if (dx == 0 && dy == 0)
             {
                 continue;   // ya comparte celda: se contabiliza al medir
@@ -574,11 +592,73 @@ class DZEController : EventHandler
                 zy[i] += (dy > 0) ? 1 : -1;
             }
 
+            // Las mallas cercanas se animan tic a tic (ver AnimateVisuals);
+            // las lejanas, que no se ven, se colocan de golpe en su celda.
             Actor a = zActors[i];
-            if (a != null)
+            if (a != null && !NearCamera(i))
             {
                 a.SetOrigin(CellOrigin(zx[i], zy[i]), true);
             }
+        }
+    }
+
+    // Radio (en celdas) dentro del cual las mallas se interpolan. Fuera de el
+    // no se ven, asi que recolocarlas de golpe ahorra miles de SetOrigin.
+    bool NearCamera(int i)
+    {
+        int dx = zx[i] - mx;
+        int dy = zy[i] - my;
+        if (dx < 0) { dx = -dx; }
+        if (dy < 0) { dy = -dy; }
+        if (dx > DZE_ANIM_RADIUS) { return false; }
+        if (dy > DZE_ANIM_RADIUS) { return false; }
+        return true;
+    }
+
+    // ==================================================================
+    //  Movimiento continuo (solo representacion)
+    //
+    //  El modelo avanza una celda por paso. Para que no se vea un salto de 64
+    //  unidades, cada tic se coloca cada malla en la interpolacion lineal
+    //  entre su celda anterior y la actual, con fase = ticAcc / (stepTics-1).
+    // ==================================================================
+    void AnimateVisuals()
+    {
+        double frac;
+        if (stepTics <= 1)
+        {
+            frac = 1.0;
+        }
+        else
+        {
+            frac = double(ticAcc) / double(stepTics - 1);
+            if (frac > 1.0) { frac = 1.0; }
+        }
+
+        // Marine: imprescindible, la camara lo sigue.
+        if (mindy != null)
+        {
+            vector3 a = CellOrigin(pmx, pmy);
+            vector3 b = CellOrigin(mx, my);
+            a.x = a.x + (b.x - a.x) * frac;
+            a.y = a.y + (b.y - a.y) * frac;
+            mindy.SetOrigin(a, true);
+        }
+
+        // Zombis cercanos.
+        int n = zx.Size();
+        for (int i = 0; i < n; i++)
+        {
+            Actor act = zActors[i];
+            if (act == null || !NearCamera(i))
+            {
+                continue;
+            }
+            vector3 a = CellOrigin(pzx[i], pzy[i]);
+            vector3 b = CellOrigin(zx[i], zy[i]);
+            a.x = a.x + (b.x - a.x) * frac;
+            a.y = a.y + (b.y - a.y) * frac;
+            act.SetOrigin(a, true);
         }
     }
 

@@ -211,10 +211,9 @@ termina en `Module.print` y la captura `public/js/telemetry-bridge.js`:
 * `mx, my` — celda que decidió el algoritmo; `min_d1` — distancia ℓ¹ al zombi
   más cercano; `shock` — zombis sobre la fila o la columna de Mindy (masa de
   choque);
-* `ax, ay` — celda medida sobre el actor del marine (debe coincidir con `mx, my`);
-* `ax, ay` — celda **medida** sobre `mo.pos`: debe coincidir con `mx, my`
-  (diagnóstico del teleport); `drift` — pasos en que no coincidió (contador
-  acumulado); `stay` — pasos en que el bot eligió quedarse (candidato legal);
+* `ax, ay` — celda medida sobre la malla del marine **al iniciar el paso**
+  (con animación continua la malla va a medio camino dentro del paso, así que
+  lo comprobable es que al empezar estuviera donde la dejó el paso anterior);
 * `hash`/`h` — checksum FNV‑1a de la nube (boot) y tras cada paso: permite
   comparar el estado con el gemelo JS bit a bit;
 * `in` — tics en los que la interfaz humana pidió movimiento. En los modos
@@ -286,9 +285,10 @@ node scripts/check-bot.mjs build/bot-apw.json --controller 1
 
 Verifica, sobre los datos del motor:
 
-* que la celda medida en `mo.pos` (`ax, ay`) coincide con la que decidió el
-  algoritmo (`mx, my`) en **todos** los pasos — es decir, que el teleport
-  realmente mueve al jugador;
+* que la malla del marine está, al empezar cada paso, en la celda que dejó el
+  paso anterior (`ax, ay` frente a la celda previa) — con movimiento continuo
+  la malla va a medio camino dentro del paso, así que ésa es la invariante; el
+  contador `drift` debe quedar en 0;
 * que cada paso cambia como mucho una celda en un solo eje (paseo legal de Z²);
 * que el contador `drift` del mod se queda en 0 (nadie desplaza al jugador
   entre pasos);
@@ -336,10 +336,16 @@ Verifica, sobre los datos del motor:
 * **Mallas 3D**: se instancian como mucho `DZE_MAX_ACTORS = 2048` actores
   `LatticeZombie`; por encima se submuestrea con un paso constante (la nube
   matemática y el radar siguen completos). Con λ = 0.03 son 1 742 sprites.
-* **Cómo se mueve el marine**: en cada paso el controlador elige candidato,
-  actualiza su celda y hace `SetOrigin` al centro de esa celda; el paso
-  siguiente comprueba contra `pos` que siga ahí y, si no, re-sincroniza el
-  modelo (`drift`, siempre 0 en las auditorías). La cámara se reencuadra al
+* **Movimiento continuo sin tocar el modelo**: el paso sigue siendo discreto
+  (una celda por `dze_step_tics`), pero cada tic se coloca cada malla en la
+  interpolación lineal entre su celda anterior y la nueva
+  (`AnimateVisuals`, fase `ticAcc/(stepTics-1)`). Así el marine y la horda se
+  deslizan en vez de saltar 64 unidades de golpe, y la cámara —que sigue la
+  posición interpolada— también se mueve suave. Solo se animan los zombis
+  dentro de `DZE_ANIM_RADIUS` (70 celdas) del marine; los demás no se ven y se
+  recolocan de golpe para ahorrar miles de `SetOrigin` por segundo. Al empezar
+  cada paso se comprueba que la malla esté en la celda que dejó el paso anterior
+  (`drift`, siempre 0 en las auditorías). La cámara se reencuadra al
   final de cada paso para no quedarse una celda atrás.
 * **El jugador no controla al personaje**: cada tic se anulan sus órdenes de
   movimiento y de acción, se le congela el pawn en el origen y se le oculta
