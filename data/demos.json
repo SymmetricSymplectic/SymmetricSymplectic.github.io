@@ -65,13 +65,15 @@
       ]
     },
     {
-      "title": "Elecciones como martingalas · Taleb",
-      "description": "Simula votos y probabilidades de victoria y reconstruye paso a paso el argumento de Taleb: Itô, valoración binaria, incertidumbre y coherencia temporal.",
+      "title": "Elecciones como martingalas · Taleb, EKR y México 2024",
+      "description": "Compara la martingala acotada de Taleb con el modelo bayesiano de Ernst–Kendall–Rosenthal y aplica ambos a la elección presidencial de México de 2024.",
       "url": "demos/election_martingales.html",
       "lang": "es",
       "tags": [
         "martingalas",
         "Taleb",
+        "EKR",
+        "México 2024",
         "probabilidad"
       ]
     },

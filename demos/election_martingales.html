@@ -1,89 +1,1156 @@
 <!doctype html>
 <html lang="es">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Elecciones como martingalas · Taleb</title>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Comparación entre la martingala acotada de Taleb y el modelo bayesiano de Ernst–Kendall–Rosenthal, aplicada a la elección presidencial de México de 2024.">
+<title>Elecciones como martingalas · Taleb, EKR y México 2024</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font:16px/1.65 system-ui,sans-serif}main{max-width:1100px;margin:auto;padding:28px 22px 70px}h1{font-size:clamp(30px,5vw,52px);line-height:1.12;max-width:850px}h2{line-height:1.25}section{border:1px solid;border-radius:12px;padding:24px;margin:22px 0}.eyebrow{letter-spacing:.13em;font-size:12px}.controls{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}label{display:block}input[type=range]{width:100%}output{display:block;font-weight:700}.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}button{padding:10px 16px;border:1px solid;border-radius:6px;font:inherit;cursor:pointer}.stats{display:flex;flex-wrap:wrap;gap:28px;margin:20px 0}.stats strong{display:block;font-size:26px}.stats span{font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}.grid>div{min-width:0}canvas{width:100%;height:290px;display:block}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px}.math{padding:14px 16px;margin:14px 0;overflow-x:auto;font:17px/1.9 'Cambria Math',Cambria,serif;white-space:nowrap}.note{padding:12px 18px}.reading{max-width:850px;margin:auto}.reading section{padding:26px}li{margin:9px 0}summary{cursor:pointer;font-weight:600}details{padding:14px;margin:16px 0;border:1px solid;border-radius:8px}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}.scroll{overflow:auto}a{scroll-margin-top:85px}section[id]{scroll-margin-top:85px}@media(max-width:700px){main{padding:20px 12px}.controls,.grid{grid-template-columns:1fr}section,.reading section{padding:18px}.math{font-size:16px}}
-</style><link rel="stylesheet" href="../css/demos.css"></head>
-<body><nav class="demo-chrome"><a class="demo-chrome-brand" href="../index.html">FELIXNET</a><span class="demo-chrome-links"><a href="../index.html">Inicio</a><a href="../journal.html">Journal</a><a href="../archivo.html">Archivo</a><a href="../proyectos.html" aria-current="page">Proyectos</a><a href="../sobre-mi.html">Sobre mí</a></span></nav>
-<main><div class="eyebrow">NASSIM NICHOLAS TALEB · LABORATORIO DE PROBABILIDAD</div><h1>Ganar una elección no es lo mismo que obtener el 52% de los votos.</h1>
-<p>Una ventaja pequeña puede implicar una victoria casi segura o una contienda abierta. La diferencia es la incertidumbre que queda hasta la elección. Explora el modelo de <em>Election Predictions as Martingales: An Arbitrage Approach</em> y después reconstruye sus argumentos, paso a paso.</p>
-<p><a href="#laboratorio">Simulación</a> · <a href="#argumento">Derivación</a> · <a href="#precision">Precisiones sobre el artículo</a></p>
-<section id="laboratorio"><div class="eyebrow">01 · EXPERIMENTA</div><h2>Los votos y la probabilidad se actualizan juntos</h2>
-<div class="controls">
-<label for="votes">Proporción estimada de votos, Y₀<output id="votesOut"></output><input id="votes" type="range" min="35" max="65" step="0.5" value="52"></label>
-<label for="sigma">Escala del proceso auxiliar, σ<output id="sigmaOut"></output><input id="sigma" type="range" min="0.05" max="2" step="0.05" value="0.4"></label>
-<label for="days">Tiempo hasta la elección<output id="daysOut"></output><input id="days" type="range" min="7" max="730" step="1" value="180"></label>
-</div><p class="muted">Umbral de victoria K = 50%. Tiempo en años (365 días). σ se mide en años⁻¹ᐟ²; no es el error de una encuesta. La volatilidad instantánea de votos se calcula debajo.</p>
-<div class="toolbar"><button id="close">Elección reñida</button><button id="certain">Poca incertidumbre</button><button id="uncertain">Mucha incertidumbre</button><button id="resample" class="primary">Otra muestra</button></div>
-<div class="stats"><div><strong id="prob"></strong><span>Probabilidad de victoria B₀</span></div><div><strong id="vol"></strong><span>Volatilidad local de Y (pp/√año)</span></div><div><strong id="mc"></strong><span>Victorias simuladas · 4 000 trayectorias</span></div></div>
-<div class="grid"><div><h3>Una misma historia, dos cantidades</h3><div class="legend"><span class="c1">━ Votos estimados Yₜ</span><span class="c2">━ Probabilidad Bₜ</span></div><canvas id="path" role="img" aria-label="Trayectoria de votos estimados y probabilidad de victoria hasta la elección"></canvas></div><div><h3>¿Qué cambia al aumentar σ?</h3><div class="legend"><span class="c2">━ Probabilidad inicial B₀</span><span class="c1">┄ Proporción inicial Y₀</span></div><canvas id="curve" role="img" aria-label="Probabilidad de victoria frente a la incertidumbre sigma; votos iniciales constantes"></canvas></div></div>
-<p id="status" role="status"></p><p class="note">Prueba «Poca incertidumbre» y luego «Mucha incertidumbre»: la misma ventaja de 52% deja de justificar tanta confianza. Una trayectoria individual puede subir o bajar mucho: ser martingala significa que su <em>promedio condicional</em> no tiene deriva.</p>
-<details><summary>Comprobar la martingala en el conjunto de simulaciones</summary><p>Se simulan 4 000 historias independientes con transiciones gaussianas exactas en 100 intervalos. La tabla compara sus medias con los valores iniciales. Los márgenes son ±1,96 errores estándar de Monte Carlo; no son intervalos sobre una elección real.</p><div class="scroll"><table><thead><tr><th>Tiempo transcurrido</th><th>Media de Yₜ ± margen</th><th>Media de Bₜ ± margen</th></tr></thead><tbody id="checks"></tbody></table></div><p>Este diagnóstico verifica medias desde el estado inicial. La propiedad condicional completa se demuestra con la ley de la esperanza iterada, más abajo. Las curvas usan la misma semilla al mover controles para facilitar la comparación; «Otra muestra» cambia la semilla.</p></details></section>
-<div class="reading"><section id="argumento"><div class="eyebrow">02 · EL ARGUMENTO</div><h2>1. Tres objetos que conviene separar</h2>
-<p><strong>Yₜ</strong> es la estimación en el tiempo t de la proporción final de votos. <strong>I = 𝟙{Y<sub>T</sub> &gt; K}</strong> indica si el candidato gana. <strong>Bₜ</strong> es la probabilidad condicional de esa victoria, dada la información ℱₜ. En general, Yₜ ≠ Bₜ.</p>
-<div class="math">Yₜ ∈ (0,1), &nbsp; I ∈ {0,1}, &nbsp; Bₜ = E[I | ℱₜ].</div>
-<p>Un contrato que paga 1 al ganar y 0 al perder tiene valor Bₜ bajo la medida de valoración del modelo, sin descuento. Taleb propone exigir a los pronósticos la misma coherencia temporal que a ese precio.</p>
-<p>Para u &gt; t, la información disponible ahora está contenida en la futura: ℱₜ ⊆ ℱᵤ. Por eso, promediar hoy las probabilidades que mañana podríamos publicar devuelve la probabilidad de hoy:</p>
-<div class="math">E[Bᵤ | ℱₜ] = E[E[I | ℱᵤ] | ℱₜ] = E[I | ℱₜ] = Bₜ.</div>
-<p>Ésta es la propiedad de martingala. No obliga a mantener fijo el pronóstico: obliga a que sus revisiones futuras no sean predecibles <em>en promedio</em> con la información actual.</p></section>
-<section><h2>2. Cómo construir votos acotados sin introducir deriva</h2><p>Un movimiento browniano puede salir de [0,1]. Taleb introduce una variable auxiliar X sobre toda la recta y la transforma con una sigmoide:</p>
-<div class="math">S(x) = ½[1 + erf(x)] = Φ(√2 x), &nbsp; Yₜ = S(Xₜ).<br>erf(x) = (2/√π) ∫₀ˣ exp(−u²) du.</div>
-<p>Φ es la función de distribución normal estándar. S es creciente y lleva la recta a (0,1). Transformar un browniano sin deriva no basta: la curvatura de S añade una deriva por la fórmula de Itô.</p>
-<p>Escribamos dXₜ = μ(Xₜ)dt + σdWₜ. Derivamos S y sustituimos:</p>
-<div class="math">S′(x) = exp(−x²)/√π, &nbsp; S″(x) = −2x S′(x).<br>dYₜ = [S′(Xₜ)μ(Xₜ) + ½σ²S″(Xₜ)]dt + σS′(Xₜ)dWₜ<br>&nbsp;&nbsp;&nbsp;&nbsp; = S′(Xₜ)[μ(Xₜ) − σ²Xₜ]dt + σS′(Xₜ)dWₜ.</div>
-<p>Elegir <strong>μ(x) = σ²x</strong> cancela exactamente el término en dt. Así se obtienen las ecuaciones (5) y de la sección III:</p>
-<div class="math">dXₜ = σ²Xₜ dt + σ dWₜ,<br>dYₜ = a(Yₜ)dWₜ, &nbsp; a(y) = (σ/√π) exp(−[erf⁻¹(2y−1)]²).</div>
-<p>X tiene una deriva que lo aleja del centro; Y no tiene deriva. Como Y está acotado, esta martingala local es una martingala verdadera. Su volatilidad a(y) disminuye cerca de 0 y 1; la transformación evita que atraviese las fronteras.</p></section>
-<section><h2>3. Resolver X antes de calcular una victoria</h2><p>Sea τ = T − t. Multiplicamos la ecuación de X por el factor integrante exp(−σ²t). La regla del producto cancela la deriva:</p>
-<div class="math">d[exp(−σ²t)Xₜ] = σ exp(−σ²t)dWₜ.<br>X<sub>T</sub> = exp(σ²τ)Xₜ + σ ∫ₜᵀ exp[σ²(T−u)] dWᵤ.</div>
-<p>Condicional a ℱₜ, la integral tiene media cero. Su integrando es determinista, por lo que es gaussiana; su varianza se obtiene con la isometría de Itô:</p>
-<div class="math">m = E[X<sub>T</sub> | ℱₜ] = exp(σ²τ)Xₜ,<br>v = σ² ∫ₜᵀ exp[2σ²(T−u)] du<br>&nbsp;&nbsp; = σ² · [exp(2σ²τ) − 1]/(2σ²)<br>&nbsp;&nbsp; = [exp(2σ²τ) − 1]/2.</div>
-<p>En consecuencia, X<sub>T</sub> = m + √v Z en distribución condicional, donde Z es normal estándar. Esta misma fórmula genera cada paso de la simulación; no se usa Euler ni se recortan los votos a [0,1].</p></section>
-<section><h2>4. De una cola normal a la fórmula de Taleb</h2><p>Hay dos umbrales distintos: K en unidades de votos y ℓ en unidades de X. La monotonía de S permite transformar el evento sin cambiar su probabilidad:</p>
-<div class="math">x = S⁻¹(y) = erf⁻¹(2y−1), &nbsp; ℓ = S⁻¹(K).<br>{Y<sub>T</sub> &gt; K} = {X<sub>T</sub> &gt; ℓ}.<br>B(y,σ,τ;K) = P(Z &gt; (ℓ−m)/√v)<br>&nbsp;&nbsp; = Φ((m−ℓ)/√v)<br>&nbsp;&nbsp; = ½ erfc((ℓ−x exp(σ²τ))/√[exp(2σ²τ)−1]).</div>
-<p>Aquí erfc(z) = 1 − erf(z). Para K = ½, el umbral transformado es <strong>ℓ = 0</strong>, no ½. El signo también importa: aumentar los votos estimados debe aumentar la probabilidad de ganar.</p>
-<h3>La cuenta con tus parámetros</h3><div id="worked" class="math" aria-live="polite"></div>
-<p>Al final, τ = 0, la fórmula de cola se sustituye por el pago I. Para σ &gt; 0 y un estado inicial interior, el empate terminal tiene probabilidad cero.</p></section>
-<section><h2>5. Qué significa «más incertidumbre»</h2><p>Con umbral ½ podemos dividir numerador y denominador por exp(σ²τ) y escribir q = σ²τ:</p>
-<div class="math">B = Φ(√2 x / √[1−exp(−2q)]).</div>
-<p>Si y &gt; ½, entonces x &gt; 0. Al aumentar q, crece el denominador, disminuye el argumento de Φ y baja B. Para y &lt; ½ ocurre lo simétrico. Pero los límites exactos son:</p>
-<div class="math">q → 0: &nbsp; B → 𝟙{y &gt; ½} &nbsp; (y ≠ ½).<br>q → ∞: &nbsp; B → Φ(√2 x) = y.<br>y = ½: &nbsp; B = ½ &nbsp; para todo q &gt; 0.</div>
-<p>Con 52% de votos estimados, el límite de gran incertidumbre es <strong>52% de probabilidad</strong>. La expresión «hacia el 50%» resume bien una elección cercana al empate, pero no es el límite literal para cualquier y.</p>
-<h3>Sensibilidad a votos no es volatilidad temporal</h3><p>Definiendo D = 1−exp(−2q) y z = √2x/√D, la regla de la cadena da:</p>
-<div class="math">∂B/∂y = φ(z) · (√2/√D) · √π exp(x²)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = exp[x² − x²/D]/√D.</div>
-<p>φ es la densidad normal estándar. Cerca del empate, x ≈ 0, esta sensibilidad pasa de valores grandes a 1 al aumentar q. Lejos del empate puede comportarse de manera no monótona. Y la volatilidad instantánea del pronóstico es <strong>σ<sub>B</sub> = (∂B/∂y)a(y)</strong>: también interviene a(y), que crece con σ a estado fijo. Por eso no debe leerse la afirmación introductoria del artículo como una ley universal de volatilidad temporal decreciente.</p></section>
-<section><h2>6. Por qué B tampoco tiene deriva</h2><p>Sea F(t,x) la probabilidad calculada arriba. Aplicar Itô a F(t,Xₜ) produce:</p>
-<div class="math">dBₜ = [Fₜ + σ²x Fₓ + ½σ²Fₓₓ]dt + σFₓdWₜ.<br>Fₜ + σ²x Fₓ + ½σ²Fₓₓ = 0,<br>F(T,x) = 𝟙{x &gt; ℓ}.</div>
-<p>La ecuación hacia atrás, ecuación (6) del artículo, hace cero la deriva. <strong>No se impone Fₜ = 0</strong>: el tiempo restante cambia el valor de una opción binaria. Es la suma de los tres términos la que se anula. La demostración por esperanza iterada del apartado 1 ofrece el mismo resultado sin derivar F.</p></section>
-<section><h2>7. De la incertidumbre de votos a σ</h2><p>La simulación controla σ directamente para evitar confundir tres cantidades: la escala auxiliar σ, la volatilidad instantánea a(y) y la desviación estándar terminal de votos s<sub>τ</sub> = √Var(Y<sub>T</sub> | Yₜ=y).</p>
-<p>La calibración aproximada de las ecuaciones (2) y (4) linealiza la transformación inversa alrededor de y. Puesto que (S⁻¹)′(y) = √π exp(x²):</p>
-<div class="math">Var(X<sub>T</sub>) ≈ [(S⁻¹)′(y)]² s<sub>τ</sub>² = π exp(2x²) s<sub>τ</sub>².<br>[exp(2σ²τ)−1]/2 ≈ π exp(2x²) s<sub>τ</sub>².<br>exp(2σ²τ) ≈ 1 + 2π exp(2x²) s<sub>τ</sub>².<br>σ ≈ √{log[1 + 2π exp(2x²)s<sub>τ</sub>²]/(2τ)}.</div>
-<p>Ésta es una aproximación de primer orden, no una igualdad de varianzas exacta. El artículo llama s «anualizada», pero la expresión anterior usa incertidumbre acumulada hasta T. Si se parte de una escala anualizada s<sub>anual</sub> y se adopta escalamiento difusivo local, se sustituye s<sub>τ</sub> ≈ s<sub>anual</sub>√τ. Para horizontes cortos, resulta σ ≈ √π exp(x²)s<sub>anual</sub>, coherente con a(y).</p></section>
-<section><h2>8. El vínculo con Brier y el alcance del arbitraje</h2><p>Para un evento I con probabilidad condicional p y una predicción b, el error cuadrático esperado se descompone exactamente:</p>
-<div class="math">E[(I−b)² | ℱₜ] = p(1−b)² + (1−p)b²<br>&nbsp;&nbsp; = p − 2pb + b²<br>&nbsp;&nbsp; = p(1−p) + (b−p)².</div>
-<p>El primer término no depende de b; el segundo se minimiza únicamente en b = p. El Brier óptimo y el valor condicional del contrato seleccionan la misma probabilidad, dada la misma medida y la misma información.</p>
-<p>Si hoy alguien cotiza 0,60 y anuncia que mañana cotizará 0,70 <em>en todos los estados</em>, comprar hoy y vender mañana asegura 0,10, siempre que ambas operaciones sean posibles y no haya costos. Si 0,70 es sólo el <em>valor esperado</em> de mañana, el beneficio es esperado y puede haber pérdidas: eso por sí solo no demuestra arbitraje sin riesgo.</p>
-<p>La interpretación de Taleb supone cotizaciones negociables de compra y venta y una medida de valoración coherente. Ausencia de arbitraje exige una medida martingala adecuada; no identifica por sí sola las probabilidades reales ni el modelo específico de X. El voto subyacente puede no ser negociable y una encuesta no equivale automáticamente a Yₜ.</p></section>
-<section id="precision"><h2>Cómo leer el artículo con estas precisiones</h2><p>Se reproduce el núcleo del modelo, explicitando pasos y corrigiendo ambigüedades de notación de la copia consultada:</p>
-<ul><li><strong>Umbral y signo (§II):</strong> se distinguen K y ℓ = S⁻¹(K). Se usa la cola superior que crece con y; una de las expresiones intermedias del PDF invierte el signo de erfc.</li><li><strong>Derivada temporal (§II):</strong> Fₜ generalmente no es cero; debe conservarse en la ecuación hacia atrás.</li><li><strong>Simetría no es martingala (§III, proposición 1):</strong> comenzar X en cero puede mantener la media no condicional de S(X) en ½ por simetría. No elimina la deriva condicional después de que el proceso abandona el centro.</li><li><strong>Interpretación:</strong> una derrota con pronóstico alto no refuta por sí sola una probabilidad. Tampoco esta simulación reproduce las elecciones de 2016: muestra las consecuencias de los supuestos del modelo.</li></ul>
-<p class="doc-source">Fuente: Nassim Nicholas Taleb, <em>Election Predictions as Martingales: An Arbitrage Approach</em>, copia local de 5 páginas; portada «3rd Version, October 2017», sello arXiv:1703.06351v4, 2 de julio de 2019. Ecuaciones (1), (2), (4)–(6), secciones III–IV. Las derivaciones ampliadas, los diagnósticos y las precisiones son parte de este demo.</p></section></div></main>
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-size:17px;line-height:1.7}
+main{max-width:1100px;margin:0 auto;padding:30px 22px 80px}
+h1{font-size:clamp(34px,5.4vw,64px);line-height:1.04;letter-spacing:-.025em;margin:.25em 0 .4em;max-width:15ch}
+h2{font-size:clamp(27px,3.6vw,40px);line-height:1.12;letter-spacing:-.015em;margin:.15em 0 .55em}
+h3{font-size:clamp(20px,2.4vw,26px);line-height:1.25;margin:1.5em 0 .45em}
+h4{font-size:17px;line-height:1.35;margin:1.2em 0 .3em}
+p{margin:.85em 0;max-width:72ch}
+.prose{max-width:72ch}
+.lead{font-size:clamp(18px,2.1vw,21px);line-height:1.6;max-width:66ch}
+p.read,.lead{color:var(--text)!important}
+section p{color:var(--text)!important}
+.summary p{color:var(--muted)!important}
+p.small,p.status-line{color:var(--muted)!important}
+th.lower{text-transform:none;letter-spacing:0}
+.eyebrow{font-size:12px;letter-spacing:.14em;font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.hero{max-width:920px;margin:0 auto;padding:16px 0 6px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13.5px;margin:18px 0 8px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px}
+.toc a{font-size:13px;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--muted)!important}
+.toc a:hover{border-color:var(--accent);color:var(--accent)!important}
+section{margin:26px 0;padding:clamp(20px,3vw,34px);scroll-margin-top:78px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:24px 0 6px}
+.summary>div{padding:16px 18px;border:1px solid var(--line);border-radius:12px}
+.summary strong{display:block;font-size:15px;margin-bottom:3px}
+.summary p{font-size:14.5px;line-height:1.55;margin:0;max-width:none}
+.control-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0}
+.control-stack{display:grid;gap:20px;align-content:start}
+fieldset{border:1px solid var(--line);border-radius:10px;padding:16px 18px 18px;margin:0}
+legend{font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:0 7px}
+.control{display:flex;flex-direction:column;gap:5px;margin-top:12px}
+.control:first-of-type{margin-top:4px}
+.control label{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:14.5px;font-weight:600}
+.control output{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.control input[type=range]{width:100%;margin:3px 0}
+.hint{font-size:12.5px;line-height:1.45;max-width:44ch}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+button{padding:9px 14px;border:1px solid var(--line);border-radius:7px;font:inherit;font-size:14px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.chip{padding:6px 12px;border-radius:999px;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.stats>div{padding:15px 16px;border:1px solid var(--line);border-radius:10px}
+.stats strong{display:block;font-size:clamp(25px,3vw,34px);line-height:1.1;font-variant-numeric:tabular-nums}
+.stats span{display:block;font-size:12.5px;line-height:1.4;margin-top:3px}
+.status-line{font-size:14px;line-height:1.6;margin:16px 0 0}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0}
+.chart-card{min-width:0;padding:16px 16px 14px;border:1px solid var(--line);border-radius:12px}
+.chart-card h3{margin:0 0 3px;font-size:19px}
+.chart-card p{margin:2px 0 9px;font-size:13.5px;max-width:none}
+.chart{width:100%;height:320px;display:block}
+.chart.short{height:255px}
+.legend{display:flex;flex-wrap:wrap;gap:12px 16px;font-size:12.5px;margin:6px 0 2px}
+.legend span{white-space:nowrap}
+.math{font:17px/1.95 'Cambria Math',Cambria,serif;padding:13px 16px;margin:15px 0;border:1px solid var(--line);border-radius:8px;overflow-x:auto}
+.math div{white-space:nowrap}
+.math.small{font-size:15px;line-height:1.85}
+.calc{font:14px/1.75 'Cambria Math',Cambria,serif;padding:14px 16px;margin:16px 0;border:1px solid var(--line);border-radius:8px;overflow-x:auto}
+.calc div{white-space:nowrap;padding:3px 0}
+.calc b{font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.note{padding:14px 18px;margin:20px 0;border-left:3px solid var(--accent);border-radius:0 9px 9px 0}
+.note p{max-width:none;margin:.4em 0}
+.note p:first-child{margin-top:0}
+.note p:last-child{margin-bottom:0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:18px 0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}
+.mini-card{padding:16px 18px;border:1px solid var(--line);border-radius:11px;min-width:0}
+.mini-card h3,.mini-card h4{margin:0 0 5px}
+.mini-card p{font-size:14.5px;line-height:1.55;margin:.3em 0;max-width:none}
+.mini-card ul{margin:.4em 0 0;padding-left:1.15em}
+.mini-card li{margin:.45em 0;font-size:14.5px}
+.result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+.result{padding:16px;border:1px solid var(--line);border-radius:10px}
+.result strong{display:block;font-size:clamp(24px,3vw,34px);line-height:1.1;font-variant-numeric:tabular-nums}
+.result span{display:block;font-size:12.5px;line-height:1.4;margin-top:4px}
+.scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:9px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:right;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+tbody tr:last-child td{border-bottom:0}
+thead th{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}
+table.compare th,table.compare td{white-space:normal;vertical-align:top;line-height:1.5;text-align:left;padding:11px 13px}
+table.compare th:nth-child(1),table.compare td:nth-child(1){width:16%}
+table.compare th:nth-child(2),table.compare td:nth-child(2){width:42%}
+table.compare th:nth-child(3),table.compare td:nth-child(3){width:42%}
+tbody tr.selected{background:var(--accent-soft)}
+tbody tr.selected td{font-weight:600}
+details{padding:14px 18px;margin:18px 0;border:1px solid var(--line);border-radius:9px}
+summary{cursor:pointer;font-weight:600}
+details p{margin:.7em 0}
+ul,ol{max-width:72ch;padding-left:1.2em}
+li{margin:.45em 0}
+.source-list{font-size:14px;line-height:1.65}
+.source-list li{margin:.55em 0}
+footer{max-width:1100px;margin:0 auto;padding:8px 22px 50px;font-size:13px}
+sub,sup{line-height:0;font-size:.72em}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:860px){
+  main{padding:22px 13px 60px}
+  section{padding:19px 16px}
+  .summary,.grid-3,.result-grid{grid-template-columns:1fr 1fr}
+  .control-grid,.chart-grid,.grid-2{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .chart{height:290px}
+  .chart.short{height:235px}
+  h1{max-width:none}
+}
+@media(max-width:700px){
+  .math{font-size:15px;line-height:1.8}
+  .math div{white-space:normal;overflow-wrap:break-word}
+  .calc{font-size:13.5px}
+  .calc div{white-space:normal}
+  table.compare,table.compare tbody,table.compare tr,table.compare td,
+  table.mexico,table.mexico tbody,table.mexico tr,table.mexico td{display:block;width:100%}
+  table.compare thead,table.mexico thead{display:none}
+  table.compare tr,table.mexico tr{padding:8px 0;border-bottom:1px solid var(--line)}
+  table.compare td,table.mexico td{display:block;border:0;padding:4px 12px;text-align:left;white-space:normal}
+  table.compare td:first-child,table.mexico td:first-child{display:block;text-align:left;font-weight:700;font-size:15px;padding-top:9px}
+  table.compare td:first-child::before,table.mexico td:first-child::before{content:none}
+  table.compare td:not(:first-child)::before,table.mexico td:not(:first-child)::before{display:block;content:attr(data-label);color:var(--muted);font-size:10.5px;line-height:1.6;letter-spacing:.05em;text-transform:uppercase;text-align:left;margin-bottom:1px}
+  table.compare td[colspan]{display:block;padding:6px 12px}
+  table.compare td[colspan]::before{content:none}
+  table.mexico td[data-label="τ"]::before{text-transform:none;letter-spacing:0}
+}
+@media(max-width:520px){
+  body{font-size:16px}
+  .summary,.grid-3,.result-grid,.stats{grid-template-columns:1fr}
+  .chart{height:265px}
+  th,td{padding:9px 8px}
+}
+</style>
+<link rel="stylesheet" href="../css/demos.css">
+</head>
+<body>
+<nav class="demo-chrome"><a class="demo-chrome-brand" href="../index.html">FELIXNET</a><span class="demo-chrome-links"><a href="../index.html">Inicio</a><a href="../journal.html">Journal</a><a href="../archivo.html">Archivo</a><a href="../proyectos.html" aria-current="page">Proyectos</a><a href="../sobre-mi.html">Sobre mí</a></span></nav>
+<main>
+
+<header class="hero">
+  <div class="eyebrow">Laboratorio de probabilidad · Elecciones</div>
+  <h1>Ganar no es lo mismo que ir arriba en las encuestas.</h1>
+  <p class="lead">Una elección se decide en una fecha, pero la probabilidad de ganarla se revisa todos los días. Taleb y Ernst–Kendall–Rosenthal proponen dos maneras de que esas revisiones sean coherentes. Aquí las comparamos y las aplicamos a México 2024.</p>
+  <div class="hero-meta"><span>Lectura: 10–12 min</span><span>5 gráficas interactivas</span><span>Resultados oficiales del INE</span></div>
+  <nav class="toc" aria-label="Contenido del demo"><a href="#idea">La idea</a><a href="#laboratorio">Laboratorio</a><a href="#taleb">Taleb</a><a href="#ekr">EKR</a><a href="#comparacion">Comparación</a><a href="#mexico">México 2024</a><a href="#precision">Precisiones</a></nav>
+  <div class="summary">
+    <div><strong>La probabilidad no es el voto</strong><p>El porcentaje de intención de voto describe un estado. La probabilidad de victoria es el precio de un contrato binario que paga 1 si el candidato gana.</p></div>
+    <div><strong>Dos modelos, una disciplina</strong><p>Taleb impone que el voto estimado sea una martingala acotada. EKR responden que basta con que la probabilidad sea martingala, lo que se cumple para cualquier proceso de votos razonable.</p></div>
+    <div><strong>El caso mexicano</strong><p>La ventaja de dos partidos pasó de 64.4% en diciembre de 2023 a 68.5% el día de la elección. Los modelos coincidieron en el ganador, pero no en el camino ni en la confianza.</p></div>
+  </div>
+</header>
+
+<section id="idea">
+  <div class="eyebrow">00 · La idea</div>
+  <h2>Tres objetos que conviene no confundir</h2>
+  <p class="read">Una elección es una opción binaria: paga 1 si el candidato gana y 0 si pierde. Su precio hoy no es el porcentaje de votos; es la probabilidad condicional de ese pago, dada la información disponible. Para hablar de coherencia hay que separar tres cantidades.</p>
+  <div class="grid-3">
+    <div class="mini-card"><span class="tag">Y<sub>t</sub></span><h3>El voto estimado</h3><p>La proporción final de votos que se espera, según las encuestas y el modelo, en el instante <em>t</em>. Vive en (0,1).</p></div>
+    <div class="mini-card"><span class="tag">I</span><h3>El resultado</h3><p>El indicador de victoria: <em>I</em> = 1 si <em>Y<sub>T</sub></em> supera el umbral <em>K</em>, y 0 si no. Es lo que ocurre el día de la elección.</p></div>
+    <div class="mini-card"><span class="tag">B<sub>t</sub></span><h3>La probabilidad</h3><p>El precio del contrato hoy: <em>B<sub>t</sub></em> = 𝔼[<em>I</em> | ℱ<sub>t</sub>]. No es <em>Y<sub>t</sub></em>: es la esperanza condicional del resultado.</p></div>
+  </div>
+  <div class="math">
+    <div><em>B<sub>t</sub></em> = 𝔼[<em>I</em> | ℱ<sub>t</sub>], &nbsp; <em>I</em> = 𝟙{<em>Y<sub>T</sub></em> &gt; <em>K</em>}, &nbsp; <em>Y<sub>t</sub></em> ∈ (0,1).</div>
+  </div>
+  <p class="read">La información de hoy está contenida en la de mañana: ℱ<sub>t</sub> ⊆ ℱ<sub>u</sub> para <em>u</em> &gt; <em>t</em>. Si mañana se publica una probabilidad y hoy se promedia sobre todos los escenarios posibles de mañana, se recupera la probabilidad de hoy. Es la <strong>propiedad de la torre</strong>:</p>
+  <div class="math">
+    <div>𝔼[<em>B<sub>u</sub></em> | ℱ<sub>t</sub>] = 𝔼[𝔼[<em>I</em> | ℱ<sub>u</sub>] | ℱ<sub>t</sub>]</div>
+    <div>= 𝔼[<em>I</em> | ℱ<sub>t</sub>] = <em>B<sub>t</sub></em>.</div>
+  </div>
+  <p class="read">Eso es exactamente lo que significa que <em>B</em> sea una <strong>martingala</strong>. No obliga a que el pronóstico se quede quieto: obliga a que sus revisiones futuras no sean predecibles <em>en promedio</em> con la información actual. Una martingala puede subir, bajar o quedarse igual; lo que no puede es tener una deriva predecible.</p>
+  <div class="note">
+    <p><strong>Martingala no significa «pronóstico congelado».</strong> Significa que, si hoy se promedian todos los caminos posibles, el valor de mañana es el de hoy. Un pronosticador puede cambiar de opinión; lo que no puede es anunciar hoy que mañana subirá o bajará con certeza.</p>
+  </div>
+  <p class="read">Entonces, ¿dónde está el desacuerdo entre Taleb y EKR? No en la propiedad de la torre: los dos aceptan que <em>B</em> sea martingala. El desacuerdo está en <strong>qué proceso describe el voto <em>Y</em></strong>. Taleb construye un <em>Y</em> sin deriva; EKR permiten que <em>Y</em> tenga reversión a la media y sesgos correlacionados. Esa diferencia cambia las probabilidades, sobre todo cuando falta mucho tiempo.</p>
+</section>
+
+<section id="laboratorio">
+  <div class="eyebrow">01 · Laboratorio</div>
+  <h2>Dos modelos, los mismos datos</h2>
+  <p class="read">Mueve el voto de dos partidos, el tiempo restante y los supuestos de cada modelo. Las curvas y la tabla se recalculan. No hace falta entender la derivación para experimentar; las cuentas están más abajo.</p>
+
+  <div class="control-grid">
+    <div class="control-stack">
+      <fieldset>
+        <legend>Voto y tiempo</legend>
+        <div class="control">
+          <label for="y">Voto de dos partidos, <em>Y</em> <output id="yOut" for="y">64.4%</output></label>
+          <input id="y" type="range" min="35" max="75" step="0.1" value="64.4">
+          <small class="hint">Sheinbaum contra Gálvez, excluyendo a Máynez. El umbral es <em>K</em> = 50% de ese duelo.</small>
+        </div>
+        <div class="control">
+          <label for="months">Tiempo hasta la elección, τ <output id="monthsOut" for="months">6 meses</output></label>
+          <input id="months" type="range" min="0" max="24" step="0.5" value="6">
+          <small class="hint">Se convierte a años: τ = meses / 12.</small>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Supuestos de Taleb</legend>
+        <div class="control">
+          <label for="sigmaT">Escala de incertidumbre, σ <output id="sigmaTOut" for="sigmaT">0.75</output></label>
+          <input id="sigmaT" type="range" min="0.10" max="1.50" step="0.01" value="0.75">
+          <small class="hint">Unidades sombra por √año. No es el margen de error de una encuesta: incluye riesgo de cola.</small>
+        </div>
+      </fieldset>
+    </div>
+    <fieldset>
+      <legend>Supuestos de EKR</legend>
+      <div class="control">
+        <label for="kappa">Reversión a los fundamentos, κ <output id="kappaOut" for="kappa">2.0 año⁻¹</output></label>
+        <input id="kappa" type="range" min="0.5" max="8" step="0.1" value="2.0">
+        <small class="hint">Cuánto pesan la aprobación, la economía y la lealtad partidista. Alto: los choques se disipan rápido.</small>
+      </div>
+      <div class="control">
+        <label for="theta">Equilibrio estructural, θ <output id="thetaOut" for="theta">65.4%</output></label>
+        <input id="theta" type="range" min="50" max="75" step="0.1" value="65.4">
+        <small class="hint">Voto de dos partidos al que la campaña revierte si no hay choques nuevos.</small>
+      </div>
+      <div class="control">
+        <label for="sigmaC">Volatilidad de campaña, σ<sub>c</sub> <output id="sigmaCOut" for="sigmaC">0.30</output></label>
+        <input id="sigmaC" type="range" min="0.05" max="1.00" step="0.01" value="0.30">
+        <small class="hint">Sacudidas de campaña, no ruido de encuestas. Unidades sombra por √año.</small>
+      </div>
+      <div class="control">
+        <label for="sigmaBias">Sesgo sistemático, σ<sub>bias</sub> <output id="sigmaBiasOut" for="sigmaBias">0.18</output></label>
+        <input id="sigmaBias" type="range" min="0.00" max="0.40" step="0.01" value="0.18">
+        <small class="hint">Error común a todas las encuestas. No se promedia: o favorece a un candidato o al otro.</small>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="toolbar" role="group" aria-label="Escenarios de la campaña">
+    <button type="button" data-preset="dic">Diciembre 2023</button>
+    <button type="button" data-preset="mar">Marzo 2024</button>
+    <button type="button" data-preset="may">Mayo 2024</button>
+    <button type="button" data-preset="cierre">Cierre de casillas</button>
+    <button type="button" id="reset">Reiniciar supuestos</button>
+    <button type="button" id="reseed">Otra muestra</button>
+  </div>
+
+  <div class="stats">
+    <div><strong id="statT" class="c1">—</strong><span>Taleb · probabilidad de victoria</span></div>
+    <div><strong id="statE" class="c2">—</strong><span>EKR · probabilidad de victoria</span></div>
+    <div><strong id="statN" class="c4">—</strong><span>Regla ingenua · solo mira la ventaja</span></div>
+    <div><strong id="statGap">—</strong><span>Brecha EKR − Taleb</span></div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>La curva de valoración</h3>
+      <p>Probabilidad de victoria para cada nivel de voto, con el tiempo y los supuestos actuales.</p>
+      <div class="legend"><span class="c1">━ Taleb</span><span class="c2">━ EKR</span><span class="c4">┄ Regla ingenua</span></div>
+      <canvas id="curveChart" class="chart" role="img" aria-label="Probabilidad de victoria frente al voto de dos partidos para Taleb, EKR y la regla ingenua"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>El reloj de la elección</h3>
+      <p>La misma ventaja, pero con distinto tiempo restante. El punto marcado es el escenario actual.</p>
+      <div class="legend"><span class="c1">━ Taleb</span><span class="c2">━ EKR</span><span class="c4">┄ Regla ingenua</span></div>
+      <canvas id="clockChart" class="chart" role="img" aria-label="Probabilidad de victoria según los meses restantes para Taleb, EKR y la regla ingenua"></canvas>
+    </div>
+  </div>
+
+  <p class="read"><strong>Cómo leer las dos curvas.</strong> La primera compara modelos a igual tiempo: EKR suele ser más alta cuando la ventaja es moderada, porque incorpora un equilibrio estructural θ por encima de 50%. La segunda compara tiempos a igual ventaja: Taleb descuenta la incertidumbre con el calendario y salta a 0 o 100 al final; EKR la descuenta con el conteo y conserva la incertidumbre del sesgo sistemático.</p>
+
+  <div class="scroll">
+    <table>
+      <caption class="sr-only">Probabilidad de victoria según los meses restantes</caption>
+      <thead><tr><th scope="col">Meses restantes</th><th scope="col">Taleb</th><th scope="col">EKR</th><th scope="col">Regla ingenua</th></tr></thead>
+      <tbody id="clockTable"></tbody>
+    </table>
+  </div>
+  <p class="small">La regla ingenua no es un agregador real: asigna 100% si el candidato va arriba y 0% si va abajo. Es un espejo para ver qué añade cada modelo. En la fila de 0 meses, EKR aún no conoce el sesgo η; el conteo lo revela.</p>
+  <p id="status" class="status-line" role="status"></p>
+</section>
+
+<section id="taleb">
+  <div class="eyebrow">02 · Taleb (2017)</div>
+  <h2>Construir una martingala acotada</h2>
+  <p class="lead">Taleb quiere que el voto estimado sea, él mismo, una martingala acotada. El problema técnico es que un movimiento browniano puede salirse de [0,1]. La solución es mover una variable auxiliar <em>X</em> en toda la recta y transformarla con una sigmoide.</p>
+
+  <h3>1. Una variable sombra para no cruzar las fronteras</h3>
+  <p class="read">Sea <em>S</em> la función de distribución normal estándar evaluada en √2<em>x</em>, que también se escribe con la función error:</p>
+  <div class="math">
+    <div><em>S</em>(<em>x</em>) = ½[1 + erf(<em>x</em>)] = Φ(√2 <em>x</em>),</div>
+    <div><em>Y<sub>t</sub></em> = <em>S</em>(<em>X<sub>t</sub></em>).</div>
+  </div>
+  <p class="read"><em>S</em> es creciente y lleva toda la recta real al intervalo (0,1). Si <em>X</em> se mueve como un browniano, <em>Y</em> nunca cruza 0% ni 100%. Pero transformar un browniano sin deriva no basta: la curvatura de <em>S</em> introduce una deriva por la fórmula de Itô.</p>
+
+  <h3>2. La deriva que hay que cancelar</h3>
+  <p class="read">Escribimos <em>dX<sub>t</sub></em> = μ(<em>X<sub>t</sub></em>)<em>dt</em> + σ<em>dW<sub>t</sub></em> y aplicamos Itô a <em>Y<sub>t</sub></em> = <em>S</em>(<em>X<sub>t</sub></em>):</p>
+  <div class="math">
+    <div><em>dY<sub>t</sub></em> = [<em>S</em>′(<em>X<sub>t</sub></em>)μ(<em>X<sub>t</sub></em>) + ½σ²<em>S</em>″(<em>X<sub>t</sub></em>)]<em>dt</em></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp; + σ<em>S</em>′(<em>X<sub>t</sub></em>)<em>dW<sub>t</sub></em>.</div>
+  </div>
+  <p class="read">Para la sigmoide elegida, <em>S</em>′(<em>x</em>) = e<sup>−<em>x</em>²</sup>/√π y <em>S</em>″(<em>x</em>) = −2<em>x</em><em>S</em>′(<em>x</em>). Sustituyendo, el término de deriva queda <em>S</em>′(<em>x</em>)[μ(<em>x</em>) − σ²<em>x</em>]. Se anula exactamente si se elige <strong>μ(<em>x</em>) = σ²<em>x</em></strong>:</p>
+  <div class="math">
+    <div><em>dX<sub>t</sub></em> = σ²<em>X<sub>t</sub> dt</em> + σ<em>dW<sub>t</sub></em>, &nbsp; <em>dY<sub>t</sub></em> = <em>a</em>(<em>Y<sub>t</sub></em>)<em>dW<sub>t</sub></em>,</div>
+    <div><em>a</em>(<em>y</em>) = σ<em>S</em>′(<em>S</em><sup>−1</sup>(<em>y</em>)) = (σ/√π) exp{−[erf<sup>−1</sup>(2<em>y</em>−1)]²}.</div>
+  </div>
+  <p class="read"><em>X</em> tiene una deriva que lo empuja lejos del centro; <em>Y</em> no tiene deriva. Como <em>Y</em> está acotado, esta martingala local es una martingala verdadera. La volatilidad <em>a</em>(<em>y</em>) se apaga cerca de 0 y de 1, justo cuando la transformación impide atravesar las fronteras.</p>
+
+  <h3>3. La fórmula cerrada</h3>
+  <p class="read">Sea τ = <em>T</em> − <em>t</em> y <em>q</em> = σ²τ. La ecuación de <em>X</em> es lineal; su solución y su varianza condicional son exactas:</p>
+  <div class="math">
+    <div><em>X<sub>T</sub></em> | ℱ<sub>t</sub> ~ N(<em>x e<sup>q</sup></em>, (<em>e</em><sup>2<em>q</em></sup> − 1)/2), &nbsp; <em>x</em> = <em>X<sub>t</sub></em>.</div>
+    <div>ℓ = <em>S</em><sup>−1</sup>(<em>K</em>), &nbsp; <em>B<sub>t</sub></em> = Φ((<em>x e<sup>q</sup></em> − ℓ)/√[(<em>e</em><sup>2<em>q</em></sup> − 1)/2]).</div>
+  </div>
+  <p class="read">Para el umbral <em>K</em> = 50%, el umbral transformado es ℓ = 0, no 0.5. Entonces la fórmula se simplifica:</p>
+  <div class="math">
+    <div><em>B<sub>t</sub></em> = Φ(√2 <em>x</em> / √(1 − <em>e</em><sup>−2<em>q</em></sup>))</div>
+    <div>= ½[1 + erf(<em>x</em> / √(1 − <em>e</em><sup>−2<em>q</em></sup>))].</div>
+  </div>
+  <p class="read">Ésta es la misma probabilidad que usa el laboratorio. No se simula con Euler ni se recorta <em>Y</em> a [0,1]: la transición de <em>X</em> es gaussiana exacta y la sigmoide mantiene <em>Y</em> dentro del intervalo.</p>
+
+  <div class="grid-3">
+    <div class="mini-card"><h4>τ → 0</h4><p><em>B</em> → 1 si <em>y</em> &gt; 50%, y 0 si <em>y</em> &lt; 50%. En <em>y</em> = 50%, <em>B</em> = 50%.</p></div>
+    <div class="mini-card"><h4>τ → ∞</h4><p><em>B</em> → <em>y</em>. Con 52% de votos, el límite es 52%, no 50%. «Hacia el 50%» solo es literal en el empate.</p></div>
+    <div class="mini-card"><h4><em>y</em> = 50%</h4><p><em>B</em> = 50% para todo τ &gt; 0. La simetría del umbral fija el precio, sin importar la incertidumbre.</p></div>
+  </div>
+
+  <p class="read"><strong>La calibración de σ no es un detalle.</strong> Con <em>Y</em> = 64.4% y τ = 0.5 años, σ = 0.20 da 96.9% y σ = 0.75 da 71.3%. La diferencia entre mirar solo el ruido de las encuestas y cargar el riesgo de cola es de casi 26 puntos de probabilidad.</p>
+
+  <h3>4. Las tres conclusiones de Taleb</h3>
+  <div class="grid-3">
+    <div class="mini-card"><h4>1. La incertidumbre aplana</h4><p>Más σ o más tiempo acercan <em>B</em> al voto actual y, si la ventaja es pequeña, al 50%. Una ventaja de 52% no justifica 90% de confianza si falta mucho.</p></div>
+    <div class="mini-card"><h4>2. Confianza y volatilidad no caben juntas</h4><p>Si <em>B</em> salta mucho, la σ implícita es alta; con σ alta, <em>B</em> debería estar lejos de los extremos. Es una prueba de coherencia, no una ley de la naturaleza.</p></div>
+    <div class="mini-card"><h4>3. Evalúa toda la trayectoria</h4><p>No basta con acertar el día final. El Brier esperado se descompone en <em>p</em>(1−<em>p</em>) + (<em>b</em>−<em>p</em>)²; el segundo término castiga alejarse de la probabilidad condicional.</p></div>
+  </div>
+
+  <details>
+    <summary>La derivación completa, paso a paso</summary>
+    <p>Partimos de <em>dX<sub>t</sub></em> = μ(<em>X<sub>t</sub></em>)<em>dt</em> + σ<em>dW<sub>t</sub></em> y <em>Y<sub>t</sub></em> = <em>S</em>(<em>X<sub>t</sub></em>). Itô da</p>
+    <div class="math small">
+      <div><em>dY<sub>t</sub></em> = [<em>S</em>′(<em>X<sub>t</sub></em>)μ(<em>X<sub>t</sub></em>) + ½σ²<em>S</em>″(<em>X<sub>t</sub></em>)]<em>dt</em> + σ<em>S</em>′(<em>X<sub>t</sub></em>)<em>dW<sub>t</sub></em>.</div>
+    </div>
+    <p>Con <em>S</em>(<em>x</em>) = ½[1 + erf(<em>x</em>)], se tiene <em>S</em>′(<em>x</em>) = e<sup>−<em>x</em>²</sup>/√π y <em>S</em>″(<em>x</em>) = −2<em>x S</em>′(<em>x</em>). Por tanto,</p>
+    <div class="math small">
+      <div><em>S</em>′(<em>x</em>)μ(<em>x</em>) + ½σ²<em>S</em>″(<em>x</em>) = <em>S</em>′(<em>x</em>)[μ(<em>x</em>) − σ²<em>x</em>].</div>
+      <div>μ(<em>x</em>) = σ²<em>x</em> &nbsp;⇒&nbsp; <em>dX<sub>t</sub></em> = σ²<em>X<sub>t</sub> dt</em> + σ<em>dW<sub>t</sub></em>, &nbsp; <em>dY<sub>t</sub></em> = σ<em>S</em>′(<em>X<sub>t</sub></em>)<em>dW<sub>t</sub></em>.</div>
+    </div>
+    <p>Para resolver <em>X</em>, multiplicamos por el factor integrante <em>e</em><sup>−σ²<em>t</em></sup>:</p>
+    <div class="math small">
+      <div><em>d</em>[<em>e</em><sup>−σ²<em>t</em></sup><em>X<sub>t</sub></em>] = σ<em>e</em><sup>−σ²<em>t</em></sup><em>dW<sub>t</sub></em>,</div>
+      <div><em>X<sub>T</sub></em> = <em>e</em><sup>σ²τ</sup><em>X<sub>t</sub></em> + σ∫<sub><em>t</em></sub><sup><em>T</em></sup> <em>e</em><sup>σ²(<em>T</em>−<em>u</em>)</sup><em>dW<sub>u</sub></em>.</div>
+    </div>
+    <p>La integral tiene media cero y su integrando es determinista, así que es gaussiana. Por la isometría de Itô,</p>
+    <div class="math small">
+      <div><em>m</em> = 𝔼[<em>X<sub>T</sub></em> | ℱ<sub>t</sub>] = <em>x e<sup>q</sup></em>,</div>
+      <div><em>v</em> = σ²∫<sub><em>t</em></sub><sup><em>T</em></sup> <em>e</em><sup>2σ²(<em>T</em>−<em>u</em>)</sup><em>du</em> = (<em>e</em><sup>2<em>q</em></sup> − 1)/2.</div>
+    </div>
+    <p>Como <em>S</em> es creciente, el evento {<em>Y<sub>T</sub></em> &gt; <em>K</em>} es el mismo que {<em>X<sub>T</sub></em> &gt; ℓ}, con ℓ = <em>S</em><sup>−1</sup>(<em>K</em>). Estandarizando,</p>
+    <div class="math small">
+      <div><em>B<sub>t</sub></em> = ℙ(<em>Z</em> &gt; (ℓ − <em>m</em>)/√<em>v</em>) = Φ((<em>m</em> − ℓ)/√<em>v</em>).</div>
+    </div>
+    <p>Para <em>K</em> = ½, ℓ = 0. Al multiplicar numerador y denominador por <em>e</em><sup>−<em>q</em></sup> se obtiene la forma que usa el laboratorio:</p>
+    <div class="math small">
+      <div><em>B<sub>t</sub></em> = Φ(√2 <em>x</em>/√(1 − <em>e</em><sup>−2<em>q</em></sup>)).</div>
+    </div>
+    <p>La ecuación hacia atrás de <em>B</em> no impone <em>F<sub>t</sub></em> = 0: el tiempo restante cambia el valor de una opción binaria. Lo que se anula es la suma <em>F<sub>t</sub></em> + σ²<em>x F<sub>x</sub></em> + ½σ²<em>F<sub>xx</sub></em>.</p>
+  </details>
+
+  <div class="chart-card">
+    <h3>Y es martingala; B también</h3>
+    <p>24 trayectorias simuladas con la transición exacta de <em>X</em>. La línea gruesa es la media de 400 trayectorias.</p>
+    <canvas id="talebPaths" class="chart short" role="img" aria-label="Trayectorias simuladas del voto de dos partidos bajo el modelo de Taleb, con su media"></canvas>
+    <p id="talebPathsNote" class="small"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>Lo específico de Taleb no es que <em>B</em> sea martingala.</strong> Eso ya se deduce de la torre para cualquier <em>Y</em> razonable. Lo específico es el modelo: <em>Y</em> acotada, sin deriva, con una sola escala σ. Esa restricción es la que EKR discute.</p>
+  </div>
+</section>
+
+<section id="ekr">
+  <div class="eyebrow">03 · Ernst–Kendall–Rosenthal (2019)</div>
+  <h2>La probabilidad ya era una martingala</h2>
+  <p class="lead">En 2019, Philip Ernst, Wilfrid Kendall y Jeffrey Rosenthal respondieron que el supuesto de Taleb es más fuerte de lo necesario. No hace falta que el voto <em>Y</em> sea una martingala: <em>B<sub>t</sub></em> = 𝔼[<em>I</em> | ℱ<sub>t</sub>] ya lo es, para cualquier proceso de votos razonable, por la propiedad de la torre.</p>
+  <div class="math">
+    <div>𝔼[<em>B<sub>u</sub></em> | ℱ<sub>t</sub>] = 𝔼[𝔼[<em>I</em> | ℱ<sub>u</sub>] | ℱ<sub>t</sub>]</div>
+    <div>= 𝔼[<em>I</em> | ℱ<sub>t</sub>] = <em>B<sub>t</sub></em>.</div>
+  </div>
+  <p class="read">La demostración es la misma del apartado 0. La objeción de EKR no es que Taleb se equivoque al decir que <em>B</em> es martingala; es que <strong>no necesita imponerle esa propiedad a <em>Y</em></strong>. Se puede modelar el voto con deriva, reversión a la media o choques correlacionados, y la probabilidad condicional seguirá siendo una martingala.</p>
+
+  <h3>1. El modelo: reversión a los fundamentos y sesgo de encuestas</h3>
+  <p class="read">EKR permiten especificar un proceso latente <em>X</em> con la dinámica que dicte la política. Un ejemplo natural es el Ornstein–Uhlenbeck, que revierte a un equilibrio θ<sub><em>x</em></sub>; las encuestas observan ese proceso con dos errores: uno sistemático η, común a todas las encuestas, y uno idiosincrático ε.</p>
+  <div class="math">
+    <div><em>dX<sub>t</sub></em> = κ(θ<sub><em>x</em></sub> − <em>X<sub>t</sub></em>)<em>dt</em> + σ<sub>c</sub><em>dW<sub>t</sub></em>,</div>
+    <div>Encuesta<sub>t</sub> = <em>X<sub>t</sub></em> + η + ε<sub>t</sub>, &nbsp; η ~ N(0, σ<sub>bias</sub>²).</div>
+  </div>
+  <p class="read">κ mide la fuerza de la reversión: cuánto pesan la aprobación presidencial, la economía, la lealtad partidista y la polarización. θ<sub><em>x</em></sub> es el equilibrio en unidades sombra; en los controles, θ = <em>S</em>(θ<sub><em>x</em></sub>) se muestra como porcentaje de voto (65.4% en el escenario inicial). σ<sub>c</sub> es la volatilidad de la campaña; σ<sub>bias</sub> es el error común que no se promedia por muchas encuestas que se acumulen.</p>
+
+  <h3>2. La fórmula y el reloj de la noche electoral</h3>
+  <p class="read">Condicional a la información de hoy, <em>X<sub>T</sub></em> es normal con media y varianza conocidas. Al sumar el sesgo η, la varianza total incluye un término que no desaparece con el calendario:</p>
+  <div class="math">
+    <div><em>B</em><sub>EKR</sub>(<em>t</em>,<em>T</em>) = Φ( (<em>x e</em><sup>−κτ</sup> + θ<sub><em>x</em></sub>(1 − <em>e</em><sup>−κτ</sup>)) / √[ (σ<sub>c</sub>²/(2κ))(1 − <em>e</em><sup>−2κτ</sup>) + σ<sub>bias</sub>² ] ).</div>
+  </div>
+  <p class="read">El numerador mezcla el estado actual <em>x</em> con el equilibrio θ<sub><em>x</em></sub>. El denominador separa dos incertidumbres: la varianza transitoria de la campaña, que se apaga cuando τ → 0, y la varianza del sesgo sistemático, que no se apaga. Por eso, en τ = 0, la fórmula todavía puede dar menos de 100%:</p>
+  <div class="math">
+    <div>τ → 0: &nbsp; <em>B</em><sub>EKR</sub> → Φ(<em>x</em>/σ<sub>bias</sub>).</div>
+  </div>
+  <p class="read">El conteo es el que revela η. Hasta que se cuenta, el modelo no sabe si el sesgo favorece a un candidato o al otro; por eso la probabilidad no salta a 0 o 1 al cerrar las casillas. Es una diferencia conceptual con Taleb, cuyo <em>B<sub>T</sub></em> es el indicador del resultado ya conocido.</p>
+
+  <div class="grid-3">
+    <div class="mini-card"><h4>Objeción 1: restricción innecesaria</h4><p>Para que <em>B</em> sea libre de arbitraje no hace falta que <em>Y</em> lo sea. Cualquier proceso estocástico razonable produce <em>B</em> martingala por la torre.</p></div>
+    <div class="mini-card"><h4>Objeción 2: volatilidad no es estabilidad</h4><p>Mayor σ aplana <em>B</em> a <em>Y</em> fijo, pero también hace que <em>Y</em> se mueva más rápido. La trayectoria observada de <em>B</em> puede seguir siendo volátil. La afirmación vale para la curva, no para el camino.</p></div>
+    <div class="mini-card"><h4>Punto válido de Taleb</h4><p>Los modelos electorales subestiman la varianza entre <em>t</em> y <em>T</em> y sobrerreaccionan a cada encuesta. Un choque correlacionado no se promedia como ruido independiente.</p></div>
+  </div>
+
+  <details>
+    <summary>La derivación de la fórmula EKR</summary>
+    <p>La ecuación <em>dX<sub>t</sub></em> = κ(θ<sub><em>x</em></sub> − <em>X<sub>t</sub></em>)<em>dt</em> + σ<sub>c</sub><em>dW<sub>t</sub></em> es lineal. Su solución condicional entre <em>t</em> y <em>T</em> es</p>
+    <div class="math small">
+      <div><em>X<sub>T</sub></em> = θ<sub><em>x</em></sub> + (<em>X<sub>t</sub></em> − θ<sub><em>x</em></sub>)<em>e</em><sup>−κτ</sup> + σ<sub>c</sub>∫<sub><em>t</em></sub><sup><em>T</em></sup> <em>e</em><sup>−κ(<em>T</em>−<em>u</em>)</sup><em>dW<sub>u</sub></em>.</div>
+    </div>
+    <p>Por la isometría de Itô, la varianza de la integral es (σ<sub>c</sub>²/(2κ))(1 − <em>e</em><sup>−2κτ</sup>). Al añadir el sesgo η, que es independiente del ruido de campaña,</p>
+    <div class="math small">
+      <div>𝔼[<em>X<sub>T</sub></em> | ℱ<sub>t</sub>] = <em>x e</em><sup>−κτ</sup> + θ<sub><em>x</em></sub>(1 − <em>e</em><sup>−κτ</sup>),</div>
+      <div>Var(<em>X<sub>T</sub></em> + η | ℱ<sub>t</sub>) = (σ<sub>c</sub>²/(2κ))(1 − <em>e</em><sup>−2κτ</sup>) + σ<sub>bias</sub>².</div>
+    </div>
+    <p>Como el evento de victoria es {<em>X<sub>T</sub></em> + η &gt; 0}, estandarizar una normal da la fórmula. En τ = 0 queda Φ(<em>x</em>/σ<sub>bias</sub>); si además σ<sub>bias</sub> → 0, se recupera el escalón de Taleb.</p>
+    <p>Nada de esto exige que <em>Y</em> sea martingala. La coherencia de <em>B</em> viene de ser una esperanza condicional, no de la dinámica de <em>Y</em>.</p>
+  </details>
+
+  <div class="chart-card">
+    <h3>Y revierte; B sigue siendo martingala</h3>
+    <p>24 trayectorias simuladas del proceso OU, transformadas con la misma sigmoide. La línea gruesa es la media de 400 trayectorias.</p>
+    <canvas id="ekrPaths" class="chart short" role="img" aria-label="Trayectorias simuladas del voto de dos partidos bajo el modelo EKR, con reversión al equilibrio"></canvas>
+    <p id="ekrPathsNote" class="small"></p>
+  </div>
+
+  <div class="note">
+    <p><strong>La reversión no es un defecto.</strong> Es lo que permite incorporar la aprobación, la economía y la lealtad partidista. El precio que se paga es más parámetros: θ, κ y σ<sub>bias</sub> no se observan directamente y hay que estimarlos o calibrarlos.</p>
+  </div>
+</section>
+
+<section id="comparacion">
+  <div class="eyebrow">04 · Comparación</div>
+  <h2>Dos modelos, una misma disciplina</h2>
+  <p class="lead">La diferencia no es «martingala sí o no». Los dos producen <em>B</em> martingala. La diferencia es qué proceso de votos consideran creíble y cuánta incertidumbre dejan para el final.</p>
+  <div class="scroll">
+    <table class="compare">
+      <caption class="sr-only">Comparación entre el modelo de Taleb y el modelo EKR</caption>
+      <thead><tr><th scope="col">Aspecto</th><th scope="col">Taleb (2017)</th><th scope="col">EKR (2019)</th></tr></thead>
+      <tbody>
+        <tr><td>Qué modela</td><td data-label="Taleb (2017)">El voto <em>Y</em> como martingala acotada y su precio binario <em>B</em>.</td><td data-label="EKR (2019)">El voto latente <em>X</em>, las encuestas y la probabilidad condicional <em>B</em>.</td></tr>
+        <tr><td>Supuesto clave</td><td data-label="Taleb (2017)"><em>Y</em> no tiene deriva.</td><td data-label="EKR (2019)"><em>Y</em> puede tener deriva; <em>B</em> es martingala por la torre.</td></tr>
+        <tr><td>Proceso</td><td data-label="Taleb (2017)"><em>dX</em> = σ²<em>X dt</em> + σ<em>dW</em>; <em>Y</em> = <em>S</em>(<em>X</em>).</td><td data-label="EKR (2019)"><em>dX</em> = κ(θ<sub><em>x</em></sub> − <em>X</em>)<em>dt</em> + σ<sub>c</sub><em>dW</em>; encuesta = <em>X</em> + η + ε.</td></tr>
+        <tr><td>Incertidumbre</td><td data-label="Taleb (2017)">Una sola escala σ.</td><td data-label="EKR (2019)">Volatilidad de campaña σ<sub>c</sub> + sesgo sistemático σ<sub>bias</sub>.</td></tr>
+        <tr><td>Ventaja</td><td data-label="Taleb (2017)">Simple, cerrada, con cota natural. Ideal para auditar coherencia.</td><td data-label="EKR (2019)">Realista: fundamentos, reversión, error correlacionado y filtro de Kalman.</td></tr>
+        <tr><td>Riesgo</td><td data-label="Taleb (2017)">Sobre-restrictivo; σ difícil de calibrar; ignora deriva y sesgo.</td><td data-label="EKR (2019)">Más parámetros; θ y σ<sub>bias</sub> no observables; riesgo de sobreajuste.</td></tr>
+        <tr><td>Uso recomendado</td><td data-label="Taleb (2017)">Prueba de coherencia y auditoría de saltos.</td><td data-label="EKR (2019)">Motor de pronóstico y combinación de encuestas.</td></tr>
+        <tr><td>Lo que comparten</td><td colspan="2"><em>B<sub>t</sub></em> = 𝔼[<em>I</em> | ℱ<sub>t</sub>] es martingala; el desacuerdo es sobre <em>Y</em>, no sobre <em>B</em>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2">
+    <div class="mini-card">
+      <h3>Coinciden en</h3>
+      <ul>
+        <li>La probabilidad de victoria es una esperanza condicional, no un voto.</li>
+        <li>Reaccionar a cada encuesta como si fuera el resultado final viola la coherencia temporal.</li>
+        <li>Los choques correlacionados y el sesgo sistemático no se eliminan promediando encuestas.</li>
+        <li>Ningún modelo es libre de supuestos; ambos necesitan calibración.</li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h3>Discrepan en</h3>
+      <ul>
+        <li>Si el voto <em>Y</em> debe ser martingala o puede tener deriva y reversión.</li>
+        <li>Si una σ alta estabiliza <em>B</em> en el tiempo o solo aplana la curva a <em>Y</em> fijo.</li>
+        <li>Si τ = 0 es un escalón (resultado conocido) o todavía contiene la incertidumbre del sesgo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note">
+    <p><strong>Veredicto práctico.</strong> No son rivales simétricos: EKR describen una clase de modelos; Taleb es un caso especial con una restricción fuerte. La lectura útil es construir con EKR y auditar con Taleb. Si un pronóstico salta de 90% a 50% con una sola encuesta, Taleb pregunta si la σ implícita es creíble; si el pronóstico ignora la aprobación y la economía, EKR pregunta por qué el voto no revierte a los fundamentos.</p>
+  </div>
+</section>
+
+<section id="mexico">
+  <div class="eyebrow">05 · Caso · México 2024</div>
+  <h2>Del 64.4% al 68.5%</h2>
+  <p class="lead">El 2 de junio de 2024, Claudia Sheinbaum ganó la presidencia con 59.76% de los votos. Xóchitl Gálvez obtuvo 27.45% y Jorge Álvarez Máynez 10.32%. La participación fue de alrededor de 61%. La elección se definió en una sola vuelta por mayoría relativa.</p>
+  <div class="result-grid">
+    <div class="result"><strong class="c3">59.76%</strong><span>Claudia Sheinbaum</span></div>
+    <div class="result"><strong>27.45%</strong><span>Xóchitl Gálvez</span></div>
+    <div class="result"><strong>10.32%</strong><span>Jorge Álvarez Máynez</span></div>
+    <div class="result"><strong class="c3">68.5%</strong><span>Duelo de dos partidos</span></div>
+  </div>
+
+  <h3>Por qué K = 50% no es el 50% del voto total</h3>
+  <p class="read">Con tres candidatos, la presidencia no exige 50% del voto total: basta con tener más que el segundo. Para usar una opción binaria, definimos <em>Y</em> como el duelo entre Sheinbaum y Gálvez:</p>
+  <div class="math">
+    <div><em>Y<sub>t</sub></em> = <em>V</em><sub>Sheinbaum,<em>t</em></sub> / (<em>V</em><sub>Sheinbaum,<em>t</em></sub> + <em>V</em><sub>Gálvez,<em>t</em></sub>), &nbsp; <em>K</em> = 50%.</div>
+  </div>
+  <p class="read">Así, «ganar» significa superar a Gálvez en ese duelo, no superar el 50% del total. En diciembre de 2023, 58% y 32% daban <em>Y</em> = 64.4%. El resultado final, 59.76% y 27.45%, dio <em>Y</em> = 68.5%.</p>
+  <div class="note">
+    <p><strong>Sobre las cifras intermedias.</strong> Los valores de diciembre, marzo y mayo son un escenario didáctico inspirado en los promedios de encuestas citados en la conversación; no son una reconstrucción de encuestas individuales. El resultado final y la participación son los datos oficiales del INE.</p>
+  </div>
+
+  <h3>La campaña, hito por hito</h3>
+  <p class="read">Los controles del laboratorio fijan los supuestos de los dos modelos; esta tabla usa esos mismos supuestos y cambia el voto y el tiempo en cada hito. Cambia una σ o un κ arriba y observa cómo se mueve toda la campaña.</p>
+  <div class="chart-card">
+    <p class="small">Voto de dos partidos (<em>Y</em>) y probabilidad de victoria de cada modelo. El eje horizontal es esquemático.</p>
+    <div class="legend"><span class="c3">━ Voto de dos partidos</span><span class="c1">━ Taleb</span><span class="c2">━ EKR</span></div>
+    <canvas id="mexicoChart" class="chart" role="img" aria-label="Evolución del voto de dos partidos y de las probabilidades de Taleb y EKR durante la campaña de México 2024"></canvas>
+  </div>
+  <div class="toolbar" role="group" aria-label="Hitos de la campaña">
+    <button type="button" class="chip" data-milestone="0" aria-pressed="true">Diciembre 2023</button>
+    <button type="button" class="chip" data-milestone="1" aria-pressed="false">Marzo 2024</button>
+    <button type="button" class="chip" data-milestone="2" aria-pressed="false">Mayo 2024</button>
+    <button type="button" class="chip" data-milestone="3" aria-pressed="false">Cierre de casillas</button>
+    <button type="button" class="chip" data-milestone="4" aria-pressed="false">Conteo rápido</button>
+    <button type="button" id="sendToLab">Explorar este punto en el laboratorio</button>
+  </div>
+  <div class="scroll">
+    <table class="mexico">
+      <caption class="sr-only">Probabilidades por hito de la campaña de México 2024</caption>
+      <thead><tr><th scope="col">Hito</th><th scope="col" class="lower">τ (años)</th><th scope="col"><em>Y</em></th><th scope="col">Regla ingenua</th><th scope="col">Taleb</th><th scope="col">EKR</th></tr></thead>
+      <tbody id="mexicoBody"></tbody>
+    </table>
+  </div>
+  <div id="milestoneDetail" class="calc"></div>
+  <p class="small">La regla ingenua asigna 100% si <em>Y</em> &gt; 50% y 0% si <em>Y</em> &lt; 50%. En el cierre de casillas, el ejercicio supone que la última estimación (63.5%) es <em>Y<sub>T</sub></em>: Taleb ya no tiene incertidumbre y salta a 100%, mientras EKR todavía no sabe si η favorece o no. En la realidad, <em>Y<sub>T</sub></em> no se conoce hasta el conteo; el conteo rápido revela η y lleva a ambos a 100%.</p>
+
+  <h3>Lo que muestran los números</h3>
+  <ul>
+    <li><strong>La ventaja era grande y estable.</strong> <em>Y</em> pasó de 64.4% en diciembre a 68.5% al final. La regla ingenua nunca dudó; los modelos sí, y esa duda es información.</li>
+    <li><strong>Taleb fue el más cauto mientras faltaba tiempo.</strong> En diciembre asignaba <span id="mexDecT">—</span> y en mayo <span id="mexMayT">—</span>. Su principal fuente de riesgo era el calendario: la misma ventaja vale menos cuando aún pueden pasar muchas cosas.</li>
+    <li><strong>EKR fue más confiado en diciembre.</strong> Asignaba <span id="mexDecE">—</span> porque los fundamentos y la reversión a θ sostenían la ventaja. Pero el sesgo sistemático le puso un techo: en mayo seguía en <span id="mexMayE">—</span>.</li>
+    <li><strong>La noche electoral separa los dos relojes.</strong> En el cierre, Taleb ya valía <span id="mexCloseT">—</span> y EKR <span id="mexCloseE">—</span>. El conteo rápido reveló η y llevó a ambos a 100%.</li>
+  </ul>
+
+  <h3>La lección de México</h3>
+  <p class="read">Una ventaja de 26 puntos en la intención bruta (casi 29 en el duelo de dos partidos) reduce el riesgo, pero no lo elimina. Los dos modelos daban una probabilidad alta; la diferencia estaba en <strong>cuánto pesaba el calendario</strong> (Taleb) y <strong>cuánto pesaba el sesgo correlacionado</strong> (EKR). El resultado final no distingue entre los dos: una sola elección es una sola realización.</p>
+  <p class="read">El sesgo η no es una abstracción. En 2024, las encuestas domiciliarias y las de teléfono o internet no contaban la misma historia; promediar todos los números sin modelar ese error común puede producir una falsa precisión. Ése es el fenómeno que EKR intentan capturar con σ<sub>bias</sub>.</p>
+  <p class="read">El episodio también muestra el valor de la auditoría de Taleb. Si un tracker diario mueve la intención de voto 10 puntos en una semana, la σ implícita es enorme; con esa σ, una probabilidad de 95% es matemáticamente incómoda. La respuesta de EKR es que el voto puede tener deriva y que el sesgo de las encuestas puede cambiar; la respuesta de Taleb es que, si el cambio es real, la probabilidad no puede haberse quedado quieta. Las dos preguntas son útiles.</p>
+  <div class="note">
+    <p><strong>Qué no prueba este caso.</strong> Un solo resultado no valida un modelo ni refuta al otro. Las cifras intermedias son un escenario, no una serie oficial. Y ninguna de estas probabilidades es una recomendación de apuesta: la analogía con opciones requiere precios negociables, compra y venta, y ausencia de costos.</p>
+  </div>
+</section>
+
+<section id="precision">
+  <div class="eyebrow">06 · Precisiones</div>
+  <h2>Cómo leer el demo sin perderse</h2>
+  <p class="read">Las fórmulas son estándar, pero hay varias trampas de notación y de interpretación. Éstas son las que más afectan a las conclusiones.</p>
+  <ul>
+    <li><strong>Umbral en votos contra umbral sombra.</strong> <em>K</em> = 50% vive en la escala de votos; ℓ = <em>S</em><sup>−1</sup>(<em>K</em>) vive en la escala de <em>X</em>. Para <em>K</em> = 50%, ℓ = 0, no 0.5. Mezclar las dos escalas invierte o desplaza la probabilidad.</li>
+    <li><strong>La derivada temporal no es cero.</strong> En la ecuación hacia atrás de <em>B</em>, <em>F<sub>t</sub></em> generalmente no se anula. Lo que se anula es la suma <em>F<sub>t</sub></em> + σ²<em>x F<sub>x</sub></em> + ½σ²<em>F<sub>xx</sub></em>. El tiempo restante cambia el valor de una opción binaria.</li>
+    <li><strong>Simetría no es martingala.</strong> Empezar <em>X</em> en cero puede mantener la media no condicional de <em>Y</em> en 50% por simetría, pero no elimina la deriva condicional después de que el proceso abandona el centro.</li>
+    <li><strong>Martingala no es bola de cristal.</strong> Que <em>B</em> sea martingala no significa que acierte siempre ni que no pueda cambiar. Significa que sus cambios no tienen una deriva predecible con la información actual.</li>
+    <li><strong>El Brier selecciona la misma probabilidad.</strong> Para un evento <em>I</em> con probabilidad condicional <em>p</em> y una predicción <em>b</em>, 𝔼[(<em>I</em> − <em>b</em>)² | ℱ<sub>t</sub>] = <em>p</em>(1 − <em>p</em>) + (<em>b</em> − <em>p</em>)². El primer término no depende de <em>b</em>; el segundo se minimiza en <em>b</em> = <em>p</em>.</li>
+    <li><strong>Arbitraje no es lo mismo que probabilidad real.</strong> La analogía con opciones supone cotizaciones negociables y una medida de valoración coherente. Una encuesta no es un precio ejecutable y el voto no es necesariamente un activo negociable.</li>
+    <li><strong>Una elección no valida un modelo.</strong> México 2024 es una sola realización. Los dos modelos podían dar probabilidades altas y el resultado no permite decidir cuál tenía la dinámica correcta. Para eso harían falta muchas elecciones y una evaluación por trayectoria.</li>
+    <li><strong>Las cifras de la conversación son ilustrativas.</strong> La tabla original redondea y algunos de sus valores no se reproducen exactamente con la fórmula y los parámetros que declara. Aquí todo se recalcula con las fórmulas y los supuestos se muestran en los controles. Las diferencias de pocos puntos no cambian la conclusión.</li>
+  </ul>
+
+  <h3>Fuentes</h3>
+  <ul class="source-list">
+    <li>Nassim Nicholas Taleb, <em>Election Predictions as Martingales: An Arbitrage Approach</em>, arXiv:1703.06351. <a href="https://arxiv.org/abs/1703.06351">arxiv.org/abs/1703.06351</a></li>
+    <li>Philip A. Ernst, Wilfrid S. Kendall y Jeffrey S. Rosenthal, <em>Election predictions are arbitrage-free: response to Taleb</em>, arXiv:1907.01576. <a href="https://arxiv.org/abs/1907.01576">arxiv.org/abs/1907.01576</a></li>
+    <li>Instituto Nacional Electoral, resultados de los cómputos distritales de la elección presidencial de 2024 (<a href="https://centralelectoral.ine.mx/2024/06/09/informa-ine-que-se-computaron-60-millones-115-mil-184-votos-en-la-eleccion-presidencial/">cómputos</a>) y participación ciudadana de 61% (<a href="https://centralelectoral.ine.mx/2024/06/09/votacion-total-cuantificada-de-los-computos-distritales-indico-que-la-participacion-ciudadana-en-elecciones-2024-fue-del-61-por-ciento/">comunicado</a>).</li>
+    <li>Convención de la conversación de Gemini incluida en <code>resources/ElectionMartingalesConvo.pdf</code>: exposición del artículo, respuesta de EKR y aplicación a México 2024.</li>
+  </ul>
+  <p class="small">Demo educativo. No es asesoría electoral ni financiera. Las simulaciones usan una semilla fija para que las comparaciones sean reproducibles; «Otra muestra» cambia la semilla de las trayectorias.</p>
+</section>
+
+</main>
+<footer>FELIXNET · Laboratorio de probabilidad · Demo autocontenido, sin dependencias externas.</footer>
+
 <script>
 'use strict';
-const $=id=>document.getElementById(id),tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-let seed=20260922,result;
-function erf(x){const a=Math.abs(x),t=1/(1+.3275911*a);const v=1-(((((1.061405429*t-1.453152027)*t)+1.421413741)*t-.284496736)*t+.254829592)*t*Math.exp(-a*a);return x===0?0:Math.sign(x)*v;}
-const S=x=>(1+erf(x))/2;
-function invS(y){let l=-8,h=8;for(let i=0;i<55;i++){const m=(l+h)/2;if(S(m)<y)l=m;else h=m;}return (l+h)/2;}
-function probability(x,s,t){if(t<=0)return x>0?1:0;return S(x/Math.sqrt(-Math.expm1(-2*s*s*t)));}
-function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
-function params(){return {y:+$('votes').value/100,s:+$('sigma').value,T:+$('days').value/365};}
-function simulate(p){const N=4000,M=100,dt=p.T/M,g=Math.exp(p.s*p.s*dt),sd=Math.sqrt(Math.expm1(2*p.s*p.s*dt)/2),random=rng(seed),x0=invS(p.y),sum=Array.from({length:5},()=>[0,0,0,0]),path=[];for(let i=0;i<N;i++){let x=x0;for(let j=0;j<=M;j++){const y=S(x),b=probability(x,p.s,p.T*(1-j/M));if(i===0)path.push([j/M,y,b]);if(j%25===0){const a=sum[j/25];a[0]+=y;a[1]+=y*y;a[2]+=b;a[3]+=b*b;}if(j<M){const z=Math.sqrt(-2*Math.log(Math.max(random(),1e-15)))*Math.cos(2*Math.PI*random());x=g*x+sd*z;}}}return {path,rows:sum.map(a=>[a[0]/N,1.96*Math.sqrt(Math.max(0,(a[1]-a[0]*a[0]/N)/(N-1)/N)),a[2]/N,1.96*Math.sqrt(Math.max(0,(a[3]-a[2]*a[2]/N)/(N-1)/N))])};}
-function plot(id,lines,maxX,label){const el=$(id),w=el.clientWidth,h=290,d=devicePixelRatio||1;el.width=w*d;el.height=h*d;const c=el.getContext('2d');c.scale(d,d);const L=43,R=w-16,U=14,B=h-48,X=x=>L+x/maxX*(R-L),Y=y=>B-y*(B-U);c.font='12px system-ui';c.lineWidth=1;for(let i=0;i<=4;i++){c.strokeStyle=tok('--line');c.beginPath();c.moveTo(L,Y(i/4));c.lineTo(R,Y(i/4));c.stroke();c.fillStyle=tok('--muted');c.textAlign='right';c.fillText((25*i)+'%',L-6,Y(i/4)+4);c.textAlign='center';c.fillText((maxX*i/4).toFixed(maxX===1?2:1),X(maxX*i/4),B+20);}c.fillText(label,(L+R)/2,h-6);for(const line of lines){c.strokeStyle=tok(line.token);c.lineWidth=2;c.setLineDash(line.dash||[]);c.beginPath();line.data.forEach(([x,y],i)=>i?c.lineTo(X(x),Y(y)):c.moveTo(X(x),Y(y)));c.stroke();}c.setLineDash([]);}
-const pct=x=>(100*x).toFixed(2)+'%';
-function draw(){if(!result)return;const p=params(),x=invS(p.y);plot('path',[{token:'--c1',data:result.path.map(a=>[a[0],a[1]])},{token:'--c2',data:result.path.map(a=>[a[0],a[2]])}],1,'Fracción del tiempo hasta la elección');plot('curve',[{token:'--c2',data:Array.from({length:160},(_,i)=>{const s=.025+i*1.975/159;return [s,probability(x,s,p.T)];})},{token:'--c1',dash:[5,4],data:[[0,p.y],[2,p.y]]}],2,'Escala auxiliar σ (años⁻¹ᐟ²)');}
-function update(){const p=params(),x=invS(p.y),q=p.s*p.s*p.T,m=x*Math.exp(q),v=Math.expm1(2*q)/2,b=probability(x,p.s,p.T);result=simulate(p);$('votesOut').textContent=pct(p.y);$('sigmaOut').textContent=p.s.toFixed(2)+' años⁻¹ᐟ²';$('daysOut').textContent=$('days').value+' días';$('prob').textContent=pct(b);$('vol').textContent=(100*p.s/Math.sqrt(Math.PI)*Math.exp(-x*x)).toFixed(2);$('mc').textContent=pct(result.rows[4][2]);$('worked').innerHTML=`y = ${p.y.toFixed(3)}, σ = ${p.s.toFixed(2)}, τ = ${p.T.toFixed(4)} años.<br>x = erf⁻¹(2y−1) = ${x.toFixed(5)}, ℓ = 0.<br>q = σ²τ = ${q.toFixed(5)}.<br>m = x exp(q) = ${m.toFixed(5)}.<br>v = [exp(2q)−1]/2 = ${v.toFixed(5)}.<br>z = (m−0)/√v = ${(m/Math.sqrt(v)).toFixed(5)}.<br>B₀ = Φ(z) = ${pct(b)}.`;$('checks').innerHTML=result.rows.map((a,i)=>`<tr><td>${i*25}%</td><td>${pct(a[0])} ± ${(100*a[1]).toFixed(2)} pp</td><td>${pct(a[2])} ± ${(100*a[3]).toFixed(2)} pp</td></tr>`).join('');$('status').textContent=`Semilla ${seed}. En la historia dibujada, el candidato ${result.path[100][2]?'gana':'pierde'} con ${pct(result.path[100][1])} de votos finales. La media terminal de B es ${pct(result.rows[4][2])}, frente al valor analítico ${pct(b)}. Puede haber variación de muestreo.`;draw();}
-for(const id of ['votes','sigma','days'])$(id).addEventListener('input',update);
-for(const [id,s] of [['close',.4],['certain',.05],['uncertain',2]])$(id).onclick=()=>{$('votes').value=52;$('sigma').value=s;$('days').value=180;update();};
-$('resample').onclick=()=>{seed++;update();};window.addEventListener('resize',draw);matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);update();
-</script></body></html>
+const $ = (id) => document.getElementById(id);
+const tok = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const SQRT2 = Math.SQRT2;
+const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Matemáticas ---------- */
+function erf(x) {
+  const a = Math.abs(x);
+  const t = 1 / (1 + 0.3275911 * a);
+  const v = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-a * a);
+  return x === 0 ? 0 : Math.sign(x) * v;
+}
+const S = (x) => 0.5 * (1 + erf(x));
+const Phi = (z) => 0.5 * (1 + erf(z / SQRT2));
+function invS(y) {
+  const yy = Math.min(0.999999, Math.max(0.000001, y));
+  let lo = -8, hi = 8;
+  for (let i = 0; i < 64; i++) {
+    const mid = (lo + hi) / 2;
+    if (S(mid) < yy) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+const Sprime = (x) => Math.exp(-x * x) / Math.sqrt(Math.PI);
+function talebB(y, sigma, tau) {
+  if (tau <= 1e-12) return y > 0.5 ? 1 : (y < 0.5 ? 0 : 0.5);
+  const x = invS(y);
+  const q = sigma * sigma * tau;
+  const den = Math.sqrt(1 - Math.exp(-2 * q));
+  return Phi(SQRT2 * x / den);
+}
+function ekrB(y, tau, p) {
+  const x = invS(y);
+  const thetaX = invS(p.theta);
+  const e = Math.exp(-p.kappa * tau);
+  const mean = x * e + thetaX * (1 - e);
+  const varT = (p.sigmaC * p.sigmaC / (2 * p.kappa)) * (1 - Math.exp(-2 * p.kappa * tau));
+  const den = Math.sqrt(varT + p.sigmaBias * p.sigmaBias);
+  return Phi(mean / den);
+}
+const naiveB = (y) => y > 0.5 ? 1 : (y < 0.5 ? 0 : 0.5);
+
+/* ---------- Estado y formato ---------- */
+const DEFAULTS = { y: 64.4, months: 6, sigmaT: 0.75, kappa: 2.0, theta: 65.4, sigmaC: 0.30, sigmaBias: 0.18 };
+const PRESETS = {
+  dic:   { y: 64.4, months: 6 },
+  mar:   { y: 65.0, months: 3 },
+  may:   { y: 63.5, months: 0.5 },
+  cierre:{ y: 63.5, months: 0 }
+};
+const MEXICO = [
+  { label: 'Dic 2023', short: 'Dic 23', t: 0.0, tau: 0.50, y: 0.644, known: false },
+  { label: 'Mar 2024', short: 'Mar 24', t: 3.0, tau: 0.25, y: 0.650, known: false },
+  { label: 'May 2024', short: 'May 24', t: 6.0, tau: 0.05, y: 0.635, known: false },
+  { label: 'Cierre de casillas', short: '2 jun', t: 6.5, tau: 0.00, y: 0.635, known: false },
+  { label: 'Conteo rápido', short: 'Conteo', t: 6.6, tau: 0.00, y: 0.685, known: true }
+];
+let selectedMilestone = 0;
+let pathSeed = 20240602;
+
+const pct = (x, d = 1) => (100 * x).toFixed(d) + '%';
+const signed = (x, d = 1) => (x >= 0 ? '+' : '−') + Math.abs(x).toFixed(d) + ' pp';
+const fmtTime = (m) => m === 0 ? '0 meses' : (m < 1 ? Math.round(m * 30) + ' días' : (m === 1 ? '1 mes' : m + ' meses'));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+
+function readParams() {
+  return {
+    y: clamp(+$('y').value / 100, 0.001, 0.999),
+    months: +$('months').value,
+    sigmaT: +$('sigmaT').value,
+    kappa: +$('kappa').value,
+    theta: clamp(+$('theta').value / 100, 0.001, 0.999),
+    sigmaC: +$('sigmaC').value,
+    sigmaBias: +$('sigmaBias').value
+  };
+}
+
+/* ---------- Lienzo y gráficas ---------- */
+function fitCanvas(canvas) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(260, canvas.clientWidth || 600);
+  const h = Math.max(180, canvas.clientHeight || 300);
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  return { ctx, w, h };
+}
+function niceTicks(min, max, n) {
+  const span = max - min;
+  if (span <= 0) return [min];
+  const raw = span / Math.max(1, n);
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const norm = raw / mag;
+  const step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+  const out = [];
+  for (let v = Math.ceil(min / step) * step; v <= max + 1e-9; v += step) out.push(+v.toFixed(10));
+  return out;
+}
+function drawChart(canvas, cfg) {
+  const { ctx, w, h } = fitCanvas(canvas);
+  const pad = Object.assign({ l: 54, r: 16, t: 16, b: 48 }, cfg.pad || {});
+  const x0 = pad.l, x1 = w - pad.r, y0 = pad.t, y1 = h - pad.b;
+  const xr = cfg.xmax - cfg.xmin || 1;
+  const yr = cfg.ymax - cfg.ymin || 1;
+  const X = (v) => x0 + (v - cfg.xmin) / xr * (x1 - x0);
+  const Y = (v) => y1 - (v - cfg.ymin) / yr * (y1 - y0);
+  const text = tok('--muted');
+  const line = tok('--line');
+  const accent = tok('--accent');
+  ctx.font = '12px system-ui, -apple-system, "Segoe UI", sans-serif';
+  ctx.textBaseline = 'middle';
+
+  const xTicks = cfg.xTicks || niceTicks(cfg.xmin, cfg.xmax, 5).map((v) => ({ v }));
+  const yTicks = (cfg.yTicks || niceTicks(cfg.ymin, cfg.ymax, 4)).map((v) => (typeof v === 'object' ? v : { v }));
+
+  // Rejilla
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1;
+  ctx.globalAlpha = 0.75;
+  for (const t of yTicks) {
+    const yy = Y(t.v);
+    ctx.beginPath(); ctx.moveTo(x0, yy); ctx.lineTo(x1, yy); ctx.stroke();
+  }
+  for (const t of xTicks) {
+    const xx = X(t.v);
+    ctx.beginPath(); ctx.moveTo(xx, y0); ctx.lineTo(xx, y1); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  // Ejes
+  ctx.strokeStyle = line;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.lineTo(x1, y1);
+  ctx.stroke();
+
+  // Etiquetas
+  ctx.fillStyle = text;
+  ctx.font = '12px system-ui, -apple-system, "Segoe UI", sans-serif';
+  for (const t of yTicks) {
+    ctx.textAlign = 'right';
+    ctx.fillText(cfg.yFormat ? cfg.yFormat(t.v) : (t.v * 100).toFixed(0) + '%', x0 - 8, Y(t.v));
+  }
+  for (const t of xTicks) {
+    ctx.textAlign = 'center';
+    const label = t.label != null ? t.label : (cfg.xFormat ? cfg.xFormat(t.v) : t.v.toFixed(0));
+    ctx.fillText(label, X(t.v), y1 + 18);
+  }
+  if (cfg.xLabel) {
+    ctx.textAlign = 'center';
+    ctx.fillText(cfg.xLabel, (x0 + x1) / 2, h - 10);
+  }
+  if (cfg.yLabel) {
+    ctx.save();
+    ctx.translate(14, (y0 + y1) / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textAlign = 'center';
+    ctx.fillText(cfg.yLabel, 0, 0);
+    ctx.restore();
+  }
+
+  // Recorte del área de datos
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x0, y0, x1 - x0, y1 - y0);
+  ctx.clip();
+
+  for (const l of cfg.hlines || []) {
+    ctx.strokeStyle = l.color || line;
+    ctx.lineWidth = l.width || 1;
+    ctx.setLineDash(l.dash || []);
+    ctx.beginPath(); ctx.moveTo(x0, Y(l.y)); ctx.lineTo(x1, Y(l.y)); ctx.stroke();
+  }
+  for (const l of cfg.vlines || []) {
+    ctx.strokeStyle = l.color || line;
+    ctx.lineWidth = l.width || 1;
+    ctx.setLineDash(l.dash || []);
+    ctx.beginPath(); ctx.moveTo(X(l.x), y0); ctx.lineTo(X(l.x), y1); ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  for (const s of cfg.series || []) {
+    if (!s.data || !s.data.length) continue;
+    ctx.save();
+    ctx.globalAlpha = s.alpha == null ? 1 : s.alpha;
+    ctx.strokeStyle = s.color;
+    ctx.lineWidth = s.width || 2;
+    ctx.setLineDash(s.dash || []);
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    let started = false;
+    for (const pt of s.data) {
+      const x = pt[0], y = pt[1];
+      if (!isFinite(x) || !isFinite(y)) { started = false; continue; }
+      const px = X(x), py = Y(y);
+      if (!started) { ctx.moveTo(px, py); started = true; }
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    if (s.points) {
+      ctx.setLineDash([]);
+      for (const pt of s.data) {
+        const px = X(pt[0]), py = Y(pt[1]);
+        ctx.beginPath();
+        ctx.arc(px, py, 3.2, 0, Math.PI * 2);
+        ctx.fillStyle = s.color;
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+  ctx.restore();
+
+  // Etiquetas de líneas verticales, fuera del recorte
+  for (const l of cfg.vlines || []) {
+    if (!l.label) continue;
+    ctx.fillStyle = l.color || accent;
+    ctx.font = '11.5px system-ui, -apple-system, "Segoe UI", sans-serif';
+    const px = X(l.x);
+    const alignRight = px > (x0 + x1) / 2;
+    ctx.textAlign = alignRight ? 'right' : 'left';
+    ctx.fillText(l.label, px + (alignRight ? -5 : 5), y0 + 10);
+  }
+}
+function messageCanvas(canvas, msg) {
+  const { ctx, w, h } = fitCanvas(canvas);
+  ctx.fillStyle = tok('--muted');
+  ctx.font = '14px system-ui, -apple-system, "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(msg, w / 2, h / 2);
+}
+
+/* ---------- Simulaciones ---------- */
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function normal(rng) {
+  const u = Math.max(rng(), 1e-12);
+  const v = rng();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+function simulateTaleb(p, tau) {
+  if (tau <= 0) return null;
+  const steps = 60, n = 400, draw = 24;
+  const dt = tau / steps;
+  const g = Math.exp(p.sigmaT * p.sigmaT * dt);
+  const sd = Math.sqrt(Math.expm1(2 * p.sigmaT * p.sigmaT * dt) / 2);
+  const x0 = invS(p.y);
+  const rng = mulberry32(pathSeed);
+  const paths = [], mean = new Array(steps + 1).fill(0);
+  for (let i = 0; i < n; i++) {
+    let x = x0;
+    const path = [];
+    for (let k = 0; k <= steps; k++) {
+      const y = S(x);
+      path.push(y);
+      mean[k] += y;
+      if (k < steps) x = g * x + sd * normal(rng);
+    }
+    if (i < draw) paths.push(path);
+  }
+  for (let k = 0; k <= steps; k++) mean[k] /= n;
+  return { paths, mean, steps, tau };
+}
+function simulateEKR(p, tau) {
+  if (tau <= 0) return null;
+  const steps = 60, n = 400, draw = 24;
+  const dt = tau / steps;
+  const thetaX = invS(p.theta);
+  const e = Math.exp(-p.kappa * dt);
+  const sd = p.sigmaC * Math.sqrt((1 - Math.exp(-2 * p.kappa * dt)) / (2 * p.kappa));
+  let x0 = invS(p.y);
+  const rng = mulberry32(pathSeed + 17);
+  const paths = [], mean = new Array(steps + 1).fill(0);
+  for (let i = 0; i < n; i++) {
+    let x = x0;
+    const path = [];
+    for (let k = 0; k <= steps; k++) {
+      const y = S(x);
+      path.push(y);
+      mean[k] += y;
+      if (k < steps) x = thetaX + (x - thetaX) * e + sd * normal(rng);
+    }
+    if (i < draw) paths.push(path);
+  }
+  for (let k = 0; k <= steps; k++) mean[k] /= n;
+  return { paths, mean, steps, tau };
+}
+function drawPaths(canvas, sim, model, p) {
+  if (!sim) { messageCanvas(canvas, 'τ = 0: no hay trayectorias que simular.'); return; }
+  const horizon = sim.tau * 12;
+  const color = model === 'taleb' ? tok('--c1') : tok('--c2');
+  const series = [];
+  for (const path of sim.paths) {
+    series.push({
+      data: path.map((y, k) => [k / sim.steps * horizon, y]),
+      color, width: 1, alpha: 0.30
+    });
+  }
+  series.push({
+    data: sim.mean.map((y, k) => [k / sim.steps * horizon, y]),
+    color, width: 2.8, alpha: 1
+  });
+  const xTicks = horizon <= 1
+    ? [{ v: 0, label: '0' }, { v: horizon / 2, label: (horizon / 2).toFixed(1) }, { v: horizon, label: horizon.toFixed(1) }]
+    : niceTicks(0, horizon, 5).map((v) => ({ v, label: String(v) }));
+  drawChart(canvas, {
+    xmin: 0, xmax: horizon, ymin: 0, ymax: 1,
+    xTicks, yTicks: [0, 0.25, 0.5, 0.75, 1],
+    xLabel: 'Meses hasta la elección', yLabel: 'Voto de dos partidos',
+    series,
+    hlines: model === 'taleb'
+      ? [{ y: p.y, color: tok('--muted'), dash: [4, 4] }]
+      : [{ y: p.theta, color: tok('--c2'), dash: [4, 4] }]
+  });
+}
+
+/* ---------- Tablas y detalles ---------- */
+function renderClockTable(p) {
+  const rows = [12, 6, 3, 1, 0];
+  const tbody = $('clockTable');
+  if (!tbody) return;
+  tbody.innerHTML = rows.map((m) => {
+    const tau = m / 12;
+    const bt = talebB(p.y, p.sigmaT, tau);
+    const be = ekrB(p.y, tau, p);
+    const zero = m === 0 ? ' <span class="small">(antes del conteo)</span>' : '';
+    return `<tr><td>${m} ${m === 1 ? 'mes' : 'meses'}${zero}</td><td class="c1">${pct(bt)}</td><td class="c2">${pct(be)}</td><td class="c4">${pct(naiveB(p.y))}</td></tr>`;
+  }).join('');
+}
+function renderMexico(p) {
+  const tbody = $('mexicoBody');
+  if (!tbody) return;
+  tbody.innerHTML = MEXICO.map((pt, i) => {
+    const bt = pt.known ? 1 : talebB(pt.y, p.sigmaT, pt.tau);
+    const be = pt.known ? 1 : ekrB(pt.y, pt.tau, p);
+    return `<tr class="${i === selectedMilestone ? 'selected' : ''}">
+      <td>${pt.label}</td>
+      <td data-label="τ">${pt.known ? '—' : pt.tau.toFixed(2)}</td>
+      <td data-label="Y">${pct(pt.y)}</td>
+      <td data-label="Ingenua">${pct(naiveB(pt.y))}</td>
+      <td data-label="Taleb" class="c1">${pct(bt)}</td>
+      <td data-label="EKR" class="c2">${pct(be)}</td>
+    </tr>`;
+  }).join('');
+
+  const dec = MEXICO[0], may = MEXICO[2], close = MEXICO[3];
+  $('mexDecT').textContent = pct(talebB(dec.y, p.sigmaT, dec.tau));
+  $('mexDecE').textContent = pct(ekrB(dec.y, dec.tau, p));
+  $('mexMayT').textContent = pct(talebB(may.y, p.sigmaT, may.tau));
+  $('mexMayE').textContent = pct(ekrB(may.y, may.tau, p));
+  $('mexCloseT').textContent = pct(talebB(close.y, p.sigmaT, close.tau));
+  $('mexCloseE').textContent = pct(ekrB(close.y, close.tau, p));
+
+  const pt = MEXICO[selectedMilestone];
+  const send = $('sendToLab');
+  if (send) send.textContent = pt.known ? 'Explorar el cierre en el laboratorio' : 'Explorar este punto en el laboratorio';
+  const detail = $('milestoneDetail');
+  if (pt.known) {
+    detail.innerHTML = `<div><b>${pt.label}.</b> El conteo reveló Y = ${pct(pt.y)} &gt; 50%: I = 1. Ambos modelos valen 100%. No hay nada que calcular.</div>`;
+  } else {
+    const x = invS(pt.y);
+    const bt = talebB(pt.y, p.sigmaT, pt.tau);
+    const be = ekrB(pt.y, pt.tau, p);
+    if (pt.tau <= 1e-9) {
+      detail.innerHTML = `
+        <div><b>${pt.label}</b> · Y = ${pct(pt.y)} · τ = 0 · x = erf⁻¹(2Y−1) = ${x.toFixed(3)}</div>
+        <div>Taleb: en τ = 0 ya no hay incertidumbre de calendario; con Y &gt; 50%, B = 100%.</div>
+        <div>EKR: B = Φ(x/σ<sub>bias</sub>) = Φ(${(x / p.sigmaBias).toFixed(3)}) = ${pct(be)}. La única incertidumbre que queda es el sesgo η; el conteo la resuelve.</div>
+      `;
+      return;
+    }
+    const thetaX = invS(p.theta);
+    const e = Math.exp(-p.kappa * pt.tau);
+    const mean = x * e + thetaX * (1 - e);
+    const varT = (p.sigmaC * p.sigmaC / (2 * p.kappa)) * (1 - Math.exp(-2 * p.kappa * pt.tau));
+    const den = Math.sqrt(varT + p.sigmaBias * p.sigmaBias);
+    const q = p.sigmaT * p.sigmaT * pt.tau;
+    const denT = Math.sqrt(1 - Math.exp(-2 * q));
+    detail.innerHTML = `
+      <div><b>${pt.label}</b> · Y = ${pct(pt.y)} · τ = ${pt.tau.toFixed(2)} años · x = erf⁻¹(2Y−1) = ${x.toFixed(3)}</div>
+      <div>Taleb: B = Φ(√2·${x.toFixed(3)} / √(1−e<sup>−2·${p.sigmaT.toFixed(2)}²·${pt.tau.toFixed(2)}</sup>)) = Φ(${(SQRT2 * x / denT).toFixed(3)}) = ${pct(bt)}</div>
+      <div>EKR: media = ${x.toFixed(3)}·e<sup>−${p.kappa.toFixed(1)}·${pt.tau.toFixed(2)}</sup> + ${thetaX.toFixed(3)}·(1−e<sup>−${p.kappa.toFixed(1)}·${pt.tau.toFixed(2)}</sup>) = ${mean.toFixed(3)}</div>
+      <div>EKR: B = Φ(${mean.toFixed(3)} / √(${varT.toFixed(4)} + ${(p.sigmaBias * p.sigmaBias).toFixed(4)})) = Φ(${(mean / den).toFixed(3)}) = ${pct(be)}</div>
+    `;
+  }
+}
+function drawMexicoChart(p) {
+  const canvas = $('mexicoChart');
+  const narrow = canvas && canvas.clientWidth < 420;
+  const ys = MEXICO.map((pt) => [pt.t, pt.y]);
+  const ts = MEXICO.map((pt) => [pt.t, pt.known ? 1 : talebB(pt.y, p.sigmaT, pt.tau)]);
+  const es = MEXICO.map((pt) => [pt.t, pt.known ? 1 : ekrB(pt.y, pt.tau, p)]);
+  drawChart(canvas, {
+    xmin: 0, xmax: 7.2, ymin: 0.50, ymax: 1.0,
+    xTicks: narrow ? [
+      { v: 0, label: 'Dic' },
+      { v: 3, label: 'Mar' },
+      { v: 6.6, label: 'Conteo' }
+    ] : [
+      { v: 0, label: 'Dic 23' },
+      { v: 3, label: 'Mar 24' },
+      { v: 6, label: 'May 24' },
+      { v: 6.6, label: 'Conteo' }
+    ],
+    yTicks: [0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+    xLabel: 'Campaña 2024 (esquemática)', yLabel: 'Voto y probabilidad',
+    series: [
+      { data: ys, color: tok('--c3'), width: 2.6, points: true },
+      { data: ts, color: tok('--c1'), width: 2.6, points: true },
+      { data: es, color: tok('--c2'), width: 2.6, points: true }
+    ],
+    hlines: [{ y: 0.5, color: tok('--muted'), dash: [3, 4] }],
+    vlines: [{ x: 6.55, color: tok('--muted'), dash: [3, 4], label: 'noche electoral' }]
+  });
+}
+
+/* ---------- Actualización ---------- */
+function update() {
+  const p = readParams();
+  const tau = p.months / 12;
+  const bT = talebB(p.y, p.sigmaT, tau);
+  const bE = ekrB(p.y, tau, p);
+  const bN = naiveB(p.y);
+
+  $('yOut').textContent = pct(p.y);
+  $('monthsOut').textContent = fmtTime(p.months);
+  $('sigmaTOut').textContent = p.sigmaT.toFixed(2);
+  $('kappaOut').textContent = p.kappa.toFixed(1) + ' año⁻¹';
+  $('thetaOut').textContent = pct(p.theta);
+  $('sigmaCOut').textContent = p.sigmaC.toFixed(2);
+  const biasPP = p.sigmaBias * Sprime(invS(p.y)) * 100;
+  $('sigmaBiasOut').textContent = p.sigmaBias.toFixed(2) + ' (≈ ' + biasPP.toFixed(1) + ' pp)';
+
+  $('statT').textContent = pct(bT);
+  $('statE').textContent = pct(bE);
+  $('statN').textContent = pct(bN);
+  $('statGap').textContent = signed((bE - bT) * 100);
+
+  const status = `Con Y = ${pct(p.y)} y ${fmtTime(p.months)} por delante, Taleb asigna ${pct(bT)} y EKR ${pct(bE)}. La regla ingenua diría ${pct(bN)}. La brecha entre los dos modelos es de ${signed((bE - bT) * 100)}.`;
+  $('status').textContent = status;
+
+  // Curva de valoración
+  const yGrid = [];
+  for (let i = 0; i <= 160; i++) yGrid.push(0.35 + i * (0.40 / 160));
+  drawChart($('curveChart'), {
+    xmin: 0.35, xmax: 0.75, ymin: 0, ymax: 1,
+    xTicks: [
+      { v: 0.35, label: '35%' }, { v: 0.45, label: '45%' }, { v: 0.55, label: '55%' }, { v: 0.65, label: '65%' }, { v: 0.75, label: '75%' }
+    ],
+    yTicks: [0, 0.25, 0.5, 0.75, 1],
+    xLabel: 'Voto de dos partidos, Y', yLabel: 'Probabilidad de victoria',
+    series: [
+      { data: yGrid.map((y) => [y, talebB(y, p.sigmaT, tau)]), color: tok('--c1'), width: 2.6 },
+      { data: yGrid.map((y) => [y, ekrB(y, tau, p)]), color: tok('--c2'), width: 2.6 },
+      { data: [[0.35, 0], [0.5, 0], [0.5, 1], [0.75, 1]], color: tok('--c4'), width: 1.6, dash: [5, 4] }
+    ],
+    hlines: [{ y: 0.5, color: tok('--muted'), dash: [2, 4] }],
+    vlines: [{ x: p.y, color: tok('--muted'), dash: [3, 4], label: 'Y actual' }]
+  });
+
+  // Reloj
+  const monthsGrid = [];
+  for (let i = 0; i <= 160; i++) monthsGrid.push(i * (24 / 160));
+  drawChart($('clockChart'), {
+    xmin: 0, xmax: 24, ymin: 0, ymax: 1,
+    xTicks: [0, 4, 8, 12, 16, 20, 24].map((v) => ({ v, label: String(v) })),
+    yTicks: [0, 0.25, 0.5, 0.75, 1],
+    xLabel: 'Meses hasta la elección', yLabel: 'Probabilidad de victoria',
+    series: [
+      { data: monthsGrid.map((m) => [m, talebB(p.y, p.sigmaT, m / 12)]), color: tok('--c1'), width: 2.6 },
+      { data: monthsGrid.map((m) => [m, ekrB(p.y, m / 12, p)]), color: tok('--c2'), width: 2.6 },
+      { data: [[0, bN], [24, bN]], color: tok('--c4'), width: 1.6, dash: [5, 4] }
+    ],
+    hlines: [{ y: 0.5, color: tok('--muted'), dash: [2, 4] }],
+    vlines: [{ x: p.months, color: tok('--muted'), dash: [3, 4], label: 'hoy' }]
+  });
+
+  // Trayectorias
+  const simT = simulateTaleb(p, tau);
+  const simE = simulateEKR(p, tau);
+  drawPaths($('talebPaths'), simT, 'taleb', p);
+  drawPaths($('ekrPaths'), simE, 'ekr', p);
+  if (simT) {
+    const lastT = simT.mean[simT.mean.length - 1];
+    $('talebPathsNote').textContent = `Media final de 400 trayectorias: ${pct(lastT)}; valor teórico: ${pct(p.y)}. La media se queda cerca del punto de partida: Y no tiene deriva.`;
+  } else {
+    $('talebPathsNote').textContent = 'Con τ = 0 no hay trayectorias: el estado es el punto actual.';
+  }
+  if (simE) {
+    const lastE = simE.mean[simE.mean.length - 1];
+    $('ekrPathsNote').textContent = `Media final de 400 trayectorias: ${pct(lastE)}; equilibrio θ: ${pct(p.theta)}. La media revierte: Y no es martingala, pero B sí.`;
+  } else {
+    $('ekrPathsNote').textContent = 'Con τ = 0 no hay trayectorias: el estado es el punto actual.';
+  }
+
+  renderClockTable(p);
+  renderMexico(p);
+  drawMexicoChart(p);
+}
+
+/* ---------- Controles ---------- */
+let rafId = 0;
+function scheduleUpdate() {
+  if (rafId) return;
+  rafId = requestAnimationFrame(() => { rafId = 0; update(); });
+}
+for (const id of ['y', 'months', 'sigmaT', 'kappa', 'theta', 'sigmaC', 'sigmaBias']) {
+  $(id).addEventListener('input', scheduleUpdate);
+}
+for (const btn of document.querySelectorAll('[data-preset]')) {
+  btn.addEventListener('click', () => {
+    const preset = PRESETS[btn.dataset.preset];
+    if (!preset) return;
+    $('y').value = preset.y;
+    $('months').value = preset.months;
+    update();
+  });
+}
+$('reset').addEventListener('click', () => {
+  $('y').value = DEFAULTS.y;
+  $('months').value = DEFAULTS.months;
+  $('sigmaT').value = DEFAULTS.sigmaT;
+  $('kappa').value = DEFAULTS.kappa;
+  $('theta').value = DEFAULTS.theta;
+  $('sigmaC').value = DEFAULTS.sigmaC;
+  $('sigmaBias').value = DEFAULTS.sigmaBias;
+  selectedMilestone = 0;
+  for (const b of document.querySelectorAll('[data-milestone]')) b.setAttribute('aria-pressed', String(b.dataset.milestone === '0'));
+  update();
+});
+$('reseed').addEventListener('click', () => {
+  pathSeed = (pathSeed * 1664525 + 1013904223) >>> 0;
+  update();
+});
+for (const btn of document.querySelectorAll('[data-milestone]')) {
+  btn.addEventListener('click', () => {
+    selectedMilestone = +btn.dataset.milestone;
+    for (const b of document.querySelectorAll('[data-milestone]')) {
+      b.setAttribute('aria-pressed', String(b === btn));
+    }
+    update();
+  });
+}
+$('sendToLab').addEventListener('click', () => {
+  const pt = MEXICO[selectedMilestone].known ? MEXICO[3] : MEXICO[selectedMilestone];
+  $('y').value = (pt.y * 100).toFixed(1);
+  $('months').value = (pt.tau * 12).toFixed(1);
+  update();
+  const lab = $('laboratorio');
+  if (lab) lab.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'start' });
+});
+
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(update, 140);
+});
+if (window.matchMedia) {
+  const mq = window.matchMedia('(prefers-color-scheme: dark)');
+  if (mq.addEventListener) mq.addEventListener('change', update);
+  else if (mq.addListener) mq.addListener(update);
+}
+
+update();
+</script>
+</body>
+</html>
