@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{theorem}{Theorem}
+\title{The Feynman--Kac Formula via Random Walks}
+\author{}
+\date{}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A nearest-neighbor walk gives a discrete path formula for a heat equation
+with potential. The functional central limit theorem takes the formula to
+Brownian motion, and the Markov property identifies the limit with the
+unique bounded mild solution.
+\end{abstract}
+
+\begin{theorem}
+Let $f,q$ be bounded continuous real functions on $\mathbb R^d$ and set
+$\Delta=-\sum_{j=1}^d\partial_j^2$. The unique mild solution, bounded on
+each finite time strip, of
+\[
+  \partial_tu+\Delta u+qu=0,\qquad u(0,x)=f(x)
+\]
+is given by
+\[
+  u(t,x)=\mathbb E_x\!\left[
+   f(B_t)\exp\!\left(-\int_0^t q(B_s)\,ds\right)\right],
+  \qquad B_s=x+\sqrt{2}\,W_s,
+\]
+where $W$ is standard $d$-dimensional Brownian motion.
+\end{theorem}
+
+\section{The discrete path formula}
+For a time step $\tau>0$, put $h=\sqrt{2d\tau}$. Start a walk at
+$X_0=x$, and let each step be independently uniform on
+$\{\pm h e_j:1\le j\le d\}$. Denote its one-step averaging operator
+by $A_\tau$ and set $\Delta^\tau=(I-A_\tau)/\tau$.
+Taylor expansion on smooth test functions gives
+$\Delta^\tau\varphi(x)\to\Delta\varphi(x)$. The covariance of one
+increment is $(h^2/d)I=2\tau I$, which fixes the Brownian clock.
+
+Evaluate the potential term at the new time level and the discrete
+Laplacian at the old one. For $\tau\|q\|_\infty\le 1/2$ the scheme gives
+\[
+  \frac{u_{m+1}-u_m}{\tau}+\Delta^\tau u_m+q\,u_{m+1}=0,
+  \qquad
+  u_{m+1}(x)=\frac{(A_\tau u_m)(x)}{1+\tau q(x)}.
+\]
+Starting from $u_0=f$, induction by conditioning on $X_1$ yields
+\[
+  u_m(x)=\mathbb E_x\!\left[
+     f(X_m)\prod_{k=0}^{m-1}(1+\tau q(X_k))^{-1}\right].
+\]
+The time step contributes a factor at the departure point.
+There are $m$ factors for $m$ steps. For $f\equiv1$ and $q\equiv c>0$,
+the scheme gives $(1+\tau c)^{-m}$, which tends to $e^{-ct}$ at time $t$.
+
+\section{The Brownian limit}
+Fix $t>0$ and set $\tau=t/n$. Let $Y^\tau$ be the piecewise-constant
+walk, equal to $X_k$ on $[k\tau,(k+1)\tau)$ and to $X_n$ at $t$.
+By the functional central limit theorem the linear interpolation
+converges in law in $C([0,t];\mathbb R^d)$ to $B$. The uniform
+distance from $Y^\tau$ to that interpolation is at most $h$.
+Equivalently, $Y^\tau$ converges to $B$ in the Skorokhod topology,
+where convergence to a continuous path implies uniform convergence.
+
+Since $q$ is bounded, the logarithm has a uniform quadratic
+remainder. Thus, for every walk path,
+\[
+ -\sum_{k=0}^{n-1}\log(1+\tau q(X_k))
+ =-\int_0^t q(Y^\tau_s)\,ds+O(t\tau).
+\]
+At each continuous path, endpoint evaluation and the time integral of
+$q$ are continuous under uniform convergence. For the integral, uniform
+convergence confines the paths to a common compact neighborhood of the
+limiting path, on which $q$ is uniformly continuous. The continuous
+mapping theorem therefore applies to the endpoint and the integral
+jointly. The weighted endpoint values are bounded in absolute value by
+$\|f\|_\infty e^{2t\|q\|_\infty}$ because
+$|\log(1+\tau q)|\le 2\tau\|q\|_\infty$. Their expectations converge to
+the expectation in the theorem.
+
+\section{Identification with the heat equation}
+Write $P_t=e^{-t\Delta}$ for the free heat semigroup and let $u$ denote
+the limiting expectation. Pathwise differentiation with respect to
+the lower endpoint of the integral gives
+\[
+ e^{-\int_0^t q(B_r)\,dr}
+  =1-\int_0^t q(B_s)e^{-\int_s^t q(B_r)\,dr}\,ds.
+\]
+Multiply by $f(B_t)$, take expectations, and condition on $B_s$ inside
+the integral. Boundedness justifies Fubini, and the Markov property
+gives
+\[
+ u(t)=P_tf-\int_0^t P_s\bigl(q\,u(t-s)\bigr)\,ds
+     =P_tf-\int_0^t P_{t-s}\bigl(q\,u(s)\bigr)\,ds.
+\]
+This is the mild equation. For two bounded solutions on a finite time
+strip, the sup norm of their difference at time $t$ is bounded by
+$\|q\|_\infty$ times the integral of that norm from $0$ to $t$.
+Gr\"onwall's inequality gives uniqueness. With smooth bounded data
+and bounded derivatives, the mild solution is classical by standard
+heat equation regularity. \hfill$\square$
+
+\begin{thebibliography}{9}
+\bibitem{taylor} M.~E.~Taylor, \emph{Brownian Motion and Potential
+Theory}, Chapter 11, Sec.~2.
+\href{https://mtaylor.web.unc.edu/wp-content/uploads/sites/16915/2018/04/chap11.pdf}{Online chapter}.
+\end{thebibliography}
+\end{document}
